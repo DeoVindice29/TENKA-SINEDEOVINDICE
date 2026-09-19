@@ -1,0 +1,46 @@
+import { useUI, type ScriptKey } from "@/state/UIContext";
+import { getConqueredTitles } from "@/data/titles";
+
+const SCRIPTS: { key: ScriptKey; glyph: string; label: string }[] = [
+  { key: "hiragana", glyph: "あ", label: "Hiragana" },
+  { key: "katakana", glyph: "ア", label: "Katakana" },
+  { key: "kotoba", glyph: "語", label: "Kotoba" },
+  { key: "bunpo", glyph: "文", label: "Bunpō" },
+  { key: "kanji", glyph: "漢", label: "Kanji" },
+];
+
+export default function ScriptTabs() {
+  const { currentScript, setCurrentScript, setSelectedMode } = useUI();
+  const earned = getConqueredTitles();
+
+  const handleClick = (key: ScriptKey) => {
+    setCurrentScript(key);
+    setSelectedMode(null); // reset mode saat ganti script
+  };
+
+  return (
+    <div
+      className="script-tabs"
+      id="script-tabs"
+      role="tablist"
+      aria-label="Choose a script"
+    >
+      {SCRIPTS.map((s) => (
+        <button
+          key={s.key}
+          className={`script-tab ${
+            currentScript === s.key ? "active" : ""
+          } ${earned[s.key] ? "conquered" : ""}`}
+          type="button"
+          role="tab"
+          aria-selected={currentScript === s.key}
+          onClick={() => handleClick(s.key)}
+        >
+          {s.glyph}
+          <span>{s.label}</span>
+          <span className="tab-conquered-badge" />
+        </button>
+      ))}
+    </div>
+  );
+}

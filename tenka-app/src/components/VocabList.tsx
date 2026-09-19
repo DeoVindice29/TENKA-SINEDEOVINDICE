@@ -1,0 +1,107 @@
+import { useLang } from "@/i18n/LangContext";
+import { useSpeech } from "@/hooks/useSpeech";
+import type { Bilingual } from "@/data/types";
+
+type VocabListProps = {
+  items: any[];
+};
+
+export default function VocabList({ items }: VocabListProps) {
+  const { lang, t } = useLang();
+  const { speak } = useSpeech();
+
+  const tf = (entry: Bilingual | string | null | undefined): string => {
+    if (entry == null) return "";
+    if (typeof entry === "string") return entry;
+    return entry[lang] || entry.en || entry.id || "";
+  };
+
+  return (
+    <div className="grammar-list vocab-list">
+      {items.map((item: any, idx: number) => {
+        const word = item[0];
+        const reading = item[1];
+        const meaning = item[2];
+        const example = item[3];
+        const segments = item[4];
+        const translation = item[5];
+        const kanjiWord = item[6];
+        const kanjiExample = item[7];
+        const usage = item[8];
+
+        return (
+          <div key={idx} className="grammar-card vocab-card">
+            <div className="vocab-top">
+              <div className="vocab-main">
+                <button
+                  type="button"
+                  className="vocab-word-btn"
+                  onClick={(e) => speak(word, e.currentTarget)}
+                >
+                  <span className="vocab-word-stack">
+                    {kanjiWord && (
+                      <span className="vocab-kanji">{kanjiWord}</span>
+                    )}
+                    <span className="grammar-pattern vocab-word">{word}</span>
+                  </span>
+                  <span className="cell-audio-icon">🔊</span>
+                </button>
+                <span className="vocab-reading">{reading}</span>
+                <span className="grammar-meaning">{tf(meaning)}</span>
+              </div>
+              {usage && (
+                <div className="vocab-usage">
+                  <span className="vocab-usage-label">
+                    {t("learn.usageNote")}
+                  </span>
+                  <p className="vocab-usage-text">{tf(usage)}</p>
+                </div>
+              )}
+            </div>
+
+            {example && (
+              <div className="vocab-example-block">
+                <div className="grammar-example-row">
+                  <div className="vocab-example-stack">
+                    {kanjiExample && kanjiExample !== example && (
+                      <span className="vocab-example-kanji">
+                        {kanjiExample}
+                      </span>
+                    )}
+                    <span className="grammar-example">{example}</span>
+                  </div>
+                  <button
+                    type="button"
+                    className="speak-btn"
+                    onClick={(e) => speak(example, e.currentTarget)}
+                  >
+                    🔊
+                  </button>
+                </div>
+                <div className="grammar-segments">
+                  {segments &&
+                    segments.map((seg: any, sIdx: number) => (
+                      <button
+                        key={sIdx}
+                        type="button"
+                        className="segment-chip"
+                        onClick={(e) => speak(seg[0], e.currentTarget)}
+                      >
+                        <span className="seg-jp">{seg[0]}</span>
+                        <span className="seg-romaji">{seg[1]}</span>
+                      </button>
+                    ))}
+                </div>
+                {translation && (
+                  <span className="vocab-example-translation">
+                    {tf(translation)}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
