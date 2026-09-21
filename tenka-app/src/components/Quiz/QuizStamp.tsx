@@ -1,11 +1,14 @@
 import { useQuiz } from "@/state/QuizContext";
+import { splitMarks, stripMarks } from "@/data/jlptConquest";
 
 export default function QuizStamp() {
   const { state } = useQuiz();
   const current = state.queue[state.index];
   if (!current) return null;
 
-  const text = current[0];
+  // soal Penaklukan ala JLPT bisa punya kata yang digarisbawahi (⟦ ⟧)
+  const parts = splitMarks(current[0]);
+  const text = stripMarks(current[0]);
   const isLong = text.length > 6;
 
   let style: React.CSSProperties | undefined = undefined;
@@ -22,9 +25,15 @@ export default function QuizStamp() {
 
   return (
     <div className="stamp-wrap">
-      <div className={`stamp ${isLong ? "long-text" : ""}`}>
+      {/* key = index soal → elemen di-mount ulang, animasi "stempel" main tiap soal */}
+      <div
+        key={state.index}
+        className={`stamp pop ${isLong ? "long-text" : ""}`}
+      >
         <span className="kana" style={style}>
-          {text}
+          {parts.map((p, i) =>
+            p.marked ? <u key={i}>{p.text}</u> : <span key={i}>{p.text}</span>,
+          )}
         </span>
       </div>
     </div>

@@ -12,6 +12,8 @@ import {
   getConquestLockReason as checkLockReason,
 } from "@/data/titles";
 import { getLocalizedConquestStory } from "@/data/conquestStory";
+import { getJlptStory, isJlptScript } from "@/data/jlptConquest";
+import { useLang } from "@/i18n/LangContext";
 import { getSpeedrunBest, saveSpeedrunTime } from "@/utils/speedrun";
 import { promoteIfHigher, computeRankIndex } from "@/data/ranks";
 
@@ -42,6 +44,7 @@ type ConquestContextValue = {
 const ConquestContext = createContext<ConquestContextValue | null>(null);
 
 export function ConquestProvider({ children }: { children: ReactNode }) {
+  const { lang } = useLang();
   const [reloadFlag, setReloadFlag] = useState(0);
 
   const reload = useCallback(() => setReloadFlag((n) => n + 1), []);
@@ -58,8 +61,10 @@ export function ConquestProvider({ children }: { children: ReactNode }) {
 
   const getStory = useCallback(
     (scriptKey: string): ConquestStory | null =>
-      getLocalizedConquestStory(scriptKey),
-    [],
+      isJlptScript(scriptKey)
+        ? getJlptStory(scriptKey, lang)
+        : getLocalizedConquestStory(scriptKey),
+    [lang],
   );
 
   const completeConquest = useCallback((scriptKey: string) => {

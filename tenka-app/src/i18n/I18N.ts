@@ -23,6 +23,10 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Pilih aksara untuk belajar",
   },
   "profile.addNickname": { en: "+ Add nickname", id: "+ Tambah nickname" },
+  "profile.nicknamePlaceholder": {
+    en: "Your nickname...",
+    id: "Nickname kamu...",
+  },
   "appearance.language": { en: "Language", id: "Bahasa" },
 
   "start.chooseTierFirst": {
@@ -89,6 +93,7 @@ export const I18N: Record<string, I18NEntry> = {
   },
   "quiz.meaningLabel": { en: "Meaning: {value}", id: "Arti: {value}" },
   "quiz.romajiLabel": { en: "Romaji: {value}", id: "Romaji: {value}" },
+  "quiz.readingLabel": { en: "Reading: {value}", id: "Bacaan: {value}" },
   "quiz.functionLabel": { en: "Function: {value}", id: "Fungsi: {value}" },
   "quiz.kalimatLabel": { en: "Example: {value}", id: "Kalimat: {value}" },
   "quiz.hiraganaLabel": { en: "Hiragana: {value}", id: "Hiragana: {value}" },
@@ -141,6 +146,12 @@ export const I18N: Record<string, I18NEntry> = {
     en: 'No matches for "{query}". Try a different word.',
     id: 'Tidak ada yang cocok dengan "{query}". Coba kata lain.',
   },
+  "learn.studyAsFlashcards": {
+    en: "Study This as Flashcards",
+    id: "Pelajari Ini sebagai Flashcard",
+  },
+  "levels.groupChapter": { en: "Chapter {n}", id: "Chapter {n}" },
+  "levels.subTiers": { en: "sub-tiers", id: "sub-tier" },
   "learn.usageNote": { en: "Notes", id: "Catatan" },
   "learn.listenPronunciation": {
     en: "Listen to {text}, read {reading}",
@@ -163,6 +174,94 @@ export const I18N: Record<string, I18NEntry> = {
   "aria.openFlashcards": {
     en: "Open Flashcards",
     id: "Buka Flashcard",
+  },
+  "aria.openPractice": {
+    en: "Open Question Practice",
+    id: "Buka Latihan Soal",
+  },
+  "practice.eyebrow": { en: "question types", id: "tipe soal" },
+  "practice.title": { en: "Question Practice", id: "Latihan Soal" },
+  "practice.sub": {
+    en: "Drill the exam-style question types from Conquest mode, drawn at random from the whole bank. Not every entry has every type, so each type is its own pool.",
+    id: "Latih tipe soal ala ujian dari Mode Penaklukan, diambil acak dari seluruh bank soal. Tidak semua entri punya semua tipe, jadi tiap tipe punya kumpulan soalnya sendiri.",
+  },
+  "practice.countLabel": { en: "Number of questions", id: "Jumlah soal" },
+  "practice.all": { en: "All ({count})", id: "Semua ({count})" },
+  "practice.questions": { en: "questions", id: "soal" },
+  "practice.customCount": { en: "Custom…", id: "Ketik sendiri…" },
+  "practice.customCountAria": {
+    en: "Type a custom number of questions",
+    id: "Ketik jumlah soal sendiri",
+  },
+  "practice.scriptLabel": { en: "Script", id: "Aksara" },
+  "practice.kotoba.write": { en: "Find the Kanji", id: "Tebak Kanji" },
+  "practice.kotoba.writeDesc": {
+    en: "Hiragana sentence, one word underlined — pick its kanji.",
+    id: "Kalimat hiragana, satu kata digarisbawahi — pilih kanjinya.",
+  },
+  "practice.kotoba.reading": { en: "Find the Reading", id: "Tebak Bacaan" },
+  "practice.kotoba.readingDesc": {
+    en: "Kanji sentence, one word underlined — pick its reading.",
+    id: "Kalimat kanji, satu kata digarisbawahi — pilih bacaannya.",
+  },
+  "practice.kotoba.fill": { en: "Best Word", id: "Kata yang Cocok" },
+  "practice.kotoba.fillDesc": {
+    en: "Sentence with a blank — pick the word that fits.",
+    id: "Kalimat dengan bagian kosong — pilih kata yang cocok.",
+  },
+  "practice.kotoba.usage": { en: "Correct Sentence", id: "Kalimat yang Benar" },
+  "practice.kotoba.usageDesc": {
+    en: "Four sentences use the word — pick the correct one.",
+    id: "Empat kalimat memakai kata itu — pilih yang benar.",
+  },
+  "practice.bunpo.meaning": { en: "Pattern Meaning", id: "Arti Pola" },
+  "practice.bunpo.meaningDesc": {
+    en: "A grammar pattern appears — pick its function.",
+    id: "Sebuah pola tata bahasa muncul — pilih fungsinya.",
+  },
+  "practice.bunpo.particle": { en: "Choose the Particle", id: "Tebak Partikel" },
+  "practice.bunpo.particleDesc": {
+    en: "Sentence with a blank — pick the particle that fits.",
+    id: "Kalimat dengan bagian kosong — pilih partikel yang tepat.",
+  },
+  "practice.bunpo.conjugation": { en: "Verb Conjugation", id: "Konjugasi Kata Kerja" },
+  "practice.bunpo.conjugationDesc": {
+    en: "Sentence with a blank verb — pick the correct form.",
+    id: "Kalimat dengan kata kerja kosong — pilih bentuk yang tepat.",
+  },
+  "practice.bunpo.usage": { en: "Correct Sentence", id: "Kalimat yang Benar" },
+  "practice.bunpo.usageDesc": {
+    en: "Four sentences use the pattern — pick the correct one.",
+    id: "Empat kalimat memakai pola itu — pilih yang benar.",
+  },
+  "practice.bunpo.arrange": { en: "Arrange the Sentence (★)", id: "Susun Kalimat (★)" },
+  "practice.bunpo.arrangeDesc": {
+    en: "Put four pieces in order — pick the one that lands on ★.",
+    id: "Susun empat potongan — pilih yang jatuh di posisi ★.",
+  },
+  "practice.kanji.meaning": { en: "Kanji Meaning", id: "Arti Kanji" },
+  "practice.kanji.meaningDesc": {
+    en: "A kanji appears — pick its meaning.",
+    id: "Sebuah kanji muncul — pilih artinya.",
+  },
+  "practice.kanji.reading": { en: "Reading Kanji", id: "Baca Kanji" },
+  "practice.kanji.readingDesc": {
+    en: "A kanji appears — pick its reading (hiragana).",
+    id: "Sebuah kanji muncul — pilih bacaannya (hiragana).",
+  },
+  "practice.kanji.write": { en: "Pick the Kanji", id: "Tebak Kanjinya" },
+  "practice.kanji.writeDesc": {
+    en: "A meaning appears — pick the kanji. The wrong choices look alike.",
+    id: "Sebuah arti muncul — pilih kanjinya. Pilihan salahnya bentuknya mirip.",
+  },
+  "practice.kanji.fill": { en: "Best Word", id: "Kata yang Cocok" },
+  "practice.kanji.fillDesc": {
+    en: "Sentence with a blank — pick the kanji word that fits.",
+    id: "Kalimat dengan bagian kosong — pilih kata kanji yang cocok.",
+  },
+  "practice.start": {
+    en: "Start — {count} Questions",
+    id: "Mulai — {count} Soal",
   },
   "aria.learnSearch": {
     en: "Search this study set",
@@ -215,9 +314,53 @@ export const I18N: Record<string, I18NEntry> = {
     id: "⏰ Waktu habis! Jawabannya {answer}",
   },
 
-  "learn.kotobaWords": { en: "words", id: "kata" },
-  "learn.bunpoPatterns": { en: "patterns", id: "pola" },
+  "titles.heading": {
+    en: "Conquest Title Collection",
+    id: "Koleksi Title Penaklukkan",
+  },
+  "titles.hint": {
+    en: "Complete every conquest ⚔️ to claim the title of Conqueror!",
+    id: "Selesaikan setiap penaklukan ⚔️ untuk meraih gelar Penakluk!",
+  },
 
+  "speedrunRecords.heading": { en: "Speedrun Records", id: "Rekor Speedrun" },
+  "speedrunRecords.hint": {
+    en: "Your fastest completed run for each conquered script.",
+    id: "Waktu tercepatmu untuk tiap aksara yang sudah ditaklukkan.",
+  },
+  "speedrunRecords.empty": {
+    en: "Conquer Hiragana or Katakana ⚔️ to unlock Speedrun Mode for it.",
+    id: "Taklukkan Hiragana atau Katakana ⚔️ untuk membuka Mode Speedrun-nya.",
+  },
+  "speedrunRecords.notPlayedYet": {
+    en: "Not run yet",
+    id: "Belum pernah dicoba",
+  },
+
+  "about.heading": { en: "About", id: "Tentang" },
+  "about.summary": { en: "Noble Ranks", id: "Tingkatan Kebangsawanan" },
+  "about.intro": {
+    en: "Conquer every Chapter Trial to climb from commoner to emperor.",
+    id: "Taklukkan tiap Chapter Trial untuk naik dari rakyat jelata sampai kaisar.",
+  },
+  "rank.comingSoon": { en: "Coming soon", id: "Segera hadir" },
+
+  "feedback.heading": { en: "Send Feedback", id: "Kirim Masukan" },
+  "feedback.button": { en: "Send Feedback", id: "Kirim Masukan" },
+  "feedback.placeholder": {
+    en: "Got a suggestion, idea, or found a bug? Write it here...",
+    id: "Ada saran, ide, atau nemu bug? Tulis di sini...",
+  },
+  "feedback.subject": {
+    en: "Feedback — Learning Japanese App",
+    id: "Masukan — Learning Japanese App",
+  },
+  "feedback.bodyDefault": {
+    en: "Write your feedback here...",
+    id: "Tulis masukanmu di sini...",
+  },
+
+  "speedrun.countdownGo": { en: "GO!", id: "MULAI!" },
   "matchMode.cardTitle": { en: "Match Mode", id: "Mode Match" },
   "matchMode.cardDesc": {
     en: "Match 4 characters with their romaji, round by round.",
@@ -258,6 +401,9 @@ export const I18N: Record<string, I18NEntry> = {
   },
   "flash.dueNow": { en: "due now", id: "jatuh tempo" },
   "flash.cards": { en: "cards", id: "kartu" },
+  "flash.new": { en: "New", id: "Baru" },
+  "flash.learn": { en: "Learn", id: "Belajar" },
+  "flash.due": { en: "Due", id: "Ulang" },
   "flash.deleteDeck": { en: "Delete deck", id: "Hapus deck" },
   "flash.confirmDelete": {
     en: 'Delete the deck "{name}"? This can\'t be undone.',
@@ -266,6 +412,10 @@ export const I18N: Record<string, I18NEntry> = {
   "flash.progress": {
     en: "Card {current}/{total} · {label}",
     id: "Kartu {current}/{total} · {label}",
+  },
+  "flash.progressLabel": {
+    en: "{label}",
+    id: "{label}",
   },
   "flash.again": { en: "Again", id: "Lagi" },
   "flash.hard": { en: "Hard", id: "Sulit" },
@@ -281,6 +431,32 @@ export const I18N: Record<string, I18NEntry> = {
     en: "You reviewed {count} card(s) from {label}.",
     id: "Kamu sudah mengulang {count} kartu dari {label}.",
   },
+  "flash.caughtUp": {
+    en: "No cards to review right now. They'll come back when they're due.",
+    id: "Belum ada kartu yang perlu diulang sekarang. Kartu muncul lagi saat waktunya tiba.",
+  },
+  "flash.caughtUpTitle": {
+    en: "Nothing to review right now",
+    id: "Belum ada kartu untuk diulang",
+  },
+  "flash.caughtUpSub": {
+    en: "Every card in {label} has been answered and is waiting for its next turn. Come back later, or press Review Again to practice them all.",
+    id: "Semua kartu di {label} sudah pernah dijawab dan lagi menunggu jadwal muncul lagi. Kembali lagi nanti, atau tekan Ulangi untuk latihan semua kartu.",
+  },
+  "flash.studyAheadNote": {
+    en: "Reviewing all cards, even ones not due yet. The numbers below are grouped by your last answer, not by schedule.",
+    id: "Mode ulang semua kartu, termasuk yang belum jatuh tempo. Angka di bawah dikelompokkan dari jawaban terakhirmu, bukan dari jadwal.",
+  },
+  "flash.intervalNow": { en: "now", id: "sekarang" },
+  "flash.waitingTitle": {
+    en: "Waiting for the next card…",
+    id: "Menunggu kartu berikutnya…",
+  },
+  "flash.waitingSub": {
+    en: "The next card comes back in {time}.",
+    id: "Kartu berikutnya muncul lagi dalam {time}.",
+  },
+  "flash.waitingSkip": { en: "Continue now", id: "Lanjut sekarang" },
   "flash.reviewAgain": {
     en: "Review This Deck Again",
     id: "Ulangi Deck Ini Lagi",
@@ -301,9 +477,17 @@ export const I18N: Record<string, I18NEntry> = {
     en: "Conquer {label}",
     id: "Taklukkan {label}",
   },
+  "conquest.jlptRetryCardTitleWithLabel": {
+    en: "Retake {label} Exam",
+    id: "Ulangi Ujian {label}",
+  },
   "conquest.desc": {
     en: "Conquer all of {label} at once — {count} questions, one mistake and it's over.",
     id: "Taklukkan seluruh {label} sekaligus — {count} soal, satu kali salah langsung gagal.",
+  },
+  "conquest.jlptDesc": {
+    en: "JLPT N5-style exam — {tiers} tiers, {count} random questions per tier. You need at least {percent}% correct in every tier.",
+    id: "Ujian ala JLPT N5 — {tiers} tier, {count} soal acak per tier. Minimal {percent}% benar di setiap tier.",
   },
   "conquest.lockNote": {
     en: "🔒 Conquer {lockLabel} first before you can conquer {label}.",
@@ -321,6 +505,34 @@ export const I18N: Record<string, I18NEntry> = {
   "conquestModal.singleIntro": {
     en: "You'll face all {count} {label} questions at once, shuffled.",
     id: "Kamu akan menghadapi seluruh {count} soal {label} sekaligus, diacak.",
+  },
+  "conquestModal.jlptIntro": {
+    en: "This works like the JLPT N5 exam: 3 tiers — meaning, reading, and choosing the best word for a sentence — with {count} random {label} questions in each ({total} in total).",
+    id: "Ujiannya ala JLPT N5: 3 tier — arti, membaca, dan memilih kata yang paling cocok untuk kalimat — masing-masing {count} soal acak {label} (total {total} soal).",
+  },
+  "conquestModal.jlptIntroBunpo": {
+    en: "This works like the JLPT N5 grammar exam: 5 tiers — pattern meaning, particles, verb conjugation, choosing the correct sentence for a pattern, and arranging a sentence (★) — with {count} random {label} questions in each ({total} in total).",
+    id: "Ujiannya ala JLPT N5 tata bahasa: 5 tier — arti pola, partikel, konjugasi kata kerja, memilih kalimat yang benar untuk sebuah pola, dan menyusun kalimat (★) — masing-masing {count} soal acak {label} (total {total} soal).",
+  },
+  "conquestModal.jlptIntroKanji": {
+    en: "This works like the JLPT N5 kanji exam: 4 tiers — kanji meaning, kanji reading (hiragana), picking the kanji for a meaning, and choosing the best kanji word for a sentence — with {count} random {label} questions in each ({total} in total).",
+    id: "Ujiannya ala JLPT N5 kanji: 4 tier — arti kanji, bacaan kanji (hiragana), menebak kanji dari arti, dan memilih kata kanji yang paling cocok untuk kalimat — masing-masing {count} soal acak {label} (total {total} soal).",
+  },
+  "conquestModal.jlptIntroKotoba": {
+    en: "This works like the JLPT N5 vocabulary (Moji · Goi) exam: 4 tiers — hiragana → kanji, kanji → hiragana, choosing the best word for a sentence, and choosing the correct sentence for a word — with {count} random {label} questions in each ({total} in total).",
+    id: "Ujiannya ala JLPT N5 Moji · Goi: 4 tier — hiragana → kanji, kanji → hiragana, memilih kata yang paling cocok untuk kalimat, dan memilih kalimat yang benar untuk sebuah kata — masing-masing {count} soal acak {label} (total {total} soal).",
+  },
+  "conquestModal.rule.jlptChoices": {
+    en: "Every tier is <b>multiple choice with 4 options</b>. The questions are drawn at random from {label} each attempt.",
+    id: "Semua tier berupa <b>pilihan ganda 4 opsi</b>. Soal diambil acak dari {label} setiap percobaan.",
+  },
+  "conquestModal.rule.jlptPassMark": {
+    en: "You need <b>at least {percent}% correct in every tier</b>. Fall below that and the conquest <b>FAILS</b> right away.",
+    id: "Kamu harus <b>minimal {percent}% benar di setiap tier</b>. Kalau nilainya sudah tidak mungkin cukup, penaklukkan langsung <b>GAGAL</b>.",
+  },
+  "conquestModal.rule.jlptFailRestart": {
+    en: "If you fail, you'll have to start over from Tier 1.",
+    id: "Kalau gagal, kamu harus mengulang lagi dari Tier 1.",
   },
   "conquestModal.rule.typeOnly": {
     en: "In <b>every Chapter</b>, you must <b>type your own</b> answer — there's no multiple choice at all.",
@@ -366,9 +578,37 @@ export const I18N: Record<string, I18NEntry> = {
     en: "{label} — {script}",
     id: "{label} — {script}",
   },
+  "conquestStory.jlptEyebrowStart": {
+    en: "📝 The N5 exam begins",
+    id: "📝 Ujian N5 dimulai",
+  },
+  "conquestStory.jlptEyebrowNext": {
+    en: "📝 Next tier",
+    id: "📝 Tier berikutnya",
+  },
+  "conquestStory.jlptEyebrowFinal": {
+    en: "📝 Final tier",
+    id: "📝 Tier terakhir",
+  },
+  "conquestStory.jlptMeta": {
+    en: "{count} questions in this tier · 4 choices · at least {percent}% correct to pass ({need} of {count}).",
+    id: "{count} soal di tier ini · 4 pilihan · minimal {percent}% benar untuk lulus ({need} dari {count}).",
+  },
+  "conquestStory.startThisTier": {
+    en: "Start This Tier",
+    id: "Mulai Tier Ini",
+  },
   "conquestStory.startThisChapter": {
     en: "Start This Chapter",
     id: "Mulai Chapter Ini",
+  },
+  "conquestStory.diffLabel": {
+    en: "🔥 type your own answer",
+    id: "🔥 ketik jawaban sendiri",
+  },
+  "conquestStory.meta": {
+    en: "{count} questions in this Chapter · {diff} · one mistake and the whole conquest fails.",
+    id: "{count} soal di Chapter ini · {diff} · satu kali salah, seluruh penaklukkan gagal.",
   },
   "speedrun.cardTitleWithLabel": {
     en: "Speedrun {label}",
@@ -419,6 +659,96 @@ export const I18N: Record<string, I18NEntry> = {
   },
   "results.conquerAgain": { en: "⚔️ Conquer Again", id: "⚔️ Taklukkan Lagi" },
   "results.speedrunAgain": { en: "⚡ Speedrun Again", id: "⚡ Speedrun Lagi" },
+
+  "results.bestStreak": {
+    en: " · best streak {n}",
+    id: " · beruntun terbaik {n}",
+  },
+  "results.greetConquestFail": {
+    en: "Keep going, {name}! 💪",
+    id: "Semangat, {name}! 💪",
+  },
+  "results.greetConquestSuccess": {
+    en: "Perfect, {name}! 🏆",
+    id: "Sempurna, {name}! 🏆",
+  },
+  "results.greetPerfect": {
+    en: "Perfect, {name}! 🎉",
+    id: "Sempurna, {name}! 🎉",
+  },
+  "results.greetAlmost": {
+    en: "Almost perfect, {name}! Just a bit more.",
+    id: "Hampir sempurna, {name}! Sedikit lagi.",
+  },
+  "results.greetDecent": {
+    en: "Not bad, {name}! Keep practicing.",
+    id: "Lumayan, {name}! Terus berlatih ya.",
+  },
+  "results.greetKeepGoing": {
+    en: "Keep going, {name}! Try again, take it slow.",
+    id: "Semangat, {name}! Coba lagi pelan-pelan.",
+  },
+  "results.conquestFailBanner": {
+    en: "💀 <b>Conquest Failed</b> — missed{phaseNote} (question {current} of {total}). {label} isn't conquered yet, try again from the start!",
+    id: "💀 <b>Penaklukkan Gagal</b> — meleset{phaseNote} (soal ke-{current} dari {total}). {label} belum takluk, coba lagi dari awal!",
+  },
+  "results.jlptFailBanner": {
+    en: "💀 <b>Conquest Failed</b> — too many mistakes{phaseNote} (question {current} of {total}). You need at least {percent}% correct in every tier of {label} — try again from the start!",
+    id: "💀 <b>Penaklukkan Gagal</b> — kebanyakan salah{phaseNote} (soal ke-{current} dari {total}). Kamu perlu minimal {percent}% benar di setiap tier {label} — coba lagi dari awal!",
+  },
+  "results.greetConquestPassed": {
+    en: "You passed, {name}! 🏆",
+    id: "Lulus, {name}! 🏆",
+  },
+  "results.conquestFailPhaseNote": {
+    en: " in {phase}",
+    id: " di {phase}",
+  },
+  "results.conquestSuccessOpening": {
+    en: "🏆 <b>Conquest Successful!</b> {epilogue}",
+    id: "🏆 <b>Penaklukkan Berhasil!</b> {epilogue}",
+  },
+  "results.conquestSuccessOpeningPlain": {
+    en: "🏆 <b>Conquest Successful!</b> You've officially conquered all of {label}!",
+    id: "🏆 <b>Penaklukkan Berhasil!</b> Kamu resmi menaklukkan seluruh {label}!",
+  },
+  "results.newTitleEarned": {
+    en: " New title earned: <b>{emoji} {title}</b> — check your collection in Settings.",
+    id: " Title baru didapat: <b>{emoji} {title}</b> — cek koleksimu di Settings.",
+  },
+  "results.knightCeremony": {
+    en: " <br><br>⚔️ <b>Knighting Ceremony!</b> You've fully conquered Hiragana and Katakana — the Knight Captain lays his sword on both your shoulders before the whole town. From today you officially hold the title <b>{emoji} {title} ({subtitle})</b>!",
+    id: " <br><br>⚔️ <b>Upacara Pengangkatan Ksatria!</b> Hiragana dan Katakana sudah kau taklukkan sepenuhnya — Kapten Ksatria meletakkan pedangnya di kedua bahumu di hadapan seluruh warga kota. Mulai hari ini kau resmi menyandang gelar <b>{emoji} {title} ({subtitle})</b>!",
+  },
+  "results.baronCeremony": {
+    en: " <br><br>🎗️ <b>Investiture Ceremony!</b> With Basic Kotoba fully conquered, the King's court summons you before the throne — a scroll bearing the royal seal is placed in your hands. From today you officially hold the title <b>{emoji} {title} ({subtitle})</b>!",
+    id: " <br><br>🎗️ <b>Upacara Pengangkatan Bangsawan!</b> Basic Kotoba sudah kau taklukkan sepenuhnya — istana Raja memanggilmu menghadap singgasana, sebuah gulungan bersegel kerajaan diletakkan di tanganmu. Mulai hari ini kau resmi menyandang gelar <b>{emoji} {title} ({subtitle})</b>!",
+  },
+  "results.rankUp": {
+    en: " Your rank rose to <b>{emoji} {title} ({subtitle})</b>",
+    id: " Tingkatanmu naik menjadi <b>{emoji} {title} ({subtitle})</b>",
+  },
+  "results.rankUpPlain": {
+    en: "Your rank rose! You are now <b>{emoji} {title} ({subtitle})</b>",
+    id: "Tingkatanmu naik! Sekarang kamu adalah <b>{emoji} {title} ({subtitle})</b>",
+  },
+  "results.speedrunTime": { en: "Time: {time}", id: "Waktu: {time}" },
+  "results.speedrunNewRecord": {
+    en: "⚡ <b>New Record!</b> You finished {label} in <b>{time}</b>.",
+    id: "⚡ <b>Rekor Baru!</b> Kamu menyelesaikan {label} dalam <b>{time}</b>.",
+  },
+  "results.speedrunFirstRecord": {
+    en: "⚡ <b>First record set!</b> You finished {label} in <b>{time}</b>.",
+    id: "⚡ <b>Rekor pertama tercatat!</b> Kamu menyelesaikan {label} dalam <b>{time}</b>.",
+  },
+  "results.speedrunNoRecord": {
+    en: "You finished {label} in <b>{time}</b> — your best is still {best}.",
+    id: "Kamu menyelesaikan {label} dalam <b>{time}</b> — rekor terbaikmu masih {best}.",
+  },
+  "results.speedrunFailBanner": {
+    en: "💀 <b>Speedrun Failed</b> — too many mistakes (question {current} of {total}). Try again!",
+    id: "💀 <b>Speedrun Gagal</b> — kebanyakan salah (soal ke-{current} dari {total}). Coba lagi!",
+  },
   "quiz.chapterLabel": {
     en: "⚔️ {phaseLabel} · Question {current}/{total}",
     id: "⚔️ {phaseLabel} · Soal {current}/{total}",

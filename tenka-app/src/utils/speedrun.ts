@@ -1,5 +1,13 @@
 export const SPEEDRUN_KEY = "tebakAksara_speedrun_v1";
 
+// Speedrun cuma ada di aksara dasar. Basic Kotoba, Bunpō & Kanji N5 sudah
+// pakai Penaklukan ala ujian JLPT (acak per tier), jadi tidak ada speedrun.
+export const SPEEDRUN_SCRIPTS: readonly string[] = ["hiragana", "katakana"];
+
+export function supportsSpeedrun(scriptKey: string): boolean {
+  return SPEEDRUN_SCRIPTS.includes(scriptKey);
+}
+
 export type SpeedrunRecords = Record<string, number>;
 
 export function getSpeedrunRecords(): SpeedrunRecords {

@@ -2,7 +2,7 @@ import type { Bilingual, BunpoEntry, BunpoLearnSection } from "./types";
 
 export const BUNPO_N5_TIER1: BunpoEntry[] = [
   [
-    "〜は〜です",
+    "_は_です",
     "私は学生です。",
     { en: "states that A is B", id: "menyatakan A adalah B" },
     [
@@ -15,7 +15,7 @@ export const BUNPO_N5_TIER1: BunpoEntry[] = [
     { en: "I am a student.", id: "Saya adalah murid/siswa." },
   ],
   [
-    "〜は〜ではありません",
+    "_は_ではありません",
     "私は先生ではありません。",
     { en: "states that A is not B", id: "menyatakan A bukan B" },
     [
@@ -28,7 +28,7 @@ export const BUNPO_N5_TIER1: BunpoEntry[] = [
     { en: "I am not a teacher.", id: "Saya bukan guru." },
   ],
   [
-    "〜は〜でした",
+    "_は_でした",
     "昨日は休みでした。",
     { en: "A was B (past)", id: "A adalah B (lampau)" },
     [
@@ -41,7 +41,7 @@ export const BUNPO_N5_TIER1: BunpoEntry[] = [
     { en: "Yesterday was a day off.", id: "Kemarin adalah hari libur." },
   ],
   [
-    "〜は〜ではありませんでした",
+    "_は_ではありませんでした",
     "昨日は雨ではありませんでした。",
     { en: "A was not B (past)", id: "A bukan B (lampau)" },
     [
@@ -54,7 +54,7 @@ export const BUNPO_N5_TIER1: BunpoEntry[] = [
     { en: "Yesterday was not rainy.", id: "Kemarin tidak hujan." },
   ],
   [
-    "〜も",
+    "_も_",
     "私も学生です。",
     { en: "also / too", id: "juga" },
     [
@@ -66,7 +66,7 @@ export const BUNPO_N5_TIER1: BunpoEntry[] = [
     { en: "I am also a student.", id: "Saya juga murid/siswa." },
   ],
   [
-    "NのN",
+    "_の_",
     "これは私の本です。",
     {
       en: "indicates possession/description of a thing",
@@ -82,7 +82,7 @@ export const BUNPO_N5_TIER1: BunpoEntry[] = [
     { en: "This is my book.", id: "Ini buku saya." },
   ],
   [
-    "NとN",
+    "_と_",
     "犬と猫がいます。",
     {
       en: "and (listing items exhaustively)",
@@ -101,7 +101,7 @@ export const BUNPO_N5_TIER1: BunpoEntry[] = [
 // Sub-Tier 1.2: Partikel Utama (8)
 export const BUNPO_N5_TIER2: BunpoEntry[] = [
   [
-    "〜は",
+    "_は_",
     "私は日本人です。",
     { en: "topic particle", id: "partikel topik" },
     [
@@ -113,7 +113,7 @@ export const BUNPO_N5_TIER2: BunpoEntry[] = [
     { en: "I am Japanese.", id: "Saya orang Jepang." },
   ],
   [
-    "〜が",
+    "_が_",
     "雨が降っています。",
     { en: "marks the sentence subject", id: "menandai subjek kalimat" },
     [
@@ -125,7 +125,7 @@ export const BUNPO_N5_TIER2: BunpoEntry[] = [
     { en: "It is raining.", id: "Sedang turun hujan." },
   ],
   [
-    "〜を",
+    "_を_",
     "水を飲みます。",
     { en: "marks the direct object", id: "menandai objek langsung" },
     [
@@ -137,7 +137,7 @@ export const BUNPO_N5_TIER2: BunpoEntry[] = [
     { en: "I drink water.", id: "Saya minum air." },
   ],
   [
-    "〜に",
+    "_に_",
     "7時に起きます。",
     {
       en: "indicates time or destination",
@@ -152,7 +152,7 @@ export const BUNPO_N5_TIER2: BunpoEntry[] = [
     { en: "I wake up at 7 o'clock.", id: "Saya bangun jam 7." },
   ],
   [
-    "〜で",
+    "_で_",
     "電車で行きます。",
     {
       en: "indicates the place/means of doing something",
@@ -167,7 +167,7 @@ export const BUNPO_N5_TIER2: BunpoEntry[] = [
     { en: "I go by train.", id: "Saya pergi naik kereta." },
   ],
   [
-    "〜と",
+    "_と_",
     "友達と話します。",
     { en: "together with", id: "bersama dengan" },
     [
@@ -179,7 +179,7 @@ export const BUNPO_N5_TIER2: BunpoEntry[] = [
     { en: "I talk with my friend.", id: "Saya berbicara dengan teman." },
   ],
   [
-    "〜から",
+    "_から_",
     "9時から働きます。",
     { en: "from (starting point)", id: "dari (titik awal)" },
     [
@@ -193,7 +193,7 @@ export const BUNPO_N5_TIER2: BunpoEntry[] = [
     },
   ],
   [
-    "〜まで",
+    "_まで_",
     "5時まで働きます。",
     { en: "until (end point)", id: "sampai (titik akhir)" },
     [
@@ -208,7 +208,7 @@ export const BUNPO_N5_TIER2: BunpoEntry[] = [
 // Sub-Tier 2.1: Keberadaan (Ada/Tinggal) (7)
 export const BUNPO_N5_TIER3: BunpoEntry[] = [
   [
-    "〜があります",
+    "_があります",
     "机の上に本があります。",
     { en: "there is (inanimate)", id: "ada (benda mati)" },
     [
@@ -220,7 +220,7 @@ export const BUNPO_N5_TIER3: BunpoEntry[] = [
     { en: "There is a book on the desk.", id: "Ada buku di atas meja." },
   ],
   [
-    "〜がいます",
+    "_がいます",
     "公園に猫がいます。",
     { en: "there is (animate)", id: "ada (makhluk hidup)" },
     [
@@ -232,7 +232,7 @@ export const BUNPO_N5_TIER3: BunpoEntry[] = [
     { en: "There is a cat in the park.", id: "Ada kucing di taman." },
   ],
   [
-    "場所に〜があります/います",
+    "_に_があります/います",
     "教室に学生がいます。",
     { en: "there is X at a place", id: "di suatu tempat ada X" },
     [
@@ -244,7 +244,7 @@ export const BUNPO_N5_TIER3: BunpoEntry[] = [
     { en: "There are students in the classroom.", id: "Di kelas ada murid." },
   ],
   [
-    "Xは場所にあります/います",
+    "_は_にあります/います",
     "猫は教室にいます。",
     { en: "X is located at that place", id: "X berada di tempat tsb" },
     [
@@ -256,7 +256,7 @@ export const BUNPO_N5_TIER3: BunpoEntry[] = [
     { en: "The cat is in the classroom.", id: "Kucingnya ada di kelas." },
   ],
   [
-    "〜に住んでいます",
+    "_に住んでいます",
     "東京に住んでいます。",
     { en: "living in", id: "tinggal di" },
     [
@@ -267,7 +267,7 @@ export const BUNPO_N5_TIER3: BunpoEntry[] = [
     { en: "I live in Tokyo.", id: "Saya tinggal di Tokyo." },
   ],
   [
-    "〜の中に／上に／下に",
+    "_の中に／上に／下に_",
     "箱の中に猫がいます。",
     { en: "inside/on top of/underneath", id: "di dalam/atas/bawah" },
     [
@@ -279,7 +279,7 @@ export const BUNPO_N5_TIER3: BunpoEntry[] = [
     { en: "There is a cat inside the box.", id: "Ada kucing di dalam kotak." },
   ],
   [
-    "〜の隣に／そばに／近くに",
+    "_の隣に／そばに／近くに_",
     "駅の近くに店があります。",
     { en: "next to/near", id: "di sebelah/dekat" },
     [
@@ -295,7 +295,7 @@ export const BUNPO_N5_TIER3: BunpoEntry[] = [
 // Sub-Tier 2.2: Arah & Perpindahan (7)
 export const BUNPO_N5_TIER4: BunpoEntry[] = [
   [
-    "場所へ/に行きます・来ます・帰ります",
+    "_へ/に行きます・来ます・帰ります",
     "学校へ行きます。",
     { en: "go/come/return to a place", id: "pergi/datang/pulang ke" },
     [
@@ -306,7 +306,7 @@ export const BUNPO_N5_TIER4: BunpoEntry[] = [
     { en: "I go to school.", id: "Saya pergi ke sekolah." },
   ],
   [
-    "〜で行きます",
+    "_で行きます",
     "バスで行きます。",
     {
       en: "go by (means of transport)",
@@ -320,7 +320,7 @@ export const BUNPO_N5_TIER4: BunpoEntry[] = [
     { en: "I go by bus.", id: "Saya pergi naik bis." },
   ],
   [
-    "〜から〜まで",
+    "_から_まで_",
     "家から学校まで歩きます。",
     { en: "from...to (distance)", id: "dari...sampai (jarak)" },
     [
@@ -335,7 +335,7 @@ export const BUNPO_N5_TIER4: BunpoEntry[] = [
     },
   ],
   [
-    "〜を渡ります",
+    "_を渡ります",
     "橋を渡ります。",
     { en: "to cross", id: "menyeberang" },
     [
@@ -346,7 +346,7 @@ export const BUNPO_N5_TIER4: BunpoEntry[] = [
     { en: "I cross the bridge.", id: "Saya menyeberangi jembatan." },
   ],
   [
-    "〜を曲がります",
+    "_を曲がります",
     "次の角を曲がります。",
     { en: "to turn", id: "belok" },
     [
@@ -360,7 +360,7 @@ export const BUNPO_N5_TIER4: BunpoEntry[] = [
     },
   ],
   [
-    "〜をまっすぐ行きます",
+    "_をまっすぐ行きます",
     "この道をまっすぐ行きます。",
     { en: "go straight along", id: "jalan lurus" },
     [
@@ -375,7 +375,7 @@ export const BUNPO_N5_TIER4: BunpoEntry[] = [
     },
   ],
   [
-    "〜に乗ります／〜を降ります",
+    "_に乗ります／_を降ります",
     "バスに乗ります。",
     { en: "get on/get off a vehicle", id: "naik/turun kendaraan" },
     [
@@ -390,7 +390,7 @@ export const BUNPO_N5_TIER4: BunpoEntry[] = [
 // Sub-Tier 3.1: Bentuk Sopan (Masu Form) (6)
 export const BUNPO_N5_TIER5: BunpoEntry[] = [
   [
-    "V-masu",
+    "_ます",
     "毎日勉強します。",
     {
       en: "polite non-past positive",
@@ -404,7 +404,7 @@ export const BUNPO_N5_TIER5: BunpoEntry[] = [
     { en: "I study every day.", id: "Saya belajar setiap hari." },
   ],
   [
-    "V-masen",
+    "_ません",
     "今日は勉強しません。",
     { en: "polite negative", id: "bentuk sopan negatif" },
     [
@@ -415,7 +415,7 @@ export const BUNPO_N5_TIER5: BunpoEntry[] = [
     { en: "I will not study today.", id: "Hari ini saya tidak belajar." },
   ],
   [
-    "V-mashita",
+    "_ました",
     "昨日、映画を見ました。",
     { en: "polite past positive", id: "bentuk sopan lampau positif" },
     [
@@ -427,7 +427,7 @@ export const BUNPO_N5_TIER5: BunpoEntry[] = [
     { en: "I watched a movie yesterday.", id: "Kemarin saya menonton film." },
   ],
   [
-    "V-masen deshita",
+    "_ませんでした",
     "昨日、行きませんでした。",
     { en: "polite past negative", id: "bentuk sopan lampau negatif" },
     [
@@ -438,7 +438,7 @@ export const BUNPO_N5_TIER5: BunpoEntry[] = [
     { en: "I didn't go yesterday.", id: "Kemarin saya tidak pergi." },
   ],
   [
-    "V-nagara",
+    "_ながら_",
     "音楽を聞きながら勉強します。",
     { en: "while doing", id: "sambil melakukan" },
     [
@@ -453,7 +453,7 @@ export const BUNPO_N5_TIER5: BunpoEntry[] = [
     },
   ],
   [
-    "V(masu-stem)に行きます/来ます",
+    "_（ます形の語幹）に行きます/来ます",
     "デパートへ買い物に行きます。",
     {
       en: "go/come to do (purpose)",
@@ -475,7 +475,7 @@ export const BUNPO_N5_TIER5: BunpoEntry[] = [
 // Sub-Tier 3.2: Bentuk Te (Te Form) (8)
 export const BUNPO_N5_TIER6: BunpoEntry[] = [
   [
-    "V-teいます",
+    "_ています",
     "今、勉強しています。",
     {
       en: "doing right now / ongoing state",
@@ -489,7 +489,7 @@ export const BUNPO_N5_TIER6: BunpoEntry[] = [
     { en: "I am studying right now.", id: "Sedang belajar sekarang." },
   ],
   [
-    "V-teください",
+    "_てください",
     "ここに座ってください。",
     { en: "please do", id: "tolong lakukan" },
     [
@@ -500,7 +500,7 @@ export const BUNPO_N5_TIER6: BunpoEntry[] = [
     { en: "Please sit here.", id: "Tolong duduk di sini." },
   ],
   [
-    "V-teもいいです",
+    "_てもいいです",
     "ここに座ってもいいです。",
     { en: "allowed to do", id: "boleh melakukan" },
     [
@@ -511,7 +511,7 @@ export const BUNPO_N5_TIER6: BunpoEntry[] = [
     { en: "You may sit here.", id: "Boleh duduk di sini." },
   ],
   [
-    "V-teはいけません",
+    "_てはいけません",
     "ここに座ってはいけません。",
     { en: "not allowed to do", id: "tidak boleh melakukan" },
     [
@@ -522,7 +522,7 @@ export const BUNPO_N5_TIER6: BunpoEntry[] = [
     { en: "You must not sit here.", id: "Tidak boleh duduk di sini." },
   ],
   [
-    "V-teから",
+    "_てから_",
     "手を洗ってから食べます。",
     { en: "after doing", id: "setelah melakukan" },
     [
@@ -536,7 +536,7 @@ export const BUNPO_N5_TIER6: BunpoEntry[] = [
     },
   ],
   [
-    "V-te, V-te",
+    "_て、_",
     "朝起きて、顔を洗います。",
     {
       en: "connecting two consecutive actions",
@@ -554,7 +554,7 @@ export const BUNPO_N5_TIER6: BunpoEntry[] = [
     },
   ],
   [
-    "V-teみます",
+    "_てみます",
     "この料理を食べてみます。",
     { en: "try doing", id: "coba melakukan" },
     [
@@ -568,7 +568,7 @@ export const BUNPO_N5_TIER6: BunpoEntry[] = [
     },
   ],
   [
-    "V-teおきます",
+    "_ておきます",
     "明日のために準備しておきます。",
     {
       en: "do in advance (preparation)",
@@ -589,7 +589,7 @@ export const BUNPO_N5_TIER6: BunpoEntry[] = [
 // Sub-Tier 3.3: Bentuk Nai (Nai Form) (7)
 export const BUNPO_N5_TIER7: BunpoEntry[] = [
   [
-    "V-nai",
+    "_ない",
     "明日は行かない。",
     { en: "dictionary-form negative", id: "bentuk negatif kamus" },
     [
@@ -600,7 +600,7 @@ export const BUNPO_N5_TIER7: BunpoEntry[] = [
     { en: "I won't go tomorrow.", id: "Besok saya tidak pergi." },
   ],
   [
-    "V-naiでください",
+    "_ないでください",
     "写真を撮らないでください。",
     { en: "please don't do", id: "tolong jangan lakukan" },
     [
@@ -611,7 +611,7 @@ export const BUNPO_N5_TIER7: BunpoEntry[] = [
     { en: "Please don't take photos.", id: "Tolong jangan mengambil foto." },
   ],
   [
-    "V-nakerebaなりません",
+    "_なければなりません",
     "薬を飲まなければなりません。",
     { en: "must do", id: "harus melakukan" },
     [
@@ -622,7 +622,7 @@ export const BUNPO_N5_TIER7: BunpoEntry[] = [
     { en: "I must take medicine.", id: "Saya harus minum obat." },
   ],
   [
-    "V-nakutemoいいです",
+    "_なくてもいいです",
     "今日は勉強しなくてもいいです。",
     { en: "don't need to do", id: "tidak perlu melakukan" },
     [
@@ -636,7 +636,7 @@ export const BUNPO_N5_TIER7: BunpoEntry[] = [
     },
   ],
   [
-    "V-naide",
+    "_ないで_",
     "朝ご飯を食べないで学校へ行きました。",
     { en: "without doing", id: "tanpa melakukan" },
     [
@@ -651,7 +651,7 @@ export const BUNPO_N5_TIER7: BunpoEntry[] = [
     },
   ],
   [
-    "V-naiほうがいいです",
+    "_ないほうがいいです",
     "たばこを吸わないほうがいいです。",
     { en: "better not to do", id: "lebih baik tidak melakukan" },
     [
@@ -662,7 +662,7 @@ export const BUNPO_N5_TIER7: BunpoEntry[] = [
     { en: "You'd better not smoke.", id: "Lebih baik tidak merokok." },
   ],
   [
-    "V-naiつもりです",
+    "_ないつもりです",
     "今年は旅行しないつもりです。",
     { en: "intend not to do", id: "berniat tidak melakukan" },
     [
@@ -680,7 +680,7 @@ export const BUNPO_N5_TIER7: BunpoEntry[] = [
 // Sub-Tier 3.4: Bentuk Kamus (Dictionary Form) (7)
 export const BUNPO_N5_TIER8: BunpoEntry[] = [
   [
-    "V-辞書形",
+    "_（辞書形）",
     "毎日日本語を勉強する。",
     { en: "plain non-past form", id: "bentuk polos non-lampau" },
     [
@@ -695,7 +695,7 @@ export const BUNPO_N5_TIER8: BunpoEntry[] = [
     },
   ],
   [
-    "V-る ことができます",
+    "_る ことができます",
     "漢字を読むことができます。",
     { en: "can / able to do", id: "bisa/mampu melakukan" },
     [
@@ -706,7 +706,7 @@ export const BUNPO_N5_TIER8: BunpoEntry[] = [
     { en: "I can read kanji.", id: "Saya bisa membaca kanji." },
   ],
   [
-    "V-る こと",
+    "_る こと_",
     "本を読むことが好きです。",
     {
       en: "turns a verb into a noun",
@@ -721,7 +721,7 @@ export const BUNPO_N5_TIER8: BunpoEntry[] = [
     { en: "I like reading books.", id: "Saya suka membaca buku." },
   ],
   [
-    "V-る 前に",
+    "_る 前に_",
     "寝る前に歯を磨きます。",
     { en: "before doing", id: "sebelum melakukan" },
     [
@@ -736,7 +736,7 @@ export const BUNPO_N5_TIER8: BunpoEntry[] = [
     },
   ],
   [
-    "V-る つもりです",
+    "_る つもりです",
     "来年日本へ行くつもりです。",
     { en: "intend to / plan to", id: "berniat/berencana" },
     [
@@ -751,7 +751,7 @@ export const BUNPO_N5_TIER8: BunpoEntry[] = [
     },
   ],
   [
-    "V-る（polos）と思います",
+    "_る（普通形）と思います",
     "明日雨が降ると思います。",
     { en: "I think / in my opinion", id: "menurut saya/saya pikir" },
     [
@@ -766,7 +766,7 @@ export const BUNPO_N5_TIER8: BunpoEntry[] = [
     },
   ],
   [
-    "V-る なら",
+    "_る なら_",
     "日本へ行くなら、京都もいいですよ。",
     { en: "if/when (topic conditional)", id: "kalau/jika (kondisional topik)" },
     [
@@ -784,7 +784,7 @@ export const BUNPO_N5_TIER8: BunpoEntry[] = [
 // Sub-Tier 3.5: Bentuk Ta (Past Form) (7)
 export const BUNPO_N5_TIER9: BunpoEntry[] = [
   [
-    "V-た",
+    "_た",
     "昨日映画を見た。",
     { en: "plain past form", id: "bentuk lampau polos" },
     [
@@ -796,7 +796,7 @@ export const BUNPO_N5_TIER9: BunpoEntry[] = [
     { en: "I watched a movie yesterday.", id: "Kemarin saya nonton film." },
   ],
   [
-    "V-た ことがあります",
+    "_た ことがあります",
     "日本へ行ったことがあります。",
     { en: "have done before", id: "pernah melakukan" },
     [
@@ -807,7 +807,7 @@ export const BUNPO_N5_TIER9: BunpoEntry[] = [
     { en: "I have been to Japan before.", id: "Saya pernah pergi ke Jepang." },
   ],
   [
-    "V-た 後で",
+    "_た 後で_",
     "食べた後で薬を飲みます。",
     { en: "after doing", id: "setelah melakukan" },
     [
@@ -822,7 +822,7 @@ export const BUNPO_N5_TIER9: BunpoEntry[] = [
     },
   ],
   [
-    "V-たり、V-たりします",
+    "_たり、_たりします",
     "週末は本を読んだり、映画を見たりします。",
     { en: "doing things like...", id: "melakukan hal-hal seperti..." },
     [
@@ -837,7 +837,7 @@ export const BUNPO_N5_TIER9: BunpoEntry[] = [
     },
   ],
   [
-    "V-た ほうがいいです",
+    "_た ほうがいいです",
     "早く寝たほうがいいです。",
     { en: "you should do", id: "sebaiknya melakukan" },
     [
@@ -849,7 +849,7 @@ export const BUNPO_N5_TIER9: BunpoEntry[] = [
     { en: "You'd better sleep early.", id: "Lebih baik tidur lebih awal." },
   ],
   [
-    "V-たら",
+    "_たら_",
     "雨が降ったら、行きません。",
     { en: "if/when/once (conditional)", id: "kalau/jika/ketika (kondisional)" },
     [
@@ -860,7 +860,7 @@ export const BUNPO_N5_TIER9: BunpoEntry[] = [
     { en: "If it rains, I won't go.", id: "Kalau hujan, saya tidak pergi." },
   ],
   [
-    "V-た まま",
+    "_た まま_",
     "電気をつけたまま寝ました。",
     {
       en: "remain in a state after doing",
@@ -881,7 +881,7 @@ export const BUNPO_N5_TIER9: BunpoEntry[] = [
 // Sub-Tier 4.1: Kata Sifat-i (i-Adj) (6)
 export const BUNPO_N5_TIER10: BunpoEntry[] = [
   [
-    "Adj-i（polos）",
+    "_い（普通形）",
     "この家は大きいです。",
     { en: "base form", id: "bentuk dasar" },
     [
@@ -892,7 +892,7 @@ export const BUNPO_N5_TIER10: BunpoEntry[] = [
     { en: "This house is big.", id: "Rumah ini besar." },
   ],
   [
-    "Adj-i-くないです",
+    "_くないです",
     "この家は大きくないです。",
     { en: "negative", id: "negatif" },
     [
@@ -903,7 +903,7 @@ export const BUNPO_N5_TIER10: BunpoEntry[] = [
     { en: "This house is not big.", id: "Rumah ini tidak besar." },
   ],
   [
-    "Adj-i-かったです",
+    "_かったです",
     "昨日は忙しかったです。",
     { en: "past positive", id: "lampau positif" },
     [
@@ -914,7 +914,7 @@ export const BUNPO_N5_TIER10: BunpoEntry[] = [
     { en: "Yesterday was busy.", id: "Kemarin sibuk." },
   ],
   [
-    "Adj-i-くなかったです",
+    "_くなかったです",
     "昨日は忙しくなかったです。",
     { en: "past negative", id: "lampau negatif" },
     [
@@ -925,7 +925,7 @@ export const BUNPO_N5_TIER10: BunpoEntry[] = [
     { en: "Yesterday was not busy.", id: "Kemarin tidak sibuk." },
   ],
   [
-    "Adj-i-くて",
+    "_くて_",
     "この店は安くておいしいです。",
     { en: "connecting (and)", id: "menyambung (dan)" },
     [
@@ -937,7 +937,7 @@ export const BUNPO_N5_TIER10: BunpoEntry[] = [
     { en: "This shop is cheap and delicious.", id: "Toko ini murah dan enak." },
   ],
   [
-    "Adj-i-く + V",
+    "_く_",
     "早く起きます。",
     { en: "adverb form", id: "bentuk keterangan (adverbia)" },
     [
@@ -952,7 +952,7 @@ export const BUNPO_N5_TIER10: BunpoEntry[] = [
 // Sub-Tier 4.2: Kata Sifat-na (na-Adj) (6)
 export const BUNPO_N5_TIER11: BunpoEntry[] = [
   [
-    "Adj-na + です",
+    "_です",
     "この町は静かです。",
     { en: "positive", id: "positif" },
     [
@@ -963,7 +963,7 @@ export const BUNPO_N5_TIER11: BunpoEntry[] = [
     { en: "This town is quiet.", id: "Kota ini tenang." },
   ],
   [
-    "Adj-na + ではありません",
+    "_ではありません",
     "この町は静かではありません。",
     { en: "negative", id: "negatif" },
     [
@@ -974,7 +974,7 @@ export const BUNPO_N5_TIER11: BunpoEntry[] = [
     { en: "This town is not quiet.", id: "Kota ini tidak tenang." },
   ],
   [
-    "Adj-na + でした",
+    "_でした",
     "昨日のパーティーは賑やかでした。",
     { en: "past positive", id: "lampau positif" },
     [
@@ -985,7 +985,7 @@ export const BUNPO_N5_TIER11: BunpoEntry[] = [
     { en: "Yesterday's party was lively.", id: "Pesta kemarin ramai." },
   ],
   [
-    "Adj-na + ではありませんでした",
+    "_ではありませんでした",
     "昨日のパーティーは賑やかではありませんでした。",
     { en: "past negative", id: "lampau negatif" },
     [
@@ -999,7 +999,7 @@ export const BUNPO_N5_TIER11: BunpoEntry[] = [
     },
   ],
   [
-    "Adj-na + で",
+    "_で_（な形容詞）",
     "この町は静かで、きれいです。",
     { en: "connecting (and)", id: "menyambung (dan)" },
     [
@@ -1014,7 +1014,7 @@ export const BUNPO_N5_TIER11: BunpoEntry[] = [
     },
   ],
   [
-    "Adj-na + に + V",
+    "_に_（な形容詞）",
     "静かに話します。",
     { en: "adverb form", id: "bentuk keterangan (adverbia)" },
     [
@@ -1029,7 +1029,7 @@ export const BUNPO_N5_TIER11: BunpoEntry[] = [
 // Sub-Tier 5.1: Keinginan & Ajakan (7)
 export const BUNPO_N5_TIER12: BunpoEntry[] = [
   [
-    "V-たいです",
+    "_たいです",
     "日本へ行きたいです。",
     { en: "want to do", id: "ingin melakukan" },
     [
@@ -1040,7 +1040,7 @@ export const BUNPO_N5_TIER12: BunpoEntry[] = [
     { en: "I want to go to Japan.", id: "Saya ingin pergi ke Jepang." },
   ],
   [
-    "V-たくないです",
+    "_たくないです",
     "今日は働きたくないです。",
     { en: "don't want to do", id: "tidak ingin melakukan" },
     [
@@ -1054,7 +1054,7 @@ export const BUNPO_N5_TIER12: BunpoEntry[] = [
     },
   ],
   [
-    "〜がほしいです",
+    "_がほしいです",
     "新しい車がほしいです。",
     { en: "want (a thing)", id: "ingin (benda)" },
     [
@@ -1065,7 +1065,7 @@ export const BUNPO_N5_TIER12: BunpoEntry[] = [
     { en: "I want a new car.", id: "Saya ingin mobil baru." },
   ],
   [
-    "V-ましょう",
+    "_ましょう",
     "一緒に食べましょう。",
     { en: "let's", id: "ayo/mari kita" },
     [
@@ -1076,7 +1076,7 @@ export const BUNPO_N5_TIER12: BunpoEntry[] = [
     { en: "Let's eat together.", id: "Ayo makan bersama-sama." },
   ],
   [
-    "V-ましょうか",
+    "_ましょうか",
     "一緒に映画を見ましょうか。",
     {
       en: "shall we... / how about...",
@@ -1094,7 +1094,7 @@ export const BUNPO_N5_TIER12: BunpoEntry[] = [
     },
   ],
   [
-    "V-ませんか",
+    "_ませんか",
     "一緒に行きませんか。",
     {
       en: "would you like to...? (invitation)",
@@ -1108,7 +1108,7 @@ export const BUNPO_N5_TIER12: BunpoEntry[] = [
     { en: "Would you like to go together?", id: "Mau pergi bersama-sama?" },
   ],
   [
-    "V-なさい",
+    "_なさい",
     "早く寝なさい。",
     { en: "do it! (gentle command)", id: "lakukan! (perintah halus)" },
     [
@@ -1123,7 +1123,7 @@ export const BUNPO_N5_TIER12: BunpoEntry[] = [
 // Sub-Tier 5.2: Alasan & Perbandingan (7)
 export const BUNPO_N5_TIER13: BunpoEntry[] = [
   [
-    "〜から",
+    "_から_",
     "雨が降っているから、行きません。",
     { en: "because (reason)", id: "karena (alasan)" },
     [
@@ -1137,7 +1137,7 @@ export const BUNPO_N5_TIER13: BunpoEntry[] = [
     },
   ],
   [
-    "〜ので",
+    "_ので_",
     "雨なので、行きません。",
     {
       en: "because (softer/objective reason)",
@@ -1154,7 +1154,7 @@ export const BUNPO_N5_TIER13: BunpoEntry[] = [
     },
   ],
   [
-    "AはBより〜です",
+    "_は_より_です",
     "私は犬より猫が好きです。",
     { en: "A is more ~ than B", id: "A lebih ~ daripada B" },
     [
@@ -1170,7 +1170,7 @@ export const BUNPO_N5_TIER13: BunpoEntry[] = [
     },
   ],
   [
-    "AとBとどちらが〜ですか",
+    "_と_とどちらが_ですか",
     "犬と猫とどちらが好きですか。",
     { en: "which is more ~, A or B?", id: "mana yang lebih ~, A atau B?" },
     [
@@ -1185,7 +1185,7 @@ export const BUNPO_N5_TIER13: BunpoEntry[] = [
     },
   ],
   [
-    "〜の中で〜が一番〜です",
+    "_の中で_が一番_です",
     "果物の中でりんごが一番好きです。",
     { en: "among ~, ~ is the most ~", id: "di antara ~, ~ paling ~" },
     [
@@ -1200,7 +1200,7 @@ export const BUNPO_N5_TIER13: BunpoEntry[] = [
     },
   ],
   [
-    "〜でしょう",
+    "_でしょう",
     "明日は晴れでしょう。",
     { en: "probably / likely", id: "mungkin/kemungkinan besar" },
     [
@@ -1211,7 +1211,7 @@ export const BUNPO_N5_TIER13: BunpoEntry[] = [
     { en: "It will probably be sunny tomorrow.", id: "Besok mungkin cerah." },
   ],
   [
-    "〜ほど〜ない",
+    "_ほど_ない",
     "今日は昨日ほど暑くないです。",
     {
       en: "not as ~ as (negative comparison)",
@@ -1233,7 +1233,7 @@ export const BUNPO_N5_TIER13: BunpoEntry[] = [
 // Sub-Tier 6.1: Kata Tunjuk (Ko-So-A-Do) (5)
 export const BUNPO_N5_TIER14: BunpoEntry[] = [
   [
-    "これ／それ／あれ／どれ",
+    "これ／それ／あれ／どれ_",
     "これは私の本です。",
     {
       en: "this/that/that over there/which (thing)",
@@ -1247,7 +1247,7 @@ export const BUNPO_N5_TIER14: BunpoEntry[] = [
     { en: "This is my book.", id: "Ini buku saya." },
   ],
   [
-    "この／その／あの／どの + N",
+    "この／その／あの／どの_",
     "この本は面白いです。",
     {
       en: "this/that/that over there/which N",
@@ -1261,7 +1261,7 @@ export const BUNPO_N5_TIER14: BunpoEntry[] = [
     { en: "This book is interesting.", id: "Buku ini menarik." },
   ],
   [
-    "ここ／そこ／あそこ／どこ",
+    "_ここ／そこ／あそこ／どこ",
     "教室はここです。",
     {
       en: "here/there/over there/where (place)",
@@ -1275,7 +1275,7 @@ export const BUNPO_N5_TIER14: BunpoEntry[] = [
     { en: "The classroom is here.", id: "Kelasnya ada di sini." },
   ],
   [
-    "こちら／そちら／あちら／どちら",
+    "_こちら／そちら／あちら／どちら",
     "お手洗いはあちらです。",
     {
       en: "this way/that way/that way over there/which way (polite)",
@@ -1289,7 +1289,7 @@ export const BUNPO_N5_TIER14: BunpoEntry[] = [
     { en: "The restroom is that way.", id: "Toiletnya ke arah sana." },
   ],
   [
-    "こんな／そんな／あんな／どんな + N",
+    "こんな／そんな／あんな／どんな_",
     "どんな音楽が好きですか。",
     {
       en: "this kind of/that kind of/what kind of N",
@@ -1310,7 +1310,7 @@ export const BUNPO_N5_TIER14: BunpoEntry[] = [
 // Sub-Tier 6.2: Partikel Akhir & Penghubung Kalimat (5)
 export const BUNPO_N5_TIER15: BunpoEntry[] = [
   [
-    "〜か",
+    "_か",
     "これは何ですか。",
     { en: "question particle", id: "partikel tanya" },
     [
@@ -1322,7 +1322,7 @@ export const BUNPO_N5_TIER15: BunpoEntry[] = [
     { en: "What is this?", id: "Ini apa?" },
   ],
   [
-    "〜ね",
+    "_ね",
     "今日は暑いですね。",
     {
       en: 'seeking agreement ("isn\'t it?")',
@@ -1337,7 +1337,7 @@ export const BUNPO_N5_TIER15: BunpoEntry[] = [
     { en: "It's hot today, isn't it?", id: "Hari ini panas, ya." },
   ],
   [
-    "〜よ",
+    "_よ",
     "もう6時ですよ。",
     { en: "emphasizes new information", id: "menegaskan info baru" },
     [
@@ -1349,7 +1349,7 @@ export const BUNPO_N5_TIER15: BunpoEntry[] = [
     { en: "It's already 6 o'clock!", id: "Sudah jam 6, lho!" },
   ],
   [
-    "NやN",
+    "_や_",
     "机の上に本やノートがあります。",
     {
       en: "and so on (partial, non-exhaustive listing)",
@@ -1367,7 +1367,7 @@ export const BUNPO_N5_TIER15: BunpoEntry[] = [
     },
   ],
   [
-    "そして／それから／でも／しかし",
+    "_そして／それから／でも／しかし_",
     "宿題をしました。それから、寝ました。",
     {
       en: "then/after that/but/however (sentence connector)",
@@ -1425,6 +1425,14 @@ export const BUNPO_N5_LEVEL_META: { id: string; tier: number; rank: string }[]  
   { id: "all", tier: BUNPO_N5_TIER_KEYS.length, rank: "N5" },
 ];
 
+// Jumlah pola di deskripsi tiap tingkat dihitung langsung dari datanya (bukan diketik
+// manual), supaya angkanya tidak pernah meleset lagi kalau pola ditambah/dihapus.
+const patternCountDesc = (items: readonly unknown[]): Bilingual => ({
+  en: `${items.length} N5 grammar patterns.`,
+  id: `${items.length} pola tata bahasa N5.`,
+});
+const BUNPO_N5_TOTAL = BUNPO_N5_CHAPTERS.reduce((sum, c) => sum + c.length, 0);
+
 export const BUNPO_N5_LEVEL_TEXT: Record<
   string,
   { title: Bilingual; sample: string; desc: Bilingual }
@@ -1434,121 +1442,121 @@ export const BUNPO_N5_LEVEL_TEXT: Record<
       en: "Tier 1.1 — Predicate & Basic Sentences",
       id: "Tier 1.1 — Predikat & Kalimat Dasar",
     },
-    sample: "〜は〜です",
-    desc: { en: "7 N5 grammar patterns.", id: "7 pola tata bahasa N5." },
+    sample: "_は_です",
+    desc: patternCountDesc(BUNPO_N5_TIER1),
   },
   tier2: {
     title: { en: "Tier 1.2 — Main Particles", id: "Tier 1.2 — Partikel Utama" },
-    sample: "〜は",
-    desc: { en: "8 N5 grammar patterns.", id: "8 pola tata bahasa N5." },
+    sample: "_は_",
+    desc: patternCountDesc(BUNPO_N5_TIER2),
   },
   tier3: {
     title: {
       en: "Tier 2.1 — Existence (There is / Living)",
       id: "Tier 2.1 — Keberadaan (Ada/Tinggal)",
     },
-    sample: "〜があります",
-    desc: { en: "7 N5 grammar patterns.", id: "7 pola tata bahasa N5." },
+    sample: "_があります",
+    desc: patternCountDesc(BUNPO_N5_TIER3),
   },
   tier4: {
     title: {
       en: "Tier 2.2 — Direction & Movement",
       id: "Tier 2.2 — Arah & Perpindahan",
     },
-    sample: "場所へ/に行きます・来ます・帰ります",
-    desc: { en: "7 N5 grammar patterns.", id: "7 pola tata bahasa N5." },
+    sample: "_へ/に行きます・来ます・帰ります",
+    desc: patternCountDesc(BUNPO_N5_TIER4),
   },
   tier5: {
     title: {
       en: "Tier 3.1 — Polite Form (Masu Form)",
       id: "Tier 3.1 — Bentuk Sopan (Masu Form)",
     },
-    sample: "V-masu",
-    desc: { en: "6 N5 grammar patterns.", id: "6 pola tata bahasa N5." },
+    sample: "_ます",
+    desc: patternCountDesc(BUNPO_N5_TIER5),
   },
   tier6: {
     title: { en: "Tier 3.2 — Te Form", id: "Tier 3.2 — Bentuk Te (Te Form)" },
-    sample: "V-teいます",
-    desc: { en: "8 N5 grammar patterns.", id: "8 pola tata bahasa N5." },
+    sample: "_ています",
+    desc: patternCountDesc(BUNPO_N5_TIER6),
   },
   tier7: {
     title: {
       en: "Tier 3.3 — Nai Form",
       id: "Tier 3.3 — Bentuk Nai (Nai Form)",
     },
-    sample: "V-nai",
-    desc: { en: "7 N5 grammar patterns.", id: "7 pola tata bahasa N5." },
+    sample: "_ない",
+    desc: patternCountDesc(BUNPO_N5_TIER7),
   },
   tier8: {
     title: {
       en: "Tier 3.4 — Dictionary Form",
       id: "Tier 3.4 — Bentuk Kamus (Dictionary Form)",
     },
-    sample: "V-辞書形",
-    desc: { en: "7 N5 grammar patterns.", id: "7 pola tata bahasa N5." },
+    sample: "_（辞書形）",
+    desc: patternCountDesc(BUNPO_N5_TIER8),
   },
   tier9: {
     title: {
       en: "Tier 3.5 — Past Form (Ta Form)",
       id: "Tier 3.5 — Bentuk Ta (Past Form)",
     },
-    sample: "V-た",
-    desc: { en: "7 N5 grammar patterns.", id: "7 pola tata bahasa N5." },
+    sample: "_た",
+    desc: patternCountDesc(BUNPO_N5_TIER9),
   },
   tier10: {
     title: {
       en: "Tier 4.1 — i-Adjectives",
       id: "Tier 4.1 — Kata Sifat-i (i-Adj)",
     },
-    sample: "Adj-i（polos）",
-    desc: { en: "6 N5 grammar patterns.", id: "6 pola tata bahasa N5." },
+    sample: "_い（普通形）",
+    desc: patternCountDesc(BUNPO_N5_TIER10),
   },
   tier11: {
     title: {
       en: "Tier 4.2 — na-Adjectives",
       id: "Tier 4.2 — Kata Sifat-na (na-Adj)",
     },
-    sample: "Adj-na + です",
-    desc: { en: "6 N5 grammar patterns.", id: "6 pola tata bahasa N5." },
+    sample: "_です",
+    desc: patternCountDesc(BUNPO_N5_TIER11),
   },
   tier12: {
     title: {
       en: "Tier 5.1 — Wants & Invitations",
       id: "Tier 5.1 — Keinginan & Ajakan",
     },
-    sample: "V-たいです",
-    desc: { en: "7 N5 grammar patterns.", id: "7 pola tata bahasa N5." },
+    sample: "_たいです",
+    desc: patternCountDesc(BUNPO_N5_TIER12),
   },
   tier13: {
     title: {
       en: "Tier 5.2 — Reasons & Comparisons",
       id: "Tier 5.2 — Alasan & Perbandingan",
     },
-    sample: "〜から",
-    desc: { en: "7 N5 grammar patterns.", id: "7 pola tata bahasa N5." },
+    sample: "_から_",
+    desc: patternCountDesc(BUNPO_N5_TIER13),
   },
   tier14: {
     title: {
       en: "Tier 6.1 — Demonstratives (Ko-So-A-Do)",
       id: "Tier 6.1 — Kata Tunjuk (Ko-So-A-Do)",
     },
-    sample: "これ／それ／あれ／どれ",
-    desc: { en: "5 N5 grammar patterns.", id: "5 pola tata bahasa N5." },
+    sample: "これ／それ／あれ／どれ_",
+    desc: patternCountDesc(BUNPO_N5_TIER14),
   },
   tier15: {
     title: {
       en: "Tier 6.2 — Sentence-final Particles & Connectors",
       id: "Tier 6.2 — Partikel Akhir & Penghubung Kalimat",
     },
-    sample: "〜か",
-    desc: { en: "5 N5 grammar patterns.", id: "5 pola tata bahasa N5." },
+    sample: "_か",
+    desc: patternCountDesc(BUNPO_N5_TIER15),
   },
   all: {
     title: { en: "All Mixed", id: "seluruh Campur" },
-    sample: "〜たいです",
+    sample: "_たいです",
     desc: {
-      en: "All 100 N5 grammar patterns shuffled into one Chapter.",
-      id: "Seluruh 100 pola bunpō N5 diacak menjadi satu Chapter.",
+      en: `All ${BUNPO_N5_TOTAL} N5 grammar patterns shuffled into one Chapter.`,
+      id: `Seluruh ${BUNPO_N5_TOTAL} pola bunpō N5 diacak menjadi satu Chapter.`,
     },
   },
 };
@@ -1560,13 +1568,13 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
       en: "Tier 1.1 — Predicate & Basic Sentences",
       id: "Tier 1.1 — Predikat & Kalimat Dasar",
     },
-    desc: { en: "7 N5 grammar patterns.", id: "7 pola tata bahasa N5." },
+    desc: patternCountDesc(BUNPO_N5_TIER1),
     items: BUNPO_N5_TIER1,
   },
   {
     tierKey: "tier2",
     title: { en: "Tier 1.2 — Main Particles", id: "Tier 1.2 — Partikel Utama" },
-    desc: { en: "8 N5 grammar patterns.", id: "8 pola tata bahasa N5." },
+    desc: patternCountDesc(BUNPO_N5_TIER2),
     items: BUNPO_N5_TIER2,
   },
   {
@@ -1575,7 +1583,7 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
       en: "Tier 2.1 — Existence (There is / Living)",
       id: "Tier 2.1 — Keberadaan (Ada/Tinggal)",
     },
-    desc: { en: "7 N5 grammar patterns.", id: "7 pola tata bahasa N5." },
+    desc: patternCountDesc(BUNPO_N5_TIER3),
     items: BUNPO_N5_TIER3,
   },
   {
@@ -1584,7 +1592,7 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
       en: "Tier 2.2 — Direction & Movement",
       id: "Tier 2.2 — Arah & Perpindahan",
     },
-    desc: { en: "7 N5 grammar patterns.", id: "7 pola tata bahasa N5." },
+    desc: patternCountDesc(BUNPO_N5_TIER4),
     items: BUNPO_N5_TIER4,
   },
   {
@@ -1593,13 +1601,13 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
       en: "Tier 3.1 — Polite Form (Masu Form)",
       id: "Tier 3.1 — Bentuk Sopan (Masu Form)",
     },
-    desc: { en: "6 N5 grammar patterns.", id: "6 pola tata bahasa N5." },
+    desc: patternCountDesc(BUNPO_N5_TIER5),
     items: BUNPO_N5_TIER5,
   },
   {
     tierKey: "tier6",
     title: { en: "Tier 3.2 — Te Form", id: "Tier 3.2 — Bentuk Te (Te Form)" },
-    desc: { en: "8 N5 grammar patterns.", id: "8 pola tata bahasa N5." },
+    desc: patternCountDesc(BUNPO_N5_TIER6),
     items: BUNPO_N5_TIER6,
   },
   {
@@ -1608,7 +1616,7 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
       en: "Tier 3.3 — Nai Form",
       id: "Tier 3.3 — Bentuk Nai (Nai Form)",
     },
-    desc: { en: "7 N5 grammar patterns.", id: "7 pola tata bahasa N5." },
+    desc: patternCountDesc(BUNPO_N5_TIER7),
     items: BUNPO_N5_TIER7,
   },
   {
@@ -1617,7 +1625,7 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
       en: "Tier 3.4 — Dictionary Form",
       id: "Tier 3.4 — Bentuk Kamus (Dictionary Form)",
     },
-    desc: { en: "7 N5 grammar patterns.", id: "7 pola tata bahasa N5." },
+    desc: patternCountDesc(BUNPO_N5_TIER8),
     items: BUNPO_N5_TIER8,
   },
   {
@@ -1626,7 +1634,7 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
       en: "Tier 3.5 — Past Form (Ta Form)",
       id: "Tier 3.5 — Bentuk Ta (Past Form)",
     },
-    desc: { en: "7 N5 grammar patterns.", id: "7 pola tata bahasa N5." },
+    desc: patternCountDesc(BUNPO_N5_TIER9),
     items: BUNPO_N5_TIER9,
   },
   {
@@ -1635,7 +1643,7 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
       en: "Tier 4.1 — i-Adjectives",
       id: "Tier 4.1 — Kata Sifat-i (i-Adj)",
     },
-    desc: { en: "6 N5 grammar patterns.", id: "6 pola tata bahasa N5." },
+    desc: patternCountDesc(BUNPO_N5_TIER10),
     items: BUNPO_N5_TIER10,
   },
   {
@@ -1644,7 +1652,7 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
       en: "Tier 4.2 — na-Adjectives",
       id: "Tier 4.2 — Kata Sifat-na (na-Adj)",
     },
-    desc: { en: "6 N5 grammar patterns.", id: "6 pola tata bahasa N5." },
+    desc: patternCountDesc(BUNPO_N5_TIER11),
     items: BUNPO_N5_TIER11,
   },
   {
@@ -1653,7 +1661,7 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
       en: "Tier 5.1 — Wants & Invitations",
       id: "Tier 5.1 — Keinginan & Ajakan",
     },
-    desc: { en: "7 N5 grammar patterns.", id: "7 pola tata bahasa N5." },
+    desc: patternCountDesc(BUNPO_N5_TIER12),
     items: BUNPO_N5_TIER12,
   },
   {
@@ -1662,7 +1670,7 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
       en: "Tier 5.2 — Reasons & Comparisons",
       id: "Tier 5.2 — Alasan & Perbandingan",
     },
-    desc: { en: "7 N5 grammar patterns.", id: "7 pola tata bahasa N5." },
+    desc: patternCountDesc(BUNPO_N5_TIER13),
     items: BUNPO_N5_TIER13,
   },
   {
@@ -1671,7 +1679,7 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
       en: "Tier 6.1 — Demonstratives (Ko-So-A-Do)",
       id: "Tier 6.1 — Kata Tunjuk (Ko-So-A-Do)",
     },
-    desc: { en: "5 N5 grammar patterns.", id: "5 pola tata bahasa N5." },
+    desc: patternCountDesc(BUNPO_N5_TIER14),
     items: BUNPO_N5_TIER14,
   },
   {
@@ -1680,7 +1688,7 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
       en: "Tier 6.2 — Sentence-final Particles & Connectors",
       id: "Tier 6.2 — Partikel Akhir & Penghubung Kalimat",
     },
-    desc: { en: "5 N5 grammar patterns.", id: "5 pola tata bahasa N5." },
+    desc: patternCountDesc(BUNPO_N5_TIER15),
     items: BUNPO_N5_TIER15,
   },
 ];

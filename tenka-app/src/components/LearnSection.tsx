@@ -3,6 +3,8 @@ import type { Bilingual } from "@/data/types";
 import { useLang } from "@/i18n/LangContext";
 
 type LearnSectionProps = {
+  /** id stabil (dipakai Kotoba, karena section-nya di-mount malas) */
+  id?: string;
   title: Bilingual;
   count: number;
   countLabel: string;
@@ -11,6 +13,7 @@ type LearnSectionProps = {
 };
 
 export default function LearnSection({
+  id,
   title,
   count,
   countLabel,
@@ -25,7 +28,7 @@ export default function LearnSection({
   };
 
   return (
-    <div className="learn-section">
+    <div className="learn-section" id={id}>
       <h2 className="learn-section-title">
         {tf(title)}{" "}
         <span className="count">

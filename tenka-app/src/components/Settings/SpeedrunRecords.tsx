@@ -2,6 +2,7 @@ import { useLang } from "@/i18n/LangContext";
 import { useConquest } from "@/state/ConquestContext";
 import { SCRIPTS } from "@/data/scripts";
 import { CONQUEST_TITLES, getConqueredTitles } from "@/data/titles";
+import { supportsSpeedrun } from "@/utils/speedrun";
 
 function fmtTime(ms: number): string {
   const totalCs = Math.floor(ms / 10);
@@ -14,29 +15,27 @@ function fmtTime(ms: number): string {
 }
 
 export default function SpeedrunRecords() {
-  const { lang } = useLang();
+  const { t } = useLang();
   const { getSpeedrunBestTime, reloadFlag } = useConquest();
   void reloadFlag;
 
   const earned = getConqueredTitles();
-  const conqueredKeys = Object.keys(CONQUEST_TITLES).filter((k) => !!earned[k]);
+  const conqueredKeys = Object.keys(CONQUEST_TITLES).filter(
+    (k) => !!earned[k] && supportsSpeedrun(k),
+  );
 
   return (
     <div className="settings-group">
       <span className="settings-label">
-        {lang === "id" ? "Rekor Speedrun" : "Speedrun Records"}
+        {t("speedrunRecords.heading")}
       </span>
       <p className="title-collection-hint">
-        {lang === "id"
-          ? "Waktu tercepatmu untuk tiap aksara yang sudah ditaklukkan."
-          : "Your fastest completed run for each conquered script."}
+        {t("speedrunRecords.hint")}
       </p>
       <div className="speedrun-records">
         {conqueredKeys.length === 0 ? (
           <p className="speedrun-records-empty">
-            {lang === "id"
-              ? "Taklukkan sebuah aksara ⚔️ untuk membuka Mode Speedrun-nya."
-              : "Conquer a script ⚔️ to unlock Speedrun Mode for it."}
+            {t("speedrunRecords.empty")}
           </p>
         ) : (
           conqueredKeys.map((key) => {
@@ -56,9 +55,7 @@ export default function SpeedrunRecords() {
                 >
                   {best !== null
                     ? fmtTime(best)
-                    : lang === "id"
-                      ? "Belum pernah dicoba"
-                      : "Not run yet"}
+                    : t("speedrunRecords.notPlayedYet")}
                 </span>
               </div>
             );

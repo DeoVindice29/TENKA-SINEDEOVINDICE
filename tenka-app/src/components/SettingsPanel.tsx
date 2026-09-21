@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { useLang } from "@/i18n/LangContext";
 import { useTheme, type BorderStyle } from "@/hooks/useTheme";
 import ProfileCard from "@/components/Settings/ProfileCard";
@@ -16,6 +17,29 @@ export default function SettingsPanel({ open, onClose }: SettingsPanelProps) {
   const { lang, setLang, t } = useLang();
   const { theme, toggleTheme, borderStyle, setBorderStyle } = useTheme();
 
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const wasOpenRef = useRef(false);
+
+  // fokus pindah ke tombol tutup saat dibuka, dan kembali ke tombol gear
+  // saat ditutup; Esc menutup panel.
+  useEffect(() => {
+    if (open) {
+      closeBtnRef.current?.focus();
+    } else if (wasOpenRef.current) {
+      document.getElementById("settings-toggle")?.focus();
+    }
+    wasOpenRef.current = open;
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
   return (
     <div
       className={`settings-overlay ${open ? "open" : ""}`}
@@ -33,6 +57,7 @@ export default function SettingsPanel({ open, onClose }: SettingsPanelProps) {
         <h2 id="settings-title">
           Settings
           <button
+            ref={closeBtnRef}
             className="close-x"
             id="settings-close"
             type="button"

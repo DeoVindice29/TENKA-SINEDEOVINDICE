@@ -9,6 +9,8 @@ export default function QuizHeader() {
   const position = state.index + 1;
   const total = state.queue.length;
   const showStreak = state.streak >= 1;
+  // makin panjang streak, makin banyak api: 1-2 → 🔥, 3-5 → 🔥🔥, 6+ → 🔥🔥🔥
+  const flames = state.streak >= 6 ? 3 : state.streak >= 3 ? 2 : 1;
   const showTimer = state.timerSeconds > 0 && !state.answered;
 
   const [remaining, setRemaining] = useState(state.timerSeconds);
@@ -65,7 +67,7 @@ export default function QuizHeader() {
 
       {showStreak && (
         <div className="streak show">
-          <span className="flame">🔥</span> {state.streak}{" "}
+          <span className="flame">{"🔥".repeat(flames)}</span> {state.streak}{" "}
           <span>{t("quiz.streak")}</span>
         </div>
       )}

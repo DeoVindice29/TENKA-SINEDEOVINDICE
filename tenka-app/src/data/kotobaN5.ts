@@ -324,8 +324,8 @@ export const KOTOBA_N5_CH1_1: KotobaEntry[] = [
     "方",
     "あの方はどなたですか。",
     {
-      en: "The polite version of hito (person) — used instead of hito to show respect toward the person being discussed, e.g. a customer or an elder.",
-      id: "Versi sopan dari ひと (orang) — dipakai alih-alih ひと untuk menghormati orang yang sedang dibicarakan, misalnya pelanggan atau orang yang lebih tua.",
+      en: "The polite version of hito (person) — used instead of hito to show respect toward the person being discussed, e.g. a customer or an elder. The polite counterpart of hito — used instead of hito to show respect toward the person being discussed, e.g. a customer or an elder.",
+      id: "Versi sopan dari ひと (orang) — dipakai alih-alih ひと untuk menghormati orang yang sedang dibicarakan, misalnya pelanggan atau orang yang lebih tua. Padanan sopan dari ひと — dipakai alih-alih ひと untuk menghormati orang yang sedang dibicarakan, misalnya pelanggan atau orang yang lebih tua.",
     },
   ],
   [
@@ -609,8 +609,8 @@ export const KOTOBA_N5_CH1_1: KotobaEntry[] = [
     "誰",
     "あの人は誰ですか。",
     {
-      en: "A basic question word asking about identity. For a more polite way to ask, use donata instead.",
-      id: "Kata tanya dasar untuk menanyakan identitas seseorang. Untuk versi lebih sopan, gunakan どなた.",
+      en: "A basic question word asking about identity. For a more polite way to ask, use donata instead. 誰 has a kanji form but, like いつ, だれ is almost always written in hiragana in everyday text; the polite version どなた is used when asking about someone of higher status.",
+      id: "Kata tanya dasar untuk menanyakan identitas seseorang. Untuk versi lebih sopan, gunakan どなた. 誰 punya bentuk kanji, tetapi seperti いつ, だれ hampir selalu ditulis dalam hiragana pada tulisan sehari-hari; bentuk sopannya どなた dipakai saat menanyakan orang yang statusnya lebih tinggi.",
     },
   ],
   [
@@ -814,8 +814,8 @@ export const KOTOBA_N5_CH1_1: KotobaEntry[] = [
     "",
     "",
     {
-      en: "Asks the listener to specify one noun out of several, e.g. dono sensei (which teacher).",
-      id: "Meminta lawan bicara memilih satu kata benda dari beberapa pilihan, mis. どの先生 (guru yang mana).",
+      en: "Asks the listener to specify one noun out of several, e.g. dono sensei (which teacher). どの is part of the この/その/あの/どの series and, like どんな, always attaches directly in front of a noun rather than standing alone.",
+      id: "Meminta lawan bicara memilih satu kata benda dari beberapa pilihan, mis. どの先生 (guru yang mana). どの termasuk dalam rangkaian この/その/あの/どの dan, seperti どんな, selalu menempel langsung di depan kata benda, tidak berdiri sendiri.",
     },
   ],
   [
@@ -895,8 +895,8 @@ export const KOTOBA_N5_CH1_1: KotobaEntry[] = [
     "",
     "",
     {
-      en: "Asks about a location. Also appears later as part of a wider question-word set alongside itsu (when) and nani (what).",
-      id: "Menanyakan lokasi/tempat. Juga muncul lagi nanti sebagai bagian dari kelompok kata tanya bersama いつ (kapan) dan なに (apa).",
+      en: 'Asks about a location. Also appears later as part of a wider question-word set alongside itsu (when) and nani (what). どこ belongs to the こそあど system of demonstratives (これ/それ/あれ/どれ, ここ/そこ/あそこ/どこ), all sharing the same question-word "do-" prefix pattern.',
+      id: 'Menanyakan lokasi/tempat. Juga muncul lagi nanti sebagai bagian dari kelompok kata tanya bersama いつ (kapan) dan なに (apa). どこ termasuk dalam sistem こそあど kata tunjuk (これ/それ/あれ/どれ, ここ/そこ/あそこ/どこ), semuanya berbagi pola awalan kata tanya "do-" yang sama.',
     },
   ],
   [
@@ -1063,6 +1063,77 @@ export const KOTOBA_N5_CH1_1: KotobaEntry[] = [
     {
       en: "Often used with the polite prefix o- (onamae) when asking someone else's name; drop the o- when talking about your own.",
       id: "Sering dipakai dengan awalan sopan お (おなまえ) saat menanyakan nama orang lain; awalan お dihilangkan untuk nama sendiri.",
+    },
+  ],
+  [
+    "どうぞ",
+    "douzo",
+    { en: "please (go ahead), here you are", id: "silakan" },
+    "どうぞ おはいり ください。",
+    [
+      ["どうぞ", "Douzo"],
+      ["おはいり", "ohairi"],
+      ["ください", "kudasai"],
+    ],
+    { en: "Please come in.", id: "Silakan masuk." },
+    "",
+    "どうぞお入りください。",
+    {
+      en: "どうぞ is what you say when offering or inviting: handing something over, offering a seat, or letting someone go first. The usual reply is どうも or ありがとう.",
+      id: "どうぞ diucapkan saat menawarkan atau mempersilakan: menyerahkan sesuatu, menawarkan tempat duduk, atau mempersilakan orang lain lebih dulu. Balasan yang lazim adalah どうも atau ありがとう.",
+    },
+  ],
+  [
+    "どうも",
+    "doumo",
+    { en: "thanks; very (much)", id: "terima kasih; sangat" },
+    "どうも ありがとうございます。",
+    [
+      ["どうも", "Doumo"],
+      ["ありがとうございます", "arigatou gozaimasu"],
+    ],
+    { en: "Thank you very much.", id: "Terima kasih banyak." },
+    "",
+    "どうもありがとうございます。",
+    {
+      en: "On its own, どうも is a casual 'thanks' (and sometimes a quick hello or goodbye). It also strengthens other phrases: どうも すみません means 'I'm terribly sorry'.",
+      id: "Berdiri sendiri, どうも adalah 'terima kasih' santai (kadang juga salam singkat atau perpisahan). Kata ini juga memperkuat ungkapan lain: どうも すみません berarti 'mohon maaf sekali'.",
+    },
+  ],
+  [
+    "もしもし",
+    "moshimoshi",
+    { en: "hello (on the phone)", id: "halo (di telepon)" },
+    "もしもし、たなかです。",
+    [
+      ["もしもし", "Moshimoshi"],
+      ["たなか", "Tanaka"],
+      ["です", "desu"],
+    ],
+    { en: "Hello, this is Tanaka.", id: "Halo, ini Tanaka." },
+    "",
+    "もしもし、田中です。",
+    {
+      en: "もしもし is used only when answering or making a phone call — not to greet someone face to face. It is always written in kana.",
+      id: "もしもし hanya dipakai saat menjawab atau melakukan panggilan telepon — bukan untuk menyapa orang secara langsung. Selalu ditulis dengan kana.",
+    },
+  ],
+  [
+    "ください",
+    "kudasai",
+    { en: "please (give me / do)", id: "tolong; mohon berikan" },
+    "みずを ください。",
+    [
+      ["みず", "Mizu"],
+      ["を", "wo"],
+      ["ください", "kudasai"],
+    ],
+    { en: "Please give me some water.", id: "Tolong minta air." },
+    "",
+    "水をください。",
+    {
+      en: "Two patterns: noun + を ください ('please give me ~') and verb-て + ください ('please do ~', たべて ください). It is a polite request rather than an order.",
+      id: "Dua pola: kata benda + を ください ('tolong berikan ~') dan kata kerja-て + ください ('tolong lakukan ~', たべて ください). Ini permintaan sopan, bukan perintah.",
     },
   ],
 ];
@@ -1621,8 +1692,8 @@ export const KOTOBA_N5_CH1_2: KotobaEntry[] = [
     "子供",
     "あの子供は元気です。",
     {
-      en: "A neutral, common word for 'child' — often written as a mix of kanji and hiragana (kodomo) to avoid an overly formal look.",
-      id: "Kata umum/netral untuk 'anak' — sering ditulis campuran kanji dan hiragana (子ども) supaya tidak terlalu formal terkesan.",
+      en: "A neutral, common word for 'child' — often written as a mix of kanji and hiragana (kodomo) to avoid an overly formal look. Can refer to a specific child, children in general, or — depending on context — 'my child/children'. Add -tachi (kodomotachi) to mark the plural explicitly, e.g. kodomotachi ('the children').",
+      id: "Kata umum/netral untuk 'anak' — sering ditulis campuran kanji dan hiragana (子ども) supaya tidak terlalu formal terkesan. Bisa merujuk pada seorang anak tertentu, anak-anak secara umum, atau — tergantung konteks — 'anak saya'. Tambahkan -tachi (kodomotachi) untuk menandai bentuk jamak secara eksplisit, misalnya kodomotachi ('anak-anak').",
     },
   ],
   [
@@ -1666,8 +1737,8 @@ export const KOTOBA_N5_CH1_2: KotobaEntry[] = [
     "生徒",
     "この学校には生徒が多いです。",
     {
-      en: "Typically used for students in elementary through high school; for university students, use gakusei instead.",
-      id: "Biasanya dipakai untuk murid SD sampai SMA; untuk mahasiswa, gunakan 学生.",
+      en: "Typically used for students in elementary through high school; for university students, use gakusei instead. Used for students below university level, especially junior high and high school; university students are gakusei instead.",
+      id: "Biasanya dipakai untuk murid SD sampai SMA; untuk mahasiswa, gunakan 学生. Dipakai untuk murid di bawah jenjang kuliah, terutama SMP dan SMA; mahasiswa disebut がくせい.",
     },
   ],
   [
@@ -1687,8 +1758,8 @@ export const KOTOBA_N5_CH1_2: KotobaEntry[] = [
     "学生",
     "私は大学の学生です。",
     {
-      en: "A general word for 'student' that can apply at any level, though it's most often used for university students specifically.",
-      id: "Kata umum untuk 'pelajar/siswa' yang bisa dipakai di segala jenjang, tapi paling sering dipakai khusus untuk mahasiswa.",
+      en: "A general word for 'student' that can apply at any level, though it's most often used for university students specifically. General word for a student at any level (school or university). For a foreign student specifically, the more specific word is ryuugakusei.",
+      id: "Kata umum untuk 'pelajar/siswa' yang bisa dipakai di segala jenjang, tapi paling sering dipakai khusus untuk mahasiswa. Kata umum untuk pelajar di jenjang apa pun (sekolah maupun kuliah). Untuk pelajar asing secara spesifik, ada kata yang lebih spesifik yaitu りゅうがくせい.",
     },
   ],
   [
@@ -1711,8 +1782,8 @@ export const KOTOBA_N5_CH1_2: KotobaEntry[] = [
     "先生",
     "田中先生は日本語の先生です。",
     {
-      en: "Used both as a title attached after someone's name (like -san) and as a standalone word for 'teacher' — also used for doctors and other respected professionals.",
-      id: "Dipakai baik sebagai gelar setelah nama seseorang (seperti さん) maupun sebagai kata berdiri sendiri untuk 'guru' — juga dipakai untuk dokter dan profesi terhormat lainnya.",
+      en: "Used both as a title attached after someone's name (like -san) and as a standalone word for 'teacher' — also used for doctors and other respected professionals. A respectful title for teachers, doctors, or other experts — can be used directly as a form of address, not just a job title. Never use it to refer to your own job; for 'teacher' as a plain occupation, use kyoushi instead.",
+      id: "Dipakai baik sebagai gelar setelah nama seseorang (seperti さん) maupun sebagai kata berdiri sendiri untuk 'guru' — juga dipakai untuk dokter dan profesi terhormat lainnya. Gelar hormat untuk guru, dokter, atau ahli lain — bisa dipakai langsung sebagai sapaan, bukan cuma sebagai jabatan. Jangan pakai untuk menyebut pekerjaan diri sendiri; untuk 'guru' sebagai profesi biasa, gunakan きょうし.",
     },
   ],
   [
@@ -1738,61 +1809,103 @@ export const KOTOBA_N5_CH1_2: KotobaEntry[] = [
     "留学生",
     "彼女は日本の留学生です。",
     {
-      en: "Built from ryuugaku (studying abroad) plus sei (student) — refers to a student studying in a foreign country.",
-      id: "Dibentuk dari 留学 (belajar di luar negeri) plus 生 (pelajar) — merujuk pelajar yang sedang belajar di negara asing.",
+      en: "Built from ryuugaku (studying abroad) plus sei (student) — refers to a student studying in a foreign country. Specifically means a student studying abroad — a more specific version of the general gakusei.",
+      id: "Dibentuk dari 留学 (belajar di luar negeri) plus 生 (pelajar) — merujuk pelajar yang sedang belajar di negara asing. Secara spesifik berarti pelajar yang belajar di luar negeri — bentuk lebih spesifik dari がくせい yang umum.",
+    },
+  ],
+  [
+    "おじいさん",
+    "ojiisan",
+    { en: "grandfather / old man", id: "kakek / bapak tua" },
+    "たなかさんの おじいさんは げんきです。",
+    [
+      ["たなかさんの", "Tanaka-san no"],
+      ["おじいさん", "ojiisan"],
+      ["は", "wa"],
+      ["げんき", "genki"],
+      ["です", "desu"],
+    ],
+    {
+      en: "Mr. Tanaka's grandfather is healthy.",
+      id: "Kakek Tanaka-san sehat.",
+    },
+    "お祖父さん",
+    "田中さんのお祖父さんは元気です。",
+    {
+      en: "Mind the long vowel: おじいさん (grandfather) has a stretched じい, while おじさん (uncle) is short — the length changes the meaning completely. It also works as a polite word for any elderly man.",
+      id: "Perhatikan huruf vokal panjangnya: おじいさん (kakek) memakai じい yang dipanjangkan, sedangkan おじさん (paman) pendek — panjang-pendeknya mengubah arti sepenuhnya. Kata ini juga dipakai sebagai sebutan sopan untuk pria lanjut usia.",
+    },
+  ],
+  [
+    "おばあさん",
+    "obaasan",
+    { en: "grandmother / old woman", id: "nenek / ibu tua" },
+    "たなかさんの おばあさんは しんせつです。",
+    [
+      ["たなかさんの", "Tanaka-san no"],
+      ["おばあさん", "obaasan"],
+      ["は", "wa"],
+      ["しんせつ", "shinsetsu"],
+      ["です", "desu"],
+    ],
+    {
+      en: "Mr. Tanaka's grandmother is kind.",
+      id: "Nenek Tanaka-san baik hati.",
+    },
+    "お祖母さん",
+    "田中さんのお祖母さんは親切です。",
+    {
+      en: "Same long-vowel trap as おじいさん: おばあさん (grandmother) is stretched, おばさん (aunt) is short. Also used politely for any elderly woman.",
+      id: "Jebakan vokal panjang yang sama seperti おじいさん: おばあさん (nenek) dipanjangkan, おばさん (bibi) pendek. Juga dipakai sebagai sebutan sopan untuk wanita lanjut usia.",
+    },
+  ],
+  [
+    "おじさん",
+    "ojisan",
+    { en: "uncle; middle-aged man", id: "paman; bapak-bapak" },
+    "たなかさんの おじさんは いしゃです。",
+    [
+      ["たなかさんの", "Tanaka-san no"],
+      ["おじさん", "ojisan"],
+      ["は", "wa"],
+      ["いしゃ", "isha"],
+      ["です", "desu"],
+    ],
+    {
+      en: "Mr. Tanaka's uncle is a doctor.",
+      id: "Paman Tanaka-san adalah dokter.",
+    },
+    "",
+    "田中さんのおじさんは医者です。",
+    {
+      en: "おじさん means 'uncle' inside a family, and is also a friendly way to refer to a middle-aged man. Short じ — compare the long じい in おじいさん (grandfather).",
+      id: "おじさん berarti 'paman' dalam keluarga, dan juga sebutan akrab untuk pria paruh baya. Bunyi じ pendek — bandingkan じい panjang pada おじいさん (kakek).",
+    },
+  ],
+  [
+    "おばさん",
+    "obasan",
+    { en: "aunt; middle-aged woman", id: "bibi; ibu-ibu" },
+    "わたしの おばさんは せんせいです。",
+    [
+      ["わたしの", "Watashi no"],
+      ["おばさん", "obasan"],
+      ["は", "wa"],
+      ["せんせい", "sensei"],
+      ["です", "desu"],
+    ],
+    { en: "My aunt is a teacher.", id: "Bibi saya adalah guru." },
+    "",
+    "私のおばさんは先生です。",
+    {
+      en: "おばさん means 'aunt', and is also a casual term for a middle-aged woman. Calling a stranger おばさん to her face can sound rude, so be careful. Short ば — the long ばあ in おばあさん means grandmother.",
+      id: "おばさん berarti 'bibi', dan juga sebutan santai untuk wanita paruh baya. Memanggil orang asing おばさん secara langsung bisa terdengar kasar, jadi hati-hati. Bunyi ば pendek — ばあ panjang pada おばあさん berarti nenek.",
     },
   ],
 ];
 
 // Sub-Tier 1.3: Profesi & Peran (3)
 export const KOTOBA_N5_CH1_3: KotobaEntry[] = [
-  [
-    "がくせい",
-    "gakusei",
-    { en: "student", id: "siswa / mahasiswa" },
-    "がくせいは まいにち がっこうへ いきます。",
-    [
-      ["がくせい", "Gakusei"],
-      ["は", "wa"],
-      ["まいにち", "mainichi"],
-      ["がっこう", "gakkou"],
-      ["へ", "e"],
-      ["いきます", "ikimasu"],
-    ],
-    {
-      en: "The student goes to school every day.",
-      id: "Siswa itu pergi ke sekolah setiap hari.",
-    },
-    "学生",
-    "",
-    {
-      en: "General word for a student at any level (school or university). For a foreign student specifically, the more specific word is ryuugakusei.",
-      id: "Kata umum untuk pelajar di jenjang apa pun (sekolah maupun kuliah). Untuk pelajar asing secara spesifik, ada kata yang lebih spesifik yaitu りゅうがくせい.",
-    },
-  ],
-  [
-    "せんせい",
-    "sensei",
-    {
-      en: "teacher / professor / doctor (respectful title)",
-      id: "guru / dosen / dokter (sapaan hormat)",
-    },
-    "せんせいは とても やさしいです。",
-    [
-      ["せんせい", "Sensei"],
-      ["は", "wa"],
-      ["とても", "totemo"],
-      ["やさしい", "yasashii"],
-      ["です", "desu"],
-    ],
-    { en: "The teacher is very kind.", id: "Guru itu sangat baik." },
-    "先生",
-    "先生はとても優しいです。",
-    {
-      en: "A respectful title for teachers, doctors, or other experts — can be used directly as a form of address, not just a job title. Never use it to refer to your own job; for 'teacher' as a plain occupation, use kyoushi instead.",
-      id: "Gelar hormat untuk guru, dokter, atau ahli lain — bisa dipakai langsung sebagai sapaan, bukan cuma sebagai jabatan. Jangan pakai untuk menyebut pekerjaan diri sendiri; untuk 'guru' sebagai profesi biasa, gunakan きょうし.",
-    },
-  ],
   [
     "きょうし",
     "kyoushi",
@@ -1993,29 +2106,6 @@ export const KOTOBA_N5_CH1_3: KotobaEntry[] = [
     },
   ],
   [
-    "りゅうがくせい",
-    "ryuugakusei",
-    { en: "international student", id: "pelajar / mahasiswa asing" },
-    "かのじょは にほんの りゅうがくせいです。",
-    [
-      ["かのじょ", "Kanojo"],
-      ["は", "wa"],
-      ["にほん", "nihon"],
-      ["の", "no"],
-      ["りゅうがくせいです", "ryuugakusei desu"],
-    ],
-    {
-      en: "She is an international student in Japan.",
-      id: "Dia adalah mahasiswa asing di Jepang.",
-    },
-    "留学生",
-    "",
-    {
-      en: "Specifically means a student studying abroad — a more specific version of the general gakusei.",
-      id: "Secara spesifik berarti pelajar yang belajar di luar negeri — bentuk lebih spesifik dari がくせい yang umum.",
-    },
-  ],
-  [
     "おとな",
     "otona",
     { en: "adult", id: "orang dewasa" },
@@ -2038,30 +2128,6 @@ export const KOTOBA_N5_CH1_3: KotobaEntry[] = [
     {
       en: "An age-category word (adult vs. child), not an occupation — the opposite of kodomo (child).",
       id: "Kata kategori usia (dewasa vs. anak), bukan profesi — lawan kata dari こども (anak).",
-    },
-  ],
-  [
-    "こども",
-    "kodomo",
-    { en: "child, children", id: "anak-anak" },
-    "あの こどもは にわで あそんでいます。",
-    [
-      ["あの", "Ano"],
-      ["こども", "kodomo"],
-      ["は", "wa"],
-      ["にわ", "niwa"],
-      ["で", "de"],
-      ["あそんでいます", "asondeimasu"],
-    ],
-    {
-      en: "That child is playing in the yard.",
-      id: "Anak itu sedang bermain di halaman.",
-    },
-    "子供",
-    "あの子供は庭で遊んでいます。",
-    {
-      en: "Can refer to a specific child, children in general, or — depending on context — 'my child/children'. Add -tachi (kodomotachi) to mark the plural explicitly, e.g. kodomotachi ('the children').",
-      id: "Bisa merujuk pada seorang anak tertentu, anak-anak secara umum, atau — tergantung konteks — 'anak saya'. Tambahkan -tachi (kodomotachi) untuk menandai bentuk jamak secara eksplisit, misalnya kodomotachi ('anak-anak').",
     },
   ],
   [
@@ -2221,87 +2287,6 @@ export const KOTOBA_N5_CH1_3: KotobaEntry[] = [
     },
   ],
   [
-    "せいと",
-    "seito",
-    { en: "student, pupil (junior/senior high)", id: "murid (SMP/SMA)" },
-    "この クラスには せいとが さんじゅうにん います。",
-    [
-      ["この", "Kono"],
-      ["クラス", "kurasu"],
-      ["には", "niwa"],
-      ["せいと", "seito"],
-      ["が", "ga"],
-      ["さんじゅうにん", "sanjuunin"],
-      ["います", "imasu"],
-    ],
-    { en: "This class has 30 students.", id: "Kelas ini ada 30 murid." },
-    "生徒",
-    "このクラスには生徒が三十人います。",
-    {
-      en: "Used for students below university level, especially junior high and high school; university students are gakusei instead.",
-      id: "Dipakai untuk murid di bawah jenjang kuliah, terutama SMP dan SMA; mahasiswa disebut がくせい.",
-    },
-  ],
-  [
-    "かた",
-    "kata",
-    { en: "person (polite)", id: "orang (bentuk sopan dari hito)" },
-    "あの かたは どなたですか。",
-    [
-      ["あの", "Ano"],
-      ["かた", "kata"],
-      ["は", "wa"],
-      ["どなた", "donata"],
-      ["です", "desu"],
-      ["か", "ka"],
-    ],
-    { en: "Who is that person? (polite)", id: "Siapa orang itu? (sopan)" },
-    "方",
-    "あの方はどなたですか。",
-    {
-      en: "The polite counterpart of hito — used instead of hito to show respect toward the person being discussed, e.g. a customer or an elder.",
-      id: "Padanan sopan dari ひと — dipakai alih-alih ひと untuk menghormati orang yang sedang dibicarakan, misalnya pelanggan atau orang yang lebih tua.",
-    },
-  ],
-  [
-    "ひと",
-    "hito",
-    { en: "person", id: "orang" },
-    "あの ひとは だれですか。",
-    [
-      ["あの", "Ano"],
-      ["ひと", "hito"],
-      ["は", "wa"],
-      ["だれ", "dare"],
-      ["です", "desu"],
-      ["か", "ka"],
-    ],
-    { en: "Who is that person?", id: "Siapa orang itu?" },
-    "人",
-    "あの人は誰ですか。",
-    {
-      en: "General, neutral word for 'person'. For a more polite tone, use kata instead.",
-      id: "Kata umum/netral untuk 'orang'. Untuk kesan lebih sopan, gunakan かた.",
-    },
-  ],
-  [
-    "みなさん",
-    "minasan",
-    { en: "everyone", id: "semuanya / hadirin" },
-    "みなさん、おはようございます。",
-    [
-      ["みなさん", "Minasan"],
-      ["おはようございます", "ohayou gozaimasu"],
-    ],
-    { en: "Good morning, everyone.", id: "Selamat pagi, semuanya." },
-    "皆さん",
-    "皆さん、おはようございます。",
-    {
-      en: "Used to address a group of people at once, e.g. in front of a class or at a meeting.",
-      id: "Dipakai untuk menyapa banyak orang sekaligus, mis. di depan kelas atau saat rapat.",
-    },
-  ],
-  [
     "しごと",
     "shigoto",
     { en: "job / work", id: "pekerjaan" },
@@ -2361,6 +2346,173 @@ export const KOTOBA_N5_CH1_3: KotobaEntry[] = [
     {
       en: "Ei comes from the kanji for 'England' — the same go ending marks a language name, as in nihongo (Japanese).",
       id: "えい berasal dari kanji untuk 'Inggris' — akhiran ご yang sama menandai nama bahasa, seperti pada にほんご (bahasa Jepang).",
+    },
+  ],
+
+  // -- Tambahan kata baru (Kotoba N5 jadi 800) --
+  [
+    "にほんじん",
+    "nihonjin",
+    { en: "Japanese person", id: "orang Jepang" },
+    "たなかさんは にほんじんです。",
+    [
+      ["たなか", "Tanaka"],
+      ["さん", "san"],
+      ["は", "wa"],
+      ["にほんじん", "nihonjin"],
+      ["です", "desu"],
+    ],
+    { en: "Mr. Tanaka is Japanese.", id: "Pak Tanaka adalah orang Jepang." },
+    "日本人",
+    "田中さんは日本人です。",
+    {
+      en: "Country name + じん (人) means a person of that nationality: アメリカじん (an American), インドネシアじん (an Indonesian). To name the language instead, swap in ご (語): にほんご, インドネシアご.",
+      id: "Nama negara + じん (人) berarti orang dari negara tersebut: アメリカじん (orang Amerika), インドネシアじん (orang Indonesia). Untuk menyebut bahasanya, ganti dengan ご (語): にほんご, インドネシアご.",
+    },
+  ],
+  [
+    "がいこくじん",
+    "gaikokujin",
+    { en: "foreigner", id: "orang asing" },
+    "あの ひとは がいこくじんです。",
+    [
+      ["あの", "Ano"],
+      ["ひと", "hito"],
+      ["は", "wa"],
+      ["がいこくじん", "gaikokujin"],
+      ["です", "desu"],
+    ],
+    { en: "That person is a foreigner.", id: "Orang itu adalah orang asing." },
+    "外国人",
+    "あの人は外国人です。",
+    {
+      en: "Literally 'person from outside the country'. Because it can sound a little blunt, politer speech often uses がいこくの かた (外国の方) when referring to someone directly.",
+      id: "Secara harfiah 'orang dari luar negeri'. Karena bisa terdengar agak lugas, ucapan yang lebih sopan sering memakai がいこくの かた (外国の方) saat menyebut seseorang secara langsung.",
+    },
+  ],
+  [
+    "うんてんしゅ",
+    "untenshu",
+    { en: "driver", id: "pengemudi / sopir" },
+    "タクシーの うんてんしゅは しんせつです。",
+    [
+      ["タクシー", "Takushii"],
+      ["の", "no"],
+      ["うんてんしゅ", "untenshu"],
+      ["は", "wa"],
+      ["しんせつ", "shinsetsu"],
+      ["です", "desu"],
+    ],
+    { en: "The taxi driver is kind.", id: "Sopir taksi itu ramah." },
+    "運転手",
+    "タクシーの運転手は親切です。",
+    {
+      en: "Refers to someone who drives for a living, like a taxi, bus, or truck driver. The 手 (しゅ) ending marks a person with a particular skill or job, as in かしゅ (singer) and せんしゅ (athlete). To say you yourself drive, use the verb うんてんする (運転する).",
+      id: "Merujuk pada orang yang pekerjaannya mengemudi, seperti sopir taksi, bus, atau truk. Akhiran 手 (しゅ) menandai orang dengan keahlian atau pekerjaan tertentu, seperti pada かしゅ (penyanyi) dan せんしゅ (atlet). Untuk mengatakan diri sendiri mengemudi, pakai kata kerja うんてんする (運転する).",
+    },
+  ],
+  [
+    "かしゅ",
+    "kashu",
+    { en: "singer", id: "penyanyi" },
+    "この かしゅは ゆうめいです。",
+    [
+      ["この", "Kono"],
+      ["かしゅ", "kashu"],
+      ["は", "wa"],
+      ["ゆうめい", "yuumei"],
+      ["です", "desu"],
+    ],
+    { en: "This singer is famous.", id: "Penyanyi ini terkenal." },
+    "歌手",
+    "この歌手は有名です。",
+    {
+      en: "歌 is read か inside compounds like かしゅ (singer) and かし (lyrics), but うた when it stands alone (うたを うたう, 'to sing a song').",
+      id: "歌 dibaca か di dalam kata majemuk seperti かしゅ (penyanyi) dan かし (lirik), tetapi うた bila berdiri sendiri (うたを うたう, 'menyanyikan lagu').",
+    },
+  ],
+  [
+    "パイロット",
+    "pairotto",
+    { en: "pilot", id: "pilot" },
+    "ちちは パイロットです。",
+    [
+      ["ちち", "Chichi"],
+      ["は", "wa"],
+      ["パイロット", "pairotto"],
+      ["です", "desu"],
+    ],
+    { en: "My father is a pilot.", id: "Ayah saya adalah seorang pilot." },
+    "",
+    "父はパイロットです。",
+    {
+      en: "Borrowed from English, so it's written in katakana. When talking about your own father use ちち (父); for someone else's father use おとうさん.",
+      id: "Serapan dari bahasa Inggris, jadi ditulis dengan katakana. Saat menyebut ayah sendiri pakai ちち (父); untuk ayah orang lain pakai おとうさん.",
+    },
+  ],
+  [
+    "おきゃくさん",
+    "okyakusan",
+    { en: "customer, guest", id: "pelanggan / tamu" },
+    "おきゃくさんが たくさん きました。",
+    [
+      ["おきゃくさん", "Okyakusan"],
+      ["が", "ga"],
+      ["たくさん", "takusan"],
+      ["きました", "kimashita"],
+    ],
+    { en: "Lots of customers came.", id: "Banyak pelanggan datang." },
+    "お客さん",
+    "お客さんがたくさん来ました。",
+    {
+      en: "Covers a shop's customer, a restaurant diner, or a guest visiting your home. The plain form is きゃく (客); おきゃくさん adds politeness and is the one you'll hear most.",
+      id: "Mencakup pelanggan toko, pengunjung restoran, maupun tamu yang datang ke rumah. Bentuk polosnya きゃく (客); おきゃくさん lebih sopan dan paling sering terdengar.",
+    },
+  ],
+  [
+    "しゃちょう",
+    "shachou",
+    { en: "company president", id: "direktur utama" },
+    "しゃちょうは いま かいしゃに います。",
+    [
+      ["しゃちょう", "Shachou"],
+      ["は", "wa"],
+      ["いま", "ima"],
+      ["かいしゃ", "kaisha"],
+      ["に", "ni"],
+      ["います", "imasu"],
+    ],
+    {
+      en: "The company president is at the office right now.",
+      id: "Direktur utama sedang ada di kantor sekarang.",
+    },
+    "社長",
+    "社長は今会社にいます。",
+    {
+      en: "Job titles are often attached right after a surname as a form of address: たなかしゃちょう (President Tanaka), used in place of さん.",
+      id: "Jabatan sering dilekatkan langsung setelah nama keluarga sebagai sapaan: たなかしゃちょう (Direktur Utama Tanaka), dipakai menggantikan さん.",
+    },
+  ],
+  [
+    "しゅふ",
+    "shufu",
+    { en: "housewife, homemaker", id: "ibu rumah tangga" },
+    "あねは しゅふです。",
+    [
+      ["あね", "Ane"],
+      ["は", "wa"],
+      ["しゅふ", "shufu"],
+      ["です", "desu"],
+    ],
+    {
+      en: "My older sister is a homemaker.",
+      id: "Kakak perempuan saya adalah ibu rumah tangga.",
+    },
+    "主婦",
+    "姉は主婦です。",
+    {
+      en: "Describes a person who runs the household full-time. It isn't a paid job, but it is a common answer to 'What do you do?'",
+      id: "Menyebut orang yang mengurus rumah tangga sepenuh waktu. Bukan pekerjaan bergaji, tetapi sering dipakai sebagai jawaban atas pertanyaan 'Pekerjaannya apa?'",
     },
   ],
 ];
@@ -2712,8 +2864,8 @@ export const KOTOBA_N5_CH2_1: KotobaEntry[] = [
     "毎朝",
     "毎朝ジョギングをします。",
     {
-      en: "Built from mai (every) + asa (morning) — the same pattern as mainichi and maiban.",
-      id: "Dibentuk dari まい (setiap) + あさ (pagi) — pola yang sama seperti まいにち dan まいばん.",
+      en: "Built from mai (every) + asa (morning) — the same pattern as mainichi and maiban. Built from まい (every) + あさ (morning) — the same pattern as まいばん (every night) and まいにち (every day).",
+      id: "Dibentuk dari まい (setiap) + あさ (pagi) — pola yang sama seperti まいにち dan まいばん. Dibentuk dari まい (setiap) + あさ (pagi) — pola yang sama seperti まいばん (setiap malam) dan まいにち (setiap hari).",
     },
   ],
   [
@@ -2780,8 +2932,8 @@ export const KOTOBA_N5_CH2_1: KotobaEntry[] = [
     "",
     "",
     {
-      en: "A basic question word asking about time — has no common kanji form and is almost always written in hiragana.",
-      id: "Kata tanya dasar untuk menanyakan waktu — tidak punya bentuk kanji umum dan hampir selalu ditulis dalam hiragana.",
+      en: "A basic question word asking about time — has no common kanji form and is almost always written in hiragana. いつ has no common kanji form (unlike どこ or なに) and is almost always written in hiragana, even in formal writing.",
+      id: "Kata tanya dasar untuk menanyakan waktu — tidak punya bentuk kanji umum dan hampir selalu ditulis dalam hiragana. いつ tidak punya bentuk kanji yang umum (berbeda dari どこ atau なに) dan hampir selalu ditulis dalam hiragana, bahkan pada tulisan formal.",
     },
   ],
   [
@@ -2801,8 +2953,8 @@ export const KOTOBA_N5_CH2_1: KotobaEntry[] = [
     "",
     "",
     {
-      en: "Describes a habitual, unchanging routine — built from itsu (when) plus mo (also/even), literally 'at any time'.",
-      id: "Menjelaskan kebiasaan/rutinitas tetap — dibentuk dari いつ (kapan) plus も (juga/bahkan), secara harfiah 'di waktu kapan pun'.",
+      en: "Describes a habitual, unchanging routine — built from itsu (when) plus mo (also/even), literally 'at any time'. Sits at the top of the frequency scale (100%) and pairs with a positive verb — usually written in kana since its kanji (何時も) is rarely used in modern writing. いつも sits at the top of the N5 frequency scale — いつも > たいてい > よく > ときどき > あまり > ぜんぜん — a useful order to memorize together with the other adverbs in this tier.",
+      id: "Menjelaskan kebiasaan/rutinitas tetap — dibentuk dari いつ (kapan) plus も (juga/bahkan), secara harfiah 'di waktu kapan pun'. Berada di puncak skala frekuensi (100%) dan dipasangkan dengan bentuk kata kerja positif — biasanya ditulis dengan kana karena kanjinya (何時も) jarang dipakai dalam tulisan modern. いつも berada di puncak skala frekuensi N5 — いつも > たいてい > よく > ときどき > あまり > ぜんぜん — urutan yang berguna untuk dihafal bersama kata keterangan lain di tingkatan ini.",
     },
   ],
   [
@@ -2823,8 +2975,8 @@ export const KOTOBA_N5_CH2_1: KotobaEntry[] = [
     "時々",
     "時々映画を見ます。",
     {
-      en: "Sits in the middle of the frequency scale — less often than itsumo (always) but more than never.",
-      id: "Berada di tengah skala frekuensi, lebih jarang dari いつも (selalu) tapi lebih sering dari tidak pernah.",
+      en: "Sits in the middle of the frequency scale — less often than itsumo (always) but more than never. The 々 is a repeater mark showing that the kanji before it (時) is read twice — sits mid-scale (about 30–50%), between よく and たまに. ときどき is written with a doubled kanji 時々, using the iteration mark 々 to show that 時 (time) repeats — a common pattern in Japanese reduplicated words.",
+      id: "Berada di tengah skala frekuensi, lebih jarang dari いつも (selalu) tapi lebih sering dari tidak pernah. 々 adalah tanda pengulang yang menunjukkan kanji sebelumnya (時) dibaca dua kali — berada di tengah skala (sekitar 30–50%), di antara よく dan たまに. ときどき ditulis dengan kanji ganda 時々, memakai tanda pengulangan 々 untuk menunjukkan bahwa 時 (waktu) berulang — pola umum pada kata-kata Jepang yang mengalami reduplikasi.",
     },
   ],
   [
@@ -2861,8 +3013,8 @@ export const KOTOBA_N5_CH2_1: KotobaEntry[] = [
     "",
     "",
     {
-      en: "Combines mou (already) with sugu (soon) to emphasize that something is very close in time.",
-      id: "Menggabungkan もう (sudah) dengan すぐ (segera) untuk menekankan sesuatu yang sangat dekat waktunya.",
+      en: "Combines mou (already) with sugu (soon) to emphasize that something is very close in time. Built from もう (already) + すぐ (right away) — describes something that is about to happen very shortly.",
+      id: "Menggabungkan もう (sudah) dengan すぐ (segera) untuk menekankan sesuatu yang sangat dekat waktunya. Dibentuk dari もう (sudah) + すぐ (segera) — menjelaskan sesuatu yang akan segera terjadi sebentar lagi.",
     },
   ],
   [
@@ -2896,8 +3048,8 @@ export const KOTOBA_N5_CH2_1: KotobaEntry[] = [
     "",
     "",
     {
-      en: "With an affirmative verb it means 'still' (mada nemui desu — still sleepy); with a negative verb it means 'not yet' (mada tabeteimasen — haven't eaten yet).",
-      id: "Dengan kata kerja afirmatif berarti 'masih' (mada nemui desu — masih ngantuk); dengan kata kerja negatif berarti 'belum' (mada tabeteimasen — belum makan).",
+      en: 'With an affirmative verb it means \'still\' (mada nemui desu — still sleepy); with a negative verb it means \'not yet\' (mada tabeteimasen — haven\'t eaten yet). Has two related meanings depending on the verb: "still" with a positive verb (まだ学生です), and "not yet" with a negative one (まだ食べません). まだ pairs naturally with a negative verb to mean "not yet", but with an affirmative verb it instead means "still", as in まだ あめが ふっています (it\'s still raining).',
+      id: 'Dengan kata kerja afirmatif berarti \'masih\' (mada nemui desu — masih ngantuk); dengan kata kerja negatif berarti \'belum\' (mada tabeteimasen — belum makan). Memiliki dua makna terkait tergantung kata kerjanya: "masih" dengan kata kerja positif (まだ学生です), dan "belum" dengan kata kerja negatif (まだ食べません). まだ secara alami dipasangkan dengan kata kerja negatif untuk berarti "belum", tetapi dengan kata kerja afirmatif justru berarti "masih", seperti pada まだ あめが ふっています (masih hujan).',
     },
   ],
   [
@@ -2915,8 +3067,8 @@ export const KOTOBA_N5_CH2_1: KotobaEntry[] = [
     "",
     "",
     {
-      en: "Marks a completed action or a change of state — the opposite pairing to mada (not yet) when asking about completion, e.g. mou tabemashita ka? (have you eaten already?).",
-      id: "Menandai tindakan yang sudah selesai atau perubahan keadaan — berpasangan berlawanan dengan まだ (belum) saat menanyakan apakah sudah selesai, mis. もう食べましたか (apakah sudah makan?).",
+      en: 'Marks a completed action or a change of state — the opposite pairing to mada (not yet) when asking about completion, e.g. mou tabemashita ka? (have you eaten already?). もう means "already" with a positive verb, but shifts to mean "not anymore" when paired with a negative verb, as in もう たべません (I won\'t eat anymore) — the same positive/negative flip seen with まだ.',
+      id: 'Menandai tindakan yang sudah selesai atau perubahan keadaan — berpasangan berlawanan dengan まだ (belum) saat menanyakan apakah sudah selesai, mis. もう食べましたか (apakah sudah makan?). もう berarti "sudah" bila dipakai dengan kata kerja positif, tetapi berubah menjadi "tidak lagi" bila dipasangkan dengan kata kerja negatif, seperti pada もう たべません (saya tidak akan makan lagi) — pembalikan makna positif/negatif yang sama seperti pada まだ.',
     },
   ],
   [
@@ -3187,25 +3339,6 @@ export const KOTOBA_N5_CH2_2: KotobaEntry[] = [
     {
       en: "The smallest common time unit taught at N5, after ふん (minute) and じかん (hour).",
       id: "Satuan waktu terkecil yang umum diajarkan di N5, setelah ふん (menit) dan じかん (jam).",
-    },
-  ],
-  [
-    "まいあさ",
-    "maiasa",
-    { en: "every morning", id: "setiap pagi" },
-    "まいあさ コーヒーを のみます。",
-    [
-      ["まいあさ", "Maiasa"],
-      ["コーヒー", "koohii"],
-      ["を", "wo"],
-      ["のみます", "nomimasu"],
-    ],
-    { en: "I drink coffee every morning.", id: "Saya minum kopi setiap pagi." },
-    "毎朝",
-    "毎朝コーヒーを飲みます。",
-    {
-      en: "Built from まい (every) + あさ (morning) — the same pattern as まいばん (every night) and まいにち (every day).",
-      id: "Dibentuk dari まい (setiap) + あさ (pagi) — pola yang sama seperti まいばん (setiap malam) dan まいにち (setiap hari).",
     },
   ],
   [
@@ -3719,8 +3852,8 @@ export const KOTOBA_N5_CH2_2: KotobaEntry[] = [
     "",
     "",
     {
-      en: "Attaches after an amount or duration (not a specific clock point) to mean 'roughly' — also written/pronounced kurai; goro is used for a specific point in time instead.",
-      id: "Ditempel setelah jumlah atau durasi (bukan titik waktu tertentu) untuk berarti 'kurang lebih' — juga ditulis/diucapkan くらい; untuk titik waktu tertentu gunakan ごろ.",
+      en: "Attaches after an amount or duration (not a specific clock point) to mean 'roughly' — also written/pronounced kurai; goro is used for a specific point in time instead. くらい is an equally common variant — attaches after a quantity or duration to mean 'approximately' that much.",
+      id: "Ditempel setelah jumlah atau durasi (bukan titik waktu tertentu) untuk berarti 'kurang lebih' — juga ditulis/diucapkan くらい; untuk titik waktu tertentu gunakan ごろ. くらい adalah variasi yang sama umum dipakainya — menempel setelah jumlah atau durasi untuk berarti 'kira-kira' sebanyak itu.",
     },
   ],
   [
@@ -3744,8 +3877,8 @@ export const KOTOBA_N5_CH2_2: KotobaEntry[] = [
     "前",
     "九時五分前です。",
     {
-      en: "Placed after a number of minutes and before the target hour to mean 'X minutes before' that hour — the opposite is sugi (past).",
-      id: "Diletakkan setelah jumlah menit dan sebelum jam target untuk berarti 'kurang X menit' dari jam itu — kebalikannya adalah すぎ (lewat).",
+      en: 'Placed after a number of minutes and before the target hour to mean \'X minutes before\' that hour — the opposite is sugi (past). 前 covers both spatial "front" and temporal "before", as in ごぜん (a.m., lit. "before noon") — its opposite うしろ (behind) only has a spatial meaning.',
+      id: 'Diletakkan setelah jumlah menit dan sebelum jam target untuk berarti \'kurang X menit\' dari jam itu — kebalikannya adalah すぎ (lewat). 前 mencakup makna posisi "depan" maupun waktu "sebelum", seperti pada ごぜん (pagi/AM, secara harfiah "sebelum tengah hari") — lawannya うしろ (belakang) hanya bermakna posisi.',
     },
   ],
   [
@@ -4089,6 +4222,255 @@ export const KOTOBA_N5_CH2_2: KotobaEntry[] = [
       id: "Menggabungkan なん (apa/berapa) dengan kata bantu bilangan tahun ~年 — bisa menanyakan tahun kalender atau durasi dalam tahun tergantung konteks.",
     },
   ],
+  [
+    "ついたち",
+    "tsuitachi",
+    { en: "1st day of the month", id: "tanggal 1" },
+    "ついたちは やすみです。",
+    [
+      ["ついたち", "Tsuitachi"],
+      ["は", "wa"],
+      ["やすみ", "yasumi"],
+      ["です", "desu"],
+    ],
+    { en: "The 1st is a day off.", id: "Tanggal 1 libur." },
+    "一日",
+    "一日は休みです。",
+    {
+      en: "一日 is read ついたち for the 1st of a month, but いちにち when it means 'one day' (a duration) — same kanji, different reading and meaning.",
+      id: "一日 dibaca ついたち untuk tanggal 1, tetapi dibaca いちにち untuk arti 'satu hari' (lamanya waktu) — kanji sama, bacaan dan artinya berbeda.",
+    },
+  ],
+  [
+    "ふつか",
+    "futsuka",
+    { en: "2nd day of the month / two days", id: "tanggal 2 / dua hari" },
+    "きょうは ふつかです。",
+    [
+      ["きょう", "Kyou"],
+      ["は", "wa"],
+      ["ふつか", "futsuka"],
+      ["です", "desu"],
+    ],
+    { en: "Today is the 2nd.", id: "Hari ini tanggal 2." },
+    "二日",
+    "今日は二日です。",
+    {
+      en: "From the 2nd to the 10th, the dates use the native Japanese counting (ふつか, みっか, よっか...) instead of the Chinese-style numbers. The same word also counts durations: ふつか = 'two days'.",
+      id: "Tanggal 2 sampai 10 memakai hitungan asli Jepang (ふつか, みっか, よっか...) bukan angka gaya Tionghoa. Kata yang sama juga dipakai untuk lama waktu: ふつか = 'dua hari'.",
+    },
+  ],
+  [
+    "みっか",
+    "mikka",
+    { en: "3rd day of the month / three days", id: "tanggal 3 / tiga hari" },
+    "みっかに ともだちが きます。",
+    [
+      ["みっか", "Mikka"],
+      ["に", "ni"],
+      ["ともだち", "tomodachi"],
+      ["が", "ga"],
+      ["きます", "kimasu"],
+    ],
+    {
+      en: "A friend is coming on the 3rd.",
+      id: "Teman akan datang tanggal 3.",
+    },
+    "三日",
+    "三日に友達が来ます。",
+    {
+      en: "Dates take the particle に when they mark a specific day (みっかに), just like times and days of the week.",
+      id: "Tanggal memakai partikel に saat menunjuk hari tertentu (みっかに), sama seperti jam dan nama hari.",
+    },
+  ],
+  [
+    "よっか",
+    "yokka",
+    { en: "4th day of the month / four days", id: "tanggal 4 / empat hari" },
+    "よっかに りょこうします。",
+    [
+      ["よっか", "Yokka"],
+      ["に", "ni"],
+      ["りょこうします", "ryokou shimasu"],
+    ],
+    { en: "I will travel on the 4th.", id: "Saya akan bepergian tanggal 4." },
+    "四日",
+    "四日に旅行します。",
+    {
+      en: "Watch the small っ: よっか (4th) is not よんにち. It is one of the irregular readings you simply have to memorize.",
+      id: "Perhatikan っ kecilnya: よっか (tanggal 4), bukan よんにち. Ini salah satu bacaan tak beraturan yang harus dihafal.",
+    },
+  ],
+  [
+    "いつか",
+    "itsuka",
+    { en: "5th day of the month / five days", id: "tanggal 5 / lima hari" },
+    "いつかは にちようびです。",
+    [
+      ["いつか", "Itsuka"],
+      ["は", "wa"],
+      ["にちようび", "nichiyoubi"],
+      ["です", "desu"],
+    ],
+    { en: "The 5th is a Sunday.", id: "Tanggal 5 hari Minggu." },
+    "五日",
+    "五日は日曜日です。",
+    {
+      en: "いつか (5th) sounds like the question word いつ + か ('when?'), so context decides. Don't confuse it with いつか written in kana meaning 'someday'.",
+      id: "いつか (tanggal 5) terdengar seperti kata tanya いつ + か ('kapan?'), jadi konteks yang menentukan. Jangan tertukar dengan いつか yang ditulis kana berarti 'suatu hari nanti'.",
+    },
+  ],
+  [
+    "むいか",
+    "muika",
+    { en: "6th day of the month / six days", id: "tanggal 6 / enam hari" },
+    "むいかは あめでした。",
+    [
+      ["むいか", "Muika"],
+      ["は", "wa"],
+      ["あめ", "ame"],
+      ["でした", "deshita"],
+    ],
+    { en: "The 6th was rainy.", id: "Tanggal 6 hujan." },
+    "六日",
+    "六日は雨でした。",
+    {
+      en: "むいか uses the old reading む for six, the same む you see in むっつ (six things). It is not ろくにち.",
+      id: "むいか memakai bacaan lama む untuk angka enam, む yang sama seperti pada むっつ (enam benda). Bukan ろくにち.",
+    },
+  ],
+  [
+    "なのか",
+    "nanoka",
+    { en: "7th day of the month / seven days", id: "tanggal 7 / tujuh hari" },
+    "なのかに かいしゃを やすみます。",
+    [
+      ["なのか", "Nanoka"],
+      ["に", "ni"],
+      ["かいしゃ", "kaisha"],
+      ["を", "wo"],
+      ["やすみます", "yasumimasu"],
+    ],
+    {
+      en: "I take a day off work on the 7th.",
+      id: "Saya libur kerja tanggal 7.",
+    },
+    "七日",
+    "七日に会社を休みます。",
+    {
+      en: "You may also hear なぬか, but なのか is the standard reading to learn first.",
+      id: "Kamu mungkin juga mendengar なぬか, tetapi なのか adalah bacaan standar yang dipelajari lebih dulu.",
+    },
+  ],
+  [
+    "ようか",
+    "youka",
+    { en: "8th day of the month / eight days", id: "tanggal 8 / delapan hari" },
+    "ようかに ともだちと あいます。",
+    [
+      ["ようか", "Youka"],
+      ["に", "ni"],
+      ["ともだち", "tomodachi"],
+      ["と", "to"],
+      ["あいます", "aimasu"],
+    ],
+    {
+      en: "I will meet a friend on the 8th.",
+      id: "Saya akan bertemu teman tanggal 8.",
+    },
+    "八日",
+    "八日に友達と会います。",
+    {
+      en: "ようか (8th) and とおか (10th) look alike when written fast — the long よう vs. the long とお is the only difference in sound.",
+      id: "ようか (tanggal 8) dan とおか (tanggal 10) mirip bila ditulis cepat — perbedaannya hanya pada bunyi panjang よう dan とお.",
+    },
+  ],
+  [
+    "ここのか",
+    "kokonoka",
+    { en: "9th day of the month / nine days", id: "tanggal 9 / sembilan hari" },
+    "ここのかは いそがしいです。",
+    [
+      ["ここのか", "Kokonoka"],
+      ["は", "wa"],
+      ["いそがしい", "isogashii"],
+      ["です", "desu"],
+    ],
+    { en: "I am busy on the 9th.", id: "Saya sibuk tanggal 9." },
+    "九日",
+    "九日は忙しいです。",
+    {
+      en: "ここのか follows ここのつ (nine things): the native-number stem ここの + か. Note that 九 is read ここの here, not く or きゅう.",
+      id: "ここのか mengikuti ここのつ (sembilan benda): pangkal bilangan asli ここの + か. Perhatikan 九 dibaca ここの di sini, bukan く atau きゅう.",
+    },
+  ],
+  [
+    "とおか",
+    "tooka",
+    { en: "10th day of the month / ten days", id: "tanggal 10 / sepuluh hari" },
+    "わたしの たんじょうびは とおかです。",
+    [
+      ["わたしの", "Watashi no"],
+      ["たんじょうび", "tanjoubi"],
+      ["は", "wa"],
+      ["とおか", "tooka"],
+      ["です", "desu"],
+    ],
+    { en: "My birthday is on the 10th.", id: "Ulang tahun saya tanggal 10." },
+    "十日",
+    "私の誕生日は十日です。",
+    {
+      en: "The long おお sound is spelled とおか (to-o-ka), matching とお (ten things). From the 11th on, dates go back to number + にち (じゅういちにち), except the 14th, 20th and 24th.",
+      id: "Bunyi panjang おお ditulis とおか (to-o-ka), sejalan dengan とお (sepuluh benda). Mulai tanggal 11 kembali ke angka + にち (じゅういちにち), kecuali tanggal 14, 20, dan 24.",
+    },
+  ],
+  [
+    "はつか",
+    "hatsuka",
+    {
+      en: "20th day of the month / twenty days",
+      id: "tanggal 20 / dua puluh hari",
+    },
+    "はつかは やすみです。",
+    [
+      ["はつか", "Hatsuka"],
+      ["は", "wa"],
+      ["やすみ", "yasumi"],
+      ["です", "desu"],
+    ],
+    { en: "The 20th is a day off.", id: "Tanggal 20 libur." },
+    "二十日",
+    "二十日は休みです。",
+    {
+      en: "An irregular reading: the 20th is はつか, not にじゅうにち. Age twenty (二十歳) is also irregular: はたち.",
+      id: "Bacaan tak beraturan: tanggal 20 adalah はつか, bukan にじゅうにち. Usia dua puluh tahun (二十歳) juga tak beraturan: はたち.",
+    },
+  ],
+
+  // -- Tambahan kata baru (Kotoba N5 jadi 800) --
+  [
+    "なんにち",
+    "nannichi",
+    {
+      en: "what day of the month; how many days",
+      id: "tanggal berapa; berapa hari",
+    },
+    "きょうは なんにちですか。",
+    [
+      ["きょう", "Kyou"],
+      ["は", "wa"],
+      ["なんにち", "nannichi"],
+      ["です", "desu"],
+      ["か", "ka"],
+    ],
+    { en: "What's the date today?", id: "Hari ini tanggal berapa?" },
+    "何日",
+    "今日は何日ですか。",
+    {
+      en: "Asks for a date (きょうは なんにち) or for a number of days (なんにち かかりますか). Answers use the special readings like ふつか and みっか instead of number + にち.",
+      id: "Bisa menanyakan tanggal (きょうは なんにち) maupun jumlah hari (なんにち かかりますか). Jawabannya memakai bacaan khusus seperti ふつか dan みっか, bukan angka + にち.",
+    },
+  ],
 ];
 
 // Sub-Tier 2.3: Bilangan & Satuan Penghitung (35)
@@ -4308,8 +4690,8 @@ export const KOTOBA_N5_CH2_3: KotobaEntry[] = [
     "本",
     "ペンが二本あります。",
     {
-      en: "Changes sound depending on the number before it: いっぽん, にほん, さんぼん — listen for the pattern.",
-      id: "Bunyinya berubah sesuai bilangan di depannya: いっぽん, にほん, さんぼん — perhatikan polanya.",
+      en: 'Changes sound depending on the number before it: いっぽん, にほん, さんぼん — listen for the pattern. The same kanji 本 also appears as the counter root in ほん, used for counting long cylindrical objects like bottles and pencils — a different function from the noun "book".',
+      id: 'Bunyinya berubah sesuai bilangan di depannya: いっぽん, にほん, さんぼん — perhatikan polanya. Kanji yang sama, 本, juga muncul sebagai akar kata bantu bilangan ほん, dipakai untuk menghitung benda panjang seperti botol dan pensil — fungsi berbeda dari kata benda "buku".',
     },
   ],
   [
@@ -4568,8 +4950,8 @@ export const KOTOBA_N5_CH2_3: KotobaEntry[] = [
     "",
     "りんごはいくつありますか。",
     {
-      en: "Often used to ask someone's age politely: おいくつですか (How old are you?).",
-      id: "Sering dipakai untuk menanyakan usia secara sopan: おいくつですか (Berapa usia Anda?).",
+      en: "Often used to ask someone's age politely: おいくつですか (How old are you?). いくつ also politely asks someone's age, as in おいくつですか (How old are you?), adding the honorific お prefix.",
+      id: "Sering dipakai untuk menanyakan usia secara sopan: おいくつですか (Berapa usia Anda?). いくつ juga dipakai untuk sopan menanyakan umur seseorang, seperti pada おいくつですか (Berapa umur Anda?), dengan menambahkan awalan hormat お.",
     },
   ],
   [
@@ -4828,31 +5210,269 @@ export const KOTOBA_N5_CH2_3: KotobaEntry[] = [
       id: "Partikel yang menempel tepat setelah kata benda atau jumlah untuk berarti 'hanya/cuma sebanyak itu' — misalnya ひとつだけ (hanya satu).",
     },
   ],
+  [
+    "いち",
+    "ichi",
+    { en: "one (1)", id: "satu (1)" },
+    "いちから じゅうまで かぞえます。",
+    [
+      ["いち", "Ichi"],
+      ["から", "kara"],
+      ["じゅう", "juu"],
+      ["まで", "made"],
+      ["かぞえます", "kazoemasu"],
+    ],
+    {
+      en: "I count from one to ten.",
+      id: "Saya menghitung dari satu sampai sepuluh.",
+    },
+    "一",
+    "一から十まで数えます。",
+    {
+      en: "The Chinese-style numbers 1–10 are いち, に, さん, し/よん, ご, ろく, しち/なな, はち, く/きゅう, じゅう. They are used for prices, dates, phone numbers and times. Before some counters いち shortens to いっ: いっぷん, いっぽん, いっさい.",
+      id: "Bilangan gaya Tionghoa 1–10 adalah いち, に, さん, し/よん, ご, ろく, しち/なな, はち, く/きゅう, じゅう. Dipakai untuk harga, tanggal, nomor telepon, dan jam. Sebelum beberapa satuan penghitung, いち menjadi いっ: いっぷん, いっぽん, いっさい.",
+    },
+  ],
+  [
+    "に",
+    "ni",
+    { en: "two (2)", id: "dua (2)" },
+    "にじに ともだちと あいます。",
+    [
+      ["に", "Ni"],
+      ["じ", "ji"],
+      ["に", "ni"],
+      ["ともだち", "tomodachi"],
+      ["と", "to"],
+      ["あいます", "aimasu"],
+    ],
+    {
+      en: "I will meet a friend at 2 o'clock.",
+      id: "Saya akan bertemu teman jam 2.",
+    },
+    "二",
+    "二時に友達と会います。",
+    {
+      en: "Use に for numbers, times (にじ) and months (にがつ). Counting two people or two things has its own words: ふたり and ふたつ, not にひと or にこ.",
+      id: "Pakai に untuk angka, jam (にじ) dan bulan (にがつ). Menghitung dua orang atau dua benda punya kata sendiri: ふたり dan ふたつ, bukan にひと atau にこ.",
+    },
+  ],
+  [
+    "さん",
+    "san",
+    { en: "three (3)", id: "tiga (3)" },
+    "さんじに おちゃを のみます。",
+    [
+      ["さん", "San"],
+      ["じ", "ji"],
+      ["に", "ni"],
+      ["おちゃ", "ocha"],
+      ["を", "wo"],
+      ["のみます", "nomimasu"],
+    ],
+    { en: "I drink tea at 3 o'clock.", id: "Saya minum teh jam 3." },
+    "三",
+    "三時にお茶を飲みます。",
+    {
+      en: "This さん is the number 3 (三) — not the suffix さん (Mr./Ms.) in the Pronouns & Greetings sub-tier. Some counters change its sound: さんぼん, さんびき, さんぷん.",
+      id: "さん ini adalah angka 3 (三) — bukan akhiran さん (Tuan/Nyonya) di sub-tier Kata Ganti & Sapaan. Beberapa satuan penghitung mengubah bunyinya: さんぼん, さんびき, さんぷん.",
+    },
+  ],
+  [
+    "よん",
+    "yon",
+    { en: "four (4)", id: "empat (4)" },
+    "ここは よんかいです。",
+    [
+      ["ここ", "Koko"],
+      ["は", "wa"],
+      ["よん", "yon"],
+      ["かい", "kai"],
+      ["です", "desu"],
+    ],
+    { en: "This is the 4th floor.", id: "Ini lantai 4." },
+    "四",
+    "ここは四階です。",
+    {
+      en: "4 is よん or し — よん is the default because し sounds like 死 (death). A few fixed forms use よ: よじ (4 o'clock), よにん (4 people), よっつ (four things).",
+      id: "4 dibaca よん atau し — よん adalah bacaan utama karena し berbunyi sama dengan 死 (kematian). Beberapa bentuk tetap memakai よ: よじ (jam 4), よにん (4 orang), よっつ (empat benda).",
+    },
+  ],
+  [
+    "ご",
+    "go",
+    { en: "five (5)", id: "lima (5)" },
+    "ごじに おきます。",
+    [
+      ["ご", "Go"],
+      ["じ", "ji"],
+      ["に", "ni"],
+      ["おきます", "okimasu"],
+    ],
+    { en: "I get up at 5 o'clock.", id: "Saya bangun jam 5." },
+    "五",
+    "五時に起きます。",
+    {
+      en: "ご (五, five) has the same sound as the ご in にほんご (語, language) and the polite prefix ご~ — three different words that are only told apart by context and kanji.",
+      id: "ご (五, lima) berbunyi sama dengan ご pada にほんご (語, bahasa) dan awalan sopan ご~ — tiga kata berbeda yang hanya dibedakan lewat konteks dan kanji.",
+    },
+  ],
+  [
+    "ろく",
+    "roku",
+    { en: "six (6)", id: "enam (6)" },
+    "ろくにんで いきます。",
+    [
+      ["ろく", "Roku"],
+      ["にん", "nin"],
+      ["で", "de"],
+      ["いきます", "ikimasu"],
+    ],
+    { en: "Six of us will go.", id: "Kami berenam akan pergi." },
+    "六",
+    "六人で行きます。",
+    {
+      en: "Some counters trigger a small っ or a ぱ sound after ろく: ろっぽん (6 long things), ろっぷん (6 minutes), ろっぴき (6 small animals).",
+      id: "Beberapa satuan penghitung memicu っ kecil atau bunyi ぱ setelah ろく: ろっぽん (6 benda panjang), ろっぷん (6 menit), ろっぴき (6 hewan kecil).",
+    },
+  ],
+  [
+    "なな",
+    "nana",
+    { en: "seven (7)", id: "tujuh (7)" },
+    "こどもは ななさいです。",
+    [
+      ["こども", "Kodomo"],
+      ["は", "wa"],
+      ["なな", "nana"],
+      ["さい", "sai"],
+      ["です", "desu"],
+    ],
+    {
+      en: "The child is seven years old.",
+      id: "Anak itu berusia tujuh tahun.",
+    },
+    "七",
+    "子供は七歳です。",
+    {
+      en: "7 is なな or しち. しち is fixed in times and months (しちじ, しちがつ), while なな is common in phone numbers, ななつ (seven things) and ages, and avoids confusion with いち.",
+      id: "7 dibaca なな atau しち. しち tetap dipakai untuk jam dan bulan (しちじ, しちがつ), sedangkan なな umum untuk nomor telepon, ななつ (tujuh benda) dan usia, serta menghindari tertukar dengan いち.",
+    },
+  ],
+  [
+    "はち",
+    "hachi",
+    { en: "eight (8)", id: "delapan (8)" },
+    "はちじに かいしゃへ いきます。",
+    [
+      ["はち", "Hachi"],
+      ["じ", "ji"],
+      ["に", "ni"],
+      ["かいしゃ", "kaisha"],
+      ["へ", "e"],
+      ["いきます", "ikimasu"],
+    ],
+    {
+      en: "I go to the office at 8 o'clock.",
+      id: "Saya pergi ke kantor jam 8.",
+    },
+    "八",
+    "八時に会社へ行きます。",
+    {
+      en: "This はち is the number 8 (八) — not the はち (蜂, bee) in the Animals sub-tier. Some counters shorten it to はっ: はっぷん, はっぽん, はっさい.",
+      id: "はち ini adalah angka 8 (八) — bukan はち (蜂, lebah) di sub-tier Hewan. Beberapa satuan penghitung memendekkannya menjadi はっ: はっぷん, はっぽん, はっさい.",
+    },
+  ],
+  [
+    "きゅう",
+    "kyuu",
+    { en: "nine (9)", id: "sembilan (9)" },
+    "いもうとは きゅうさいです。",
+    [
+      ["いもうと", "Imouto"],
+      ["は", "wa"],
+      ["きゅう", "kyuu"],
+      ["さい", "sai"],
+      ["です", "desu"],
+    ],
+    {
+      en: "My younger sister is nine years old.",
+      id: "Adik perempuan saya berusia sembilan tahun.",
+    },
+    "九",
+    "妹は九歳です。",
+    {
+      en: "9 is きゅう or く. く is fixed in くじ (9 o'clock) and くがつ (September); きゅう is used for counting people, ages and phone numbers.",
+      id: "9 dibaca きゅう atau く. く tetap dipakai pada くじ (jam 9) dan くがつ (September); きゅう dipakai untuk menghitung orang, usia dan nomor telepon.",
+    },
+  ],
+  [
+    "じゅう",
+    "juu",
+    { en: "ten (10)", id: "sepuluh (10)" },
+    "じゅうじに かえります。",
+    [
+      ["じゅう", "Juu"],
+      ["じ", "ji"],
+      ["に", "ni"],
+      ["かえります", "kaerimasu"],
+    ],
+    { en: "I go home at 10 o'clock.", id: "Saya pulang jam 10." },
+    "十",
+    "十時に帰ります。",
+    {
+      en: "十 is じゅう when you read numbers but とお when you count objects (ten things). Before some counters it becomes じゅっ: じゅっぷん (10 minutes), じゅっぽん.",
+      id: "十 dibaca じゅう saat membaca angka tetapi とお saat menghitung benda (sepuluh benda). Sebelum beberapa satuan penghitung menjadi じゅっ: じゅっぷん (10 menit), じゅっぽん.",
+    },
+  ],
+  [
+    "えん",
+    "en",
+    { en: "yen (Japanese currency)", id: "yen (mata uang Jepang)" },
+    "この ほんは せんえんです。",
+    [
+      ["この", "Kono"],
+      ["ほん", "hon"],
+      ["は", "wa"],
+      ["せん", "sen"],
+      ["えん", "en"],
+      ["です", "desu"],
+    ],
+    { en: "This book costs 1,000 yen.", id: "Buku ini harganya 1.000 yen." },
+    "円",
+    "この本は千円です。",
+    {
+      en: "円 is placed after the number (せんえん = 1,000 yen) and also means 'round'. Ask a price with いくらですか.",
+      id: "円 ditaruh setelah angka (せんえん = 1.000 yen) dan juga berarti 'bulat'. Tanyakan harga dengan いくらですか.",
+    },
+  ],
+  [
+    "さい",
+    "sai",
+    { en: "years old (age)", id: "tahun (usia)" },
+    "いもうとは じゅうごさいです。",
+    [
+      ["いもうと", "Imouto"],
+      ["は", "wa"],
+      ["じゅうご", "juugo"],
+      ["さい", "sai"],
+      ["です", "desu"],
+    ],
+    {
+      en: "My younger sister is 15 years old.",
+      id: "Adik perempuan saya berusia 15 tahun.",
+    },
+    "歳",
+    "妹は十五歳です。",
+    {
+      en: "歳 is added after a number to give age. Watch the sound changes: いっさい (1), はっさい (8), じゅっさい (10), and the irregular はたち for 20. Ask with なんさい, or politely おいくつ.",
+      id: "歳 ditambahkan setelah angka untuk menyebut usia. Perhatikan perubahan bunyinya: いっさい (1), はっさい (8), じゅっさい (10), dan はたち yang tak beraturan untuk 20. Tanyakan dengan なんさい, atau secara sopan おいくつ.",
+    },
+  ],
 ];
 
 // Sub-Tier 2.4: Frekuensi & Durasi (21)
 export const KOTOBA_N5_CH2_4: KotobaEntry[] = [
-  [
-    "いつも",
-    "itsumo",
-    { en: "always", id: "selalu" },
-    "わたしは いつも コーヒーを のみます。",
-    [
-      ["わたし", "Watashi"],
-      ["は", "wa"],
-      ["いつも", "itsumo"],
-      ["コーヒー", "koohii"],
-      ["を", "wo"],
-      ["のみます", "nomimasu"],
-    ],
-    { en: "I always drink coffee.", id: "Saya selalu minum kopi." },
-    "",
-    "私はいつもコーヒーを飲みます。",
-    {
-      en: "Sits at the top of the frequency scale (100%) and pairs with a positive verb — usually written in kana since its kanji (何時も) is rarely used in modern writing.",
-      id: "Berada di puncak skala frekuensi (100%) dan dipasangkan dengan bentuk kata kerja positif — biasanya ditulis dengan kana karena kanjinya (何時も) jarang dipakai dalam tulisan modern.",
-    },
-  ],
   [
     "よく",
     "yoku",
@@ -4870,30 +5490,8 @@ export const KOTOBA_N5_CH2_4: KotobaEntry[] = [
     "",
     "私はよく映画を見ます。",
     {
-      en: 'Sits just below いつも on the frequency scale (about 70–80%). Context matters: よく also doubles as the adverb form of いい/よい, meaning "well" or "skillfully".',
-      id: 'Berada tepat di bawah いつも pada skala frekuensi (sekitar 70–80%). Konteks penting: よく juga berfungsi sebagai bentuk kata keterangan dari いい/よい, yang berarti "dengan baik" atau "terampil".',
-    },
-  ],
-  [
-    "ときどき",
-    "tokidoki",
-    { en: "sometimes", id: "kadang-kadang" },
-    "ときどき えいがを みます。",
-    [
-      ["ときどき", "Tokidoki"],
-      ["えいが", "eiga"],
-      ["を", "wo"],
-      ["みます", "mimasu"],
-    ],
-    {
-      en: "Sometimes I watch a movie.",
-      id: "Kadang-kadang saya menonton film.",
-    },
-    "時々",
-    "時々映画を見ます。",
-    {
-      en: "The 々 is a repeater mark showing that the kanji before it (時) is read twice — sits mid-scale (about 30–50%), between よく and たまに.",
-      id: "々 adalah tanda pengulang yang menunjukkan kanji sebelumnya (時) dibaca dua kali — berada di tengah skala (sekitar 30–50%), di antara よく dan たまに.",
+      en: 'Sits just below いつも on the frequency scale (about 70–80%). Context matters: よく also doubles as the adverb form of いい/よい, meaning "well" or "skillfully". よく has two separate meanings depending on context: frequency ("often"), as here, or manner ("well"), as in よく わかりました (I understood well).',
+      id: 'Berada tepat di bawah いつも pada skala frekuensi (sekitar 70–80%). Konteks penting: よく juga berfungsi sebagai bentuk kata keterangan dari いい/よい, yang berarti "dengan baik" atau "terampil". よく memiliki dua makna berbeda tergantung konteks: frekuensi ("sering"), seperti di sini, atau cara ("dengan baik"), seperti pada よく わかりました (saya mengerti dengan baik).',
     },
   ],
   [
@@ -4930,8 +5528,8 @@ export const KOTOBA_N5_CH2_4: KotobaEntry[] = [
     "",
     "たいてい七時に起きます。",
     {
-      en: "Has a kanji form (大抵) but it's rarely written that way — kana is standard. Describes what happens in most cases, allowing for occasional exceptions.",
-      id: "Memiliki bentuk kanji (大抵) tapi jarang ditulis demikian — kana adalah bentuk standar. Menjelaskan apa yang biasanya terjadi, dengan kemungkinan pengecualian sesekali.",
+      en: 'Has a kanji form (大抵) but it\'s rarely written that way — kana is standard. Describes what happens in most cases, allowing for occasional exceptions. たいてい ranks just below いつも on the frequency scale — closer to "most of the time" than to a strict "always".',
+      id: 'Memiliki bentuk kanji (大抵) tapi jarang ditulis demikian — kana adalah bentuk standar. Menjelaskan apa yang biasanya terjadi, dengan kemungkinan pengecualian sesekali. たいてい berada tepat di bawah いつも pada skala frekuensi — lebih dekat ke "sebagian besar waktu" daripada "selalu" secara mutlak.',
     },
   ],
   [
@@ -4955,28 +5553,8 @@ export const KOTOBA_N5_CH2_4: KotobaEntry[] = [
     "全然",
     "日本語が全然分かりません。",
     {
-      en: "Sits at the bottom of the frequency/degree scale (0%) and must be followed by a negative verb — using it with a positive verb is a common learner mistake.",
-      id: "Berada di dasar skala frekuensi/derajat (0%) dan harus diikuti oleh kata kerja bentuk negatif — memakainya dengan kata kerja positif adalah kesalahan umum pelajar.",
-    },
-  ],
-  [
-    "まだ",
-    "mada",
-    { en: "still, not yet", id: "masih, belum" },
-    "わたしは まだ がくせいです。",
-    [
-      ["わたし", "Watashi"],
-      ["は", "wa"],
-      ["まだ", "mada"],
-      ["がくせい", "gakusei"],
-      ["です", "desu"],
-    ],
-    { en: "I am still a student.", id: "Saya masih seorang pelajar." },
-    "",
-    "私はまだ学生です。",
-    {
-      en: 'Has two related meanings depending on the verb: "still" with a positive verb (まだ学生です), and "not yet" with a negative one (まだ食べません).',
-      id: 'Memiliki dua makna terkait tergantung kata kerjanya: "masih" dengan kata kerja positif (まだ学生です), dan "belum" dengan kata kerja negatif (まだ食べません).',
+      en: 'Sits at the bottom of the frequency/degree scale (0%) and must be followed by a negative verb — using it with a positive verb is a common learner mistake. Like あまり, ぜんぜん traditionally needs a negative ending; in casual modern speech it\'s sometimes paired with a positive word to mean "totally" (ぜんぜん だいじょうぶ, totally fine), though textbooks teach the negative pattern.',
+      id: 'Berada di dasar skala frekuensi/derajat (0%) dan harus diikuti oleh kata kerja bentuk negatif — memakainya dengan kata kerja positif adalah kesalahan umum pelajar. Seperti あまり, ぜんぜん secara tradisional memerlukan akhiran negatif; dalam percakapan santai modern kadang dipasangkan dengan kata positif untuk berarti "benar-benar" (ぜんぜん だいじょうぶ, benar-benar tidak apa-apa), meski buku pelajaran mengajarkan pola negatif.',
     },
   ],
   [
@@ -4996,28 +5574,6 @@ export const KOTOBA_N5_CH2_4: KotobaEntry[] = [
     {
       en: "Often appears as すぐに without changing the meaning much — describes an action happening with almost no delay.",
       id: "Sering muncul sebagai すぐに tanpa mengubah makna secara signifikan — menjelaskan tindakan yang terjadi hampir tanpa jeda.",
-    },
-  ],
-  [
-    "もうすぐ",
-    "mousugu",
-    { en: "soon, almost time", id: "sebentar lagi, hampir waktunya" },
-    "なつやすみは もうすぐです。",
-    [
-      ["なつやすみ", "Natsuyasumi"],
-      ["は", "wa"],
-      ["もうすぐ", "mousugu"],
-      ["です", "desu"],
-    ],
-    {
-      en: "Summer vacation is coming soon.",
-      id: "Libur musim panas sebentar lagi.",
-    },
-    "",
-    "夏休みはもうすぐです。",
-    {
-      en: "Built from もう (already) + すぐ (right away) — describes something that is about to happen very shortly.",
-      id: "Dibentuk dari もう (sudah) + すぐ (segera) — menjelaskan sesuatu yang akan segera terjadi sebentar lagi.",
     },
   ],
   [
@@ -5041,8 +5597,8 @@ export const KOTOBA_N5_CH2_4: KotobaEntry[] = [
     "",
     "日本語があまり分かりません。",
     {
-      en: "Sits between たまに and ぜんぜん on the frequency/degree scale — must be followed by a negative verb, similar to ぜんぜん but milder.",
-      id: "Berada di antara たまに dan ぜんぜん pada skala frekuensi/derajat — harus diikuti kata kerja bentuk negatif, mirip ぜんぜん tapi lebih ringan.",
+      en: 'Sits between たまに and ぜんぜん on the frequency/degree scale — must be followed by a negative verb, similar to ぜんぜん but milder. あまり needs a negative ending like ～ません to mean "not very" — paired with an affirmative verb instead, it means "too much", an excessive degree.',
+      id: 'Berada di antara たまに dan ぜんぜん pada skala frekuensi/derajat — harus diikuti kata kerja bentuk negatif, mirip ぜんぜん tapi lebih ringan. あまり memerlukan akhiran negatif seperti ～ません untuk berarti "tidak terlalu" — jika dipasangkan dengan kata kerja afirmatif, artinya justru "terlalu", suatu tingkat berlebihan.',
     },
   ],
   [
@@ -5121,8 +5677,8 @@ export const KOTOBA_N5_CH2_4: KotobaEntry[] = [
     "",
     "ちょっと待ってください。",
     {
-      en: "Very versatile — can mean a small amount, a short time, or soften a request/refusal, e.g. ちょっと… (well, that's a bit difficult...).",
-      id: "Sangat serbaguna — bisa berarti jumlah sedikit, waktu singkat, atau memperhalus permintaan/penolakan, misalnya ちょっと… (wah, itu agak sulit...).",
+      en: "Very versatile — can mean a small amount, a short time, or soften a request/refusal, e.g. ちょっと… (well, that's a bit difficult...). ちょっと is the casual, everyday counterpart of すこし; it's also used alone to soften a refusal, as in ちょっと… (trailing off to mean \"that's a bit difficult\").",
+      id: 'Sangat serbaguna — bisa berarti jumlah sedikit, waktu singkat, atau memperhalus permintaan/penolakan, misalnya ちょっと… (wah, itu agak sulit...). ちょっと adalah padanan santai dan sehari-hari dari すこし; kata ini juga dipakai sendirian untuk memperhalus penolakan, seperti pada ちょっと… (menggantung untuk berarti "agak sulit").',
     },
   ],
   [
@@ -5235,8 +5791,8 @@ export const KOTOBA_N5_CH2_4: KotobaEntry[] = [
     "間",
     "夏休みの間、旅行しました。",
     {
-      en: "Attaches to a noun with の to mark a span of time (or space) something happens within — e.g. しごとのあいだ (during work).",
-      id: "Menempel pada kata benda dengan の untuk menandai rentang waktu (atau ruang) tempat sesuatu terjadi — misalnya しごとのあいだ (selama bekerja).",
+      en: "Attaches to a noun with の to mark a span of time (or space) something happens within — e.g. しごとのあいだ (during work). 間 is read あいだ here but becomes かん in time-duration words like にじかん (two hours) and じかん (time).",
+      id: "Menempel pada kata benda dengan の untuk menandai rentang waktu (atau ruang) tempat sesuatu terjadi — misalnya しごとのあいだ (selama bekerja). 間 dibaca あいだ di sini, tetapi menjadi かん pada kata durasi waktu seperti にじかん (dua jam) dan じかん (waktu).",
     },
   ],
   [
@@ -5263,21 +5819,130 @@ export const KOTOBA_N5_CH2_4: KotobaEntry[] = [
     },
   ],
   [
-    "ぐらい",
-    "-gurai / -kurai",
-    { en: "about, approximately", id: "kira-kira / sekitar" },
-    "いちじかんぐらい かかります。",
+    "はじめて",
+    "hajimete",
+    { en: "for the first time", id: "untuk pertama kali" },
+    "きょう はじめて すしを たべました。",
     [
-      ["いちじかん", "Ichijikan"],
-      ["ぐらい", "gurai"],
-      ["かかります", "kakarimasu"],
+      ["きょう", "Kyou"],
+      ["はじめて", "hajimete"],
+      ["すし", "sushi"],
+      ["を", "wo"],
+      ["たべました", "tabemashita"],
     ],
-    { en: "It takes about one hour.", id: "Memakan waktu sekitar satu jam." },
-    "",
-    "一時間ぐらいかかります。",
     {
-      en: "くらい is an equally common variant — attaches after a quantity or duration to mean 'approximately' that much.",
-      id: "くらい adalah variasi yang sama umum dipakainya — menempel setelah jumlah atau durasi untuk berarti 'kira-kira' sebanyak itu.",
+      en: "I ate sushi for the first time today.",
+      id: "Hari ini saya makan sushi untuk pertama kalinya.",
+    },
+    "初めて",
+    "今日初めて寿司を食べました。",
+    {
+      en: "はじめて marks a first-ever experience, unlike はじめに ('first of all', the first step in a sequence). Used with a past-tense verb: はじめて たべました.",
+      id: "はじめて menandai pengalaman pertama kali, berbeda dari はじめに ('pertama-tama', langkah awal dalam urutan). Dipakai dengan kata kerja lampau: はじめて たべました.",
+    },
+  ],
+
+  // -- Tambahan kata baru (Kotoba N5 jadi 800) --
+  [
+    "つぎ",
+    "tsugi",
+    { en: "next", id: "berikutnya / selanjutnya" },
+    "つぎは わたしの ばんです。",
+    [
+      ["つぎ", "Tsugi"],
+      ["は", "wa"],
+      ["わたし", "watashi"],
+      ["の", "no"],
+      ["ばん", "ban"],
+      ["です", "desu"],
+    ],
+    { en: "Next is my turn.", id: "Berikutnya giliran saya." },
+    "次",
+    "次は私の番です。",
+    {
+      en: "Works like a noun to say 'the next ~': つぎの ひ (the next day), つぎの えき (the next station). It isn't tied to weeks or months; for 'next week / next month' use らいしゅう / らいげつ.",
+      id: "Dipakai seperti kata benda untuk 'berikutnya': つぎの ひ (hari berikutnya), つぎの えき (stasiun berikutnya). Tidak terikat pada minggu atau bulan; untuk 'minggu depan / bulan depan' pakai らいしゅう / らいげつ.",
+    },
+  ],
+  [
+    "さいしょ",
+    "saisho",
+    { en: "first, the beginning", id: "pertama, awal" },
+    "さいしょは むずかしかったです。",
+    [
+      ["さいしょ", "Saisho"],
+      ["は", "wa"],
+      ["むずかしかった", "muzukashikatta"],
+      ["です", "desu"],
+    ],
+    { en: "It was difficult at first.", id: "Pada awalnya sulit." },
+    "最初",
+    "最初は難しかったです。",
+    {
+      en: "Refers to the very first point in a sequence (さいしょに = 'first of all'); its counterpart is さいご (最後, 'the last').",
+      id: "Menunjuk titik paling awal dalam suatu urutan (さいしょに = 'pertama-tama'); lawannya adalah さいご (最後, 'terakhir').",
+    },
+  ],
+  [
+    "こんど",
+    "kondo",
+    { en: "this time; next time", id: "kali ini; lain kali" },
+    "こんど いっしょに ごはんを たべましょう。",
+    [
+      ["こんど", "Kondo"],
+      ["いっしょ", "issho"],
+      ["に", "ni"],
+      ["ごはん", "gohan"],
+      ["を", "wo"],
+      ["たべましょう", "tabemashou"],
+    ],
+    {
+      en: "Let's eat together next time.",
+      id: "Lain kali mari kita makan bersama.",
+    },
+    "今度",
+    "今度一緒にご飯を食べましょう。",
+    {
+      en: "The meaning depends on context: 'this time' for something happening now, or 'next time / sometime soon' for a future occasion. こんど is very common when casually suggesting to meet up later.",
+      id: "Artinya tergantung konteks: 'kali ini' untuk hal yang sedang terjadi, atau 'lain kali / suatu saat nanti' untuk kejadian mendatang. こんど sangat sering dipakai untuk mengajak bertemu dengan santai.",
+    },
+  ],
+  [
+    "そろそろ",
+    "sorosoro",
+    { en: "soon; about time to", id: "sebentar lagi; sudah waktunya" },
+    "そろそろ かえります。",
+    [
+      ["そろそろ", "Sorosoro"],
+      ["かえります", "kaerimasu"],
+    ],
+    {
+      en: "It's about time for me to go home.",
+      id: "Sudah waktunya saya pulang.",
+    },
+    "",
+    "そろそろ帰ります。",
+    {
+      en: "A gentle way to signal that it's nearly time to leave or finish. そろそろ しつれいします is the standard polite way to wrap up a visit.",
+      id: "Cara halus untuk memberi tanda bahwa sudah hampir waktunya pergi atau selesai. そろそろ しつれいします adalah cara sopan yang umum untuk mengakhiri kunjungan.",
+    },
+  ],
+  [
+    "ひさしぶり",
+    "hisashiburi",
+    { en: "long time (no see)", id: "lama tidak bertemu" },
+    "ひさしぶりですね。",
+    [
+      ["ひさしぶり", "Hisashiburi"],
+      ["です", "desu"],
+      ["ね", "ne"],
+    ],
+    { en: "It's been a long time!", id: "Sudah lama sekali ya!" },
+    "久しぶり",
+    "久しぶりですね。",
+    {
+      en: "A greeting for someone you haven't seen in a while. Among friends ひさしぶり is enough; to a superior or in polite speech use おひさしぶりです.",
+      id: "Sapaan untuk seseorang yang lama tidak ditemui. Dengan teman cukup ひさしぶり; kepada atasan atau saat berbicara sopan pakai おひさしぶりです.",
     },
   ],
 ];
@@ -6011,31 +6676,139 @@ export const KOTOBA_N5_CH3_1: KotobaEntry[] = [
       id: "Kata serapan dari bahasa Inggris 'fork' — dipasangkan dengan スプーン (sendok) dan ナイフ (pisau) untuk perlengkapan makan bergaya Barat.",
     },
   ],
+  [
+    "りんご",
+    "ringo",
+    { en: "apple", id: "apel" },
+    "まいあさ りんごを たべます。",
+    [
+      ["まいあさ", "Maiasa"],
+      ["りんご", "ringo"],
+      ["を", "wo"],
+      ["たべます", "tabemasu"],
+    ],
+    { en: "I eat an apple every morning.", id: "Saya makan apel setiap pagi." },
+    "",
+    "毎朝りんごを食べます。",
+    {
+      en: "りんご is normally written in hiragana or katakana (リンゴ) — the kanji 林檎 is rare. It is counted with the native numbers or こ: りんごを ふたつ.",
+      id: "りんご biasanya ditulis dengan hiragana atau katakana (リンゴ) — kanji 林檎 jarang dipakai. Dihitung dengan bilangan asli atau こ: りんごを ふたつ.",
+    },
+  ],
+  [
+    "みかん",
+    "mikan",
+    { en: "mandarin orange", id: "jeruk mandarin (jeruk Jepang)" },
+    "ふゆに みかんを たくさん たべます。",
+    [
+      ["ふゆ", "Fuyu"],
+      ["に", "ni"],
+      ["みかん", "mikan"],
+      ["を", "wo"],
+      ["たくさん", "takusan"],
+      ["たべます", "tabemasu"],
+    ],
+    {
+      en: "I eat lots of mandarin oranges in winter.",
+      id: "Saya makan banyak jeruk mandarin saat musim dingin.",
+    },
+    "蜜柑",
+    "冬に蜜柑をたくさん食べます。",
+    {
+      en: "みかん is the small, easy-to-peel citrus fruit that is a winter favorite in Japan; oranges in general are オレンジ.",
+      id: "みかん adalah jeruk kecil yang mudah dikupas dan menjadi favorit musim dingin di Jepang; jeruk orange secara umum disebut オレンジ.",
+    },
+  ],
+  [
+    "すし",
+    "sushi",
+    { en: "sushi", id: "sushi" },
+    "わたしは すしが すきです。",
+    [
+      ["わたし", "Watashi"],
+      ["は", "wa"],
+      ["すし", "sushi"],
+      ["が", "ga"],
+      ["すき", "suki"],
+      ["です", "desu"],
+    ],
+    { en: "I like sushi.", id: "Saya suka sushi." },
+    "寿司",
+    "私は寿司が好きです。",
+    {
+      en: "The kana is すし, read 'sushi'. In compounds す becomes ず — for example まきずし (rolled sushi).",
+      id: "Kananya すし, dibaca 'sushi'. Pada kata majemuk す menjadi ず — misalnya まきずし (sushi gulung).",
+    },
+  ],
+  [
+    "てんぷら",
+    "tenpura",
+    {
+      en: "tempura (battered, deep-fried food)",
+      id: "tempura (makanan bertepung yang digoreng)",
+    },
+    "てんぷらは おいしいです。",
+    [
+      ["てんぷら", "Tenpura"],
+      ["は", "wa"],
+      ["おいしい", "oishii"],
+      ["です", "desu"],
+    ],
+    { en: "Tempura is delicious.", id: "Tempura itu enak." },
+    "天ぷら",
+    "天ぷらは美味しいです。",
+    {
+      en: "Usually written 天ぷら, with only the first character in kanji. Seafood and vegetables are dipped in batter and deep-fried.",
+      id: "Biasanya ditulis 天ぷら, hanya karakter pertama yang berkanji. Seafood dan sayuran dicelup ke adonan tepung lalu digoreng.",
+    },
+  ],
+  [
+    "サラダ",
+    "sarada",
+    { en: "salad", id: "salad" },
+    "ひるごはんに サラダを たべます。",
+    [
+      ["ひるごはん", "Hirugohan"],
+      ["に", "ni"],
+      ["サラダ", "sarada"],
+      ["を", "wo"],
+      ["たべます", "tabemasu"],
+    ],
+    {
+      en: "I eat a salad for lunch.",
+      id: "Saya makan salad untuk makan siang.",
+    },
+    "",
+    "昼ご飯にサラダを食べます。",
+    {
+      en: "サラダ is a loanword from English, so it is written in katakana — like パン, ケーキ and ジュース in this same sub-tier.",
+      id: "サラダ adalah kata serapan dari bahasa Inggris, jadi ditulis dengan katakana — seperti パン, ケーキ dan ジュース di sub-tier yang sama.",
+    },
+  ],
+  [
+    "はし",
+    "hashi",
+    { en: "chopsticks", id: "sumpit" },
+    "はしで ごはんを たべます。",
+    [
+      ["はし", "Hashi"],
+      ["で", "de"],
+      ["ごはん", "gohan"],
+      ["を", "wo"],
+      ["たべます", "tabemasu"],
+    ],
+    { en: "I eat rice with chopsticks.", id: "Saya makan nasi dengan sumpit." },
+    "箸",
+    "箸でご飯を食べます。",
+    {
+      en: "箸 (chopsticks) and 橋 (bridge, in the transportation sub-tier) are both はし — the kanji and the pitch of the voice tell them apart. The particle で marks the tool: はしで たべる.",
+      id: "箸 (sumpit) dan 橋 (jembatan, di sub-tier transportasi) sama-sama はし — kanji dan nada suara yang membedakannya. Partikel で menandai alat: はしで たべる.",
+    },
+  ],
 ];
 
 // Sub-Tier 3.2: Benda-benda Pribadi & Rumah (47)
 export const KOTOBA_N5_CH3_2: KotobaEntry[] = [
-  [
-    "ほん",
-    "hon",
-    { en: "book", id: "buku" },
-    "この ほんは とても おもしろいです。",
-    [
-      ["この", "Kono"],
-      ["ほん", "hon"],
-      ["は", "wa"],
-      ["とても", "totemo"],
-      ["おもしろい", "omoshiroi"],
-      ["です", "desu"],
-    ],
-    { en: "This book is very interesting.", id: "Buku ini sangat menarik." },
-    "本",
-    "この本はとても面白いです。",
-    {
-      en: 'The same kanji 本 also appears as the counter root in ほん, used for counting long cylindrical objects like bottles and pencils — a different function from the noun "book".',
-      id: 'Kanji yang sama, 本, juga muncul sebagai akar kata bantu bilangan ほん, dipakai untuk menghitung benda panjang seperti botol dan pensil — fungsi berbeda dari kata benda "buku".',
-    },
-  ],
   [
     "かばん",
     "kaban",
@@ -6657,8 +7430,8 @@ export const KOTOBA_N5_CH3_2: KotobaEntry[] = [
     "傘",
     "雨だから傘を持って行きます。",
     {
-      en: "The kanji 傘 visually resembles an open umbrella — counted with ほん, the counter for long, cylindrical objects when closed.",
-      id: "Kanji 傘 secara visual menyerupai payung yang terbuka — dihitung dengan ほん, kata bantu bilangan untuk benda panjang silinder saat tertutup.",
+      en: "The kanji 傘 visually resembles an open umbrella — counted with ほん, the counter for long, cylindrical objects when closed. Uses さす, a unique verb specifically for opening/holding an umbrella — not shared with any other clothing item.",
+      id: "Kanji 傘 secara visual menyerupai payung yang terbuka — dihitung dengan ほん, kata bantu bilangan untuk benda panjang silinder saat tertutup. Memakai さす, kata kerja unik yang khusus untuk membuka/memegang payung — tidak dipakai bersama untuk barang pakaian lain.",
     },
   ],
   [
@@ -6746,8 +7519,8 @@ export const KOTOBA_N5_CH3_2: KotobaEntry[] = [
     "",
     "家の中でスリッパを履きます。",
     {
-      en: "From English 'slipper(s)' — commonly used indoors in Japan after taking off outdoor くつ (shoes) at the entrance.",
-      id: "Dari bahasa Inggris 'slipper(s)' — umum dipakai di dalam ruangan di Jepang setelah melepas くつ (sepatu luar) di pintu masuk.",
+      en: "From English 'slipper(s)' — commonly used indoors in Japan after taking off outdoor くつ (shoes) at the entrance. From English 'slipper(s)' — like other footwear, it pairs with はく, not きる, since it's worn on the feet.",
+      id: "Dari bahasa Inggris 'slipper(s)' — umum dipakai di dalam ruangan di Jepang setelah melepas くつ (sepatu luar) di pintu masuk. Dari bahasa Inggris 'slipper(s)' — seperti alas kaki lainnya, berpasangan dengan はく, bukan きる, karena dipakai di kaki.",
     },
   ],
   [
@@ -7118,6 +7891,147 @@ export const KOTOBA_N5_CH3_2: KotobaEntry[] = [
       id: "Kata serapan dari bahasa Inggris 'sports' — dipasangkan dengan する (melakukan) untuk berolahraga secara umum.",
     },
   ],
+  [
+    "うち",
+    "uchi",
+    { en: "home, house (one's own)", id: "rumah (sendiri); keluarga saya" },
+    "わたしの うちは とうきょうに あります。",
+    [
+      ["わたし", "Watashi"],
+      ["の", "no"],
+      ["うち", "uchi"],
+      ["は", "wa"],
+      ["とうきょう", "Toukyou"],
+      ["に", "ni"],
+      ["あります", "arimasu"],
+    ],
+    { en: "My home is in Tokyo.", id: "Rumah saya ada di Tokyo." },
+    "家",
+    "私の家は東京にあります。",
+    {
+      en: "うち and いえ both use the kanji 家. うち stresses 'my home / my household' (うちの かぞく = my family), while いえ is more the physical house or building.",
+      id: "うち dan いえ sama-sama memakai kanji 家. うち menekankan 'rumah / keluarga saya' (うちの かぞく = keluarga saya), sedangkan いえ lebih ke bangunan rumahnya.",
+    },
+  ],
+  [
+    "にわ",
+    "niwa",
+    { en: "garden, yard", id: "halaman, kebun" },
+    "にわに おおきい きが あります。",
+    [
+      ["にわ", "Niwa"],
+      ["に", "ni"],
+      ["おおきい", "ookii"],
+      ["き", "ki"],
+      ["が", "ga"],
+      ["あります", "arimasu"],
+    ],
+    {
+      en: "There is a big tree in the garden.",
+      id: "Di halaman ada pohon besar.",
+    },
+    "庭",
+    "庭に大きい木があります。",
+    {
+      en: "庭 is the yard or garden attached to a house, from a small backyard to a formal Japanese garden. A public park is こうえん.",
+      id: "庭 adalah halaman atau kebun yang menempel pada rumah, dari halaman belakang kecil sampai taman Jepang yang formal. Taman umum disebut こうえん.",
+    },
+  ],
+  [
+    "トイレ",
+    "toire",
+    { en: "toilet, restroom", id: "toilet, kamar kecil" },
+    "トイレは にかいに あります。",
+    [
+      ["トイレ", "Toire"],
+      ["は", "wa"],
+      ["にかい", "nikai"],
+      ["に", "ni"],
+      ["あります", "arimasu"],
+    ],
+    {
+      en: "The restroom is on the 2nd floor.",
+      id: "Toiletnya ada di lantai 2.",
+    },
+    "",
+    "トイレは二階にあります。",
+    {
+      en: "トイレ (from English 'toilet') is the everyday word. お手洗い (おてあらい) is a more polite alternative you will see on signs and hear in restaurants.",
+      id: "トイレ (dari bahasa Inggris 'toilet') adalah kata sehari-hari. お手洗い (おてあらい) adalah alternatif yang lebih sopan yang sering terlihat di papan petunjuk dan terdengar di restoran.",
+    },
+  ],
+  [
+    "プレゼント",
+    "purezento",
+    { en: "present, gift", id: "hadiah, kado" },
+    "ともだちに プレゼントを あげます。",
+    [
+      ["ともだち", "Tomodachi"],
+      ["に", "ni"],
+      ["プレゼント", "purezento"],
+      ["を", "wo"],
+      ["あげます", "agemasu"],
+    ],
+    {
+      en: "I give a present to a friend.",
+      id: "Saya memberi kado kepada teman.",
+    },
+    "",
+    "友達にプレゼントをあげます。",
+    {
+      en: "A loanword from English 'present'. The receiver takes に and the gift takes を: ともだちに プレゼントを あげる. From the receiver's side the verb is もらう.",
+      id: "Kata serapan dari bahasa Inggris 'present'. Penerima memakai に dan hadiahnya memakai を: ともだちに プレゼントを あげる. Dari sisi penerima kata kerjanya もらう.",
+    },
+  ],
+  [
+    "ばんごう",
+    "bangou",
+    { en: "number (phone, room, ID)", id: "nomor (telepon, kamar, identitas)" },
+    "でんわばんごうを おしえて ください。",
+    [
+      ["でんわ", "Denwa"],
+      ["ばんごう", "bangou"],
+      ["を", "wo"],
+      ["おしえて", "oshiete"],
+      ["ください", "kudasai"],
+    ],
+    {
+      en: "Please tell me your phone number.",
+      id: "Tolong beri tahu nomor teleponmu.",
+    },
+    "番号",
+    "電話番号を教えてください。",
+    {
+      en: "番号 is a number used as an identifier — a phone number, room number, ID number — not a quantity. It shares 番 with ばん (番, 'number N') in the counters sub-tier.",
+      id: "番号 adalah nomor yang berfungsi sebagai pengenal — nomor telepon, nomor kamar, nomor identitas — bukan jumlah. Memakai 番 yang sama dengan ばん (番, 'nomor N') di sub-tier satuan penghitung.",
+    },
+  ],
+
+  // -- Tambahan kata baru (Kotoba N5 jadi 800) --
+  [
+    "ほんだな",
+    "hondana",
+    { en: "bookshelf", id: "rak buku" },
+    "ほんだなに ほんが たくさん あります。",
+    [
+      ["ほんだな", "Hondana"],
+      ["に", "ni"],
+      ["ほん", "hon"],
+      ["が", "ga"],
+      ["たくさん", "takusan"],
+      ["あります", "arimasu"],
+    ],
+    {
+      en: "There are lots of books on the bookshelf.",
+      id: "Ada banyak buku di rak buku.",
+    },
+    "本棚",
+    "本棚に本がたくさんあります。",
+    {
+      en: "Combines ほん (本, book) and たな (棚, shelf). The たな becomes だな through rendaku (sequential voicing) when it follows another word.",
+      id: "Gabungan ほん (本, buku) dan たな (棚, rak). たな berubah menjadi だな lewat rendaku (pengucapan bersuara) saat mengikuti kata lain.",
+    },
+  ],
 ];
 
 // Sub-Tier 3.3: Pakaian & Aksesori (21)
@@ -7362,30 +8276,6 @@ export const KOTOBA_N5_CH3_3: KotobaEntry[] = [
     },
   ],
   [
-    "かさ",
-    "kasa",
-    { en: "umbrella", id: "payung" },
-    "あめが ふっているから かさを さします。",
-    [
-      ["あめ", "Ame"],
-      ["が", "ga"],
-      ["ふっているから", "futteirukara"],
-      ["かさ", "kasa"],
-      ["を", "wo"],
-      ["さします", "sashimasu"],
-    ],
-    {
-      en: "I open an umbrella because it is raining.",
-      id: "Saya memakai payung karena sedang hujan.",
-    },
-    "傘",
-    "雨が降っているから傘をさします。",
-    {
-      en: "Uses さす, a unique verb specifically for opening/holding an umbrella — not shared with any other clothing item.",
-      id: "Memakai さす, kata kerja unik yang khusus untuk membuka/memegang payung — tidak dipakai bersama untuk barang pakaian lain.",
-    },
-  ],
-  [
     "きもの",
     "kimono",
     {
@@ -7455,31 +8345,6 @@ export const KOTOBA_N5_CH3_3: KotobaEntry[] = [
     {
       en: "Combines 上 (upper/outer) + 着 (wear) — a general term for any outer garment worn over a shirt, whether a jacket, blazer, or coat.",
       id: "Gabungan dari 上 (atas/luar) + 着 (memakai) — istilah umum untuk pakaian luar apa pun yang dipakai di atas kemeja, baik jaket, blazer, maupun mantel.",
-    },
-  ],
-  [
-    "スリッパ",
-    "surippa",
-    { en: "slippers", id: "sandal rumah" },
-    "へやの なかで スリッパを はきます。",
-    [
-      ["へや", "Heya"],
-      ["の", "no"],
-      ["なか", "naka"],
-      ["で", "de"],
-      ["スリッパ", "surippa"],
-      ["を", "wo"],
-      ["はきます", "hakimasu"],
-    ],
-    {
-      en: "I wear slippers in the room.",
-      id: "Saya memakai sandal rumah di dalam kamar.",
-    },
-    "",
-    "部屋の中でスリッパを履きます。",
-    {
-      en: "From English 'slipper(s)' — like other footwear, it pairs with はく, not きる, since it's worn on the feet.",
-      id: "Dari bahasa Inggris 'slipper(s)' — seperti alas kaki lainnya, berpasangan dengan はく, bukan きる, karena dipakai di kaki.",
     },
   ],
   [
@@ -7569,6 +8434,49 @@ export const KOTOBA_N5_CH3_3: KotobaEntry[] = [
     {
       en: "From English 'handkerchief' — a small cloth carried for wiping hands or sweat, commonly kept in a ポケット (pocket) or カバン (bag).",
       id: "Dari bahasa Inggris 'handkerchief' — kain kecil yang dibawa untuk mengelap tangan atau keringat, biasa disimpan di ポケット (saku) atau カバン (tas).",
+    },
+  ],
+
+  // -- Tambahan kata baru (Kotoba N5 jadi 800) --
+  [
+    "ようふく",
+    "youfuku",
+    { en: "clothes (Western-style)", id: "pakaian (gaya Barat)" },
+    "デパートで ようふくを かいました。",
+    [
+      ["デパート", "Depaato"],
+      ["で", "de"],
+      ["ようふく", "youfuku"],
+      ["を", "wo"],
+      ["かいました", "kaimashita"],
+    ],
+    {
+      en: "I bought some clothes at the department store.",
+      id: "Saya membeli pakaian di department store.",
+    },
+    "洋服",
+    "デパートで洋服を買いました。",
+    {
+      en: "洋 means 'Western', so ようふく contrasts with わふく (和服) and きもの (着物), the traditional Japanese clothing. In everyday speech it often just means 'clothes'.",
+      id: "洋 berarti 'Barat', sehingga ようふく berlawanan dengan わふく (和服) dan きもの (着物), pakaian tradisional Jepang. Dalam percakapan sehari-hari sering berarti 'pakaian' saja.",
+    },
+  ],
+  [
+    "ジーンズ",
+    "jiinzu",
+    { en: "jeans", id: "jeans / celana jins" },
+    "ジーンズを はいています。",
+    [
+      ["ジーンズ", "Jiinzu"],
+      ["を", "wo"],
+      ["はいています", "haiteimasu"],
+    ],
+    { en: "I'm wearing jeans.", id: "Saya sedang memakai jeans." },
+    "",
+    "ジーンズを履いています。",
+    {
+      en: "Like other lower-body clothes (ズボン, スカート), jeans go with はく (履く), not きる: ジーンズを はく.",
+      id: "Seperti pakaian bagian bawah lainnya (ズボン, スカート), jeans memakai kata kerja はく (履く), bukan きる: ジーンズを はく.",
     },
   ],
 ];
@@ -8206,6 +9114,135 @@ export const KOTOBA_N5_CH4_1: KotobaEntry[] = [
       id: "Gabungan dari 外 (luar) + 国 (negara) — tambahkan じん menjadi がいこくじん, orang asing.",
     },
   ],
+  [
+    "にほん",
+    "nihon",
+    { en: "Japan", id: "Jepang" },
+    "わたしは にほんへ いきます。",
+    [
+      ["わたし", "Watashi"],
+      ["は", "wa"],
+      ["にほん", "Nihon"],
+      ["へ", "e"],
+      ["いきます", "ikimasu"],
+    ],
+    { en: "I am going to Japan.", id: "Saya akan pergi ke Jepang." },
+    "日本",
+    "私は日本へ行きます。",
+    {
+      en: "日本 can be read にほん or にっぽん. にほん is the everyday reading; にっぽん is used in formal or ceremonial settings such as national teams and banknotes.",
+      id: "日本 bisa dibaca にほん atau にっぽん. にほん adalah bacaan sehari-hari; にっぽん dipakai dalam situasi formal atau seremonial seperti tim nasional dan uang kertas.",
+    },
+  ],
+  [
+    "アメリカ",
+    "amerika",
+    { en: "America, the United States", id: "Amerika, Amerika Serikat" },
+    "ともだちは アメリカから きました。",
+    [
+      ["ともだち", "Tomodachi"],
+      ["は", "wa"],
+      ["アメリカ", "Amerika"],
+      ["から", "kara"],
+      ["きました", "kimashita"],
+    ],
+    {
+      en: "My friend came from America.",
+      id: "Teman saya datang dari Amerika.",
+    },
+    "",
+    "友達はアメリカから来ました。",
+    {
+      en: "アメリカ usually means the United States. Foreign country names are written in katakana, except those with an established kanji form such as 中国 (ちゅうごく) or 韓国 (かんこく).",
+      id: "アメリカ biasanya berarti Amerika Serikat. Nama negara asing ditulis dengan katakana, kecuali yang punya bentuk kanji mapan seperti 中国 (ちゅうごく) atau 韓国 (かんこく).",
+    },
+  ],
+  [
+    "インドネシア",
+    "indoneshia",
+    { en: "Indonesia", id: "Indonesia" },
+    "わたしは インドネシアから きました。",
+    [
+      ["わたし", "Watashi"],
+      ["は", "wa"],
+      ["インドネシア", "Indoneshia"],
+      ["から", "kara"],
+      ["きました", "kimashita"],
+    ],
+    { en: "I came from Indonesia.", id: "Saya berasal dari Indonesia." },
+    "",
+    "私はインドネシアから来ました。",
+    {
+      en: "Say where you are from with ~から きました. For nationality add じん: インドネシアじん means 'an Indonesian'.",
+      id: "Sebutkan asalmu dengan ~から きました. Untuk kewarganegaraan tambahkan じん: インドネシアじん berarti 'orang Indonesia'.",
+    },
+  ],
+  [
+    "ちゅうごく",
+    "chuugoku",
+    { en: "China", id: "Tiongkok, Cina" },
+    "ちゅうごくは おおきい くにです。",
+    [
+      ["ちゅうごく", "Chuugoku"],
+      ["は", "wa"],
+      ["おおきい", "ookii"],
+      ["くに", "kuni"],
+      ["です", "desu"],
+    ],
+    { en: "China is a big country.", id: "Tiongkok adalah negara yang besar." },
+    "中国",
+    "中国は大きい国です。",
+    {
+      en: "中国 literally means 'middle country'. The same character 国 appears in くに (country) and がいこく (foreign country) in this sub-tier.",
+      id: "中国 secara harfiah berarti 'negara tengah'. Karakter 国 yang sama muncul pada くに (negara) dan がいこく (luar negeri) di sub-tier ini.",
+    },
+  ],
+  [
+    "きょうしつ",
+    "kyoushitsu",
+    { en: "classroom", id: "ruang kelas" },
+    "きょうしつに がくせいが います。",
+    [
+      ["きょうしつ", "Kyoushitsu"],
+      ["に", "ni"],
+      ["がくせい", "gakusei"],
+      ["が", "ga"],
+      ["います", "imasu"],
+    ],
+    {
+      en: "There are students in the classroom.",
+      id: "Di ruang kelas ada mahasiswa.",
+    },
+    "教室",
+    "教室に学生がいます。",
+    {
+      en: "教室 combines 教 (teach) and 室 (room). Don't confuse it with きょうし (教師, teacher) in the Occupations sub-tier — similar sound, different word.",
+      id: "教室 menggabungkan 教 (mengajar) dan 室 (ruangan). Jangan tertukar dengan きょうし (教師, guru) di sub-tier Profesi — bunyinya mirip tetapi kata berbeda.",
+    },
+  ],
+  [
+    "アパート",
+    "apaato",
+    {
+      en: "apartment (small, low-rise)",
+      id: "apartemen kecil / rumah susun rendah",
+    },
+    "わたしは アパートに すんでいます。",
+    [
+      ["わたし", "Watashi"],
+      ["は", "wa"],
+      ["アパート", "apaato"],
+      ["に", "ni"],
+      ["すんでいます", "sunde imasu"],
+    ],
+    { en: "I live in an apartment.", id: "Saya tinggal di apartemen." },
+    "",
+    "私はアパートに住んでいます。",
+    {
+      en: "アパート is a small, low-rise rental building of just a couple of floors; a larger, more modern building is called マンション.",
+      id: "アパート adalah bangunan sewa kecil dan rendah dengan hanya beberapa lantai; bangunan yang lebih besar dan modern disebut マンション.",
+    },
+  ],
 ];
 
 // Sub-Tier 4.2: Arah & Posisi (11)
@@ -8343,31 +9380,6 @@ export const KOTOBA_N5_CH4_2: KotobaEntry[] = [
     },
   ],
   [
-    "まえ",
-    "mae",
-    { en: "front, before", id: "depan, sebelum" },
-    "えきの まえに ぎんこうが あります。",
-    [
-      ["えき", "Eki"],
-      ["の", "no"],
-      ["まえ", "mae"],
-      ["に", "ni"],
-      ["ぎんこう", "ginkou"],
-      ["が", "ga"],
-      ["あります", "arimasu"],
-    ],
-    {
-      en: "There is a bank in front of the station.",
-      id: "Ada bank di depan stasiun.",
-    },
-    "前",
-    "駅の前に銀行があります。",
-    {
-      en: '前 covers both spatial "front" and temporal "before", as in ごぜん (a.m., lit. "before noon") — its opposite うしろ (behind) only has a spatial meaning.',
-      id: '前 mencakup makna posisi "depan" maupun waktu "sebelum", seperti pada ごぜん (pagi/AM, secara harfiah "sebelum tengah hari") — lawannya うしろ (belakang) hanya bermakna posisi.',
-    },
-  ],
-  [
     "うしろ",
     "ushiro",
     { en: "behind, back", id: "belakang" },
@@ -8445,33 +9457,6 @@ export const KOTOBA_N5_CH4_2: KotobaEntry[] = [
     },
   ],
   [
-    "あいだ",
-    "aida",
-    { en: "between, among", id: "antara" },
-    "がっこうと えきの あいだに こうえんが あります。",
-    [
-      ["がっこう", "Gakkou"],
-      ["と", "to"],
-      ["えき", "eki"],
-      ["の", "no"],
-      ["あいだ", "aida"],
-      ["に", "ni"],
-      ["こうえん", "kouen"],
-      ["が", "ga"],
-      ["あります", "arimasu"],
-    ],
-    {
-      en: "There is a park between the school and the station.",
-      id: "Ada taman di antara sekolah dan stasiun.",
-    },
-    "間",
-    "学校と駅の間に公園があります。",
-    {
-      en: "間 is read あいだ here but becomes かん in time-duration words like にじかん (two hours) and じかん (time).",
-      id: "間 dibaca あいだ di sini, tetapi menjadi かん pada kata durasi waktu seperti にじかん (dua jam) dan じかん (waktu).",
-    },
-  ],
-  [
     "よこ",
     "yoko",
     { en: "side, beside", id: "samping" },
@@ -8544,6 +9529,174 @@ export const KOTOBA_N5_CH4_2: KotobaEntry[] = [
     {
       en: "Points to the far side of something or a distant spot — it comes from the verb むかう, to face or head toward.",
       id: "Menunjuk sisi seberang suatu benda atau tempat yang jauh — berasal dari kata kerja むかう, menghadap atau menuju.",
+    },
+  ],
+  [
+    "まっすぐ",
+    "massugu",
+    { en: "straight (ahead)", id: "lurus" },
+    "この みちを まっすぐ いって ください。",
+    [
+      ["この", "Kono"],
+      ["みち", "michi"],
+      ["を", "wo"],
+      ["まっすぐ", "massugu"],
+      ["いって", "itte"],
+      ["ください", "kudasai"],
+    ],
+    {
+      en: "Please go straight along this road.",
+      id: "Tolong jalan lurus di jalan ini.",
+    },
+    "",
+    "この道をまっすぐ行ってください。",
+    {
+      en: "The go-to word when giving directions — combine it with みぎ / ひだり and まがる, as in まっすぐ いって、みぎに まがって ください. Usually written in kana.",
+      id: "Kata andalan saat memberi petunjuk arah — gabungkan dengan みぎ / ひだり dan まがる, misalnya まっすぐ いって、みぎに まがって ください. Biasanya ditulis dengan kana.",
+    },
+  ],
+  [
+    "きた",
+    "kita",
+    { en: "north", id: "utara" },
+    "この まちの きたに やまが あります。",
+    [
+      ["この", "Kono"],
+      ["まち", "machi"],
+      ["の", "no"],
+      ["きた", "kita"],
+      ["に", "ni"],
+      ["やま", "yama"],
+      ["が", "ga"],
+      ["あります", "arimasu"],
+    ],
+    {
+      en: "There is a mountain to the north of this town.",
+      id: "Di sebelah utara kota ini ada gunung.",
+    },
+    "北",
+    "この町の北に山があります。",
+    {
+      en: "The directions are 北 (きた), 南 (みなみ), 東 (ひがし), 西 (にし). Japanese lists them as 東西南北 (とうざいなんぼく), and in compounds they take on'yomi readings — as in ほっかいどう (北海道).",
+      id: "Arah mata angin adalah 北 (きた), 南 (みなみ), 東 (ひがし), 西 (にし). Bahasa Jepang menyebutnya 東西南北 (とうざいなんぼく), dan dalam kata majemuk memakai bacaan on'yomi — seperti pada ほっかいどう (北海道).",
+    },
+  ],
+  [
+    "みなみ",
+    "minami",
+    { en: "south", id: "selatan" },
+    "えきの みなみに こうえんが あります。",
+    [
+      ["えき", "Eki"],
+      ["の", "no"],
+      ["みなみ", "minami"],
+      ["に", "ni"],
+      ["こうえん", "kouen"],
+      ["が", "ga"],
+      ["あります", "arimasu"],
+    ],
+    {
+      en: "There is a park to the south of the station.",
+      id: "Di sebelah selatan stasiun ada taman.",
+    },
+    "南",
+    "駅の南に公園があります。",
+    {
+      en: "南 also appears in みなみぐち (南口, the south exit of a station) — a very useful word when arranging to meet at a big station.",
+      id: "南 juga muncul pada みなみぐち (南口, pintu keluar selatan stasiun) — kata yang sangat berguna saat janjian bertemu di stasiun besar.",
+    },
+  ],
+  [
+    "ひがし",
+    "higashi",
+    { en: "east", id: "timur" },
+    "たいようは ひがしから でます。",
+    [
+      ["たいよう", "Taiyou"],
+      ["は", "wa"],
+      ["ひがし", "higashi"],
+      ["から", "kara"],
+      ["でます", "demasu"],
+    ],
+    { en: "The sun rises from the east.", id: "Matahari terbit dari timur." },
+    "東",
+    "太陽は東から出ます。",
+    {
+      en: "東 is read とう in compounds — とうきょう (東京) literally means 'eastern capital'.",
+      id: "東 dibaca とう pada kata majemuk — とうきょう (東京) secara harfiah berarti 'ibu kota timur'.",
+    },
+  ],
+  [
+    "にし",
+    "nishi",
+    { en: "west", id: "barat" },
+    "にしの そらが あかいです。",
+    [
+      ["にし", "Nishi"],
+      ["の", "no"],
+      ["そら", "sora"],
+      ["が", "ga"],
+      ["あかい", "akai"],
+      ["です", "desu"],
+    ],
+    { en: "The western sky is red.", id: "Langit di barat berwarna merah." },
+    "西",
+    "西の空が赤いです。",
+    {
+      en: "西 is read せい or さい in compounds, as in かんさい (関西, the Osaka–Kyoto region).",
+      id: "西 dibaca せい atau さい pada kata majemuk, seperti かんさい (関西, wilayah Osaka–Kyoto).",
+    },
+  ],
+
+  // -- Tambahan kata baru (Kotoba N5 jadi 800) --
+  [
+    "まんなか",
+    "mannaka",
+    { en: "middle, center", id: "tengah" },
+    "こうえんの まんなかに いけが あります。",
+    [
+      ["こうえん", "Kouen"],
+      ["の", "no"],
+      ["まんなか", "mannaka"],
+      ["に", "ni"],
+      ["いけ", "ike"],
+      ["が", "ga"],
+      ["あります", "arimasu"],
+    ],
+    {
+      en: "There is a pond in the middle of the park.",
+      id: "Ada kolam di tengah taman.",
+    },
+    "真ん中",
+    "公園の真ん中に池があります。",
+    {
+      en: "Points to the exact center of something. For a plain 'inside', use なか (中); まんなか stresses the dead center.",
+      id: "Menunjuk titik tepat di tengah sesuatu. Untuk 'di dalam' biasa, pakai なか (中); まんなか menekankan bagian tengah persis.",
+    },
+  ],
+  [
+    "はんたい",
+    "hantai",
+    { en: "opposite, reverse", id: "kebalikan; seberang" },
+    "ぎんこうは えきの はんたいに あります。",
+    [
+      ["ぎんこう", "Ginkou"],
+      ["は", "wa"],
+      ["えき", "eki"],
+      ["の", "no"],
+      ["はんたい", "hantai"],
+      ["に", "ni"],
+      ["あります", "arimasu"],
+    ],
+    {
+      en: "The bank is on the opposite side of the station.",
+      id: "Bank ada di sisi seberang stasiun.",
+    },
+    "反対",
+    "銀行は駅の反対にあります。",
+    {
+      en: "Works as a noun (はんたい), a modifier (はんたいの みち), and in はんたいがわ (反対側, 'the opposite side'). It also means 'opposition' to an idea: はんたいです ('I disagree').",
+      id: "Bisa berfungsi sebagai kata benda (はんたい), penjelas (はんたいの みち), dan dalam はんたいがわ (反対側, 'sisi seberang'). Juga berarti 'menentang' suatu gagasan: はんたいです ('saya tidak setuju').",
     },
   ],
 ];
@@ -9093,8 +10246,8 @@ export const KOTOBA_N5_CH5_1: KotobaEntry[] = [
     "聞く",
     "音楽を聞くのが好きです。",
     {
-      en: '聞く also means "to ask" in the right context (道を聞く, "ask for directions") — same kanji, different nuance depending on the object.',
-      id: '聞く juga bisa berarti "bertanya" dalam konteks yang tepat (道を聞く, "menanyakan arah") — kanji yang sama, nuansa berbeda tergantung objeknya.',
+      en: '聞く also means "to ask" in the right context (道を聞く, "ask for directions") — same kanji, different nuance depending on the object. 聞く means both "listen/hear" and "ask" depending on context — here に marks the person asked, while を marks what is asked about.',
+      id: '聞く juga bisa berarti "bertanya" dalam konteks yang tepat (道を聞く, "menanyakan arah") — kanji yang sama, nuansa berbeda tergantung objeknya. 聞く berarti "mendengar" maupun "bertanya" tergantung konteks — di sini に menandai orang yang ditanya, sedangkan を menandai hal yang ditanyakan.',
     },
   ],
   [
@@ -9596,6 +10749,403 @@ export const KOTOBA_N5_CH5_1: KotobaEntry[] = [
       id: "Mencakup baik mematikan alat maupun menghapus tulisan — alat penghapus pensil, けしゴム, memakai kanji yang sama.",
     },
   ],
+  [
+    "ある",
+    "aru",
+    { en: "exist, there is (things)", id: "ada (benda mati)" },
+    "きょうしつに つくえが あります。",
+    [
+      ["きょうしつ", "Kyoushitsu"],
+      ["に", "ni"],
+      ["つくえ", "tsukue"],
+      ["が", "ga"],
+      ["あります", "arimasu"],
+    ],
+    { en: "There is a desk in the classroom.", id: "Di ruang kelas ada meja." },
+    "",
+    "教室に机があります。",
+    {
+      en: "ある is for inanimate things, plants and events; living things that move by themselves use いる instead. It is normally written in kana.",
+      id: "ある dipakai untuk benda mati, tumbuhan, dan kejadian; makhluk hidup yang bergerak sendiri memakai いる. Biasanya ditulis dengan kana.",
+    },
+  ],
+  [
+    "いる",
+    "iru",
+    { en: "exist, there is (people / animals)", id: "ada (orang / hewan)" },
+    "にわに いぬが います。",
+    [
+      ["にわ", "Niwa"],
+      ["に", "ni"],
+      ["いぬ", "inu"],
+      ["が", "ga"],
+      ["います", "imasu"],
+    ],
+    { en: "There is a dog in the garden.", id: "Di halaman ada anjing." },
+    "",
+    "庭に犬がいます。",
+    {
+      en: "いる is for people and animals, the counterpart of ある for things. The same verb also forms ~ています (an action in progress or a continuing state).",
+      id: "いる dipakai untuk orang dan hewan, pasangan dari ある untuk benda. Kata kerja yang sama juga membentuk ~ています (aksi yang sedang berlangsung atau keadaan yang berlanjut).",
+    },
+  ],
+  [
+    "する",
+    "suru",
+    { en: "do, make", id: "melakukan, mengerjakan" },
+    "まいにち スポーツを します。",
+    [
+      ["まいにち", "Mainichi"],
+      ["スポーツ", "supootsu"],
+      ["を", "wo"],
+      ["します", "shimasu"],
+    ],
+    { en: "I play sports every day.", id: "Saya berolahraga setiap hari." },
+    "",
+    "毎日スポーツをします。",
+    {
+      en: "する is one of only two irregular verbs (the other is くる). Attach it to a noun to make a verb — べんきょうする, そうじする, さんぽする.",
+      id: "する adalah satu dari hanya dua kata kerja tak beraturan (yang lain くる). Tempelkan pada kata benda untuk membuat kata kerja — べんきょうする, そうじする, さんぽする.",
+    },
+  ],
+  [
+    "なる",
+    "naru",
+    { en: "become, turn into", id: "menjadi" },
+    "もう ふゆに なりました。",
+    [
+      ["もう", "Mou"],
+      ["ふゆ", "fuyu"],
+      ["に", "ni"],
+      ["なりました", "narimashita"],
+    ],
+    {
+      en: "It has become winter already.",
+      id: "Sudah menjadi musim dingin (musim dingin sudah tiba).",
+    },
+    "",
+    "もう冬になりました。",
+    {
+      en: "Marks a change of state: noun + に なる, い-adjective (drop い) + く なる (さむく なる), な-adjective + に なる (しずかに なる).",
+      id: "Menandai perubahan keadaan: kata benda + に なる, kata sifat-i (buang い) + く なる (さむく なる), kata sifat-na + に なる (しずかに なる).",
+    },
+  ],
+  [
+    "とる",
+    "toru",
+    { en: "take, get, pick up", id: "mengambil, mendapat" },
+    "しおを とって ください。",
+    [
+      ["しお", "Shio"],
+      ["を", "wo"],
+      ["とって", "totte"],
+      ["ください", "kudasai"],
+    ],
+    { en: "Please pass me the salt.", id: "Tolong ambilkan garamnya." },
+    "取る",
+    "塩を取ってください。",
+    {
+      en: "とる is very broad: 取る (take, pick up, pass), 撮る (take a photo — しゃしんを とる) and others share the reading, so the noun before を tells you which meaning is intended.",
+      id: "とる sangat luas: 取る (mengambil, memungut, mengoperkan), 撮る (memotret — しゃしんを とる) dan lainnya berbacaan sama, jadi kata benda sebelum を yang menentukan artinya.",
+    },
+  ],
+  [
+    "はく",
+    "haku",
+    { en: "wear (on the legs / feet)", id: "memakai (di kaki / bagian bawah)" },
+    "あたらしい ズボンを はきます。",
+    [
+      ["あたらしい", "Atarashii"],
+      ["ズボン", "zubon"],
+      ["を", "wo"],
+      ["はきます", "hakimasu"],
+    ],
+    { en: "I wear new trousers.", id: "Saya memakai celana baru." },
+    "履く",
+    "新しいズボンを履きます。",
+    {
+      en: "Japanese picks the verb by body part: はく for the legs and feet (ズボン, スカート, くつ, くつした), かぶる for the head, きる for the upper body.",
+      id: "Bahasa Jepang memilih kata kerja menurut bagian tubuh: はく untuk kaki dan tungkai (ズボン, スカート, くつ, くつした), かぶる untuk kepala, きる untuk badan bagian atas.",
+    },
+  ],
+  [
+    "かぶる",
+    "kaburu",
+    { en: "wear (on the head)", id: "memakai (di kepala)" },
+    "たなかさんは あかい ぼうしを かぶっています。",
+    [
+      ["たなかさん", "Tanaka-san"],
+      ["は", "wa"],
+      ["あかい", "akai"],
+      ["ぼうし", "boushi"],
+      ["を", "wo"],
+      ["かぶっています", "kabutte imasu"],
+    ],
+    {
+      en: "Mr. Tanaka is wearing a red hat.",
+      id: "Tanaka-san sedang memakai topi merah.",
+    },
+    "被る",
+    "田中さんは赤い帽子をかぶっています。",
+    {
+      en: "かぶる is for things that sit over the head — ぼうし, ヘルメット — and also for pulling something over yourself (ふとんを かぶる). ~ています describes the state of wearing, not the moment of putting on.",
+      id: "かぶる dipakai untuk benda yang menutupi kepala — ぼうし, ヘルメット — dan juga menarik sesuatu menutupi diri (ふとんを かぶる). ~ています menggambarkan keadaan sedang memakai, bukan saat memakainya.",
+    },
+  ],
+  [
+    "ひく",
+    "hiku",
+    { en: "pull; catch (a cold)", id: "menarik; terkena (flu)" },
+    "きのう かぜを ひきました。",
+    [
+      ["きのう", "Kinou"],
+      ["かぜ", "kaze"],
+      ["を", "wo"],
+      ["ひきました", "hikimashita"],
+    ],
+    {
+      en: "I caught a cold yesterday.",
+      id: "Kemarin saya masuk angin / kena flu.",
+    },
+    "引く",
+    "昨日風邪を引きました。",
+    {
+      en: "The core meaning of 引く is 'to pull' (the opposite of おす). かぜを ひく is a fixed expression for catching a cold, and ひく written 弾く is also the verb for playing instruments like the piano or guitar.",
+      id: "Arti dasar 引く adalah 'menarik' (lawan dari おす). かぜを ひく adalah ungkapan tetap untuk terkena flu, dan ひく yang ditulis 弾く juga kata kerja untuk memainkan alat musik seperti piano atau gitar.",
+    },
+  ],
+  [
+    "おわる",
+    "owaru",
+    { en: "end, finish (by itself)", id: "selesai, berakhir" },
+    "じゅぎょうは ごじに おわります。",
+    [
+      ["じゅぎょう", "Jugyou"],
+      ["は", "wa"],
+      ["ごじ", "goji"],
+      ["に", "ni"],
+      ["おわります", "owarimasu"],
+    ],
+    { en: "Class ends at 5 o'clock.", id: "Pelajaran selesai jam 5." },
+    "終わる",
+    "授業は五時に終わります。",
+    {
+      en: "終わる happens by itself — the class ends. Its opposite is はじまる. Attached to a verb stem it means 'finish doing' (よみおわる).",
+      id: "終わる terjadi dengan sendirinya — pelajaran berakhir. Lawannya はじまる. Bila digabung dengan pangkal kata kerja artinya 'selesai melakukan' (よみおわる).",
+    },
+  ],
+  [
+    "はじまる",
+    "hajimaru",
+    { en: "begin, start (by itself)", id: "mulai, dimulai" },
+    "えいがは くじに はじまります。",
+    [
+      ["えいが", "Eiga"],
+      ["は", "wa"],
+      ["くじ", "kuji"],
+      ["に", "ni"],
+      ["はじまります", "hajimarimasu"],
+    ],
+    { en: "The movie starts at 9 o'clock.", id: "Filmnya mulai jam 9." },
+    "始まる",
+    "映画は九時に始まります。",
+    {
+      en: "始まる is intransitive — an event starts by itself. When a person starts something, use はじめる (じゅぎょうを はじめます). Its opposite is おわる.",
+      id: "始まる bersifat intransitif — sebuah acara dimulai dengan sendirinya. Bila orang yang memulai sesuatu, pakai はじめる (じゅぎょうを はじめます). Lawannya おわる.",
+    },
+  ],
+  [
+    "まつ",
+    "matsu",
+    { en: "wait", id: "menunggu" },
+    "えきで ともだちを まちます。",
+    [
+      ["えき", "Eki"],
+      ["で", "de"],
+      ["ともだち", "tomodachi"],
+      ["を", "wo"],
+      ["まちます", "machimasu"],
+    ],
+    {
+      en: "I wait for a friend at the station.",
+      id: "Saya menunggu teman di stasiun.",
+    },
+    "待つ",
+    "駅で友達を待ちます。",
+    {
+      en: "The person or thing you wait for takes を (ともだちを まつ). ちょっと まって ください is the everyday way to say 'Please wait a moment'.",
+      id: "Orang atau hal yang ditunggu memakai を (ともだちを まつ). ちょっと まって ください adalah cara sehari-hari mengatakan 'Tolong tunggu sebentar'.",
+    },
+  ],
+  [
+    "すむ",
+    "sumu",
+    { en: "live (reside)", id: "tinggal, bertempat tinggal" },
+    "わたしは とうきょうに すんでいます。",
+    [
+      ["わたし", "Watashi"],
+      ["は", "wa"],
+      ["とうきょう", "Toukyou"],
+      ["に", "ni"],
+      ["すんでいます", "sunde imasu"],
+    ],
+    { en: "I live in Tokyo.", id: "Saya tinggal di Tokyo." },
+    "住む",
+    "私は東京に住んでいます。",
+    {
+      en: "To say where you currently live, Japanese uses すんでいます (be living) rather than すみます — and the place takes に, not で.",
+      id: "Untuk menyebut tempat tinggal saat ini, bahasa Jepang memakai すんでいます (sedang tinggal) bukan すみます — dan tempatnya memakai に, bukan で.",
+    },
+  ],
+  [
+    "いれる",
+    "ireru",
+    { en: "put in, insert", id: "memasukkan" },
+    "コーヒーに さとうを いれます。",
+    [
+      ["コーヒー", "koohii"],
+      ["に", "ni"],
+      ["さとう", "satou"],
+      ["を", "wo"],
+      ["いれます", "iremasu"],
+    ],
+    {
+      en: "I put sugar in my coffee.",
+      id: "Saya memasukkan gula ke dalam kopi.",
+    },
+    "入れる",
+    "コーヒーに砂糖を入れます。",
+    {
+      en: "入れる is transitive: you put something (を) into a place (に). Its intransitive partner is はいる (to enter) — かばんに ほんを いれる vs. へやに はいる.",
+      id: "入れる bersifat transitif: kamu memasukkan sesuatu (を) ke suatu tempat (に). Pasangan intransitifnya はいる (masuk) — かばんに ほんを いれる vs. へやに はいる.",
+    },
+  ],
+  [
+    "できる",
+    "dekiru",
+    { en: "can do, be able to; be made", id: "bisa, dapat; jadi" },
+    "わたしは にほんごが できます。",
+    [
+      ["わたし", "Watashi"],
+      ["は", "wa"],
+      ["にほんご", "nihongo"],
+      ["が", "ga"],
+      ["できます", "dekimasu"],
+    ],
+    { en: "I can speak Japanese.", id: "Saya bisa berbahasa Jepang." },
+    "",
+    "私は日本語ができます。",
+    {
+      en: "できる marks ability, and what you can do takes が (にほんごが できる), not を. It also means 'to be completed or made' — りょうりが できました means 'the meal is ready'.",
+      id: "できる menandai kemampuan, dan hal yang bisa dilakukan memakai が (にほんごが できる), bukan を. Juga berarti 'selesai atau jadi' — りょうりが できました artinya 'masakannya sudah jadi'.",
+    },
+  ],
+  [
+    "かかる",
+    "kakaru",
+    { en: "take (time / money), cost", id: "memakan (waktu / biaya)" },
+    "えきまで ごふん かかります。",
+    [
+      ["えき", "Eki"],
+      ["まで", "made"],
+      ["ごふん", "gofun"],
+      ["かかります", "kakarimasu"],
+    ],
+    {
+      en: "It takes five minutes to the station.",
+      id: "Butuh lima menit sampai stasiun.",
+    },
+    "",
+    "駅まで五分かかります。",
+    {
+      en: "かかる is used for the time or money needed: じかんが かかる, おかねが かかる. Ask 'how long does it take?' with どのくらい かかりますか.",
+      id: "かかる dipakai untuk waktu atau uang yang dibutuhkan: じかんが かかる, おかねが かかる. Tanyakan 'butuh berapa lama?' dengan どのくらい かかりますか.",
+    },
+  ],
+  [
+    "はじめる",
+    "hajimeru",
+    { en: "begin, start (something)", id: "memulai (sesuatu)" },
+    "せんせいは じゅぎょうを はじめます。",
+    [
+      ["せんせい", "Sensei"],
+      ["は", "wa"],
+      ["じゅぎょう", "jugyou"],
+      ["を", "wo"],
+      ["はじめます", "hajimemasu"],
+    ],
+    { en: "The teacher starts the class.", id: "Guru memulai pelajaran." },
+    "始める",
+    "先生は授業を始めます。",
+    {
+      en: "始める is transitive — someone starts something (を). Its partner はじまる describes the thing itself starting: じゅぎょうが はじまる.",
+      id: "始める bersifat transitif — seseorang memulai sesuatu (を). Pasangannya はじまる menggambarkan hal itu sendiri yang dimulai: じゅぎょうが はじまる.",
+    },
+  ],
+  [
+    "かける",
+    "kakeru",
+    {
+      en: "make (a call); wear (glasses); hang",
+      id: "menelepon; memakai (kacamata); menggantung",
+    },
+    "ははに でんわを かけます。",
+    [
+      ["はは", "Haha"],
+      ["に", "ni"],
+      ["でんわ", "denwa"],
+      ["を", "wo"],
+      ["かけます", "kakemasu"],
+    ],
+    { en: "I call my mother.", id: "Saya menelepon ibu saya." },
+    "掛ける",
+    "母に電話を掛けます。",
+    {
+      en: "かける has many uses: でんわを かける (make a call), めがねを かける (wear glasses), かぎを かける (lock up). The noun before を tells you which meaning is meant.",
+      id: "かける punya banyak pemakaian: でんわを かける (menelepon), めがねを かける (memakai kacamata), かぎを かける (mengunci). Kata benda sebelum を menentukan artinya.",
+    },
+  ],
+  [
+    "きる",
+    "kiru",
+    { en: "wear (on the upper body), put on", id: "memakai (di badan)" },
+    "しろい シャツを きます。",
+    [
+      ["しろい", "Shiroi"],
+      ["シャツ", "shatsu"],
+      ["を", "wo"],
+      ["きます", "kimasu"],
+    ],
+    { en: "I wear a white shirt.", id: "Saya memakai kemeja putih." },
+    "着る",
+    "白いシャツを着ます。",
+    {
+      en: "着る is for clothes on the torso or whole body (シャツ, セーター, コート, きもの). Legs use はく and hats use かぶる. It is an ichidan verb: きます, きない.",
+      id: "着る untuk pakaian di badan atau seluruh tubuh (シャツ, セーター, コート, きもの). Kaki memakai はく dan topi memakai かぶる. Termasuk kata kerja ichidan: きます, きない.",
+    },
+  ],
+  [
+    "きる",
+    "kiru",
+    { en: "cut", id: "memotong" },
+    "やさいを ちいさく きります。",
+    [
+      ["やさい", "Yasai"],
+      ["を", "wo"],
+      ["ちいさく", "chiisaku"],
+      ["きります", "kirimasu"],
+    ],
+    {
+      en: "I cut the vegetables small.",
+      id: "Saya memotong sayuran kecil-kecil.",
+    },
+    "切る",
+    "野菜を小さく切ります。",
+    {
+      en: "切る is a godan verb (きります), while 着る is ichidan (きます) — same dictionary form, different conjugation. Its kanji also appears in きって (切手, stamp) and きっぷ (切符, ticket).",
+      id: "切る adalah kata kerja godan (きります), sedangkan 着る ichidan (きます) — bentuk kamus sama, konjugasi berbeda. Kanjinya juga muncul pada きって (切手, prangko) dan きっぷ (切符, tiket).",
+    },
+  ],
 ];
 
 // Sub-Tier 5.2: Perpindahan & Mobilisasi (4)
@@ -10079,61 +11629,6 @@ export const KOTOBA_N5_CH5_2: KotobaEntry[] = [
 // Sub-Tier 5.3: Interaksi, Transaksi, & Kerja (4)
 export const KOTOBA_N5_CH5_3: KotobaEntry[] = [
   [
-    "はなす",
-    "hanasu",
-    { en: "speak", id: "bicara" },
-    "にほんごで はなします。",
-    [
-      ["にほんご", "Nihongo"],
-      ["で", "de"],
-      ["はなします", "hanashimasu"],
-    ],
-    { en: "I speak in Japanese.", id: "Saya berbicara dalam bahasa Jepang." },
-    "話す",
-    "日本語で話します。",
-    {
-      en: '話す shares its kanji 話 with はなし (a talk/story) and でんわ (電話, telephone, lit. "electric talk").',
-      id: '話す berbagi kanji 話 dengan はなし (cerita/obrolan) dan でんわ (電話, telepon, secara harfiah "obrolan listrik").',
-    },
-  ],
-  [
-    "かく",
-    "kaku",
-    { en: "write", id: "tulis" },
-    "てがみを かきます。",
-    [
-      ["てがみ", "Tegami"],
-      ["を", "wo"],
-      ["かきます", "kakimasu"],
-    ],
-    { en: "I write a letter.", id: "Saya menulis surat." },
-    "書く",
-    "手紙を書きます。",
-    {
-      en: '書く specifically means writing text or characters, distinct from 描く (also read かく, "to draw a picture") — same reading, different kanji.',
-      id: '書く secara khusus berarti menulis teks atau huruf, berbeda dari 描く (juga dibaca かく, "menggambar") — bacaan sama, kanji berbeda.',
-    },
-  ],
-  [
-    "かう",
-    "kau",
-    { en: "buy", id: "beli" },
-    "あたらしい くつを かいます。",
-    [
-      ["あたらしい", "Atarashii"],
-      ["くつ", "kutsu"],
-      ["を", "wo"],
-      ["かいます", "kaimasu"],
-    ],
-    { en: "I buy new shoes.", id: "Saya membeli sepatu baru." },
-    "買う",
-    "新しい靴を買います。",
-    {
-      en: '買う is a homophone of 飼う (かう, "to keep/raise an animal") — context and kanji distinguish the two meanings.',
-      id: '買う adalah homofon dari 飼う (かう, "memelihara hewan") — konteks dan kanji yang membedakan kedua maknanya.',
-    },
-  ],
-  [
     "はたらく",
     "hataraku",
     { en: "work", id: "bekerja" },
@@ -10196,29 +11691,6 @@ export const KOTOBA_N5_CH5_3: KotobaEntry[] = [
     {
       en: "払う is a godan verb used specifically for the act of paying money, distinct from かう (to buy) which focuses on the act of acquiring something.",
       id: "払う adalah kata kerja godan yang dipakai khusus untuk tindakan membayar uang, berbeda dari かう (membeli) yang menekankan tindakan memperoleh sesuatu.",
-    },
-  ],
-  [
-    "きく",
-    "kiku",
-    { en: "ask", id: "bertanya" },
-    "せんせいに みちを ききます。",
-    [
-      ["せんせい", "Sensei"],
-      ["に", "ni"],
-      ["みち", "michi"],
-      ["を", "wo"],
-      ["ききます", "kikimasu"],
-    ],
-    {
-      en: "I ask the teacher for directions.",
-      id: "Saya bertanya arah jalan kepada guru.",
-    },
-    "聞く",
-    "先生に道を聞きます。",
-    {
-      en: '聞く means both "listen/hear" and "ask" depending on context — here に marks the person asked, while を marks what is asked about.',
-      id: '聞く berarti "mendengar" maupun "bertanya" tergantung konteks — di sini に menandai orang yang ditanya, sedangkan を menandai hal yang ditanyakan.',
     },
   ],
   [
@@ -10594,6 +12066,122 @@ export const KOTOBA_N5_CH5_3: KotobaEntry[] = [
     {
       en: "Takes the particle に for the question answered, not を — its noun form こたえ means 'answer' as a thing.",
       id: "Memakai partikel に untuk pertanyaan yang dijawab, bukan を — bentuk kata bendanya こたえ berarti 'jawaban' sebagai benda.",
+    },
+  ],
+  [
+    "みせる",
+    "miseru",
+    { en: "show", id: "menunjukkan" },
+    "ともだちに しゃしんを みせます。",
+    [
+      ["ともだち", "Tomodachi"],
+      ["に", "ni"],
+      ["しゃしん", "shashin"],
+      ["を", "wo"],
+      ["みせます", "misemasu"],
+    ],
+    {
+      en: "I show a photo to a friend.",
+      id: "Saya menunjukkan foto kepada teman.",
+    },
+    "見せる",
+    "友達に写真を見せます。",
+    {
+      en: "見せる means 'to let someone see': the person you show takes に and the thing shown takes を. It uses the same kanji 見 as みる.",
+      id: "見せる berarti 'membuat seseorang melihat': orang yang diperlihatkan memakai に dan benda yang ditunjukkan memakai を. Memakai kanji 見 yang sama dengan みる.",
+    },
+  ],
+
+  // -- Tambahan kata baru (Kotoba N5 jadi 800) --
+  [
+    "くれる",
+    "kureru",
+    { en: "to give (to me / us)", id: "memberi (kepada saya / kami)" },
+    "ともだちが おかしを くれました。",
+    [
+      ["ともだち", "Tomodachi"],
+      ["が", "ga"],
+      ["おかし", "okashi"],
+      ["を", "wo"],
+      ["くれました", "kuremashita"],
+    ],
+    {
+      en: "My friend gave me some sweets.",
+      id: "Teman saya memberi saya camilan manis.",
+    },
+    "",
+    "友達がお菓子をくれました。",
+    {
+      en: "The giver is the subject and the receiver is always 'me' or someone in my group. Compare あげる (I give to someone else) and もらう (I receive).",
+      id: "Pemberi menjadi subjek dan penerimanya selalu 'saya' atau orang dari kelompok saya. Bandingkan dengan あげる (saya memberi ke orang lain) dan もらう (saya menerima).",
+    },
+  ],
+  [
+    "だす",
+    "dasu",
+    {
+      en: "to send; to take out; to hand in",
+      id: "mengirim; mengeluarkan; mengumpulkan",
+    },
+    "てがみを だして ください。",
+    [
+      ["てがみ", "Tegami"],
+      ["を", "wo"],
+      ["だして", "dashite"],
+      ["ください", "kudasai"],
+    ],
+    { en: "Please mail the letter.", id: "Tolong kirimkan surat ini." },
+    "出す",
+    "手紙を出してください。",
+    {
+      en: "A versatile verb: てがみを だす (mail a letter), しゅくだいを だす (hand in homework), こえを だす (raise one's voice). Its intransitive partner でる (出る) means 'to go out'.",
+      id: "Kata kerja serbaguna: てがみを だす (mengirim surat), しゅくだいを だす (mengumpulkan PR), こえを だす (mengeluarkan suara). Pasangan intransitifnya でる (出る) berarti 'keluar'.",
+    },
+  ],
+  [
+    "アルバイト",
+    "arubaito",
+    { en: "part-time job", id: "kerja paruh waktu" },
+    "わたしは レストランで アルバイトを しています。",
+    [
+      ["わたし", "Watashi"],
+      ["は", "wa"],
+      ["レストラン", "resutoran"],
+      ["で", "de"],
+      ["アルバイト", "arubaito"],
+      ["を", "wo"],
+      ["しています", "shiteimasu"],
+    ],
+    {
+      en: "I work part-time at a restaurant.",
+      id: "Saya bekerja paruh waktu di restoran.",
+    },
+    "",
+    "私はレストランでアルバイトをしています。",
+    {
+      en: "Borrowed from the German 'Arbeit'. Often shortened to バイト in casual speech, and commonly done by students.",
+      id: "Serapan dari bahasa Jerman 'Arbeit'. Dalam percakapan santai sering disingkat menjadi バイト, dan biasa dilakukan oleh pelajar / mahasiswa.",
+    },
+  ],
+  [
+    "しょうかいする",
+    "shoukai suru",
+    { en: "to introduce", id: "memperkenalkan" },
+    "ともだちを しょうかいします。",
+    [
+      ["ともだち", "Tomodachi"],
+      ["を", "wo"],
+      ["しょうかいします", "shoukaishimasu"],
+    ],
+    {
+      en: "I'll introduce my friend.",
+      id: "Saya akan memperkenalkan teman saya.",
+    },
+    "紹介する",
+    "友達を紹介します。",
+    {
+      en: "Used to introduce one person to another: ~を しょうかいします. じこしょうかい (自己紹介) is a self-introduction.",
+      id: "Dipakai untuk memperkenalkan seseorang kepada orang lain: ~を しょうかいします. じこしょうかい (自己紹介) adalah perkenalan diri.",
     },
   ],
 ];
@@ -11068,6 +12656,363 @@ export const KOTOBA_N5_CH6_1: KotobaEntry[] = [
     {
       en: '茶色い combines 茶色 (the noun "brown", lit. "tea color") + い, following the same pattern as きいろい to form an i-adjective from a color noun.',
       id: '茶色い menggabungkan 茶色 (kata benda "cokelat", secara harfiah "warna teh") + い, mengikuti pola yang sama seperti きいろい untuk membentuk kata sifat-i dari kata benda warna.',
+    },
+  ],
+  [
+    "おもしろい",
+    "omoshiroi",
+    { en: "interesting, funny", id: "menarik, lucu" },
+    "この えいがは おもしろいです。",
+    [
+      ["この", "Kono"],
+      ["えいが", "eiga"],
+      ["は", "wa"],
+      ["おもしろい", "omoshiroi"],
+      ["です", "desu"],
+    ],
+    { en: "This movie is interesting.", id: "Film ini menarik." },
+    "面白い",
+    "この映画は面白いです。",
+    {
+      en: "おもしろい covers both 'interesting' and 'funny', depending on context. Its opposite is つまらない (boring).",
+      id: "おもしろい mencakup arti 'menarik' dan 'lucu', tergantung konteks. Lawannya つまらない (membosankan).",
+    },
+  ],
+  [
+    "つまらない",
+    "tsumaranai",
+    { en: "boring, dull", id: "membosankan" },
+    "この ほんは つまらないです。",
+    [
+      ["この", "Kono"],
+      ["ほん", "hon"],
+      ["は", "wa"],
+      ["つまらない", "tsumaranai"],
+      ["です", "desu"],
+    ],
+    { en: "This book is boring.", id: "Buku ini membosankan." },
+    "",
+    "この本はつまらないです。",
+    {
+      en: "つまらない ends in ない but is a single い-adjective, not a negation — its past form is つまらなかった. It is the natural opposite of おもしろい.",
+      id: "つまらない berakhiran ない tetapi merupakan satu kata sifat-i, bukan bentuk negatif — bentuk lampaunya つまらなかった. Ini lawan alami dari おもしろい.",
+    },
+  ],
+  [
+    "たのしい",
+    "tanoshii",
+    { en: "fun, enjoyable", id: "menyenangkan" },
+    "りょこうは たのしいです。",
+    [
+      ["りょこう", "Ryokou"],
+      ["は", "wa"],
+      ["たのしい", "tanoshii"],
+      ["です", "desu"],
+    ],
+    { en: "Traveling is fun.", id: "Bepergian itu menyenangkan." },
+    "楽しい",
+    "旅行は楽しいです。",
+    {
+      en: "楽しい describes an activity or event that is enjoyable. To say that you personally feel happy, うれしい is the closer word.",
+      id: "楽しい menggambarkan kegiatan atau acara yang menyenangkan. Untuk mengatakan kamu sendiri merasa senang, うれしい lebih tepat.",
+    },
+  ],
+  [
+    "むずかしい",
+    "muzukashii",
+    { en: "difficult", id: "sulit" },
+    "にほんごは むずかしいです。",
+    [
+      ["にほんご", "Nihongo"],
+      ["は", "wa"],
+      ["むずかしい", "muzukashii"],
+      ["です", "desu"],
+    ],
+    { en: "Japanese is difficult.", id: "Bahasa Jepang itu sulit." },
+    "難しい",
+    "日本語は難しいです。",
+    {
+      en: "難しい is the opposite of やさしい (easy). Careful: the やさしい meaning 'kind' is written 優しい — a different word with the same sound.",
+      id: "難しい adalah lawan dari やさしい (mudah). Hati-hati: やさしい yang berarti 'baik hati' ditulis 優しい — kata berbeda dengan bunyi yang sama.",
+    },
+  ],
+  [
+    "やさしい",
+    "yasashii",
+    { en: "easy; kind, gentle", id: "mudah; baik hati, lembut" },
+    "この もんだいは やさしいです。",
+    [
+      ["この", "Kono"],
+      ["もんだい", "mondai"],
+      ["は", "wa"],
+      ["やさしい", "yasashii"],
+      ["です", "desu"],
+    ],
+    { en: "This question is easy.", id: "Soal ini mudah." },
+    "易しい",
+    "この問題は易しいです。",
+    {
+      en: "やさしい has two meanings shown by two kanji: 易しい (easy, simple) and 優しい (kind, gentle, as in やさしい せんせい). Context tells you which one is meant.",
+      id: "やさしい punya dua arti yang dibedakan lewat dua kanji: 易しい (mudah, sederhana) dan 優しい (baik hati, lembut, seperti やさしい せんせい). Konteks yang menentukan artinya.",
+    },
+  ],
+  [
+    "はやい",
+    "hayai",
+    { en: "early", id: "awal, masih pagi" },
+    "まだ はやいです。",
+    [
+      ["まだ", "Mada"],
+      ["はやい", "hayai"],
+      ["です", "desu"],
+    ],
+    { en: "It is still early.", id: "Masih pagi / masih terlalu awal." },
+    "早い",
+    "まだ早いです。",
+    {
+      en: "早い is about time — early, ahead of schedule. Its opposite is おそい (late). When you mean speed, the same sound is written 速い.",
+      id: "早い berkaitan dengan waktu — awal, lebih cepat dari jadwal. Lawannya おそい (terlambat). Untuk kecepatan, bunyi yang sama ditulis 速い.",
+    },
+  ],
+  [
+    "はやい",
+    "hayai",
+    { en: "fast, quick", id: "cepat (kecepatan)" },
+    "しんかんせんは はやいです。",
+    [
+      ["しんかんせん", "Shinkansen"],
+      ["は", "wa"],
+      ["はやい", "hayai"],
+      ["です", "desu"],
+    ],
+    { en: "The Shinkansen is fast.", id: "Shinkansen itu cepat." },
+    "速い",
+    "新幹線は速いです。",
+    {
+      en: "速い describes speed of movement — the opposite is おそい (slow). The same sound with the kanji 早い means 'early'; both share the opposite おそい.",
+      id: "速い menggambarkan kecepatan gerak — lawannya おそい (lambat). Bunyi yang sama dengan kanji 早い berarti 'awal'; keduanya berlawanan dengan おそい.",
+    },
+  ],
+  [
+    "おそい",
+    "osoi",
+    { en: "slow; late", id: "lambat; terlambat / larut" },
+    "バスは おそいですから、でんしゃで いきます。",
+    [
+      ["バス", "Basu"],
+      ["は", "wa"],
+      ["おそい", "osoi"],
+      ["です", "desu"],
+      ["から", "kara"],
+      ["でんしゃ", "densha"],
+      ["で", "de"],
+      ["いきます", "ikimasu"],
+    ],
+    {
+      en: "The bus is slow, so I'll go by train.",
+      id: "Busnya lambat, jadi saya pergi naik kereta.",
+    },
+    "遅い",
+    "バスは遅いですから、電車で行きます。",
+    {
+      en: "遅い covers both slow speed and being late in time — the opposite of both 速い and 早い. For 'being late for something' the verb form 遅れる (おくれる) is used.",
+      id: "遅い mencakup kecepatan lambat maupun terlambat dalam waktu — lawan dari 速い dan 早い. Untuk 'terlambat menghadiri sesuatu' dipakai bentuk kata kerja 遅れる (おくれる).",
+    },
+  ],
+  [
+    "ちかい",
+    "chikai",
+    { en: "near, close", id: "dekat" },
+    "えきは うちから ちかいです。",
+    [
+      ["えき", "Eki"],
+      ["は", "wa"],
+      ["うち", "uchi"],
+      ["から", "kara"],
+      ["ちかい", "chikai"],
+      ["です", "desu"],
+    ],
+    {
+      en: "The station is close to my house.",
+      id: "Stasiun dekat dari rumah saya.",
+    },
+    "近い",
+    "駅は家から近いです。",
+    {
+      en: "The opposite is とおい. The noun ちかく (nearby, in the Directions & Positions sub-tier) uses the same kanji 近 but is a different word.",
+      id: "Lawannya とおい. Kata benda ちかく (dekat, di sub-tier Arah & Posisi) memakai kanji 近 yang sama tetapi merupakan kata yang berbeda.",
+    },
+  ],
+  [
+    "とおい",
+    "tooi",
+    { en: "far", id: "jauh" },
+    "がっこうは えきから とおいです。",
+    [
+      ["がっこう", "Gakkou"],
+      ["は", "wa"],
+      ["えき", "eki"],
+      ["から", "kara"],
+      ["とおい", "tooi"],
+      ["です", "desu"],
+    ],
+    {
+      en: "The school is far from the station.",
+      id: "Sekolah jauh dari stasiun.",
+    },
+    "遠い",
+    "学校は駅から遠いです。",
+    {
+      en: "Note the long お: とおい is to-o-i. It sounds like とお (ten, when counting things) but is an unrelated word written with a different kanji.",
+      id: "Perhatikan お panjangnya: とおい dibaca to-o-i. Bunyinya seperti とお (sepuluh, saat menghitung benda) tetapi kata yang tidak berkaitan dan memakai kanji berbeda.",
+    },
+  ],
+  [
+    "おおい",
+    "ooi",
+    { en: "many, much", id: "banyak" },
+    "この まちは ひとが おおいです。",
+    [
+      ["この", "Kono"],
+      ["まち", "machi"],
+      ["は", "wa"],
+      ["ひと", "hito"],
+      ["が", "ga"],
+      ["おおい", "ooi"],
+      ["です", "desu"],
+    ],
+    {
+      en: "There are many people in this town.",
+      id: "Di kota ini banyak orang.",
+    },
+    "多い",
+    "この町は人が多いです。",
+    {
+      en: "Japanese usually says ひとが おおい ('people are many') rather than placing おおい before a noun; before a noun, use たくさんの or おおくの instead.",
+      id: "Bahasa Jepang biasanya mengatakan ひとが おおい ('orangnya banyak') dan tidak menaruh おおい sebelum kata benda; sebelum kata benda, pakai たくさんの atau おおくの.",
+    },
+  ],
+  [
+    "すくない",
+    "sukunai",
+    { en: "few, little", id: "sedikit" },
+    "この まちは こうえんが すくないです。",
+    [
+      ["この", "Kono"],
+      ["まち", "machi"],
+      ["は", "wa"],
+      ["こうえん", "kouen"],
+      ["が", "ga"],
+      ["すくない", "sukunai"],
+      ["です", "desu"],
+    ],
+    { en: "This town has few parks.", id: "Di kota ini taman sedikit." },
+    "少ない",
+    "この町は公園が少ないです。",
+    {
+      en: "The opposite of おおい, and like it, it works as a predicate (~が すくない). For 'a little bit' as an adverb, use すこし (少し) — the same kanji.",
+      id: "Lawan dari おおい, dan seperti itu, dipakai sebagai predikat (~が すくない). Untuk 'sedikit' sebagai kata keterangan, pakai すこし (少し) — kanji yang sama.",
+    },
+  ],
+  [
+    "わかい",
+    "wakai",
+    { en: "young", id: "muda" },
+    "せんせいは まだ わかいです。",
+    [
+      ["せんせい", "Sensei"],
+      ["は", "wa"],
+      ["まだ", "mada"],
+      ["わかい", "wakai"],
+      ["です", "desu"],
+    ],
+    { en: "The teacher is still young.", id: "Gurunya masih muda." },
+    "若い",
+    "先生はまだ若いです。",
+    {
+      en: "若い describes people who are young in age or in spirit; for objects, use あたらしい (new) instead. Its kanji also appears in わかもの (若者, a young person).",
+      id: "若い menggambarkan orang yang muda usia atau jiwanya; untuk benda, pakai あたらしい (baru). Kanjinya juga muncul pada わかもの (若者, anak muda).",
+    },
+  ],
+  [
+    "つよい",
+    "tsuyoi",
+    { en: "strong", id: "kuat" },
+    "たなかさんは からだが つよいです。",
+    [
+      ["たなかさん", "Tanaka-san"],
+      ["は", "wa"],
+      ["からだ", "karada"],
+      ["が", "ga"],
+      ["つよい", "tsuyoi"],
+      ["です", "desu"],
+    ],
+    { en: "Mr. Tanaka has a strong body.", id: "Tanaka-san bertubuh kuat." },
+    "強い",
+    "田中さんは体が強いです。",
+    {
+      en: "強い covers the strength of people, wind, drinks, and even skill (えいごが つよい = strong in English). The opposite is よわい (弱い).",
+      id: "強い mencakup kekuatan orang, angin, minuman, bahkan kemampuan (えいごが つよい = kuat dalam bahasa Inggris). Lawannya よわい (弱い).",
+    },
+  ],
+  [
+    "かわいい",
+    "kawaii",
+    { en: "cute, adorable", id: "lucu, imut" },
+    "この ねこは かわいいです。",
+    [
+      ["この", "Kono"],
+      ["ねこ", "neko"],
+      ["は", "wa"],
+      ["かわいい", "kawaii"],
+      ["です", "desu"],
+    ],
+    { en: "This cat is cute.", id: "Kucing ini imut." },
+    "可愛い",
+    "この猫は可愛いです。",
+    {
+      en: "Used for small animals, babies, and anything with a charming look — extremely common in daily talk. It is written in hiragana more often than in kanji.",
+      id: "Dipakai untuk hewan kecil, bayi, dan segala yang tampak menawan — sangat sering muncul dalam percakapan sehari-hari. Lebih sering ditulis dengan hiragana daripada kanji.",
+    },
+  ],
+  [
+    "ほしい",
+    "hoshii",
+    { en: "want (something)", id: "ingin (punya)" },
+    "あたらしい パソコンが ほしいです。",
+    [
+      ["あたらしい", "Atarashii"],
+      ["パソコン", "pasokon"],
+      ["が", "ga"],
+      ["ほしい", "hoshii"],
+      ["です", "desu"],
+    ],
+    { en: "I want a new computer.", id: "Saya ingin komputer baru." },
+    "欲しい",
+    "新しいパソコンが欲しいです。",
+    {
+      en: "The thing you want takes が, not を (くるまが ほしい). ほしい is for wanting objects; to want to DO something, use the ~たい form (たべたい).",
+      id: "Benda yang diinginkan memakai が, bukan を (くるまが ほしい). ほしい untuk menginginkan benda; untuk ingin MELAKUKAN sesuatu, pakai bentuk ~たい (たべたい).",
+    },
+  ],
+  [
+    "うるさい",
+    "urusai",
+    { en: "noisy, annoying", id: "berisik, cerewet" },
+    "この へやは うるさいです。",
+    [
+      ["この", "Kono"],
+      ["へや", "heya"],
+      ["は", "wa"],
+      ["うるさい", "urusai"],
+      ["です", "desu"],
+    ],
+    { en: "This room is noisy.", id: "Ruangan ini berisik." },
+    "",
+    "この部屋はうるさいです。",
+    {
+      en: "うるさい describes noise, but said directly to a person (うるさい!) it means 'shut up' and is rude. Its opposite in feeling is しずか (quiet).",
+      id: "うるさい menggambarkan kebisingan, tetapi bila diucapkan langsung kepada orang (うるさい!) artinya 'diam!' dan kasar. Lawannya dalam kesan adalah しずか (tenang).",
     },
   ],
 ];
@@ -11831,6 +13776,27 @@ export const KOTOBA_N5_CH6_3: KotobaEntry[] = [
       id: "危険 adalah kata sifat-na yang sering muncul pada papan peringatan — kanji 危-nya juga muncul pada あぶない (危ない), kata sifat-i yang lebih umum dipakai sehari-hari dengan makna serupa.",
     },
   ],
+  [
+    "だいすき",
+    "daisuki",
+    { en: "love, like a lot", id: "sangat suka" },
+    "わたしは ねこが だいすきです。",
+    [
+      ["わたし", "Watashi"],
+      ["は", "wa"],
+      ["ねこ", "neko"],
+      ["が", "ga"],
+      ["だいすき", "daisuki"],
+      ["です", "desu"],
+    ],
+    { en: "I love cats.", id: "Saya sangat suka kucing." },
+    "大好き",
+    "私は猫が大好きです。",
+    {
+      en: "だいすき is a な-adjective built from だい (大, big) + すき, and what you like takes が. It is the everyday word for loving food, hobbies or people; あいしている is much stronger and rarer.",
+      id: "だいすき adalah kata sifat-na bentukan dari だい (大, besar) + すき, dan hal yang disukai memakai が. Ini kata sehari-hari untuk sangat menyukai makanan, hobi, atau orang; あいしている jauh lebih kuat dan jarang dipakai.",
+    },
+  ],
 ];
 
 // Sub-Tier 7.1: Alam & Cuaca (5)
@@ -12241,6 +14207,49 @@ export const KOTOBA_N5_CH7_1: KotobaEntry[] = [
       id: "ふる (jatuh/turun) dipakai baik untuk hujan maupun salju dalam bahasa Jepang — あめが ふる (hujan turun) dan ゆきが ふる (salju turun) berbagi kata kerja yang sama.",
     },
   ],
+  [
+    "ふる",
+    "furu",
+    { en: "fall (rain, snow)", id: "turun (hujan, salju)" },
+    "きょうは ゆきが ふっています。",
+    [
+      ["きょう", "Kyou"],
+      ["は", "wa"],
+      ["ゆき", "yuki"],
+      ["が", "ga"],
+      ["ふっています", "futte imasu"],
+    ],
+    { en: "It is snowing today.", id: "Hari ini sedang turun salju." },
+    "降る",
+    "今日は雪が降っています。",
+    {
+      en: "降る pairs with the weather noun + が: あめが ふる (rain), ゆきが ふる (snow). The same kanji 降 is read おりる in 降りる (to get off a vehicle).",
+      id: "降る berpasangan dengan kata benda cuaca + が: あめが ふる (hujan), ゆきが ふる (salju). Kanji 降 yang sama dibaca おりる pada 降りる (turun dari kendaraan).",
+    },
+  ],
+  [
+    "さく",
+    "saku",
+    { en: "bloom", id: "mekar" },
+    "はるに さくらが さきます。",
+    [
+      ["はる", "Haru"],
+      ["に", "ni"],
+      ["さくら", "sakura"],
+      ["が", "ga"],
+      ["さきます", "sakimasu"],
+    ],
+    {
+      en: "Cherry blossoms bloom in spring.",
+      id: "Bunga sakura mekar di musim semi.",
+    },
+    "咲く",
+    "春に桜が咲きます。",
+    {
+      en: "咲く is only for flowers opening, and the flower is the subject (はなが さく). In everyday speech you will often hear the state form さいています ('is in bloom').",
+      id: "咲く hanya untuk bunga yang membuka, dan bunganya menjadi subjek (はなが さく). Dalam percakapan sehari-hari sering terdengar bentuk keadaan さいています ('sedang mekar').",
+    },
+  ],
 ];
 
 // Sub-Tier 7.2: Warna (12)
@@ -12545,46 +14554,6 @@ export const KOTOBA_N5_CH7_2: KotobaEntry[] = [
 // Sub-Tier 7.3: Kata Tanya & Kata Keterangan (21)
 export const KOTOBA_N5_CH7_3: KotobaEntry[] = [
   [
-    "どこ",
-    "doko",
-    { en: "where", id: "di mana" },
-    "としょかんは どこですか。",
-    [
-      ["としょかん", "Toshokan"],
-      ["は", "wa"],
-      ["どこ", "doko"],
-      ["です", "desu"],
-      ["か", "ka"],
-    ],
-    { en: "Where is the library?", id: "Di mana perpustakaan?" },
-    "",
-    "図書館はどこですか。",
-    {
-      en: 'どこ belongs to the こそあど system of demonstratives (これ/それ/あれ/どれ, ここ/そこ/あそこ/どこ), all sharing the same question-word "do-" prefix pattern.',
-      id: 'どこ termasuk dalam sistem こそあど kata tunjuk (これ/それ/あれ/どれ, ここ/そこ/あそこ/どこ), semuanya berbagi pola awalan kata tanya "do-" yang sama.',
-    },
-  ],
-  [
-    "いつ",
-    "itsu",
-    { en: "when", id: "kapan" },
-    "たんじょうびは いつですか。",
-    [
-      ["たんじょうび", "Tanjoubi"],
-      ["は", "wa"],
-      ["いつ", "itsu"],
-      ["です", "desu"],
-      ["か", "ka"],
-    ],
-    { en: "When is your birthday?", id: "Kapan ulang tahunmu?" },
-    "",
-    "誕生日はいつですか。",
-    {
-      en: "いつ has no common kanji form (unlike どこ or なに) and is almost always written in hiragana, even in formal writing.",
-      id: "いつ tidak punya bentuk kanji yang umum (berbeda dari どこ atau なに) dan hampir selalu ditulis dalam hiragana, bahkan pada tulisan formal.",
-    },
-  ],
-  [
     "なに",
     "nani",
     { en: "what", id: "apa" },
@@ -12601,27 +14570,6 @@ export const KOTOBA_N5_CH7_3: KotobaEntry[] = [
     {
       en: "何 is read なに as a standalone word but becomes なん before certain sounds or counters, as in なんじ (what time) or なんにん (how many people).",
       id: "何 dibaca なに sebagai kata berdiri sendiri tetapi berubah menjadi なん sebelum bunyi atau kata bantu bilangan tertentu, seperti pada なんじ (jam berapa) atau なんにん (berapa orang).",
-    },
-  ],
-  [
-    "だれ",
-    "dare",
-    { en: "who", id: "siapa" },
-    "あの ひとは だれですか。",
-    [
-      ["あの", "Ano"],
-      ["ひと", "hito"],
-      ["は", "wa"],
-      ["だれ", "dare"],
-      ["です", "desu"],
-      ["か", "ka"],
-    ],
-    { en: "Who is that person?", id: "Siapa orang itu?" },
-    "誰",
-    "あの人は誰ですか。",
-    {
-      en: "誰 has a kanji form but, like いつ, だれ is almost always written in hiragana in everyday text; the polite version どなた is used when asking about someone of higher status.",
-      id: "誰 punya bentuk kanji, tetapi seperti いつ, だれ hampir selalu ditulis dalam hiragana pada tulisan sehari-hari; bentuk sopannya どなた dipakai saat menanyakan orang yang statusnya lebih tinggi.",
     },
   ],
   [
@@ -12711,178 +14659,230 @@ export const KOTOBA_N5_CH7_3: KotobaEntry[] = [
       id: "いくら secara khusus menanyakan harga atau biaya, berbeda dari いくつ, yang menanyakan jumlah yang bisa dihitung atau umur seseorang.",
     },
   ],
+
+  // -- Tambahan kata baru (Kotoba N5 jadi 800) --
   [
-    "いくつ",
-    "ikutsu",
-    { en: "how many / how old", id: "berapa banyak (jumlah/umur)" },
-    "りんごは いくつ ありますか。",
+    "こんな",
+    "konna",
+    { en: "this kind of, such", id: "yang seperti ini" },
+    "こんな ほんは はじめてです。",
     [
-      ["りんご", "Ringo"],
+      ["こんな", "Konna"],
+      ["ほん", "hon"],
       ["は", "wa"],
-      ["いくつ", "ikutsu"],
-      ["あります", "arimasu"],
-      ["か", "ka"],
+      ["はじめて", "hajimete"],
+      ["です", "desu"],
     ],
-    { en: "How many apples are there?", id: "Ada berapa buah apel?" },
-    "",
-    "りんごはいくつありますか。",
     {
-      en: "いくつ also politely asks someone's age, as in おいくつですか (How old are you?), adding the honorific お prefix.",
-      id: "いくつ juga dipakai untuk sopan menanyakan umur seseorang, seperti pada おいくつですか (Berapa umur Anda?), dengan menambahkan awalan hormat お.",
+      en: "A book like this is a first for me.",
+      id: "Buku seperti ini baru pertama kali bagi saya.",
+    },
+    "",
+    "こんな本は初めてです。",
+    {
+      en: "Part of the こんな / そんな / あんな / どんな set, which follows the same near / middle / far pattern as これ / それ / あれ / どれ. こんな describes something close to the speaker: 'this kind of ~'.",
+      id: "Bagian dari set こんな / そんな / あんな / どんな yang mengikuti pola dekat / menengah / jauh seperti これ / それ / あれ / どれ. こんな menggambarkan sesuatu yang dekat dengan pembicara: 'yang seperti ini'.",
     },
   ],
   [
-    "どの",
-    "dono",
-    { en: "which (one)", id: "yang mana" },
-    "どの ほんが あなたのですか。",
+    "そんな",
+    "sonna",
+    { en: "that kind of, such", id: "yang seperti itu" },
+    "そんな ことは ありません。",
     [
-      ["どの", "Dono"],
-      ["ほん", "hon"],
+      ["そんな", "Sonna"],
+      ["こと", "koto"],
+      ["は", "wa"],
+      ["ありません", "arimasen"],
+    ],
+    { en: "That's not the case.", id: "Tidak begitu." },
+    "",
+    "そんなことはありません。",
+    {
+      en: "Describes something near the listener or something the listener just mentioned. The set phrase そんな ことは ありません is a common way to modestly brush off a compliment.",
+      id: "Menggambarkan sesuatu yang dekat dengan lawan bicara atau yang baru saja disebutkannya. Ungkapan tetap そんな ことは ありません sering dipakai untuk menanggapi pujian dengan rendah hati.",
+    },
+  ],
+  [
+    "あんな",
+    "anna",
+    { en: "that kind of (over there)", id: "yang seperti itu (jauh)" },
+    "あんな くるまが ほしいです。",
+    [
+      ["あんな", "Anna"],
+      ["くるま", "kuruma"],
       ["が", "ga"],
-      ["あなた", "anata"],
-      ["の", "no"],
+      ["ほしい", "hoshii"],
+      ["です", "desu"],
+    ],
+    { en: "I want a car like that.", id: "Saya ingin mobil seperti itu." },
+    "",
+    "あんな車が欲しいです。",
+    {
+      en: "Describes something far from both speaker and listener, or something you both already know about: 'that kind of ~'.",
+      id: "Menggambarkan sesuatu yang jauh dari pembicara maupun lawan bicara, atau yang sama-sama sudah diketahui: 'yang seperti itu'.",
+    },
+  ],
+  [
+    "そう",
+    "sou",
+    { en: "so, that way", id: "begitu, seperti itu" },
+    "わたしも そう おもいます。",
+    [
+      ["わたし", "Watashi"],
+      ["も", "mo"],
+      ["そう", "sou"],
+      ["おもいます", "omoimasu"],
+    ],
+    { en: "I think so too.", id: "Saya juga berpikir begitu." },
+    "",
+    "私もそう思います。",
+    {
+      en: "Points back to what was just said: そう おもいます ('I think so'), そう ですか ('Is that so?'), そう ですね ('That's right'). The same sound also attaches to adjective stems to mean 'looks like ~' (おいしそう), which is a separate pattern.",
+      id: "Merujuk kembali pada apa yang baru dikatakan: そう おもいます ('saya pikir begitu'), そう ですか ('oh begitu?'), そう ですね ('benar juga'). Bunyi yang sama juga menempel pada bentuk dasar kata sifat untuk berarti 'tampaknya ~' (おいしそう), yang merupakan pola terpisah.",
+    },
+  ],
+  [
+    "なぜ",
+    "naze",
+    { en: "why", id: "mengapa" },
+    "なぜ にほんごを べんきょうしますか。",
+    [
+      ["なぜ", "Naze"],
+      ["にほんご", "nihongo"],
+      ["を", "wo"],
+      ["べんきょうします", "benkyoushimasu"],
+      ["か", "ka"],
+    ],
+    {
+      en: "Why do you study Japanese?",
+      id: "Mengapa Anda belajar bahasa Jepang?",
+    },
+    "",
+    "なぜ日本語を勉強しますか。",
+    {
+      en: "Slightly more formal than どうして, and more common in writing or presentations. Answers usually end in ~からです ('because ~').",
+      id: "Sedikit lebih formal dibanding どうして, dan lebih umum dalam tulisan atau presentasi. Jawabannya biasanya berakhir dengan ~からです ('karena ~').",
+    },
+  ],
+  [
+    "どうやって",
+    "douyatte",
+    { en: "how (by what means)", id: "bagaimana caranya" },
+    "えきまで どうやって いきますか。",
+    [
+      ["えき", "Eki"],
+      ["まで", "made"],
+      ["どうやって", "douyatte"],
+      ["いきます", "ikimasu"],
+      ["か", "ka"],
+    ],
+    { en: "How do I get to the station?", id: "Bagaimana cara ke stasiun?" },
+    "",
+    "駅までどうやって行きますか。",
+    {
+      en: "Asks about the method or route, unlike どう, which asks about a state or an opinion. Answers name a means or steps: でんしゃで いきます.",
+      id: "Menanyakan cara atau rute, berbeda dari どう yang menanyakan keadaan atau pendapat. Jawabannya menyebut sarana atau langkah: でんしゃで いきます.",
+    },
+  ],
+  [
+    "いかが",
+    "ikaga",
+    { en: "how (polite)", id: "bagaimana (sopan)" },
+    "おちゃは いかがですか。",
+    [
+      ["おちゃ", "Ocha"],
+      ["は", "wa"],
+      ["いかが", "ikaga"],
       ["です", "desu"],
       ["か", "ka"],
     ],
-    { en: "Which book is yours?", id: "Buku yang mana punyamu?" },
+    { en: "Would you like some tea?", id: "Mau minum teh?" },
     "",
-    "どの本があなたのですか。",
+    "お茶はいかがですか。",
     {
-      en: "どの is part of the この/その/あの/どの series and, like どんな, always attaches directly in front of a noun rather than standing alone.",
-      id: "どの termasuk dalam rangkaian この/その/あの/どの dan, seperti どんな, selalu menempel langsung di depan kata benda, tidak berdiri sendiri.",
+      en: "The polite version of どう, mostly used to offer something: コーヒーは いかがですか ('Would you like some coffee?'). Shop and restaurant staff use it all the time.",
+      id: "Versi sopan dari どう, kebanyakan dipakai untuk menawarkan sesuatu: コーヒーは いかがですか ('Mau minum kopi?'). Staf toko dan restoran sering memakainya.",
     },
   ],
   [
-    "いつも",
-    "itsumo",
-    { en: "always", id: "selalu" },
-    "わたしは いつも ろくじに おきます。",
+    "なにか",
+    "nanika",
+    { en: "something; anything", id: "sesuatu; apa saja" },
+    "なにか のみませんか。",
     [
-      ["わたし", "Watashi"],
-      ["は", "wa"],
-      ["いつも", "itsumo"],
-      ["ろくじ", "rokuji"],
-      ["に", "ni"],
-      ["おきます", "okimasu"],
+      ["なにか", "Nanika"],
+      ["のみません", "nomimasen"],
+      ["か", "ka"],
     ],
-    { en: "I always wake up at 6 o'clock.", id: "Saya selalu bangun jam 6." },
-    "",
-    "私はいつも六時に起きます。",
+    { en: "Would you like to drink something?", id: "Mau minum sesuatu?" },
+    "何か",
+    "何か飲みませんか。",
     {
-      en: "いつも sits at the top of the N5 frequency scale — いつも > たいてい > よく > ときどき > あまり > ぜんぜん — a useful order to memorize together with the other adverbs in this tier.",
-      id: "いつも berada di puncak skala frekuensi N5 — いつも > たいてい > よく > ときどき > あまり > ぜんぜん — urutan yang berguna untuk dihafal bersama kata keterangan lain di tingkatan ini.",
+      en: "なに + か turns the question word into 'something'. The same trick works with others: だれか (someone), どこか (somewhere), いつか (sometime). In questions it means 'anything'; in statements, 'something'.",
+      id: "なに + か mengubah kata tanya menjadi 'sesuatu'. Pola yang sama berlaku untuk kata lain: だれか (seseorang), どこか (suatu tempat), いつか (suatu saat). Dalam kalimat tanya berarti 'apa saja'; dalam kalimat pernyataan, 'sesuatu'.",
     },
   ],
   [
-    "たいてい",
-    "taitei",
-    { en: "usually", id: "biasanya" },
-    "にちようびは たいてい いえに います。",
+    "ぜひ",
+    "zehi",
+    { en: "by all means; definitely", id: "pastikan; dengan senang hati" },
+    "ぜひ あそびに きて ください。",
     [
-      ["にちようび", "Nichiyoubi"],
-      ["は", "wa"],
-      ["たいてい", "taitei"],
-      ["いえ", "ie"],
+      ["ぜひ", "Zehi"],
+      ["あそび", "asobi"],
       ["に", "ni"],
-      ["います", "imasu"],
+      ["きて", "kite"],
+      ["ください", "kudasai"],
     ],
+    { en: "Please do come and visit.", id: "Silakan datang berkunjung, ya." },
+    "是非",
+    "是非遊びに来てください。",
     {
-      en: "I'm usually at home on Sundays.",
-      id: "Hari Minggu saya biasanya di rumah.",
-    },
-    "",
-    "日曜日はたいてい家にいます。",
-    {
-      en: 'たいてい ranks just below いつも on the frequency scale — closer to "most of the time" than to a strict "always".',
-      id: 'たいてい berada tepat di bawah いつも pada skala frekuensi — lebih dekat ke "sebagian besar waktu" daripada "selalu" secara mutlak.',
+      en: "Adds strong enthusiasm to an invitation or a wish: ぜひ ~たいです ('I really want to ~'). Very common when accepting an invitation: はい、ぜひ!",
+      id: "Menambahkan semangat pada ajakan atau keinginan: ぜひ ~たいです ('saya sangat ingin ~'). Sangat umum saat menerima ajakan: はい、ぜひ!",
     },
   ],
   [
-    "よく",
-    "yoku",
-    { en: "often / well", id: "sering / dengan baik" },
-    "わたしは よく としょかんへ いきます。",
+    "たぶん",
+    "tabun",
+    { en: "probably, maybe", id: "mungkin, barangkali" },
+    "あしたは たぶん あめです。",
     [
-      ["わたし", "Watashi"],
+      ["あした", "Ashita"],
       ["は", "wa"],
-      ["よく", "yoku"],
-      ["としょかん", "toshokan"],
-      ["へ", "e"],
+      ["たぶん", "tabun"],
+      ["あめ", "ame"],
+      ["です", "desu"],
+    ],
+    { en: "It will probably rain tomorrow.", id: "Besok mungkin hujan." },
+    "多分",
+    "明日は多分雨です。",
+    {
+      en: "Expresses a guess you are fairly confident about. It often pairs with ~でしょう or ~と おもいます: たぶん くるでしょう ('He'll probably come').",
+      id: "Menyatakan dugaan yang cukup diyakini. Sering berpasangan dengan ~でしょう atau ~と おもいます: たぶん くるでしょう ('Dia mungkin akan datang').",
+    },
+  ],
+  [
+    "もちろん",
+    "mochiron",
+    { en: "of course", id: "tentu saja" },
+    "もちろん いっしょに いきます。",
+    [
+      ["もちろん", "Mochiron"],
+      ["いっしょ", "issho"],
+      ["に", "ni"],
       ["いきます", "ikimasu"],
     ],
     {
-      en: "I often go to the library.",
-      id: "Saya sering pergi ke perpustakaan.",
+      en: "Of course I'll go with you.",
+      id: "Tentu saja saya ikut pergi bersama.",
     },
     "",
-    "私はよく図書館へ行きます。",
+    "もちろん一緒に行きます。",
     {
-      en: 'よく has two separate meanings depending on context: frequency ("often"), as here, or manner ("well"), as in よく わかりました (I understood well).',
-      id: 'よく memiliki dua makna berbeda tergantung konteks: frekuensi ("sering"), seperti di sini, atau cara ("dengan baik"), seperti pada よく わかりました (saya mengerti dengan baik).',
-    },
-  ],
-  [
-    "ときどき",
-    "tokidoki",
-    { en: "sometimes", id: "kadang-kadang" },
-    "ときどき えいがを みます。",
-    [
-      ["ときどき", "Tokidoki"],
-      ["えいが", "eiga"],
-      ["を", "wo"],
-      ["みます", "mimasu"],
-    ],
-    {
-      en: "I sometimes watch movies.",
-      id: "Kadang-kadang saya menonton film.",
-    },
-    "時々",
-    "時々映画を見ます。",
-    {
-      en: "ときどき is written with a doubled kanji 時々, using the iteration mark 々 to show that 時 (time) repeats — a common pattern in Japanese reduplicated words.",
-      id: "ときどき ditulis dengan kanji ganda 時々, memakai tanda pengulangan 々 untuk menunjukkan bahwa 時 (waktu) berulang — pola umum pada kata-kata Jepang yang mengalami reduplikasi.",
-    },
-  ],
-  [
-    "もう",
-    "mou",
-    { en: "already", id: "sudah" },
-    "しゅくだいは もう おわりました。",
-    [
-      ["しゅくだい", "Shukudai"],
-      ["は", "wa"],
-      ["もう", "mou"],
-      ["おわりました", "owarimashita"],
-    ],
-    {
-      en: "I have already finished my homework.",
-      id: "PR saya sudah selesai.",
-    },
-    "",
-    "宿題はもう終わりました。",
-    {
-      en: 'もう means "already" with a positive verb, but shifts to mean "not anymore" when paired with a negative verb, as in もう たべません (I won\'t eat anymore) — the same positive/negative flip seen with まだ.',
-      id: 'もう berarti "sudah" bila dipakai dengan kata kerja positif, tetapi berubah menjadi "tidak lagi" bila dipasangkan dengan kata kerja negatif, seperti pada もう たべません (saya tidak akan makan lagi) — pembalikan makna positif/negatif yang sama seperti pada まだ.',
-    },
-  ],
-  [
-    "まだ",
-    "mada",
-    { en: "not yet", id: "belum" },
-    "しゅくだいは まだ おわっていません。",
-    [
-      ["しゅくだい", "Shukudai"],
-      ["は", "wa"],
-      ["まだ", "mada"],
-      ["おわっていません", "owatteimasen"],
-    ],
-    { en: "My homework isn't finished yet.", id: "PR saya belum selesai." },
-    "",
-    "宿題はまだ終わっていません。",
-    {
-      en: 'まだ pairs naturally with a negative verb to mean "not yet", but with an affirmative verb it instead means "still", as in まだ あめが ふっています (it\'s still raining).',
-      id: 'まだ secara alami dipasangkan dengan kata kerja negatif untuk berarti "belum", tetapi dengan kata kerja afirmatif justru berarti "masih", seperti pada まだ あめが ふっています (masih hujan).',
+      en: "Stresses that something is obvious or certain, often as a warm reply to a request: 'Can you help me?' — もちろん! In formal writing you may see the kanji 勿論.",
+      id: "Menegaskan bahwa sesuatu sudah jelas atau pasti, sering dipakai sebagai jawaban hangat atas permintaan: 'Bisa bantu saya?' — もちろん! Dalam tulisan formal kadang muncul kanji 勿論.",
     },
   ],
 ];
@@ -13079,6 +15079,24 @@ export const KOTOBA_N5_CH7_4: KotobaEntry[] = [
       id: "じゃ adalah bentuk singkat yang lebih santai lagi dibanding それじゃ, paling sering terdengar tepat sebelum mengakhiri percakapan atau mengambil keputusan cepat, seperti pada じゃ、いこう (Baiklah, ayo pergi).",
     },
   ],
+  [
+    "また",
+    "mata",
+    { en: "again; also, and", id: "lagi; juga, serta" },
+    "また あした あいましょう。",
+    [
+      ["また", "Mata"],
+      ["あした", "ashita"],
+      ["あいましょう", "aimashou"],
+    ],
+    { en: "Let's meet again tomorrow.", id: "Mari bertemu lagi besok." },
+    "",
+    "また明日会いましょう。",
+    {
+      en: "また means 'again' (また きます) and also 'in addition' when joining sentences. Goodbyes like また あした and じゃあ、また mean 'see you again'.",
+      id: "また berarti 'lagi' (また きます) dan juga 'selain itu' saat menyambung kalimat. Salam perpisahan seperti また あした dan じゃあ、また berarti 'sampai jumpa lagi'.",
+    },
+  ],
 ];
 
 // Sub-Tier 7.5: Kata Keterangan Derajat & Tata Bahasa (12)
@@ -13125,24 +15143,6 @@ export const KOTOBA_N5_CH7_5: KotobaEntry[] = [
     {
       en: 'ずいぶん expresses a stronger degree than plain とても, often carrying a note of surprise at how much something exceeds expectations — similar to English "quite" or "rather".',
       id: 'ずいぶん mengungkapkan tingkat yang lebih kuat daripada とても biasa, sering membawa nuansa terkejut atas seberapa jauh sesuatu melampaui perkiraan — mirip "cukup" atau "lumayan" dalam bahasa Indonesia.',
-    },
-  ],
-  [
-    "ちょっと",
-    "chotto",
-    { en: "a little / a moment", id: "agak / sedikit" },
-    "ちょっと まってください。",
-    [
-      ["ちょっと", "Chotto"],
-      ["まって", "matte"],
-      ["ください", "kudasai"],
-    ],
-    { en: "Please wait a moment.", id: "Tolong tunggu sebentar." },
-    "",
-    "ちょっと待ってください。",
-    {
-      en: "ちょっと is the casual, everyday counterpart of すこし; it's also used alone to soften a refusal, as in ちょっと… (trailing off to mean \"that's a bit difficult\").",
-      id: 'ちょっと adalah padanan santai dan sehari-hari dari すこし; kata ini juga dipakai sendirian untuk memperhalus penolakan, seperti pada ちょっと… (menggantung untuk berarti "agak sulit").',
     },
   ],
   [
@@ -13213,58 +15213,6 @@ export const KOTOBA_N5_CH7_5: KotobaEntry[] = [
     {
       en: "おおぜい specifically describes a large number of people, unlike the general-purpose たくさん, which can quantify anything, people included.",
       id: "おおぜい secara khusus menggambarkan banyak orang, berbeda dari たくさん yang bersifat umum dan bisa dipakai untuk apa saja, termasuk orang.",
-    },
-  ],
-  [
-    "ぜんぜん",
-    "zenzen",
-    {
-      en: "not at all (with negative)",
-      id: "sama sekali tidak (diikuti bentuk negatif)",
-    },
-    "にほんごが ぜんぜん わかりません。",
-    [
-      ["にほんご", "Nihongo"],
-      ["が", "ga"],
-      ["ぜんぜん", "zenzen"],
-      ["わかりません", "wakarimasen"],
-    ],
-    {
-      en: "I don't understand Japanese at all.",
-      id: "Saya sama sekali tidak mengerti bahasa Jepang.",
-    },
-    "全然",
-    "日本語が全然分かりません。",
-    {
-      en: 'Like あまり, ぜんぜん traditionally needs a negative ending; in casual modern speech it\'s sometimes paired with a positive word to mean "totally" (ぜんぜん だいじょうぶ, totally fine), though textbooks teach the negative pattern.',
-      id: 'Seperti あまり, ぜんぜん secara tradisional memerlukan akhiran negatif; dalam percakapan santai modern kadang dipasangkan dengan kata positif untuk berarti "benar-benar" (ぜんぜん だいじょうぶ, benar-benar tidak apa-apa), meski buku pelajaran mengajarkan pola negatif.',
-    },
-  ],
-  [
-    "あまり",
-    "amari",
-    {
-      en: "not very / not much (with negative)",
-      id: "tidak begitu (diikuti bentuk negatif)",
-    },
-    "わたしは あまり さけを のみません。",
-    [
-      ["わたし", "Watashi"],
-      ["は", "wa"],
-      ["あまり", "amari"],
-      ["さけ", "sake"],
-      ["を", "wo"],
-      ["のみません", "nomimasen"],
-    ],
-    {
-      en: "I don't drink alcohol very much.",
-      id: "Saya tidak terlalu minum sake/alkohol.",
-    },
-    "",
-    "私はあまり酒を飲みません。",
-    {
-      en: 'あまり needs a negative ending like ～ません to mean "not very" — paired with an affirmative verb instead, it means "too much", an excessive degree.',
-      id: 'あまり memerlukan akhiran negatif seperti ～ません untuk berarti "tidak terlalu" — jika dipasangkan dengan kata kerja afirmatif, artinya justru "terlalu", suatu tingkat berlebihan.',
     },
   ],
   [
@@ -13374,6 +15322,96 @@ export const KOTOBA_N5_CH7_5: KotobaEntry[] = [
     {
       en: "ちょうど emphasizes precision — a time, amount, or fit that matches exactly, as in このくつは ちょうど いいです (these shoes fit just right).",
       id: "ちょうど menekankan ketepatan — waktu, jumlah, atau kecocokan yang persis sesuai, seperti pada このくつは ちょうど いいです (sepatu ini pas/cocok).",
+    },
+  ],
+  [
+    "いっしょ",
+    "issho",
+    { en: "together; the same", id: "bersama; sama" },
+    "ともだちと いっしょに ひるごはんを たべます。",
+    [
+      ["ともだち", "Tomodachi"],
+      ["と", "to"],
+      ["いっしょ", "issho"],
+      ["に", "ni"],
+      ["ひるごはん", "hirugohan"],
+      ["を", "wo"],
+      ["たべます", "tabemasu"],
+    ],
+    {
+      en: "I eat lunch together with a friend.",
+      id: "Saya makan siang bersama teman.",
+    },
+    "一緒",
+    "友達と一緒に昼ご飯を食べます。",
+    {
+      en: "いっしょに (adverb) means 'together', often after と (ともだちと いっしょに). As a noun, いっしょです means 'it's the same' — a handy way to compare two things.",
+      id: "いっしょに (kata keterangan) berarti 'bersama', sering setelah と (ともだちと いっしょに). Sebagai kata benda, いっしょです berarti 'sama saja' — cara mudah membandingkan dua hal.",
+    },
+  ],
+
+  // -- Tambahan kata baru (Kotoba N5 jadi 800) --
+  [
+    "ほとんど",
+    "hotondo",
+    { en: "almost all, mostly", id: "hampir semua, sebagian besar" },
+    "ほとんどの がくせいが きました。",
+    [
+      ["ほとんど", "Hotondo"],
+      ["の", "no"],
+      ["がくせい", "gakusei"],
+      ["が", "ga"],
+      ["きました", "kimashita"],
+    ],
+    {
+      en: "Almost all of the students came.",
+      id: "Hampir semua murid datang.",
+    },
+    "",
+    "ほとんどの学生が来ました。",
+    {
+      en: "With a positive verb it means 'almost all / mostly'; with a negative verb it means 'hardly any': ほとんど わかりません ('I barely understand').",
+      id: "Dengan kata kerja positif berarti 'hampir semua / sebagian besar'; dengan kata kerja negatif berarti 'hampir tidak': ほとんど わかりません ('saya hampir tidak mengerti').",
+    },
+  ],
+  [
+    "いっぱい",
+    "ippai",
+    { en: "full; a lot", id: "penuh; banyak" },
+    "おなかが いっぱいです。",
+    [
+      ["おなか", "Onaka"],
+      ["が", "ga"],
+      ["いっぱい", "ippai"],
+      ["です", "desu"],
+    ],
+    { en: "I'm full.", id: "Saya kenyang." },
+    "一杯",
+    "お腹が一杯です。",
+    {
+      en: "Means 'full' for a container or a stomach, and also 'a lot': おなかが いっぱいです ('I'm full'), ひとが いっぱい います ('There are lots of people').",
+      id: "Berarti 'penuh' untuk wadah atau perut, dan juga 'banyak': おなかが いっぱいです ('saya kenyang'), ひとが いっぱい います ('ada banyak orang').",
+    },
+  ],
+  [
+    "ほんとうに",
+    "hontouni",
+    { en: "really, truly", id: "benar-benar, sungguh" },
+    "この ケーキは ほんとうに おいしいです。",
+    [
+      ["この", "Kono"],
+      ["ケーキ", "keeki"],
+      ["は", "wa"],
+      ["ほんとうに", "hontouni"],
+      ["おいしい", "oishii"],
+      ["です", "desu"],
+    ],
+    { en: "This cake is really delicious.", id: "Kue ini benar-benar enak." },
+    "本当に",
+    "このケーキは本当においしいです。",
+    {
+      en: "Stresses that something is truly the case: ほんとうですか ('Really?') is a common reaction, and ほんとうに adds sincerity to thanks or apologies.",
+      id: "Menegaskan bahwa sesuatu benar-benar terjadi: ほんとうですか ('sungguh?') adalah reaksi yang umum, dan ほんとうに menambah ketulusan pada ucapan terima kasih atau permintaan maaf.",
     },
   ],
 ];
@@ -14976,6 +17014,49 @@ export const KOTOBA_N5_CH8_3: KotobaEntry[] = [
       id: "しけん membawa nuansa yang lebih formal dan berisiko tinggi dibanding テスト — dipakai untuk ujian masuk, ujian sertifikasi, dan tes serius lainnya, selalu dipasangkan dengan kata kerja うける (mengikuti/menerima).",
     },
   ],
+  [
+    "しゅくだい",
+    "shukudai",
+    { en: "homework", id: "pekerjaan rumah (PR)" },
+    "まいばん しゅくだいを します。",
+    [
+      ["まいばん", "Maiban"],
+      ["しゅくだい", "shukudai"],
+      ["を", "wo"],
+      ["します", "shimasu"],
+    ],
+    {
+      en: "I do my homework every night.",
+      id: "Saya mengerjakan PR setiap malam.",
+    },
+    "宿題",
+    "毎晩宿題をします。",
+    {
+      en: "The verb is する: しゅくだいを する. 'There is homework' is しゅくだいが あります.",
+      id: "Kata kerjanya する: しゅくだいを する. 'Ada PR' adalah しゅくだいが あります.",
+    },
+  ],
+  [
+    "たんじょうび",
+    "tanjoubi",
+    { en: "birthday", id: "ulang tahun" },
+    "きょうは わたしの たんじょうびです。",
+    [
+      ["きょう", "Kyou"],
+      ["は", "wa"],
+      ["わたし", "watashi"],
+      ["の", "no"],
+      ["たんじょうび", "tanjoubi"],
+      ["です", "desu"],
+    ],
+    { en: "Today is my birthday.", id: "Hari ini ulang tahun saya." },
+    "誕生日",
+    "今日は私の誕生日です。",
+    {
+      en: "誕生日 combines 誕生 (birth) and 日 (day). The greeting is おたんじょうび おめでとう (ございます).",
+      id: "誕生日 menggabungkan 誕生 (kelahiran) dan 日 (hari). Ucapannya おたんじょうび おめでとう (ございます).",
+    },
+  ],
 ];
 
 export const KOTOBA_TIER_KEYS = [
@@ -15040,6 +17121,13 @@ export const KOTOBA_N5_LEVEL_META = [
   ...KOTOBA_TIER_KEYS.map((id, i) => ({ id, tier: i + 1, rank: "N5" })),
   { id: "all", tier: KOTOBA_TIER_KEYS.length, rank: "N5" },
 ];
+// Jumlah kata di deskripsi tiap tingkat dihitung langsung dari datanya (bukan diketik
+// manual), supaya angkanya tidak pernah meleset lagi kalau kata ditambah/dihapus.
+const wordCountDesc = (items: readonly unknown[]): Bilingual => ({
+  en: `${items.length} N5 vocabulary words.`,
+  id: `${items.length} kosakata N5.`,
+});
+const KOTOBA_N5_TOTAL = KOTOBA_N5_CHAPTERS.reduce((sum, c) => sum + c.length, 0);
 export const KOTOBA_N5_LEVEL_TEXT = {
   tier1: {
     title: {
@@ -15047,7 +17135,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 1.1 — Kata Ganti Orang & Sapaan",
     },
     sample: "わたし あなた こんにちは",
-    desc: { en: "54 N5 vocabulary words.", id: "54 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH1_1),
   },
   tier2: {
     title: {
@@ -15055,7 +17143,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 1.2 — Keluarga & Hubungan",
     },
     sample: "かぞく ちち はは",
-    desc: { en: "29 N5 vocabulary words.", id: "29 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH1_2),
   },
   tier3: {
     title: {
@@ -15063,7 +17151,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 1.3 — Profesi & Peran",
     },
     sample: "がくせい かいしゃいん",
-    desc: { en: "28 N5 vocabulary words.", id: "28 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH1_3),
   },
   tier4: {
     title: {
@@ -15071,7 +17159,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 2.1 — Waktu Harian & Keterangan Waktu",
     },
     sample: "いま きょう あした",
-    desc: { en: "28 N5 vocabulary words.", id: "28 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH2_1),
   },
   tier5: {
     title: {
@@ -15079,7 +17167,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 2.2 — Hari, Bulan, & Jam",
     },
     sample: "げつようび いちじかん",
-    desc: { en: "53 N5 vocabulary words.", id: "53 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH2_2),
   },
   tier6: {
     title: {
@@ -15087,7 +17175,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 2.3 — Bilangan & Satuan Penghitung",
     },
     sample: "ひとつ ひとり まい",
-    desc: { en: "35 N5 vocabulary words.", id: "35 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH2_3),
   },
   tier7: {
     title: {
@@ -15095,7 +17183,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 2.4 — Frekuensi & Durasi",
     },
     sample: "いつも よく たまに",
-    desc: { en: "21 N5 vocabulary words.", id: "21 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH2_4),
   },
   tier8: {
     title: {
@@ -15103,7 +17191,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 3.1 — Makanan & Minuman",
     },
     sample: "ごはん たまご くだもの",
-    desc: { en: "36 N5 vocabulary words.", id: "36 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH3_1),
   },
   tier9: {
     title: {
@@ -15111,7 +17199,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 3.2 — Benda-benda Pribadi & Rumah",
     },
     sample: "ほん つくえ でんわ",
-    desc: { en: "52 N5 vocabulary words.", id: "52 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH3_2),
   },
   tier10: {
     title: {
@@ -15119,7 +17207,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 3.3 — Pakaian & Aksesori",
     },
     sample: "ふく くつ ぼうし",
-    desc: { en: "21 N5 vocabulary words.", id: "21 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH3_3),
   },
   tier11: {
     title: {
@@ -15127,7 +17215,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 4.1 — Lokasi & Fasilitas Publik",
     },
     sample: "がっこう びょういん こうえん",
-    desc: { en: "29 N5 vocabulary words.", id: "29 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH4_1),
   },
   tier12: {
     title: {
@@ -15135,7 +17223,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 4.2 — Arah & Posisi",
     },
     sample: "うえ した みぎ",
-    desc: { en: "14 N5 vocabulary words.", id: "14 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH4_2),
   },
   tier13: {
     title: {
@@ -15143,7 +17231,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 4.3 — Transportasi & Fitur Kota",
     },
     sample: "でんしゃ くるま バス",
-    desc: { en: "21 N5 vocabulary words.", id: "21 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH4_3),
   },
   tier14: {
     title: {
@@ -15151,7 +17239,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 5.1 — Aktivitas Dasar Harian",
     },
     sample: "たべる のむ みる",
-    desc: { en: "28 N5 vocabulary words.", id: "28 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH5_1),
   },
   tier15: {
     title: {
@@ -15159,7 +17247,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 5.2 — Perpindahan & Mobilisasi",
     },
     sample: "いく くる かえる",
-    desc: { en: "22 N5 vocabulary words.", id: "22 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH5_2),
   },
   tier16: {
     title: {
@@ -15167,7 +17255,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 5.3 — Interaksi, Transaksi, & Kerja",
     },
     sample: "はなす かく かう",
-    desc: { en: "24 N5 vocabulary words.", id: "24 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH5_3),
   },
   tier17: {
     title: {
@@ -15175,7 +17263,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 6.1 — Kata Sifat-i Deskriptif",
     },
     sample: "おおきい ちいさい",
-    desc: { en: "23 N5 vocabulary words.", id: "23 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH6_1),
   },
   tier18: {
     title: {
@@ -15183,7 +17271,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 6.2 — Kata Sifat-i Cuaca & Sensori",
     },
     sample: "あつい さむい いたい",
-    desc: { en: "15 N5 vocabulary words.", id: "15 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH6_2),
   },
   tier19: {
     title: {
@@ -15191,17 +17279,17 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 6.3 — Kata Sifat-na & Status",
     },
     sample: "すき きらい げんき",
-    desc: { en: "22 N5 vocabulary words.", id: "22 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH6_3),
   },
   tier20: {
     title: { en: "Tier 7.1 — Nature & Weather", id: "Tier 7.1 — Alam & Cuaca" },
     sample: "てんき あめ やま",
-    desc: { en: "19 N5 vocabulary words.", id: "19 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH7_1),
   },
   tier21: {
     title: { en: "Tier 7.2 — Colors", id: "Tier 7.2 — Warna" },
     sample: "あか あお きいろ",
-    desc: { en: "14 N5 vocabulary words.", id: "14 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH7_2),
   },
   tier22: {
     title: {
@@ -15209,7 +17297,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 7.3 — Kata Tanya & Kata Keterangan",
     },
     sample: "どこ だれ いつも",
-    desc: { en: "16 N5 vocabulary words.", id: "16 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH7_3),
   },
   tier23: {
     title: {
@@ -15217,7 +17305,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 7.4 — Kata Hubung & Sambungan",
     },
     sample: "そして でも だから",
-    desc: { en: "9 N5 vocabulary words.", id: "9 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH7_4),
   },
   tier24: {
     title: {
@@ -15225,7 +17313,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 7.5 — Kata Keterangan Derajat & Tata Bahasa",
     },
     sample: "とても すこし もっと",
-    desc: { en: "13 N5 vocabulary words.", id: "13 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH7_5),
   },
   tier25: {
     title: {
@@ -15233,7 +17321,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 8.1 — Tubuh & Kesehatan",
     },
     sample: "あたま かお びょうき",
-    desc: { en: "40 N5 vocabulary words.", id: "40 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH8_1),
   },
   tier26: {
     title: {
@@ -15241,7 +17329,7 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 8.2 — Hewan & Serangga",
     },
     sample: "いぬ ねこ むし",
-    desc: { en: "15 N5 vocabulary words.", id: "15 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH8_2),
   },
   tier27: {
     title: {
@@ -15249,14 +17337,14 @@ export const KOTOBA_N5_LEVEL_TEXT = {
       id: "Tier 8.3 — Olahraga, Hobi, & Sekolah",
     },
     sample: "サッカー えいが テスト",
-    desc: { en: "21 N5 vocabulary words.", id: "21 kosakata N5." },
+    desc: wordCountDesc(KOTOBA_N5_CH8_3),
   },
   all: {
     title: { en: "All Mixed", id: "seluruh Campur" },
     sample: "せんせい あるく げんき",
     desc: {
-      en: "All 702 N5 vocabulary words shuffled into one Chapter.",
-      id: "Seluruh 702 kosakata N5 diacak menjadi satu Chapter.",
+      en: `All ${KOTOBA_N5_TOTAL} N5 vocabulary words shuffled into one Chapter.`,
+      id: `Seluruh ${KOTOBA_N5_TOTAL} kosakata N5 diacak menjadi satu Chapter.`,
     },
   },
 };
@@ -15391,6 +17479,7 @@ export const KOTOBA_CATEGORY_DEFS = {
         "どういたしまして",
         "すみません",
         "ごめんなさい",
+        "どうも",
       ],
     },
     {
@@ -15427,6 +17516,14 @@ export const KOTOBA_CATEGORY_DEFS = {
     {
       label: { en: "Yes & No", id: "Jawaban Ya & Tidak" },
       words: ["はい", "いいえ"],
+    },
+    {
+      label: { en: "Offers & Requests", id: "Tawaran & Permintaan" },
+      words: ["どうぞ", "ください"],
+    },
+    {
+      label: { en: "On the Phone", id: "Di Telepon" },
+      words: ["もしもし"],
     },
   ],
   tier2: [
@@ -15468,6 +17565,14 @@ export const KOTOBA_CATEGORY_DEFS = {
         "ごしゅじん",
       ],
     },
+    {
+      label: { en: "Grandparents & Elders", id: "Kakek-Nenek & Lansia" },
+      words: ["おじいさん", "おばあさん"],
+    },
+    {
+      label: { en: "Aunts & Uncles", id: "Paman & Bibi" },
+      words: ["おじさん", "おばさん"],
+    },
     { label: { en: "Children", id: "Anak" }, words: ["こども", "おこさん"] },
     {
       label: {
@@ -15493,6 +17598,7 @@ export const KOTOBA_CATEGORY_DEFS = {
         "ぎんこういん",
         "てんいん",
         "こうむいん",
+        "しゃちょう",
       ],
     },
     {
@@ -15507,6 +17613,10 @@ export const KOTOBA_CATEGORY_DEFS = {
       ],
     },
     {
+      label: { en: "More Occupations", id: "Profesi Lainnya" },
+      words: ["うんてんしゅ", "パイロット", "かしゅ", "しゅふ"],
+    },
+    {
       label: { en: "By Age & Gender", id: "Menurut Usia & Gender" },
       words: [
         "おとな",
@@ -15518,8 +17628,12 @@ export const KOTOBA_CATEGORY_DEFS = {
       ],
     },
     {
+      label: { en: "Nationality", id: "Kebangsaan" },
+      words: ["にほんじん", "がいこくじん"],
+    },
+    {
       label: { en: "General Words for People", id: "Sebutan Umum untuk Orang" },
-      words: ["ひと", "かた", "みなさん"],
+      words: ["ひと", "かた", "みなさん", "おきゃくさん"],
     },
     {
       label: { en: "Work & Languages", id: "Pekerjaan & Bahasa" },
@@ -15596,6 +17710,23 @@ export const KOTOBA_CATEGORY_DEFS = {
       ],
     },
     {
+      label: { en: "Days of the Month", id: "Tanggal dalam Sebulan" },
+      words: [
+        "ついたち",
+        "ふつか",
+        "みっか",
+        "よっか",
+        "いつか",
+        "むいか",
+        "なのか",
+        "ようか",
+        "ここのか",
+        "とおか",
+        "はつか",
+        "なんにち",
+      ],
+    },
+    {
       label: { en: "Clock Time & Units", id: "Jam, Menit & Satuan Waktu" },
       words: [
         "じかん",
@@ -15663,6 +17794,24 @@ export const KOTOBA_CATEGORY_DEFS = {
       ],
     },
     {
+      label: {
+        en: "Numbers 1–10 (Chinese-style)",
+        id: "Angka 1–10 (Gaya Tionghoa)",
+      },
+      words: [
+        "いち",
+        "に",
+        "さん",
+        "よん",
+        "ご",
+        "ろく",
+        "なな",
+        "はち",
+        "きゅう",
+        "じゅう",
+      ],
+    },
+    {
       label: { en: "Large Numbers", id: "Angka Besar" },
       words: ["ゼロ", "ひゃく", "せん", "まん"],
     },
@@ -15699,6 +17848,10 @@ export const KOTOBA_CATEGORY_DEFS = {
       },
       words: ["いくつ", "ぜんぶ", "だけ"],
     },
+    {
+      label: { en: "Money & Age", id: "Uang & Usia" },
+      words: ["えん", "さい"],
+    },
   ],
   tier7: [
     {
@@ -15718,11 +17871,11 @@ export const KOTOBA_CATEGORY_DEFS = {
     },
     {
       label: { en: "Right Away or Not Yet", id: "Segera atau Belum" },
-      words: ["すぐ", "もうすぐ", "まだ"],
+      words: ["すぐ", "もうすぐ", "まだ", "そろそろ"],
     },
     {
       label: { en: "Duration", id: "Durasi & Lamanya" },
-      words: ["ずっと", "しばらく", "ちょっと", "あいだ"],
+      words: ["ずっと", "しばらく", "ちょっと", "あいだ", "ひさしぶり"],
     },
     {
       label: {
@@ -15733,7 +17886,15 @@ export const KOTOBA_CATEGORY_DEFS = {
     },
     {
       label: { en: "Order & Repetition", id: "Urutan & Pengulangan" },
-      words: ["はじめに", "さいごに", "もういちど"],
+      words: [
+        "はじめに",
+        "さいごに",
+        "もういちど",
+        "はじめて",
+        "つぎ",
+        "さいしょ",
+        "こんど",
+      ],
     },
     {
       label: { en: "Approximation", id: "Perkiraan Jumlah & Lama" },
@@ -15773,11 +17934,19 @@ export const KOTOBA_CATEGORY_DEFS = {
     },
     {
       label: { en: "Vegetables & Fruit", id: "Sayur & Buah" },
-      words: ["やさい", "くだもの"],
+      words: ["やさい", "くだもの", "りんご", "みかん"],
     },
     {
       label: { en: "Staples & Cooked Dishes", id: "Makanan Pokok & Olahan" },
-      words: ["パン", "そば", "ラーメン", "カレー"],
+      words: [
+        "パン",
+        "そば",
+        "ラーメン",
+        "カレー",
+        "すし",
+        "てんぷら",
+        "サラダ",
+      ],
     },
     {
       label: { en: "Snacks & Sweets", id: "Camilan & Makanan Manis" },
@@ -15789,7 +17958,7 @@ export const KOTOBA_CATEGORY_DEFS = {
     },
     {
       label: { en: "At the Table", id: "Di Meja Makan" },
-      words: ["メニュー", "スプーン", "フォーク"],
+      words: ["メニュー", "スプーン", "フォーク", "はし"],
     },
   ],
   tier9: [
@@ -15837,11 +18006,11 @@ export const KOTOBA_CATEGORY_DEFS = {
     },
     {
       label: { en: "The House & Its Parts", id: "Rumah & Bagiannya" },
-      words: ["いえ", "へや", "まど", "ドア"],
+      words: ["いえ", "へや", "まど", "ドア", "うち", "にわ", "トイレ"],
     },
     {
       label: { en: "Furniture", id: "Perabot Rumah" },
-      words: ["つくえ", "いす", "テーブル", "ベッド", "ふとん"],
+      words: ["つくえ", "いす", "テーブル", "ベッド", "ふとん", "ほんだな"],
     },
     {
       label: { en: "Tableware & Containers", id: "Peralatan Makan & Wadah" },
@@ -15858,6 +18027,10 @@ export const KOTOBA_CATEGORY_DEFS = {
       label: { en: "Hobbies & Entertainment", id: "Hobi & Hiburan" },
       words: ["しゅみ", "おんがく", "うた", "しゃしん", "スポーツ"],
     },
+    {
+      label: { en: "Gifts & Numbers", id: "Hadiah & Nomor" },
+      words: ["プレゼント", "ばんごう"],
+    },
   ],
   tier10: [
     {
@@ -15865,13 +18038,16 @@ export const KOTOBA_CATEGORY_DEFS = {
         en: "General & Traditional Wear",
         id: "Istilah Umum & Pakaian Tradisional",
       },
-      words: ["ふく", "きもの"],
+      words: ["ふく", "きもの", "ようふく"],
     },
     {
       label: { en: "Tops & Outerwear", id: "Atasan & Pakaian Luar" },
       words: ["シャツ", "Tシャツ", "セーター", "うわぎ", "コート"],
     },
-    { label: { en: "Bottoms", id: "Bawahan" }, words: ["ズボン", "スカート"] },
+    {
+      label: { en: "Bottoms", id: "Bawahan" },
+      words: ["ズボン", "スカート", "ジーンズ"],
+    },
     {
       label: { en: "Footwear", id: "Alas Kaki" },
       words: ["くつ", "くつした", "スリッパ"],
@@ -15941,6 +18117,14 @@ export const KOTOBA_CATEGORY_DEFS = {
         "がいこく",
       ],
     },
+    {
+      label: { en: "Countries", id: "Negara" },
+      words: ["にほん", "アメリカ", "インドネシア", "ちゅうごく"],
+    },
+    {
+      label: { en: "Rooms & Housing", id: "Ruangan & Tempat Tinggal" },
+      words: ["きょうしつ", "アパート"],
+    },
   ],
   tier12: [
     { label: { en: "Up & Down", id: "Atas & Bawah" }, words: ["うえ", "した"] },
@@ -15953,6 +18137,10 @@ export const KOTOBA_CATEGORY_DEFS = {
       words: ["みぎ", "ひだり"],
     },
     {
+      label: { en: "Straight Ahead", id: "Lurus ke Depan" },
+      words: ["まっすぐ"],
+    },
+    {
       label: { en: "Front & Back", id: "Depan & Belakang" },
       words: ["まえ", "うしろ"],
     },
@@ -15963,6 +18151,14 @@ export const KOTOBA_CATEGORY_DEFS = {
     {
       label: { en: "Between & Across", id: "Antara & Seberang" },
       words: ["あいだ", "むこう"],
+    },
+    {
+      label: { en: "Center & Opposite", id: "Tengah & Seberang" },
+      words: ["まんなか", "はんたい"],
+    },
+    {
+      label: { en: "Compass Directions", id: "Arah Mata Angin" },
+      words: ["きた", "みなみ", "ひがし", "にし"],
     },
   ],
   tier13: [
@@ -16056,6 +18252,50 @@ export const KOTOBA_CATEGORY_DEFS = {
       },
       words: ["あける", "しめる", "つける", "けす"],
     },
+    {
+      label: {
+        en: "Existing, Doing & Becoming",
+        id: "Ada, Melakukan & Menjadi",
+      },
+      words: ["ある", "いる", "する", "なる"],
+    },
+    {
+      label: {
+        en: "Taking, Pulling & Putting In",
+        id: "Mengambil, Menarik & Memasukkan",
+      },
+      words: ["とる", "ひく", "いれる"],
+    },
+    {
+      label: { en: "Wearing", id: "Memakai (Pakaian & Aksesori)" },
+      words: ["はく", "かぶる", ["きる", "着る"]],
+    },
+    {
+      label: { en: "Beginning & Ending", id: "Memulai & Mengakhiri" },
+      words: ["はじまる", "おわる", "はじめる"],
+    },
+    {
+      label: { en: "Waiting & Living", id: "Menunggu & Tinggal" },
+      words: ["まつ", "すむ"],
+    },
+    {
+      label: {
+        en: "Ability & Time Needed",
+        id: "Kemampuan & Waktu yang Dibutuhkan",
+      },
+      words: ["できる", "かかる"],
+    },
+    {
+      label: { en: "Cutting", id: "Memotong" },
+      words: [["きる", "切る"]],
+    },
+    {
+      label: {
+        en: "Calling, Hanging & Locking",
+        id: "Menelepon, Menggantung & Mengunci",
+      },
+      words: ["かける"],
+    },
   ],
   tier15: [
     {
@@ -16098,7 +18338,7 @@ export const KOTOBA_CATEGORY_DEFS = {
   tier16: [
     {
       label: { en: "Speaking & Telling", id: "Berbicara & Menyampaikan" },
-      words: ["はなす", "いう", "でんわする"],
+      words: ["はなす", "いう", "でんわする", "しょうかいする"],
     },
     {
       label: {
@@ -16127,7 +18367,7 @@ export const KOTOBA_CATEGORY_DEFS = {
         en: "Giving, Receiving & Sending",
         id: "Memberi, Menerima & Mengirim",
       },
-      words: ["あげる", "もらう", "おくる"],
+      words: ["あげる", "もらう", "おくる", "みせる", "くれる", "だす"],
     },
     {
       label: {
@@ -16136,7 +18376,10 @@ export const KOTOBA_CATEGORY_DEFS = {
       },
       words: ["てつだう", "よぶ", "たのむ"],
     },
-    { label: { en: "Working", id: "Bekerja" }, words: ["はたらく"] },
+    {
+      label: { en: "Working", id: "Bekerja" },
+      words: ["はたらく", "アルバイト"],
+    },
     { label: { en: "Forgetting", id: "Lupa" }, words: ["わすれる"] },
   ],
   tier17: [
@@ -16173,6 +18416,34 @@ export const KOTOBA_CATEGORY_DEFS = {
       label: { en: "Colors", id: "Warna" },
       words: ["あかい", "あおい", "くろい", "しろい", "きいろい", "ちゃいろい"],
     },
+    {
+      label: { en: "Fun & Boredom", id: "Menyenangkan & Membosankan" },
+      words: ["おもしろい", "つまらない", "たのしい"],
+    },
+    {
+      label: { en: "Difficulty", id: "Sulit & Mudah" },
+      words: ["むずかしい", "やさしい"],
+    },
+    {
+      label: { en: "Speed & Timing", id: "Kecepatan & Waktu" },
+      words: [["はやい", "早い"], ["はやい", "速い"], "おそい"],
+    },
+    {
+      label: { en: "Distance", id: "Dekat & Jauh" },
+      words: ["ちかい", "とおい"],
+    },
+    {
+      label: { en: "Quantity", id: "Banyak & Sedikit" },
+      words: ["おおい", "すくない"],
+    },
+    {
+      label: { en: "Age & Strength", id: "Usia & Kekuatan" },
+      words: ["わかい", "つよい"],
+    },
+    {
+      label: { en: "Impressions & Wants", id: "Kesan & Keinginan" },
+      words: ["かわいい", "うるさい", "ほしい"],
+    },
   ],
   tier18: [
     {
@@ -16201,7 +18472,7 @@ export const KOTOBA_CATEGORY_DEFS = {
   tier19: [
     {
       label: { en: "Likes & Dislikes", id: "Suka & Tidak Suka" },
-      words: ["すき", "きらい"],
+      words: ["すき", "きらい", "だいすき"],
     },
     {
       label: { en: "Health & Energy", id: "Kesehatan & Semangat" },
@@ -16256,6 +18527,10 @@ export const KOTOBA_CATEGORY_DEFS = {
       label: { en: "Seasons", id: "Musim" },
       words: ["はる", "なつ", "あき", "ふゆ"],
     },
+    {
+      label: { en: "Verbs of Nature", id: "Kata Kerja Alam" },
+      words: ["ふる", "さく"],
+    },
   ],
   tier21: [
     {
@@ -16294,17 +18569,39 @@ export const KOTOBA_CATEGORY_DEFS = {
         "いくら",
         "いくつ",
         "どの",
+        "なぜ",
+        "どうやって",
+        "いかが",
       ],
     },
     {
+      label: { en: "Something / Somewhere (~か)", id: "Sesuatu / Suatu (~か)" },
+      words: ["なにか"],
+    },
+    {
+      label: { en: "This / That Kind of", id: "Macam Ini / Itu" },
+      words: ["こんな", "そんな", "あんな"],
+    },
+    {
       label: { en: "Adverbs", id: "Kata Keterangan" },
-      words: ["いつも", "たいてい", "よく", "ときどき", "もう", "まだ"],
+      words: [
+        "いつも",
+        "たいてい",
+        "よく",
+        "ときどき",
+        "もう",
+        "まだ",
+        "そう",
+        "ぜひ",
+        "たぶん",
+        "もちろん",
+      ],
     },
   ],
   tier23: [
     {
       label: { en: "Adding & Sequencing", id: "Menambahkan & Mengurutkan" },
-      words: ["そして", "それから"],
+      words: ["そして", "それから", "また"],
     },
     {
       label: { en: "Contrast", id: "Pertentangan" },
@@ -16322,11 +18619,11 @@ export const KOTOBA_CATEGORY_DEFS = {
   tier24: [
     {
       label: { en: "Intensity", id: "Intensitas" },
-      words: ["とても", "ずいぶん", "ちょっと"],
+      words: ["とても", "ずいぶん", "ちょっと", "ほんとうに"],
     },
     {
       label: { en: "Quantity", id: "Jumlah & Kuantitas" },
-      words: ["すこし", "たくさん", "おおぜい"],
+      words: ["すこし", "たくさん", "おおぜい", "ほとんど", "いっぱい"],
     },
     {
       label: { en: "Negative-Paired", id: "Berpasangan dengan Negatif" },
@@ -16342,6 +18639,10 @@ export const KOTOBA_CATEGORY_DEFS = {
     {
       label: { en: "Approximation & Precision", id: "Perkiraan & Ketepatan" },
       words: ["だいたい", "たいがい", "ちょうど"],
+    },
+    {
+      label: { en: "Manner", id: "Cara & Keadaan" },
+      words: ["いっしょ"],
     },
   ],
   tier25: [
@@ -16444,7 +18745,18 @@ export const KOTOBA_CATEGORY_DEFS = {
     },
     {
       label: { en: "School & Study", id: "Sekolah & Belajar" },
-      words: ["すうがく", "かがく", "じゅぎょう", "テスト", "しけん"],
+      words: [
+        "すうがく",
+        "かがく",
+        "じゅぎょう",
+        "テスト",
+        "しけん",
+        "しゅくだい",
+      ],
+    },
+    {
+      label: { en: "Celebrations", id: "Perayaan" },
+      words: ["たんじょうび"],
     },
   ],
 };

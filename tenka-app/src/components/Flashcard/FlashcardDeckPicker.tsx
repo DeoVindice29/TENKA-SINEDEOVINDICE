@@ -7,6 +7,7 @@ import {
   type FlashDeckRef,
 } from "@/data/flashDecks";
 import FlashcardImport from "./FlashcardImport";
+import ScrollTopButton from "@/components/ScrollTopButton";
 
 type FlashcardDeckPickerProps = {
   onPickDeck: (ref: FlashDeckRef, label: string, forceAll: boolean) => void;
@@ -49,6 +50,7 @@ export default function FlashcardDeckPicker({
         {builtinDefs.map((d, i) => {
           const descs = buildDeckCardDescriptors(d.ref);
           const stat = dueSummary(descs.map((x) => x.id));
+          const allClear = stat.fresh + stat.learning + stat.due === 0;
           return (
             <button
               key={i}
@@ -59,10 +61,26 @@ export default function FlashcardDeckPicker({
               <span className="flash-deck-glyph">📇</span>
               <span className="flash-deck-info">
                 <span className="flash-deck-name">{d.label}</span>
-                <span className="flash-deck-count">
-                  {stat.total} {t("flash.cards")} · {stat.due}{" "}
-                  {t("flash.dueNow")}
-                </span>
+                {allClear ? (
+                  <span className="flash-deck-caughtup">
+                    {t("flash.caughtUp")}
+                  </span>
+                ) : (
+                  <span className="flash-deck-stats">
+                    <span className="fds-item">
+                      <span className="fds-label">{t("flash.new")}</span>
+                      <span className="fds-num fds-new">{stat.fresh}</span>
+                    </span>
+                    <span className="fds-item">
+                      <span className="fds-label">{t("flash.learn")}</span>
+                      <span className="fds-num fds-learn">{stat.learning}</span>
+                    </span>
+                    <span className="fds-item">
+                      <span className="fds-label">{t("flash.due")}</span>
+                      <span className="fds-num fds-due">{stat.due}</span>
+                    </span>
+                  </span>
+                )}
               </span>
               <span className="flash-deck-arrow">→</span>
             </button>
@@ -116,6 +134,8 @@ export default function FlashcardDeckPicker({
       </div>
 
       <FlashcardImport onImported={reload} />
+
+      <ScrollTopButton id="btn-flashdeck-scrolltop" />
     </>
   );
 }

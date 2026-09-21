@@ -9,7 +9,17 @@ import Levels from "@/components/Levels";
 import VariantPicker from "@/components/Pickers/VariantPicker";
 import DifficultyPicker from "@/components/Pickers/DifficultyPicker";
 import TimerPicker from "@/components/Pickers/TimerPicker";
+import RangePicker from "@/components/Pickers/RangePicker";
+import SpeedrunCountdown from "@/components/Quiz/SpeedrunCountdown";
 import ConquestModal from "@/components/Conquest/ConquestModal";
+import ScrollTopButton from "@/components/ScrollTopButton";
+import { supportsSpeedrun } from "@/utils/speedrun";
+import {
+  isJlptScript,
+  jlptTierCount,
+  JLPT_PASS_PERCENT,
+  jlptQuestionsPerTier,
+} from "@/data/jlptConquest";
 import type { Bilingual } from "@/data/types";
 
 function tf(
@@ -40,6 +50,10 @@ export default function StartScreen() {
     selectedDifficulty,
     selectedTimerSeconds,
     quizVariant,
+    rangeMode,
+    rangeFrom,
+    rangeTo,
+    randomCount,
     setMatchScript,
     setMatchMode,
   } = useUI();
@@ -47,6 +61,7 @@ export default function StartScreen() {
   const { isConquered, isLocked, getSpeedrunBestTime } = useConquest();
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [countdownOpen, setCountdownOpen] = useState(false);
 
   const script = SCRIPTS[currentScript as keyof typeof SCRIPTS];
 
@@ -74,7 +89,22 @@ export default function StartScreen() {
   const supportsMatch =
     currentScript === "hiragana" || currentScript === "katakana";
 
+  // jumlah soal yang akan dikerjakan, sesuai pilihan rentang / mode acak
+  const poolTotal = selectedPool?.length ?? 0;
+  const rFrom = Math.max(0, Math.min(rangeFrom, poolTotal - 1));
+  const rTo = Math.max(rFrom, Math.min(rangeTo, poolTotal - 1));
+  const questionCount =
+    rangeMode === "random"
+      ? Math.min(randomCount, poolTotal)
+      : poolTotal > 0
+        ? rTo - rFrom + 1
+        : 0;
+
   const conquered = isConquered(currentScript);
+  // Speedrun cuma untuk Hiragana & Katakana. Kotoba/Bunpō/Kanji yang sudah
+  // takluk kartunya tetap Penaklukan ala JLPT (bisa diulang), cuma dikasih ✓.
+  const speedrunMode = conquered && supportsSpeedrun(currentScript);
+  const isJlpt = isJlptScript(currentScript);
   const lockKey = isLocked(currentScript);
 
   const dataAll = (
@@ -135,32 +165,35 @@ export default function StartScreen() {
 
       <Levels />
 
-      {supportsMatch && (
-        <button
-          className="match-card"
-          id="btn-match-mode"
-          type="button"
-          disabled={!selectedMode}
-          onClick={() => {
-            if (selectedMode) {
-              setMatchScript(currentScript);
-              setMatchMode(selectedMode);
-              setScreen("match");
-            }
-          }}
-        >
-          <span className="match-mode-icon" />
-          <span className="match-mode-body">
-            <span className="match-mode-title">{t("matchMode.cardTitle")}</span>
-            <span className="match-mode-desc">{t("matchMode.cardDesc")}</span>
-          </span>
-          <span className="match-mode-arrow" />
-        </button>
-      )}
+      <div id="options-panel">
+        {supportsMatch && (
+          <button
+            className="match-card"
+            id="btn-match-mode"
+            type="button"
+            disabled={!selectedMode}
+            onClick={() => {
+              if (selectedMode) {
+                setMatchScript(currentScript);
+                setMatchMode(selectedMode);
+                setScreen("match");
+              }
+            }}
+          >
+            <span className="match-mode-icon" />
+            <span className="match-mode-body">
+              <span className="match-mode-title">{t("matchMode.cardTitle")}</span>
+              <span className="match-mode-desc">{t("matchMode.cardDesc")}</span>
+            </span>
+            <span className="match-mode-arrow" />
+          </button>
+        )}
 
-      <VariantPicker />
-      <DifficultyPicker />
-      <TimerPicker />
+        <VariantPicker />
+        <DifficultyPicker />
+        <TimerPicker />
+        <RangePicker />
+      </div>
 
       <button
         className="primary"
@@ -172,21 +205,32 @@ export default function StartScreen() {
               difficulty: selectedDifficulty,
               timerSeconds: selectedTimerSeconds,
               variant: quizVariant,
+              range: {
+                mode: rangeMode,
+                from: rangeFrom,
+                to: rangeTo,
+                randomCount,
+              },
             });
             setScreen("quiz");
           }
         }}
       >
         {canStart && selectedInfo
-          ? t("start.startCount", {
-              title: tf(selectedInfo.title, lang),
-              count: selectedPool?.length ?? 0,
-            })
+          ? t(
+              rangeMode === "random"
+                ? "start.startRandomCount"
+                : "start.startCount",
+              {
+                title: tf(selectedInfo.title, lang),
+                count: questionCount,
+              },
+            )
           : t("start.chooseTierFirst")}
       </button>
 
       <button
-        className={`conquest-card ${conquered ? "speedrun-mode" : ""} ${
+        className={`conquest-card ${speedrunMode ? "speedrun-mode" : ""} ${
           lockKey ? "locked" : ""
         }`}
         id="btn-conquest"
@@ -197,12 +241,17 @@ export default function StartScreen() {
         <span className="conquest-icon" id="conquest-icon" />
         <span className="conquest-body">
           <span className="conquest-title">
-            {conquered
+            {speedrunMode
               ? t("speedrun.cardTitleWithLabel", { label: script.label })
-              : t("conquest.cardTitleWithLabel", { label: script.label })}
+              : isJlpt && conquered
+                ? t("conquest.jlptRetryCardTitleWithLabel", {
+                    label: script.label,
+                  }) + " ✓"
+                : t("conquest.cardTitleWithLabel", { label: script.label }) +
+                  (conquered ? " ✓" : "")}
           </span>
           <span className="conquest-desc">
-            {conquered
+            {speedrunMode
               ? bestTime !== null
                 ? t("speedrun.descWithRecord", {
                     count: totalAll,
@@ -213,10 +262,16 @@ export default function StartScreen() {
                     count: totalAll,
                     label: script.label,
                   })
-              : t("conquest.desc", {
-                  label: script.label,
-                  count: totalAll,
-                })}
+              : isJlpt
+                ? t("conquest.jlptDesc", {
+                    tiers: jlptTierCount(currentScript),
+                    count: jlptQuestionsPerTier(currentScript),
+                    percent: JLPT_PASS_PERCENT,
+                  })
+                : t("conquest.desc", {
+                    label: script.label,
+                    count: totalAll,
+                  })}
           </span>
           {lockKey && (
             <span className="conquest-lock-note">
@@ -241,11 +296,23 @@ export default function StartScreen() {
           setScreen("quiz");
         }}
         onConfirmSpeedrun={() => {
+          // hitung mundur 3-2-1-GO dulu; timer speedrun baru jalan setelahnya
           setModalOpen(false);
+          setCountdownOpen(true);
+        }}
+      />
+
+      <SpeedrunCountdown
+        open={countdownOpen}
+        onCancel={() => setCountdownOpen(false)}
+        onDone={() => {
+          setCountdownOpen(false);
           startSpeedrun(currentScript, selectedDifficulty);
           setScreen("quiz");
         }}
       />
+
+      <ScrollTopButton id="btn-start-scrolltop" />
     </section>
   );
 }

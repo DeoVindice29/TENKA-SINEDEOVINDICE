@@ -1896,14 +1896,30 @@ button.secondary:focus-visible {
     display: flex;
     align-items: center;
     gap: 14px;
-    background: linear-gradient(135deg, rgba(79, 145, 85, 0.10), rgba(79, 145, 85, 0.02));
-    border: 1px solid var(--moss);
+    background: linear-gradient(135deg, #E4F7E6, #D3F0D8);
+    border: 2px solid #34C759;
     border-radius: 6px;
     padding: 16px;
     cursor: pointer;
     text-align: left;
     font-family: inherit;
     transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+    box-shadow: 0 4px 14px rgba(52, 199, 89, 0.25);
+}
+
+[data-theme="dark"] .match-card {
+    background: linear-gradient(135deg, rgba(79, 145, 85, 0.10), rgba(79, 145, 85, 0.02));
+    border: 1px solid var(--moss);
+    box-shadow: none;
+}
+
+[data-theme="dark"] .match-card:focus-visible {
+    outline: 2px solid var(--moss);
+}
+
+[data-theme="dark"] .match-mode-title,
+[data-theme="dark"] .match-mode-arrow {
+    color: var(--moss);
 }
 
 .match-card.hidden {
@@ -1916,7 +1932,7 @@ button.secondary:focus-visible {
 }
 
 .match-card:focus-visible {
-    outline: 2px solid var(--moss);
+    outline: 2px solid #34C759;
     outline-offset: 3px;
 }
 
@@ -1943,7 +1959,7 @@ button.secondary:focus-visible {
     font-family: 'Shippori Mincho', serif;
     font-weight: 800;
     font-size: 15px;
-    color: var(--moss);
+    color: #1D8A3A;
 }
 
 .match-mode-desc {
@@ -1954,7 +1970,7 @@ button.secondary:focus-visible {
 
 .match-mode-arrow {
     font-size: 18px;
-    color: var(--moss);
+    color: #1D8A3A;
     flex: 0 0 auto;
 }
 
@@ -2686,6 +2702,13 @@ button.match-tile:disabled {
     text-align: center;
 }
 
+/* kata yang digarisbawahi di soal Penaklukan ala JLPT */
+.stamp .kana u {
+    text-decoration: underline;
+    text-decoration-thickness: 0.07em;
+    text-underline-offset: 0.22em;
+}
+
 .quiz-mode-label {
     text-align: center;
     font-size: 12px;
@@ -2864,6 +2887,33 @@ button.choice.wrong {
     animation: shake .32s ease;
 }
 
+/* Penaklukan ala JLPT: pilihan bernomor 1–4 */
+button.choice.numbered {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+}
+
+button.choice.numbered .choice-num {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border: 1.5px solid currentColor;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+button.choice.numbered .choice-text {
+    flex: 1;
+    min-width: 0;
+}
+
 /* ---------- hard mode: jawaban diketik sendiri ---------- */
 .hard-input-row {
     display: flex;
@@ -3011,7 +3061,7 @@ button.ghost {
 
 .promo-banner {
     background: linear-gradient(135deg, var(--gold), var(--vermillion));
-    color: var(--on-accent);
+    color: #F5EDE0;
     font-weight: 700;
     font-size: 14px;
     border-radius: 6px;
@@ -4452,6 +4502,41 @@ button.ghost {
     color: var(--vermillion);
 }
 
+/* Ala Anki: New (biru) / Learn (merah) / Due (hijau), dipisah biar jelas
+   mana yang belum pernah dipelajari, mana yang lagi diulang karena
+   sempat salah, dan mana yang udah lulus tapi jadwalnya jatuh tempo. */
+.flash-deck-stats {
+    display: flex;
+    gap: 12px;
+}
+
+.fds-item {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    font-size: 12px;
+}
+
+.fds-label {
+    color: var(--ink-soft);
+}
+
+.fds-num {
+    font-weight: 700;
+}
+
+.fds-new {
+    color: var(--indigo);
+}
+
+.fds-learn {
+    color: var(--quiz-wrong);
+}
+
+.fds-due {
+    color: var(--moss);
+}
+
 .flash-deck-arrow {
     color: var(--ink-soft);
     flex-shrink: 0;
@@ -4717,6 +4802,36 @@ button.ghost {
     overflow-wrap: break-word;
 }
 
+/* Ala Anki: New (biru) / Learning (merah) / Review (hijau) — dipasang
+   persis di atas tombol Show Answer / baris rating, ganti "Card X/Y"
+   yang lama biar nggak keliatan "nambah" pas ada kartu yang di-requeue. */
+.flash-queue-counts {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    margin: 0 0 10px;
+}
+
+.flash-queue-counts .fqc-new {
+    color: var(--indigo);
+}
+
+.flash-queue-counts .fqc-learn {
+    color: var(--quiz-wrong);
+}
+
+.flash-queue-counts .fqc-review {
+    color: var(--moss);
+}
+
+.flash-queue-counts .fqc-sep {
+    color: var(--ink-soft);
+    font-weight: 500;
+}
+
 .flash-show-answer-btn {
     display: block;
     width: 100%;
@@ -4731,9 +4846,7 @@ button.ghost {
     margin: 0 0 20px;
     cursor: pointer;
     transition: transform .12s ease, box-shadow .15s ease, opacity .15s ease;
-}
-
-.flash-show-answer-btn:hover {
+}.flash-show-answer-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, .15);
 }
@@ -5536,67 +5649,19 @@ button.ghost {
 
 
 .flash-rate-btn.again .fr-emoji::before {
-    content: "";
-    display: block;
-    width: 1.1em;
-    height: 1.1em;
-    background-color: currentColor;
-    -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%2210%22%2F%3E%3Cpath%20d%3D%22M16%2016s-1.5-2-4-2-4%202-4%202%22%2F%3E%3Cline%20x1%3D%229%22%20y1%3D%229%22%20x2%3D%229.01%22%20y2%3D%229%22%2F%3E%3Cline%20x1%3D%2215%22%20y1%3D%229%22%20x2%3D%2215.01%22%20y2%3D%229%22%2F%3E%3C%2Fsvg%3E");
-    mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%2210%22%2F%3E%3Cpath%20d%3D%22M16%2016s-1.5-2-4-2-4%202-4%202%22%2F%3E%3Cline%20x1%3D%229%22%20y1%3D%229%22%20x2%3D%229.01%22%20y2%3D%229%22%2F%3E%3Cline%20x1%3D%2215%22%20y1%3D%229%22%20x2%3D%2215.01%22%20y2%3D%229%22%2F%3E%3C%2Fsvg%3E");
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-    mask-position: center;
-    -webkit-mask-size: contain;
-    mask-size: contain;
+    content: "😵";
 }
 
 .flash-rate-btn.hard .fr-emoji::before {
-    content: "";
-    display: block;
-    width: 1.1em;
-    height: 1.1em;
-    background-color: currentColor;
-    -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%2210%22%2F%3E%3Cline%20x1%3D%228%22%20y1%3D%2215%22%20x2%3D%2216%22%20y2%3D%2215%22%2F%3E%3Cline%20x1%3D%229%22%20y1%3D%229%22%20x2%3D%229.01%22%20y2%3D%229%22%2F%3E%3Cline%20x1%3D%2215%22%20y1%3D%229%22%20x2%3D%2215.01%22%20y2%3D%229%22%2F%3E%3C%2Fsvg%3E");
-    mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%2210%22%2F%3E%3Cline%20x1%3D%228%22%20y1%3D%2215%22%20x2%3D%2216%22%20y2%3D%2215%22%2F%3E%3Cline%20x1%3D%229%22%20y1%3D%229%22%20x2%3D%229.01%22%20y2%3D%229%22%2F%3E%3Cline%20x1%3D%2215%22%20y1%3D%229%22%20x2%3D%2215.01%22%20y2%3D%229%22%2F%3E%3C%2Fsvg%3E");
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-    mask-position: center;
-    -webkit-mask-size: contain;
-    mask-size: contain;
+    content: "😐";
 }
 
 .flash-rate-btn.good .fr-emoji::before {
-    content: "";
-    display: block;
-    width: 1.1em;
-    height: 1.1em;
-    background-color: currentColor;
-    -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%2210%22%2F%3E%3Cpath%20d%3D%22M8%2014s1.5%202%204%202%204-2%204-2%22%2F%3E%3Cline%20x1%3D%229%22%20y1%3D%229%22%20x2%3D%229.01%22%20y2%3D%229%22%2F%3E%3Cline%20x1%3D%2215%22%20y1%3D%229%22%20x2%3D%2215.01%22%20y2%3D%229%22%2F%3E%3C%2Fsvg%3E");
-    mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%2210%22%2F%3E%3Cpath%20d%3D%22M8%2014s1.5%202%204%202%204-2%204-2%22%2F%3E%3Cline%20x1%3D%229%22%20y1%3D%229%22%20x2%3D%229.01%22%20y2%3D%229%22%2F%3E%3Cline%20x1%3D%2215%22%20y1%3D%229%22%20x2%3D%2215.01%22%20y2%3D%229%22%2F%3E%3C%2Fsvg%3E");
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-    mask-position: center;
-    -webkit-mask-size: contain;
-    mask-size: contain;
+    content: "🙂";
 }
 
 .flash-rate-btn.easy .fr-emoji::before {
-    content: "";
-    display: block;
-    width: 1.1em;
-    height: 1.1em;
-    background-color: currentColor;
-    -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%2210%22%2F%3E%3Cpath%20d%3D%22M7%2013a5%205%200%200%200%2010%200Z%22%2F%3E%3Cline%20x1%3D%229%22%20y1%3D%229%22%20x2%3D%229.01%22%20y2%3D%229%22%2F%3E%3Cline%20x1%3D%2215%22%20y1%3D%229%22%20x2%3D%2215.01%22%20y2%3D%229%22%2F%3E%3C%2Fsvg%3E");
-    mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%2210%22%2F%3E%3Cpath%20d%3D%22M7%2013a5%205%200%200%200%2010%200Z%22%2F%3E%3Cline%20x1%3D%229%22%20y1%3D%229%22%20x2%3D%229.01%22%20y2%3D%229%22%2F%3E%3Cline%20x1%3D%2215%22%20y1%3D%229%22%20x2%3D%2215.01%22%20y2%3D%229%22%2F%3E%3C%2Fsvg%3E");
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-    mask-position: center;
-    -webkit-mask-size: contain;
-    mask-size: contain;
+    content: "😎";
 }
 
 #root {
@@ -5612,22 +5677,6 @@ button.ghost {
     font-size: 22px;
     margin-bottom: 4px;
     line-height: 1;
-}
-
-.flash-rate-btn.again .fr-emoji::before {
-    content: "😵";
-}
-
-.flash-rate-btn.hard .fr-emoji::before {
-    content: "😐";
-}
-
-.flash-rate-btn.good .fr-emoji::before {
-    content: "🙂";
-}
-
-.flash-rate-btn.easy .fr-emoji::before {
-    content: "😎";
 }
 
 .flash-rate-btn .fr-interval {
@@ -5651,4 +5700,97 @@ button.ghost {
     margin-left: 4px;
     display: inline-block;
     vertical-align: middle;
+}
+
+/* ---- Mode Belajar: tombol aksi di bawah daftar ---- */
+.learn-cta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 28px;
+}
+
+.learn-cta-row button {
+    width: 100%;
+}
+
+/* Daftar Kotoba isinya ratusan kartu. content-visibility bikin browser skip
+   layout/paint kartu yang jauh di luar viewport, jadi buka Chapter & scroll
+   tetap enteng. contain-intrinsic-size dipakai biar scrollbar-nya stabil. */
+.vocab-card {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 240px;
+}
+
+/* Semua kartu deck udah dipelajari / belum ada yang jatuh tempo (New+Learn+Due = 0) */
+.flash-deck-caughtup {
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--ink-soft);
+}
+
+/* Catatan kecil waktu "Ulangi Deck" (semua kartu, belum tentu jatuh tempo) */
+.flash-study-ahead-note {
+    font-size: 11.5px;
+    line-height: 1.4;
+    color: var(--ink-soft);
+    text-align: center;
+    margin: 0 0 6px;
+}
+
+/* ---------- Latihan Tipe Soal (section baru, tombol di kanan atas) ---------- */
+#practice-toggle::before {
+    content: "";
+    display: inline-block;
+    width: 19px;
+    height: 19px;
+    vertical-align: -0.15em;
+    background-color: currentColor;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http://www.w3.org/2000/svg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%275%27%20y%3D%274%27%20width%3D%2714%27%20height%3D%2717%27%20rx%3D%272%27/%3E%3Cpath%20d%3D%27M9%204h6v3H9z%27/%3E%3Cpath%20d%3D%27M9%2014l2%202%204-4%27/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http://www.w3.org/2000/svg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%275%27%20y%3D%274%27%20width%3D%2714%27%20height%3D%2717%27%20rx%3D%272%27/%3E%3Cpath%20d%3D%27M9%204h6v3H9z%27/%3E%3Cpath%20d%3D%27M9%2014l2%202%204-4%27/%3E%3C/svg%3E");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    flex-shrink: 0;
+}
+
+.practice-type-card.active {
+    border-color: var(--indigo);
+    box-shadow: 0 0 0 1px var(--indigo) inset;
+}
+
+.practice-count-picker {
+    margin-top: 22px;
+}
+
+.practice-count-input {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+    color: var(--ink);
+    cursor: text;
+    -moz-appearance: textfield;
+}
+
+.practice-count-input::placeholder {
+    color: var(--ink-soft);
+    font-weight: 500;
+}
+
+.practice-count-input::-webkit-outer-spin-button,
+.practice-count-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.practice-count-input:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.practice-script-picker {
+    margin-top: 4px;
 }

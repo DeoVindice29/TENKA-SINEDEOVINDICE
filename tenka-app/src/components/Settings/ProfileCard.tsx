@@ -69,11 +69,13 @@ export default function ProfileCard() {
               value={tempNick}
               maxLength={18}
               autoFocus
+              placeholder={t("profile.nicknamePlaceholder")}
               onChange={(e) => setTempNick(e.target.value)}
               onBlur={saveNickname}
               onKeyDown={(e) => {
                 if (e.key === "Enter") saveNickname();
                 if (e.key === "Escape") {
+                  e.stopPropagation();
                   setTempNick(nickname);
                   setEditing(false);
                 }

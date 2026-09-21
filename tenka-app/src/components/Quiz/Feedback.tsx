@@ -1,5 +1,6 @@
 import { useLang } from "@/i18n/LangContext";
 import { useQuiz } from "@/state/QuizContext";
+import { SCRIPTS } from "@/data/scripts";
 
 export default function Feedback() {
   const { t } = useLang();
@@ -32,7 +33,21 @@ export default function Feedback() {
   const type = current[2];
   let extraLabel: string | null = null;
   if (extraValue) {
-    if (type === "romaji") {
+    // label info tambahan per tipe soal yang didefinisikan script-nya
+    // (Bunpō: "meaning" → contoh kalimat, "kalimat" → fungsi pola)
+    const scriptCfg = state.script
+      ? (SCRIPTS[state.script as keyof typeof SCRIPTS] as unknown as {
+          extraLabelKeys?: Record<string, string>;
+        })
+      : undefined;
+    const scriptLabelKey = scriptCfg?.extraLabelKeys?.[type];
+
+    if (current[4]) {
+      // soal Penaklukan ala JLPT: key label ikut dibawa di soalnya
+      extraLabel = t(current[4], { value: extraValue });
+    } else if (scriptLabelKey) {
+      extraLabel = t(scriptLabelKey, { value: extraValue });
+    } else if (type === "romaji") {
       extraLabel = t("quiz.meaningLabel", { value: extraValue });
     } else if (type === "meaning") {
       extraLabel = t("quiz.romajiLabel", { value: extraValue });
@@ -57,7 +72,15 @@ export default function Feedback() {
         </div>
         {extraLabel && <div className="feedback-extra">{extraLabel}</div>}
       </div>
-      <button className="ghost" type="button" onClick={handleNext}>
+      <button
+        id="btn-next"
+        className="ghost"
+        type="button"
+        // fokus otomatis ke Next supaya Enter/Space langsung lanjut. Di mode
+        // ketik (hard) fokus dibiarkan di input biar keyboard HP tidak turun.
+        autoFocus={state.difficulty !== "hard"}
+        onClick={handleNext}
+      >
         {conquestFailed || speedrunFailed || isLast
           ? t("quiz.seeResults")
           : t("quiz.next")}

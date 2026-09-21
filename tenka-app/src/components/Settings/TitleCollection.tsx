@@ -3,7 +3,7 @@ import { CONQUEST_TITLES, getConqueredTitles } from "@/data/titles";
 import { useConquest } from "@/state/ConquestContext";
 
 export default function TitleCollection() {
-  const { lang } = useLang();
+  const { t } = useLang();
   const { reloadFlag } = useConquest();
   void reloadFlag;
 
@@ -12,14 +12,10 @@ export default function TitleCollection() {
   return (
     <div className="settings-group">
       <span className="settings-label">
-        {lang === "id"
-          ? "Koleksi Title Penaklukkan"
-          : "Conquest Title Collection"}
+        {t("titles.heading")}
       </span>
       <p className="title-collection-hint">
-        {lang === "id"
-          ? "Selesaikan setiap penaklukan ⚔️ untuk meraih gelar Penakluk!"
-          : "Complete every conquest ⚔️ to claim the title of Conqueror!"}
+        {t("titles.hint")}
       </p>
       <div className="title-collection">
         {Object.keys(CONQUEST_TITLES).map((key) => {

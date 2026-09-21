@@ -1,5 +1,6 @@
 import { useLang } from "@/i18n/LangContext";
 import { useUI } from "@/state/UIContext";
+import { scrollToId } from "@/utils/scrollTo";
 
 type Difficulty = "easy" | "medium" | "hard";
 
@@ -27,7 +28,7 @@ export default function DifficultyPicker() {
   ];
 
   return (
-    <div className="difficulty-picker">
+    <div className="difficulty-picker" id="difficulty-picker">
       <span className="settings-label">{t("quiz.difficultyLabel")}</span>
       <div className="difficulty-options">
         {options.map((opt) => (
@@ -38,7 +39,10 @@ export default function DifficultyPicker() {
               selectedDifficulty === opt.key ? "active" : ""
             }`}
             disabled={opt.disabled}
-            onClick={() => setSelectedDifficulty(opt.key)}
+            onClick={() => {
+              setSelectedDifficulty(opt.key);
+              scrollToId("timer-picker");
+            }}
           >
             {opt.label}
             <span className="difficulty-sub">{opt.sub}</span>

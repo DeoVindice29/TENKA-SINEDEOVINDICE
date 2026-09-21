@@ -5,6 +5,12 @@ import {
   useCallback,
   type ReactNode,
 } from "react";
+import {
+  classifyCard,
+  isCardReady,
+  type FlashRating,
+} from "./flashCategory";
+import { capLearnDue, nextInterval } from "./flashSchedule";
 
 const FLASH_SRS_KEY = "tebakAksara_flashSRS_v1";
 const FLASH_CUSTOM_DECKS_KEY = "tebakAksara_flashCustomDecks_v1";
@@ -16,7 +22,7 @@ export type FlashCardState = {
   due: number;
   reps: number;
   lapses: number;
-  lastRating?: string;
+  lastRating?: FlashRating;
   lastReviewed?: number;
 };
 
@@ -30,7 +36,11 @@ export type CustomDeck = {
 
 function getSRS(): Record<string, FlashCardState> {
   try {
-    return JSON.parse(localStorage.getItem(FLASH_SRS_KEY) || "{}");
+    const all: Record<string, FlashCardState> = JSON.parse(
+      localStorage.getItem(FLASH_SRS_KEY) || "{}",
+    );
+    Object.values(all).forEach(capLearnDue);
+    return all;
   } catch {
     return {};
   }
@@ -60,8 +70,13 @@ function saveCustomDecks(decks: CustomDeck[]): boolean {
 
 type FlashContextValue = {
   getCardState: (id: string) => FlashCardState;
-  rateCard: (id: string, rating: "again" | "hard" | "good" | "easy") => void;
-  dueSummary: (ids: string[]) => { total: number; due: number };
+  rateCard: (id: string, rating: FlashRating) => void;
+  dueSummary: (ids: string[]) => {
+    total: number;
+    fresh: number;
+    learning: number;
+    due: number;
+  };
   getCustomDecks: () => CustomDeck[];
   addCustomDeck: (name: string, cards: CustomDeckCard[]) => string | null;
   deleteCustomDeck: (id: string) => void;
@@ -80,7 +95,7 @@ export function FlashProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const rateCard = useCallback(
-    (id: string, rating: "again" | "hard" | "good" | "easy") => {
+    (id: string, rating: FlashRating) => {
       const all = getSRS();
       const st = all[id] || {
         ef: 2.5,
@@ -91,32 +106,24 @@ export function FlashProvider({ children }: { children: ReactNode }) {
       };
       const now = Date.now();
 
+      // interval dihitung dari state SEBELUM diupdate (ef/reps lama)
+      const interval = nextInterval(st, rating);
+
       if (rating === "again") {
         st.lapses = (st.lapses || 0) + 1;
         st.reps = 0;
-        st.interval = 0;
         st.ef = Math.max(1.3, st.ef - 0.2);
-        st.due = now;
       } else if (rating === "hard") {
         st.ef = Math.max(1.3, st.ef - 0.15);
-        st.interval =
-          st.reps === 0 ? 1 : Math.max(1, Math.round(st.interval * 1.2));
         st.reps += 1;
-        st.due = now + st.interval * FLASH_DAY_MS;
       } else if (rating === "good") {
-        st.interval =
-          st.reps === 0 ? 1 : Math.max(1, Math.round(st.interval * st.ef));
         st.reps += 1;
-        st.due = now + st.interval * FLASH_DAY_MS;
-      } else if (rating === "easy") {
+      } else {
         st.ef = Math.min(3.2, st.ef + 0.15);
-        st.interval =
-          st.reps === 0
-            ? 4
-            : Math.max(1, Math.round(st.interval * st.ef * 1.3));
         st.reps += 1;
-        st.due = now + st.interval * FLASH_DAY_MS;
       }
+      st.interval = interval;
+      st.due = now + interval * FLASH_DAY_MS;
       st.lastRating = rating;
       st.lastReviewed = now;
       all[id] = st;
@@ -128,13 +135,24 @@ export function FlashProvider({ children }: { children: ReactNode }) {
 
   const dueSummary = useCallback((ids: string[]) => {
     const all = getSRS();
+    // Kategori dari rating TERAKHIR tiap kartu:
+    //   New   = belum pernah disentuh
+    //   Learn = terakhir dijawab Again / Hard / Good
+    //   Due   = terakhir dijawab Easy
+    // Tapi cuma kartu yang SIAP MUNCUL (waktunya udah lewat) yang dihitung,
+    // sama persis kayak antrean di dalam sesi — jadi angka luar = angka dalam.
     const now = Date.now();
+    let fresh = 0;
+    let learning = 0;
     let due = 0;
     ids.forEach((id) => {
-      const st = all[id];
-      if (!st || st.due <= now) due++;
+      if (!isCardReady(all[id], now)) return;
+      const cat = classifyCard(all[id]);
+      if (cat === "new") fresh++;
+      else if (cat === "learn") learning++;
+      else if (cat === "due") due++;
     });
-    return { total: ids.length, due };
+    return { total: ids.length, fresh, learning, due };
   }, []);
 
   const addCustomDeck = useCallback(

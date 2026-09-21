@@ -11,12 +11,19 @@ export type Screen =
   | "learn"
   | "flashdeck"
   | "flashcard"
+  | "practice"
   | "quiz"
   | "conquest-story"
   | "match"
   | "results";
 
 export type ScriptKey = "hiragana" | "katakana" | "kotoba" | "bunpo" | "kanji";
+
+export type PendingFlashDeck = {
+  kind: "kotoba" | "kanji";
+  tierKey: string;
+  label: string;
+};
 
 export type Difficulty = "easy" | "medium" | "hard";
 export type RangeMode = "manual" | "random";
@@ -58,6 +65,14 @@ type UIContextValue = {
 
   matchMode: string | null;
   setMatchMode: (m: string | null) => void;
+
+  /**
+   * Deck yang dipilih dari luar layar Flashcard (mis. tombol "Study This as
+   * Flashcards" di Mode Belajar) — FlashcardScreen langsung membukanya lalu
+   * mengosongkannya lagi.
+   */
+  pendingFlashDeck: PendingFlashDeck | null;
+  setPendingFlashDeck: (d: PendingFlashDeck | null) => void;
 };
 
 const UIContext = createContext<UIContextValue | null>(null);
@@ -76,6 +91,8 @@ export function UIProvider({ children }: { children: ReactNode }) {
   const [quizVariant, setQuizVariant] = useState<string>("meaning");
   const [matchScript, setMatchScript] = useState<ScriptKey>("hiragana");
   const [matchMode, setMatchMode] = useState<string | null>(null);
+  const [pendingFlashDeck, setPendingFlashDeck] =
+    useState<PendingFlashDeck | null>(null);
 
   const goBack = useCallback(() => setScreen("start"), []);
 
@@ -107,6 +124,8 @@ export function UIProvider({ children }: { children: ReactNode }) {
         setMatchScript,
         matchMode,
         setMatchMode,
+        pendingFlashDeck,
+        setPendingFlashDeck,
       }}
     >
       {children}

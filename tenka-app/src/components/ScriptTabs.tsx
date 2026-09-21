@@ -10,12 +10,26 @@ const SCRIPTS: { key: ScriptKey; glyph: string; label: string }[] = [
 ];
 
 export default function ScriptTabs() {
-  const { currentScript, setCurrentScript, setSelectedMode } = useUI();
+  const {
+    currentScript,
+    setCurrentScript,
+    setSelectedMode,
+    setQuizVariant,
+    selectedDifficulty,
+    setSelectedDifficulty,
+  } = useUI();
   const earned = getConqueredTitles();
 
   const handleClick = (key: ScriptKey) => {
     setCurrentScript(key);
     setSelectedMode(null); // reset mode saat ganti script
+    // tipe soal antar-script tidak sama (Romaji vs Fungsi/Partikel), jadi
+    // kembali ke default supaya tidak nyangkut dari script sebelumnya
+    setQuizVariant("meaning");
+    // Hard (ketik sendiri) cuma ada di Hiragana/Katakana
+    if (selectedDifficulty === "hard" && key !== "hiragana" && key !== "katakana") {
+      setSelectedDifficulty("easy");
+    }
   };
 
   return (

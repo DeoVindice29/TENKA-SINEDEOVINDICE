@@ -1,8 +1,18 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { useLang } from "@/i18n/LangContext";
 import { useFlash } from "@/state/FlashContext";
+import {
+  classifyCard,
+  isCardReady,
+  type FlashRating,
+} from "@/state/flashCategory";
+import { LEARN_STEP_MINUTES, nextInterval } from "@/state/flashSchedule";
 import { useSpeech } from "@/hooks/useSpeech";
-import { buildDeckCardDescriptors, type FlashDeckRef } from "@/data/flashDecks";
+import {
+  buildDeckCardDescriptors,
+  type FlashCardDescriptor,
+  type FlashDeckRef,
+} from "@/data/flashDecks";
 import { KOTOBA_N5_CHAPTERS, KOTOBA_TIER_KEYS } from "@/data/kotobaN5";
 import { KANJI_N5_CHAPTERS, KANJI_TIER_KEYS } from "@/data/kanjiN5";
 
@@ -27,6 +37,19 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
+// Kartu yang lagi "ditahan" (Hard 1 menit / Good 5 menit) sebelum masuk lagi
+// ke antrean Learn.
+type WaitingCard = { card: FlashCardDescriptor; at: number };
+
+// Sisipin kartu di posisi ACAK di sisa antrean (mulai dari index `base`).
+function insertRandom<T>(arr: T[], item: T, base: number): T[] {
+  const start = Math.min(Math.max(base, 0), arr.length);
+  const pos = start + Math.floor(Math.random() * (arr.length - start + 1));
+  const next = [...arr];
+  next.splice(pos, 0, item);
+  return next;
+}
+
 function tfLocal(
   entry: { en: string; id: string } | string | null | undefined,
   lang: "en" | "id" = "en",
@@ -44,35 +67,6 @@ function escapeHtml(s: string): string {
         c
       ]!,
   );
-}
-
-type SrsState = {
-  ef: number;
-  interval: number;
-  reps: number;
-  lapses: number;
-};
-
-function predictInterval(
-  st: SrsState,
-  rating: "again" | "hard" | "good" | "easy",
-): number {
-  const ef = st.ef || 2.5;
-  const reps = st.reps || 0;
-  const interval = st.interval || 0;
-
-  if (rating === "again") return 10 / (60 * 24);
-  if (rating === "hard") {
-    if (reps === 0) return 6 / (60 * 24);
-    return Math.max(1, Math.round(interval * 1.2));
-  }
-  if (rating === "good") {
-    if (reps === 0) return 10 / (60 * 24);
-    if (reps === 1) return 1;
-    return Math.max(1, Math.round(interval * ef));
-  }
-  if (reps === 0) return 4;
-  return Math.max(1, Math.round(interval * ef * 1.3));
 }
 
 function formatInterval(days: number): string {
@@ -221,7 +215,7 @@ export default function FlashcardStudy({
   onBack,
 }: FlashcardStudyProps) {
   const { t, lang } = useLang();
-  const { rateCard, getCardState } = useFlash();
+  const { rateCard, getCardState, reloadFlag } = useFlash();
   const { speak } = useSpeech();
 
   const allCards = useMemo(() => {
@@ -229,17 +223,19 @@ export default function FlashcardStudy({
   }, [deckRef]);
 
   const [queue, setQueue] = useState(() => {
+    // Cuma kartu yang siap muncul (sama kayak angka di deck picker).
+    // Kalau belum ada yang siap, antrean kosong -> langsung layar "selesai".
     const now = Date.now();
-    const due = allCards.filter((c) => {
-      const st = getCardState(c.id);
-      return !st.due || st.due <= now;
-    });
-    return shuffle(due.length > 0 ? due : allCards);
+    return shuffle(allCards.filter((c) => isCardReady(getCardState(c.id), now)));
   });
   const [idx, setIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [ratedCount, setRatedCount] = useState(0);
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState(queue.length === 0);
+  // true kalau lagi "Ulangi Deck" (semua kartu, termasuk yang belum jatuh tempo)
+  const [studyAhead, setStudyAhead] = useState(false);
+  const [waiting, setWaiting] = useState<WaitingCard[]>([]);
+  const [nowTs, setNowTs] = useState(() => Date.now());
 
   const total = queue.length;
   const current = queue[idx];
@@ -261,14 +257,35 @@ export default function FlashcardStudy({
   const srs = current ? getCardState(current.id) : null;
 
   const intervals = useMemo(() => {
-    if (!srs) return { again: "10m", hard: "10m", good: "10m", easy: "4d" };
+    const fmt = (d: number) => (d === 0 ? t("flash.intervalNow") : formatInterval(d));
+    if (!srs)
+      return { again: fmt(0), hard: "1m", good: "5m", easy: "1d" };
     return {
-      again: formatInterval(predictInterval(srs, "again")),
-      hard: formatInterval(predictInterval(srs, "hard")),
-      good: formatInterval(predictInterval(srs, "good")),
-      easy: formatInterval(predictInterval(srs, "easy")),
+      again: fmt(nextInterval(srs, "again")),
+      hard: fmt(nextInterval(srs, "hard")),
+      good: fmt(nextInterval(srs, "good")),
+      easy: fmt(nextInterval(srs, "easy")),
     };
-  }, [srs]);
+  }, [srs, t]);
+
+  // 3 angka sisa antrean: New (belum disentuh) + Learn (terakhir Again/Hard/
+  // Good) + Due (terakhir Easy). Kartu yang lagi ditahan (Hard/Good) tetap
+  // dihitung Learn karena masih harus dikerjain di sesi ini.
+  const queueCounts = useMemo(() => {
+    const remaining = [...queue.slice(idx), ...waiting.map((w) => w.card)];
+    let fresh = 0;
+    let learning = 0;
+    let review = 0;
+    remaining.forEach((c) => {
+      const cat = classifyCard(getCardState(c.id));
+      if (cat === "new") fresh++;
+      else if (cat === "learn") learning++;
+      else if (cat === "due") review++;
+    });
+    return { fresh, learning, review };
+    // reloadFlag: kategori berubah tiap kartu dirating (state ada di localStorage)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [queue, idx, waiting, getCardState, reloadFlag]);
 
   // Reset scroll tiap ganti kartu
   useEffect(() => {
@@ -293,28 +310,72 @@ export default function FlashcardStudy({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flipped, current?.id]);
 
+  // Lepas kartu yang udah selesai ditahan: masuk ke posisi ACAK di sisa antrean.
+  useEffect(() => {
+    if (done || waiting.length === 0) return;
+    const tick = () => {
+      const t0 = Date.now();
+      setNowTs(t0);
+      const ready = waiting.filter((w) => w.at <= t0);
+      if (ready.length === 0) return;
+      setWaiting((prev) => prev.filter((w) => w.at > t0));
+      setQueue((prev) => {
+        let next = prev;
+        const base = idx < prev.length ? idx + 1 : prev.length;
+        ready.forEach((w) => {
+          if (next.slice(base).some((c) => c.id === w.card.id)) return;
+          next = insertRandom(next, w.card, base);
+        });
+        return next;
+      });
+    };
+    tick();
+    const id = window.setInterval(tick, 1000);
+    return () => window.clearInterval(id);
+  }, [waiting, idx, done, queue.length]);
+
+  const skipWait = () => {
+    if (waiting.length === 0) return;
+    const first = waiting.reduce((a, b) => (a.at <= b.at ? a : b));
+    setWaiting((prev) => prev.filter((w) => w !== first));
+    setQueue((prev) =>
+      insertRandom(prev, first.card, idx < prev.length ? idx + 1 : prev.length),
+    );
+  };
+
   const handleRating = useCallback(
-    (rating: "again" | "hard" | "good" | "easy") => {
+    (rating: FlashRating) => {
       if (!current) return;
       rateCard(current.id, rating);
       setRatedCount((n) => n + 1);
 
       let nextQueue = queue;
+      let nextWaiting = waiting;
       if (rating === "again") {
-        nextQueue = [...queue];
-        const reinsertAt = Math.min(nextQueue.length, idx + 4);
-        nextQueue.splice(reinsertAt, 0, current);
+        // Again: langsung masuk antrean Learn, posisi acak
+        nextQueue = insertRandom(queue, current, idx + 1);
         setQueue(nextQueue);
+      } else if (rating === "hard" || rating === "good") {
+        // Hard 1 menit / Good 5 menit dulu, baru masuk antrean Learn
+        nextWaiting = [
+          ...waiting,
+          {
+            card: current,
+            at: Date.now() + LEARN_STEP_MINUTES[rating] * 60_000,
+          },
+        ];
+        setWaiting(nextWaiting);
       }
 
-      if (idx + 1 >= nextQueue.length) {
+      if (idx + 1 >= nextQueue.length && nextWaiting.length === 0) {
         setDone(true);
       } else {
+        // kalau antrean habis tapi masih ada kartu ditahan -> layar "menunggu"
         setIdx((i) => i + 1);
         setFlipped(false);
       }
     },
-    [current, queue, idx, rateCard],
+    [current, queue, waiting, idx, rateCard],
   );
 
   const handleRestart = () => {
@@ -322,12 +383,14 @@ export default function FlashcardStudy({
     setIdx(0);
     setFlipped(false);
     setRatedCount(0);
-    setDone(false);
+    setWaiting([]);
+    setDone(allCards.length === 0);
+    setStudyAhead(true);
   };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (done) return;
+      if (done || !current) return;
 
       if (e.key === " " || e.key === "Enter") {
         e.preventDefault();
@@ -344,7 +407,7 @@ export default function FlashcardStudy({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [flipped, done, handleRating]);
+  }, [flipped, done, current, handleRating]);
 
   const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement;
@@ -378,9 +441,13 @@ export default function FlashcardStudy({
           </button>
         </div>
         <div className="flash-done">
-          <p className="flash-done-title">{t("flash.doneTitle")}</p>
+          <p className="flash-done-title">
+            {ratedCount === 0 ? t("flash.caughtUpTitle") : t("flash.doneTitle")}
+          </p>
           <p className="flash-done-sub">
-            {t("flash.doneSub", { count: ratedCount, label: deckLabel })}
+            {ratedCount === 0
+              ? t("flash.caughtUpSub", { label: deckLabel })
+              : t("flash.doneSub", { count: ratedCount, label: deckLabel })}
           </p>
           <button className="primary" type="button" onClick={handleRestart}>
             {t("flash.reviewAgain")}
@@ -392,6 +459,34 @@ export default function FlashcardStudy({
             onClick={onBack}
           >
             {t("flash.chooseAnother")}
+          </button>
+        </div>
+      </>
+    );
+  }
+
+  // Antrean habis tapi masih ada kartu yang ditahan (Hard/Good) -> nunggu
+  if (!current) {
+    const nextAt = waiting.length
+      ? Math.min(...waiting.map((w) => w.at))
+      : nowTs;
+    const secs = Math.max(0, Math.ceil((nextAt - nowTs) / 1000));
+    const time = `${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}`;
+    return (
+      <>
+        <div className="quiz-back-row">
+          <button className="quiz-back" type="button" onClick={onBack}>
+            {t("common.back")}
+          </button>
+          <button className="quiz-back" type="button" onClick={handleRestart}>
+            {t("flash.restart")}
+          </button>
+        </div>
+        <div className="flash-done">
+          <p className="flash-done-title">{t("flash.waitingTitle")}</p>
+          <p className="flash-done-sub">{t("flash.waitingSub", { time })}</p>
+          <button className="primary" type="button" onClick={skipWait}>
+            {t("flash.waitingSkip")}
           </button>
         </div>
       </>
@@ -421,11 +516,7 @@ export default function FlashcardStudy({
 
       <div className="quiz-top">
         <div className="flash-progress">
-          {t("flash.progress", {
-            current: idx + 1,
-            total,
-            label: deckLabel,
-          })}
+          {t("flash.progressLabel", { label: deckLabel })}
         </div>
       </div>
 
@@ -455,6 +546,18 @@ export default function FlashcardStudy({
             />
           </div>
         </div>
+      </div>
+
+      {studyAhead && (
+        <p className="flash-study-ahead-note">{t("flash.studyAheadNote")}</p>
+      )}
+
+      <div className="flash-queue-counts">
+        <span className="fqc-new">{queueCounts.fresh}</span>
+        <span className="fqc-sep">+</span>
+        <span className="fqc-learn">{queueCounts.learning}</span>
+        <span className="fqc-sep">+</span>
+        <span className="fqc-review">{queueCounts.review}</span>
       </div>
 
       {!flipped ? (

@@ -1,5 +1,6 @@
 import { useLang } from "@/i18n/LangContext";
 import { useUI } from "@/state/UIContext";
+import { scrollToId } from "@/utils/scrollTo";
 
 export default function TimerPicker() {
   const { t } = useLang();
@@ -13,7 +14,7 @@ export default function TimerPicker() {
   ];
 
   return (
-    <div className="timer-picker">
+    <div className="timer-picker" id="timer-picker">
       <span className="settings-label">{t("quiz.timerLabel")}</span>
       <div className="timer-options">
         {options.map((opt) => (
@@ -23,7 +24,13 @@ export default function TimerPicker() {
             className={`timer-btn ${
               selectedTimerSeconds === opt.value ? "active" : ""
             }`}
-            onClick={() => setSelectedTimerSeconds(opt.value)}
+            onClick={() => {
+              setSelectedTimerSeconds(opt.value);
+              // range-picker bisa gak muncul (total soal 0) → fallback ke tombol start
+              scrollToId(
+                document.getElementById("range-picker") ? "range-picker" : "btn-start",
+              );
+            }}
           >
             {opt.label}
           </button>

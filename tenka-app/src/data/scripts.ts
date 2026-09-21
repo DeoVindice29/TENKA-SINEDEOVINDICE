@@ -72,6 +72,9 @@ import {
   BUNPO_N5_LEVEL_META,
 } from "./bunpoN5";
 
+// Total kanji dihitung dari datanya, dipakai di deskripsi kartu "All Mixed".
+const KANJI_N5_TOTAL = KANJI_N5_CHAPTERS.reduce((sum, c) => sum + c.length, 0);
+
 export const SCRIPTS = {
   hiragana: {
     key: "hiragana",
@@ -417,8 +420,8 @@ export const SCRIPTS = {
         },
         sample: "一 二 十",
         desc: {
-          en: "14 kanji: numbers and counting.",
-          id: "14 kanji: angka dan hitungan.",
+          en: `${KANJI_N5_CH1.length} kanji: numbers and counting.`,
+          id: `${KANJI_N5_CH1.length} kanji: angka dan hitungan.`,
         },
       },
       tier2: {
@@ -428,8 +431,8 @@ export const SCRIPTS = {
         },
         sample: "日 山 天",
         desc: {
-          en: "11 kanji: nature and the elements.",
-          id: "11 kanji: alam dan unsur-unsurnya.",
+          en: `${KANJI_N5_CH2.length} kanji: nature and the elements.`,
+          id: `${KANJI_N5_CH2.length} kanji: alam dan unsur-unsurnya.`,
         },
       },
       tier3: {
@@ -439,8 +442,8 @@ export const SCRIPTS = {
         },
         sample: "年 朝 夜",
         desc: {
-          en: "11 kanji: time of day and calendar words.",
-          id: "11 kanji: waktu dalam sehari dan kalender.",
+          en: `${KANJI_N5_CH3.length} kanji: time of day and calendar words.`,
+          id: `${KANJI_N5_CH3.length} kanji: waktu dalam sehari dan kalender.`,
         },
       },
       tier4: {
@@ -450,8 +453,8 @@ export const SCRIPTS = {
         },
         sample: "上 東 西",
         desc: {
-          en: "10 kanji: directions and positions.",
-          id: "10 kanji: arah dan posisi.",
+          en: `${KANJI_N5_CH4.length} kanji: directions and positions.`,
+          id: `${KANJI_N5_CH4.length} kanji: arah dan posisi.`,
         },
       },
       tier5: {
@@ -461,8 +464,8 @@ export const SCRIPTS = {
         },
         sample: "人 父 友",
         desc: {
-          en: "12 kanji: people, family, and body parts.",
-          id: "12 kanji: orang, keluarga, dan anggota tubuh.",
+          en: `${KANJI_N5_CH5.length} kanji: people, family, and body parts.`,
+          id: `${KANJI_N5_CH5.length} kanji: orang, keluarga, dan anggota tubuh.`,
         },
       },
       tier6: {
@@ -472,8 +475,8 @@ export const SCRIPTS = {
         },
         sample: "大 高 青",
         desc: {
-          en: "12 kanji: traits, sizes, and colors.",
-          id: "12 kanji: sifat, ukuran, dan warna.",
+          en: `${KANJI_N5_CH6.length} kanji: traits, sizes, and colors.`,
+          id: `${KANJI_N5_CH6.length} kanji: sifat, ukuran, dan warna.`,
         },
       },
       tier7: {
@@ -483,8 +486,8 @@ export const SCRIPTS = {
         },
         sample: "国 駅 空",
         desc: {
-          en: "11 kanji: places, buildings, and transportation.",
-          id: "11 kanji: tempat, bangunan, dan transportasi.",
+          en: `${KANJI_N5_CH7.length} kanji: places, buildings, and transportation.`,
+          id: `${KANJI_N5_CH7.length} kanji: tempat, bangunan, dan transportasi.`,
         },
       },
       tier8: {
@@ -494,8 +497,8 @@ export const SCRIPTS = {
         },
         sample: "行 見 読",
         desc: {
-          en: "10 kanji: basic everyday verbs.",
-          id: "10 kanji: kata kerja dasar sehari-hari.",
+          en: `${KANJI_N5_CH8.length} kanji: basic everyday verbs.`,
+          id: `${KANJI_N5_CH8.length} kanji: kata kerja dasar sehari-hari.`,
         },
       },
       tier9: {
@@ -505,16 +508,16 @@ export const SCRIPTS = {
         },
         sample: "買 学 花",
         desc: {
-          en: "9 kanji: everyday life concepts and more verbs.",
-          id: "9 kanji: konsep kehidupan sehari-hari dan kata kerja tambahan.",
+          en: `${KANJI_N5_CH9.length} kanji: everyday life concepts and more verbs.`,
+          id: `${KANJI_N5_CH9.length} kanji: konsep kehidupan sehari-hari dan kata kerja tambahan.`,
         },
       },
       all: {
         title: { en: "All Mixed", id: "seluruh Campur" },
         sample: "一 学 会",
         desc: {
-          en: "All 100 N5 kanji shuffled into one Chapter.",
-          id: "Seluruh 100 kanji N5 diacak menjadi satu Chapter.",
+          en: `All ${KANJI_N5_TOTAL} N5 kanji shuffled into one Chapter.`,
+          id: `Seluruh ${KANJI_N5_TOTAL} kanji N5 diacak menjadi satu Chapter.`,
         },
       },
     },
@@ -526,8 +529,8 @@ export const SCRIPTS = {
           id: "Chapter 1 — Angka & Jumlah",
         },
         desc: {
-          en: "14 kanji: numbers and counting.",
-          id: "14 kanji: angka dan hitungan.",
+          en: `${KANJI_N5_CH1.length} kanji: numbers and counting.`,
+          id: `${KANJI_N5_CH1.length} kanji: angka dan hitungan.`,
         },
         items: KANJI_N5_CH1,
       },
@@ -538,8 +541,8 @@ export const SCRIPTS = {
           id: "Chapter 2 — Alam, Elemen & Cuaca",
         },
         desc: {
-          en: "11 kanji: nature and the elements.",
-          id: "11 kanji: alam dan unsur-unsurnya.",
+          en: `${KANJI_N5_CH2.length} kanji: nature and the elements.`,
+          id: `${KANJI_N5_CH2.length} kanji: alam dan unsur-unsurnya.`,
         },
         items: KANJI_N5_CH2,
       },
@@ -550,8 +553,8 @@ export const SCRIPTS = {
           id: "Chapter 3 — Waktu & Musim",
         },
         desc: {
-          en: "11 kanji: time of day and calendar words.",
-          id: "11 kanji: waktu dalam sehari dan kalender.",
+          en: `${KANJI_N5_CH3.length} kanji: time of day and calendar words.`,
+          id: `${KANJI_N5_CH3.length} kanji: waktu dalam sehari dan kalender.`,
         },
         items: KANJI_N5_CH3,
       },
@@ -562,8 +565,8 @@ export const SCRIPTS = {
           id: "Chapter 4 — Arah & Posisi",
         },
         desc: {
-          en: "10 kanji: directions and positions.",
-          id: "10 kanji: arah dan posisi.",
+          en: `${KANJI_N5_CH4.length} kanji: directions and positions.`,
+          id: `${KANJI_N5_CH4.length} kanji: arah dan posisi.`,
         },
         items: KANJI_N5_CH4,
       },
@@ -574,8 +577,8 @@ export const SCRIPTS = {
           id: "Chapter 5 — Manusia, Keluarga & Hubungan",
         },
         desc: {
-          en: "12 kanji: people, family, and body parts.",
-          id: "12 kanji: orang, keluarga, dan anggota tubuh.",
+          en: `${KANJI_N5_CH5.length} kanji: people, family, and body parts.`,
+          id: `${KANJI_N5_CH5.length} kanji: orang, keluarga, dan anggota tubuh.`,
         },
         items: KANJI_N5_CH5,
       },
@@ -586,8 +589,8 @@ export const SCRIPTS = {
           id: "Chapter 6 — Sifat, Ukuran & Warna",
         },
         desc: {
-          en: "12 kanji: traits, sizes, and colors.",
-          id: "12 kanji: sifat, ukuran, dan warna.",
+          en: `${KANJI_N5_CH6.length} kanji: traits, sizes, and colors.`,
+          id: `${KANJI_N5_CH6.length} kanji: sifat, ukuran, dan warna.`,
         },
         items: KANJI_N5_CH6,
       },
@@ -598,8 +601,8 @@ export const SCRIPTS = {
           id: "Chapter 7 — Tempat, Bangunan & Transportasi",
         },
         desc: {
-          en: "11 kanji: places, buildings, and transportation.",
-          id: "11 kanji: tempat, bangunan, dan transportasi.",
+          en: `${KANJI_N5_CH7.length} kanji: places, buildings, and transportation.`,
+          id: `${KANJI_N5_CH7.length} kanji: tempat, bangunan, dan transportasi.`,
         },
         items: KANJI_N5_CH7,
       },
@@ -610,8 +613,8 @@ export const SCRIPTS = {
           id: "Chapter 8 — Kata Kerja Dasar & Aktivitas",
         },
         desc: {
-          en: "10 kanji: basic everyday verbs.",
-          id: "10 kanji: kata kerja dasar sehari-hari.",
+          en: `${KANJI_N5_CH8.length} kanji: basic everyday verbs.`,
+          id: `${KANJI_N5_CH8.length} kanji: kata kerja dasar sehari-hari.`,
         },
         items: KANJI_N5_CH8,
       },
@@ -622,8 +625,8 @@ export const SCRIPTS = {
           id: "Chapter 9 — Konsep Kehidupan & Kata Kerja Tambahan",
         },
         desc: {
-          en: "9 kanji: everyday life concepts and more verbs.",
-          id: "9 kanji: konsep kehidupan sehari-hari dan kata kerja tambahan.",
+          en: `${KANJI_N5_CH9.length} kanji: everyday life concepts and more verbs.`,
+          id: `${KANJI_N5_CH9.length} kanji: konsep kehidupan sehari-hari dan kata kerja tambahan.`,
         },
         items: KANJI_N5_CH9,
       },
@@ -755,6 +758,8 @@ Object.values(SCRIPTS).forEach((s) => {
     tierKeys?: readonly string[];
     data: Record<string, readonly unknown[]>;
     dataRomaji?: Record<string, readonly unknown[]>;
+    dataKalimat?: Record<string, readonly unknown[]>;
+    dataKalimatBlank?: Record<string, readonly unknown[]>;
   };
   const tks = anyS.tierKeys || ["tier1", "tier2", "tier3"];
 
@@ -764,5 +769,15 @@ Object.values(SCRIPTS).forEach((s) => {
   anyS.data.all = cat(anyS.data as Record<string, unknown[]>);
   if (anyS.dataRomaji) {
     anyS.dataRomaji.all = cat(anyS.dataRomaji as Record<string, unknown[]>);
+  }
+  // Bunpō: pool "all" untuk soal Kalimat harus sejajar (index sama) dengan
+  // data.all supaya rentang soal & pencocokan pola tetap benar.
+  if (anyS.dataKalimat) {
+    anyS.dataKalimat.all = cat(anyS.dataKalimat as Record<string, unknown[]>);
+  }
+  if (anyS.dataKalimatBlank) {
+    anyS.dataKalimatBlank.all = cat(
+      anyS.dataKalimatBlank as Record<string, unknown[]>,
+    );
   }
 });

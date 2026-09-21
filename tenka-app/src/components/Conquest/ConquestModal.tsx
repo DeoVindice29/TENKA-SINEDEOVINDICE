@@ -1,6 +1,14 @@
+import { useEffect, useRef } from "react";
 import { useLang } from "@/i18n/LangContext";
 import { SCRIPTS } from "@/data/scripts";
 import { useConquest } from "@/state/ConquestContext";
+import { supportsSpeedrun } from "@/utils/speedrun";
+import {
+  isJlptScript,
+  JLPT_PASS_PERCENT,
+  jlptTierCount,
+  jlptQuestionsPerTier,
+} from "@/data/jlptConquest";
 
 type ConquestModalProps = {
   open: boolean;
@@ -20,19 +28,52 @@ export default function ConquestModal({
   const { t } = useLang();
   const { isConquered } = useConquest();
 
+  const confirmRef = useRef<HTMLButtonElement>(null);
+  const cancelRef = useRef(onCancel);
+  useEffect(() => {
+    cancelRef.current = onCancel;
+  });
+
+  // fokus ke tombol konfirmasi saat modal dibuka, Esc menutup, dan fokus
+  // kembali ke kartu Conquest/Speedrun saat ditutup.
+  useEffect(() => {
+    if (!open) return;
+    confirmRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") cancelRef.current();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.getElementById("btn-conquest")?.focus();
+    };
+  }, [open]);
+
   if (!open) return null;
+
+  // klik area gelap di luar panel = batal
+  const onBackdrop = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) onCancel();
+  };
 
   const script = SCRIPTS[scriptKey as keyof typeof SCRIPTS];
   if (!script) return null;
 
   const total = (script.data as Record<string, readonly unknown[]>).all.length;
-  const conquered = isConquered(scriptKey);
+  // Speedrun cuma untuk Hiragana & Katakana; Kotoba/Bunpō/Kanji tetap di
+  // Penaklukan ala JLPT walaupun sudah takluk.
+  const conquered = isConquered(scriptKey) && supportsSpeedrun(scriptKey);
   const isThreePhase = scriptKey === "hiragana" || scriptKey === "katakana";
+  const isJlpt = isJlptScript(scriptKey);
 
   // Speedrun mode
   if (conquered) {
     return (
-      <div className="modal-overlay open" aria-hidden="false">
+      <div
+        className="modal-overlay open"
+        aria-hidden="false"
+        onClick={onBackdrop}
+      >
         <div className="modal-panel" role="alertdialog" aria-modal="true">
           <h2>{t("speedrun.modalTitleWithLabel", { label: script.label })}</h2>
           <p className="modal-text">
@@ -49,6 +90,7 @@ export default function ConquestModal({
               {t("common.cancel")}
             </button>
             <button
+              ref={confirmRef}
               className="primary"
               type="button"
               onClick={onConfirmSpeedrun}
@@ -64,7 +106,13 @@ export default function ConquestModal({
   // Conquest mode
   const bothConquered = isConquered("hiragana") && isConquered("katakana");
   const rules: string[] = [];
-  if (isThreePhase) {
+  if (isJlpt) {
+    rules.push(t("conquestModal.rule.jlptChoices", { label: script.label }));
+    rules.push(
+      t("conquestModal.rule.jlptPassMark", { percent: JLPT_PASS_PERCENT }),
+    );
+    rules.push(t("conquestModal.rule.jlptFailRestart"));
+  } else if (isThreePhase) {
     rules.push(t("conquestModal.rule.typeOnly"));
     rules.push(t("conquestModal.rule.oneWrongFails"));
     rules.push(t("conquestModal.rule.failRestartChapter"));
@@ -80,19 +128,37 @@ export default function ConquestModal({
   }
 
   return (
-    <div className="modal-overlay open" aria-hidden="false">
+    <div
+      className="modal-overlay open"
+      aria-hidden="false"
+      onClick={onBackdrop}
+    >
       <div className="modal-panel" role="alertdialog" aria-modal="true">
         <h2>{t("conquest.modalTitleWithLabel", { label: script.label })}</h2>
         <p className="modal-text">
-          {isThreePhase
-            ? t("conquestModal.threePhaseIntro", {
-                label: script.label,
-                count: total,
-              })
-            : t("conquestModal.singleIntro", {
-                count: total,
-                label: script.label,
-              })}
+          {isJlpt
+            ? t(
+                scriptKey === "kotoba"
+                  ? "conquestModal.jlptIntroKotoba"
+                  : scriptKey === "bunpo"
+                    ? "conquestModal.jlptIntroBunpo"
+                    : "conquestModal.jlptIntroKanji",
+                {
+                  label: script.label,
+                  count: jlptQuestionsPerTier(scriptKey),
+                  total:
+                    jlptQuestionsPerTier(scriptKey) * jlptTierCount(scriptKey),
+                },
+              )
+            : isThreePhase
+              ? t("conquestModal.threePhaseIntro", {
+                  label: script.label,
+                  count: total,
+                })
+              : t("conquestModal.singleIntro", {
+                  count: total,
+                  label: script.label,
+                })}
         </p>
         <ul className="modal-rules">
           {rules.map((r, i) => (
@@ -104,6 +170,7 @@ export default function ConquestModal({
             {t("common.cancel")}
           </button>
           <button
+            ref={confirmRef}
             className="primary danger"
             type="button"
             onClick={onConfirmConquest}

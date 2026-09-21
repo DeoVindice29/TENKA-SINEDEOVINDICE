@@ -43,3 +43,25 @@ export type BunpoLearnSection = {
   desc: Bilingual;
   items: BunpoEntry[];
 };
+
+export type VerbFormKey = "masu" | "te" | "nai" | "ta" | "naide";
+
+export type VerbForms = Record<VerbFormKey, string>;
+
+// Kata kerja N5 + seluruh bentuk konjugasinya, dipakai soal "tebak konjugasi"
+// (Penaklukan Bunpō Tier 3). Kalimat & pilihan semuanya hiragana murni,
+// selaras dengan gaya kalimat "blank" (....) yang dipakai BunpoEntry.
+export type VerbConjugationEntry = {
+  /** id unik — perlu karena ada homofon beda kanji (きる = 着る / 切る) */
+  id: string;
+  kana: string;
+  kanji: string;
+  type: "godan" | "ichidan" | "irregular";
+  meaning: Bilingual;
+  forms: VerbForms;
+  /** kalimat hiragana dengan "..." di posisi kata kerja yang dikonjugasi */
+  sentence: string;
+  /** bentuk mana yang benar buat kalimat ini */
+  target: VerbFormKey;
+  translation: Bilingual;
+};

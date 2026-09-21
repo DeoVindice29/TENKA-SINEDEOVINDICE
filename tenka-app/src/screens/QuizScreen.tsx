@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLang } from "@/i18n/LangContext";
 import { useUI } from "@/state/UIContext";
 import { useQuiz } from "@/state/QuizContext";
@@ -11,6 +11,7 @@ import HardInput from "@/components/Quiz/HardInput";
 import Feedback from "@/components/Quiz/Feedback";
 import ResultsScreen from "@/screens/ResultsScreen";
 import ConquestStory from "@/components/Conquest/ConquestStory";
+import { practiceTypeKeyOfQueueType } from "@/data/jlptConquest";
 
 function fmtTime(ms: number): string {
   const totalCs = Math.floor(ms / 10);
@@ -23,9 +24,16 @@ function fmtTime(ms: number): string {
 }
 
 export default function QuizScreen() {
+  const { state } = useQuiz();
+  // key = runId → Restart/Retry me-mount ulang seluruh layar kuis (timer,
+  // input, cerita Chapter, dll. kembali bersih)
+  return <QuizScreenInner key={state.runId} />;
+}
+
+function QuizScreenInner() {
   const { t } = useLang();
   const { setScreen } = useUI();
-  const { state, dispatch } = useQuiz();
+  const { state, dispatch, restartQuiz } = useQuiz();
   const { getStory } = useConquest();
 
   const [showStory, setShowStory] = useState(() => {
@@ -37,6 +45,61 @@ export default function QuizScreen() {
     );
   });
   const [speedrunElapsed, setSpeedrunElapsed] = useState(0);
+
+  // Tombol Back "armed": klik pertama minta konfirmasi (3 detik), klik kedua
+  // baru benar-benar keluar dari kuis.
+  const [backArmed, setBackArmed] = useState(false);
+  const backTimerRef = useRef<number | null>(null);
+  useEffect(
+    () => () => {
+      if (backTimerRef.current) window.clearTimeout(backTimerRef.current);
+    },
+    [],
+  );
+  const handleBack = () => {
+    if (!backArmed) {
+      setBackArmed(true);
+      if (backTimerRef.current) window.clearTimeout(backTimerRef.current);
+      backTimerRef.current = window.setTimeout(() => setBackArmed(false), 3000);
+      return;
+    }
+    if (backTimerRef.current) window.clearTimeout(backTimerRef.current);
+    setBackArmed(false);
+    // Latihan Tipe Soal kembali ke lobbynya, bukan ke layar awal
+    setScreen(state.mode === "practice" ? "practice" : "start");
+  };
+
+  // Shortcut keyboard: 1-4 pilih jawaban, Enter/Space = Next.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (document.querySelector(".settings-overlay.open")) return;
+      const quizEl = document.getElementById("screen-quiz");
+      if (!quizEl) return;
+
+      if (e.key >= "1" && e.key <= "4") {
+        const choices = quizEl.querySelectorAll<HTMLButtonElement>(
+          "button.choice:not(:disabled)",
+        );
+        const btn = choices[Number(e.key) - 1];
+        if (btn) {
+          e.preventDefault();
+          btn.click();
+        }
+        return;
+      }
+
+      if (e.key === "Enter" || e.key === " ") {
+        const nextBtn = quizEl.querySelector<HTMLButtonElement>("#btn-next");
+        // kalau fokus sudah di tombol Next, biarkan aksi native-nya jalan
+        if (nextBtn && e.target !== nextBtn) {
+          e.preventDefault();
+          nextBtn.click();
+        }
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
 
   // Speedrun timer
   useEffect(() => {
@@ -142,9 +205,16 @@ export default function QuizScreen() {
       total: state.queue.length,
     });
   } else if (currentType === "meaning") {
-    modeLabel = t("quiz.guessMeaning");
+    // Bunpō: "Tebak fungsinya", script lain: "Tebak artinya"
+    modeLabel = t(
+      state.script === "bunpo" ? "quiz.guessFunction" : "quiz.guessMeaning",
+    );
   } else if (currentType === "kalimat") {
     modeLabel = t("quiz.guessKalimat");
+  } else if (state.mode === "practice" && currentType) {
+    // Latihan Tipe Soal: label = nama tipe soalnya (mis. "Tebak Kanji")
+    const typeKey = practiceTypeKeyOfQueueType(currentType);
+    if (typeKey) modeLabel = t(`practice.${state.script}.${typeKey}`);
   }
 
   return (
@@ -160,17 +230,17 @@ export default function QuizScreen() {
     >
            <div className="quiz-back-row">
         <button
-          className="quiz-back"
+          className={`quiz-back ${backArmed ? "armed" : ""}`}
           type="button"
           data-i18n="common.back"
-          onClick={() => setScreen("start")}
+          onClick={handleBack}
         >
-          {t("common.back")}
+          {backArmed ? t("common.backArmed") : t("common.back")}
         </button>
         <button
           className="quiz-back"
           type="button"
-          onClick={() => window.location.reload()}
+          onClick={restartQuiz}
         >
           Restart
         </button>

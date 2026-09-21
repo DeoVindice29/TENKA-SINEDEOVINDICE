@@ -15,7 +15,11 @@ export const CONQUEST_TITLES: Record<string, ConquestTitle> = {
 
 export const CONQUEST_ORDER = Object.keys(CONQUEST_TITLES);
 
+// Kunci urutan Penaklukan (harus takluk aksara sebelumnya dulu).
+export const CONQUEST_LOCK_ENABLED = true;
+
 export function getConquestLockReason(scriptKey: string): string | null {
+  if (!CONQUEST_LOCK_ENABLED) return null;
   const idx = CONQUEST_ORDER.indexOf(scriptKey);
   if (idx <= 0) return null;
   const earned = getConqueredTitles();
