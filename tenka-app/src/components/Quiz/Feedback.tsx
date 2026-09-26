@@ -54,6 +54,54 @@ export default function Feedback() {
     }
   }
 
+  // Info tambahan lain di luar extraLabel di atas — khusus soal Kotoba biasa
+  // (meaning/romaji, bukan kalimat Penaklukan/Latihan): kalau katanya punya
+  // bentuk kanji dan/atau catatan cara pakai, tampilkan juga sebagai baris
+  // tersendiri di bawah extraLabel, tepat kayak versi vanilla-nya.
+  const extraLines: string[] = [];
+  if (extraLabel) extraLines.push(extraLabel);
+  if (
+    state.script === "kotoba" &&
+    state.mode &&
+    (type === "meaning" || type === "romaji")
+  ) {
+    const kotobaCfg = SCRIPTS.kotoba as unknown as {
+      dataKanji?: Record<string, readonly (readonly string[])[]>;
+      dataUsage?: Record<string, readonly (readonly string[])[]>;
+    };
+    const kanjiPool = kotobaCfg.dataKanji?.[state.mode];
+    const usagePool = kotobaCfg.dataUsage?.[state.mode];
+    const kanjiForm = kanjiPool?.find((r) => r[0] === current[0])?.[1];
+    const usageNote = usagePool?.find((r) => r[0] === current[0])?.[1];
+    if (kanjiForm) extraLines.push(t("quiz.kanjiLabel", { value: kanjiForm }));
+    if (usageNote) extraLines.push(t("quiz.usageNote", { value: usageNote }));
+  }
+  // Bunpō biasa (meaning/kalimat, bukan Penaklukan/Latihan): tambahin arti
+  // kalimat contohnya juga, di bawah extraLabel (Kalimat/Fungsi). Kuncinya
+  // selalu pola-nya sendiri — utk tipe "meaning" pola ada di current[0], utk
+  // tipe "kalimat" pola-nya adalah jawaban benarnya (current[1]).
+  if (
+    state.script === "bunpo" &&
+    state.mode &&
+    (type === "meaning" || type === "kalimat")
+  ) {
+    const bunpoCfg = SCRIPTS.bunpo as unknown as {
+      dataTranslation?: Record<string, readonly (readonly string[])[]>;
+      dataNote?: Record<string, readonly (readonly string[])[]>;
+    };
+    const translationPool = bunpoCfg.dataTranslation?.[state.mode];
+    const notePool = bunpoCfg.dataNote?.[state.mode];
+    const patternKey = type === "meaning" ? current[0] : current[1];
+    const translation = translationPool?.find(
+      (r) => r[0] === patternKey,
+    )?.[1];
+    const usageNote = notePool?.find((r) => r[0] === patternKey)?.[1];
+    if (translation) {
+      extraLines.push(t("quiz.translationLabel", { value: translation }));
+    }
+    if (usageNote) extraLines.push(t("quiz.usageNote", { value: usageNote }));
+  }
+
   const handleNext = () => {
     if (conquestFailed || speedrunFailed) {
       dispatch({ type: "FAIL_QUIZ" });
@@ -70,7 +118,11 @@ export default function Feedback() {
         >
           {feedbackMsg}
         </div>
-        {extraLabel && <div className="feedback-extra">{extraLabel}</div>}
+        {extraLines.map((line, i) => (
+          <div key={i} className="feedback-extra">
+            {line}
+          </div>
+        ))}
       </div>
       <button
         id="btn-next"

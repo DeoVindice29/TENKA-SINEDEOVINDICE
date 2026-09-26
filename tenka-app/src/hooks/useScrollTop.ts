@@ -1,9 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 
-/**
- * Tombol "back to top": muncul setelah halaman di-scroll lebih dari
- * `threshold` px (default 400, sama seperti versi vanilla).
- */
 export function useScrollTop(threshold = 400) {
   const [visible, setVisible] = useState(false);
 

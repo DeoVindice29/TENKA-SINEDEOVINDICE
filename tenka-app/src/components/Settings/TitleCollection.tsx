@@ -1,6 +1,7 @@
 import { useLang } from "@/i18n/LangContext";
 import { CONQUEST_TITLES, getConqueredTitles } from "@/data/titles";
 import { useConquest } from "@/state/ConquestContext";
+import { LockIcon } from "@/components/Settings/icons";
 
 export default function TitleCollection() {
   const { t } = useLang();
@@ -10,28 +11,30 @@ export default function TitleCollection() {
   const earned = getConqueredTitles();
 
   return (
-    <div className="settings-group">
-      <span className="settings-label">
+    <>
+      <span className="settings-card-title">
         {t("titles.heading")}
       </span>
       <p className="title-collection-hint">
         {t("titles.hint")}
       </p>
-      <div className="title-collection">
+      <div className="achievement-grid">
         {Object.keys(CONQUEST_TITLES).map((key) => {
           const ct = CONQUEST_TITLES[key];
           const has = !!earned[key];
           return (
             <div
               key={key}
-              className={`title-badge ${has ? "earned" : "locked"}`}
+              className={`achievement-card ${has ? "earned" : "locked"}`}
             >
-              <span className="title-badge-emoji">{has ? ct.emoji : "🔒"}</span>
-              <span className="title-badge-name">{has ? ct.title : "???"}</span>
+              <span className="achievement-glyph">
+                {has ? ct.emoji : <LockIcon className="achievement-lock-icon" />}
+              </span>
+              <span className="achievement-name">{has ? ct.title : "???"}</span>
             </div>
           );
         })}
       </div>
-    </div>
+    </>
   );
 }

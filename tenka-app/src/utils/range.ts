@@ -88,10 +88,9 @@ export function getRangeItems(scriptKey: string, modeId: string): RangeItem[] {
   });
 }
 
-/** Opsi jumlah soal mode Acak: kelipatan 5 sampai total, selalu diakhiri "seluruh". */
+/** Opsi jumlah soal mode Acak: 10 / 20 selama masih di bawah total, lalu "seluruh" — dibatasi sedikit biar selalu muat 1 baris (ditambah tombol "Custom" di UI). */
 export function getRandomCountSteps(total: number): number[] {
-  const steps: number[] = [];
-  for (let n = 5; n < total; n += 5) steps.push(n);
+  const steps = [10, 20].filter((n) => n < total);
   steps.push(total);
   return steps;
 }

@@ -5,6 +5,7 @@ type ModalProps = {
   onClose: () => void;
   children: ReactNode;
   labelledBy?: string;
+  panelClassName?: string;
 };
 
 export default function Modal({
@@ -12,6 +13,7 @@ export default function Modal({
   onClose,
   children,
   labelledBy,
+  panelClassName,
 }: ModalProps) {
   useEffect(() => {
     if (!open) return;
@@ -32,7 +34,7 @@ export default function Modal({
       }}
     >
       <div
-        className="modal-panel"
+        className={`modal-panel ${panelClassName ?? ""}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby={labelledBy}

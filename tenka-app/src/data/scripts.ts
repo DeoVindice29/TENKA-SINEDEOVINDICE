@@ -366,25 +366,28 @@ export const SCRIPTS = {
     tabGlyph: "漢",
     quizType: "meaning",
     quizLabelKey: "quiz.guessMeaning",
-    quizLabelRomajiKey: "quiz.guessRomaji",
+    quizLabelRomajiKey: "quiz.guessHiragana",
     hasVariants: true,
     // "kanjiForm": tipe soal ke-4 khusus Kanji N5 — kebalikan dari "romaji"/"meaning":
     // yang ditunjukkan adalah bacaan hiragana-nya (dari dataKana), dan yang harus
     // ditebak adalah kanji mana yang tepat untuk bacaan tersebut (pilihan jawabannya
     // berupa karakter kanji, bukan romaji/arti).
+    // Catatan: key internal "romaji" dipertahankan (dipakai di banyak tempat di
+    // QuizContext/RangePicker), tapi utk Kanji N5 isinya sekarang bacaan HIRAGANA,
+    // bukan romaji — makanya label & quizLabelKey-nya "Hiragana"/"guessHiragana".
     quizLabelKeys: {
       meaning: "quiz.guessMeaning",
-      romaji: "quiz.guessRomaji",
+      romaji: "quiz.guessHiragana",
       kanjiForm: "quiz.guessKanjiForm",
     },
     extraLabelKeys: {
-      meaning: "quiz.romajiLabel",
+      meaning: "quiz.hiraganaLabel",
       romaji: "quiz.meaningLabel",
       kanjiForm: "quiz.meaningLabel",
     },
     variantButtons: [
       { key: "meaning", icon: "🈺", i18nKey: "quiz.meaning" },
-      { key: "romaji", icon: "🔤", label: "Romaji" },
+      { key: "romaji", icon: "🔤", label: "Hiragana" },
       { key: "kanjiForm", icon: "🈶", i18nKey: "quiz.kanjiFormBtn" },
       { key: "both", icon: "🎲", i18nKey: "quiz.mixed" },
     ],
@@ -398,10 +401,14 @@ export const SCRIPTS = {
         KANJI_N5_CHAPTERS[i].map(([c, , m]) => [c, tf(m)]),
       ]),
     ),
+    // Dulu ini bacaan ROMAJI (primaryReading(r)) — sekarang dipakai buat tipe
+    // soal "Hiragana" di Kuis biasa, jadi isinya bacaan hiragana (elemen ke-4)
+    // biar konsisten dengan Latihan Tipe Soal & Mode Penaklukan, yang juga
+    // selalu pakai hiragana (bukan romaji) buat bacaan kanji.
     dataRomaji: Object.fromEntries(
       KANJI_TIER_KEYS.map((tk, i) => [
         tk,
-        KANJI_N5_CHAPTERS[i].map(([c, r]) => [c, primaryReading(r)]),
+        KANJI_N5_CHAPTERS[i].map(([c, , , k]) => [c, k]),
       ]),
     ),
     // dataKana: bacaan hiragana tiap kanji (elemen ke-4 di KANJI_N5_CH*), ditampilkan
@@ -747,6 +754,24 @@ export const SCRIPTS = {
         BUNPO_N5_CHAPTERS[i].map(([c, , , , blank]) => [blank, c]),
       ]),
     ),
+    // dataTranslation: arti kalimat contoh (elemen ke-6 di BUNPO_N5_CHAPTERS),
+    // dikunci per pola (sama seperti "data") — ditampilkan sebagai info
+    // tambahan di feedback kuis, tepat di bawah baris Kalimat/Fungsi-nya.
+    dataTranslation: Object.fromEntries(
+      BUNPO_N5_TIER_KEYS.map((tk, i) => [
+        tk,
+        BUNPO_N5_CHAPTERS[i].map(([c, , , , , tr]) => [c, tf(tr)]),
+      ]),
+    ),
+    // dataNote: catatan singkat "cara pakai" tiap pola (elemen ke-7 di
+    // BUNPO_N5_CHAPTERS, "" kalau tidak ada catatan) — ditampilkan sebagai
+    // info tambahan di feedback kuis, tepat kayak dataUsage di Kotoba.
+    dataNote: Object.fromEntries(
+      BUNPO_N5_TIER_KEYS.map((tk, i) => [
+        tk,
+        BUNPO_N5_CHAPTERS[i].map(([c, , , , , , n]) => [c, tf(n)]),
+      ]),
+    ),
     levelText: BUNPO_N5_LEVEL_TEXT,
     learnGrammar: BUNPO_N5_LEARN,
   },
@@ -760,6 +785,10 @@ Object.values(SCRIPTS).forEach((s) => {
     dataRomaji?: Record<string, readonly unknown[]>;
     dataKalimat?: Record<string, readonly unknown[]>;
     dataKalimatBlank?: Record<string, readonly unknown[]>;
+    dataKanji?: Record<string, readonly unknown[]>;
+    dataUsage?: Record<string, readonly unknown[]>;
+    dataTranslation?: Record<string, readonly unknown[]>;
+    dataNote?: Record<string, readonly unknown[]>;
   };
   const tks = anyS.tierKeys || ["tier1", "tier2", "tier3"];
 
@@ -779,5 +808,23 @@ Object.values(SCRIPTS).forEach((s) => {
     anyS.dataKalimatBlank.all = cat(
       anyS.dataKalimatBlank as Record<string, unknown[]>,
     );
+  }
+  // Kotoba: pool "all" utk info tambahan (bentuk kanji & catatan cara pakai)
+  // di feedback kuis, biar tetap kebaca pas mode "Semua Chapter" juga.
+  if (anyS.dataKanji) {
+    anyS.dataKanji.all = cat(anyS.dataKanji as Record<string, unknown[]>);
+  }
+  if (anyS.dataUsage) {
+    anyS.dataUsage.all = cat(anyS.dataUsage as Record<string, unknown[]>);
+  }
+  if (anyS.dataTranslation) {
+    anyS.dataTranslation.all = cat(
+      anyS.dataTranslation as Record<string, unknown[]>,
+    );
+  }
+  // Bunpō: pool "all" utk catatan cara pakai di feedback kuis, sama kayak
+  // dataUsage di Kotoba, biar tetap kebaca pas mode "Semua Sub-Tier" juga.
+  if (anyS.dataNote) {
+    anyS.dataNote.all = cat(anyS.dataNote as Record<string, unknown[]>);
   }
 });

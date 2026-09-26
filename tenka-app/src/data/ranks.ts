@@ -1,3 +1,5 @@
+import { supabase } from "@/lib/supabaseClient";
+
 export const RANK_KEY = "tebakAksara_rank_v1";
 export const PHOTO_KEY = "tebakAksara_photo_v1";
 export const ConquerY_KEY = "tebakAksara_Conquery_v1";
@@ -87,8 +89,25 @@ export const RANK_REQ_ID = {
 export function getRankIndex(): number {
   return parseInt(localStorage.getItem(RANK_KEY) || "0", 10) || 0;
 }
+// dipancarkan tiap pangkat berubah supaya UI (sidebar) ikut update tanpa reload
+export const RANK_EVENT = "tenka:rank-changed";
+
 export function setRankIndex(i: number): void {
   localStorage.setItem(RANK_KEY, String(i));
+  window.dispatchEvent(new Event(RANK_EVENT));
+  syncRankToProfile(i);
+}
+
+// Nyimpen rank_index ke profil Supabase juga (buat ditampilin di Admin
+// Panel → Pengguna) — fire-and-forget, gak nge-block UI. Akun tamu gak
+// punya baris profile di server jadi otomatis dilewatin (getSession()
+// bakal null).
+function syncRankToProfile(i: number): void {
+  supabase.auth.getSession().then(({ data }) => {
+    const userId = data.session?.user.id;
+    if (!userId) return;
+    supabase.from("profiles").update({ rank_index: i }).eq("id", userId);
+  });
 }
 
 export function getConquery(): Record<string, boolean> {
@@ -123,4 +142,34 @@ export function promoteIfHigher(scriptKey: string, mode: string): boolean {
     return true;
   }
   return false;
+}
+
+// Misi kenaikan pangkat — target yang harus ditaklukkan per pangkat (sama
+// dengan aturan computeRankIndex di atas). Dipakai popup "Misi" di topbar.
+export type MissionScriptKey =
+  | "hiragana"
+  | "katakana"
+  | "kotoba"
+  | "bunpo"
+  | "kanji";
+
+export const RANK_MISSIONS: { rankIndex: number; scripts: MissionScriptKey[] }[] =
+  [
+    { rankIndex: 1, scripts: ["hiragana", "katakana"] }, // Knight
+    { rankIndex: 2, scripts: ["kotoba"] }, // Baron
+    { rankIndex: 3, scripts: ["bunpo"] }, // Viscount
+    { rankIndex: 4, scripts: ["kanji"] }, // Count (→ Marquis)
+  ];
+
+export const MISSION_TOTAL = RANK_MISSIONS.reduce(
+  (n, g) => n + g.scripts.length,
+  0,
+);
+
+export function countMissionsDone(): number {
+  const m = getConquery();
+  return RANK_MISSIONS.reduce(
+    (n, g) => n + g.scripts.filter((k) => m[k]).length,
+    0,
+  );
 }

@@ -5,7 +5,35 @@ import { getRandomCountSteps, getRangeItems } from "@/utils/range";
 
 type DdKey = "from" | "to";
 
-// Dropdown kustom "Dari"/"Sampai" + mode "Acak" (jumlah soal kelipatan 5).
+const svgProps = {
+  width: 16,
+  height: 16,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 2,
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
+  "aria-hidden": true,
+};
+
+const ShuffleIcon = () => (
+  <svg {...svgProps}>
+    <path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5" />
+  </svg>
+);
+const ListIcon = () => (
+  <svg {...svgProps}>
+    <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+  </svg>
+);
+const PencilIcon = () => (
+  <svg {...svgProps}>
+    <path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+  </svg>
+);
+
+// Dropdown kustom "Dari"/"Sampai" + mode "Acak" (jumlah soal 10/20/Semua + ketik sendiri, dibatasi biar selalu muat 1 baris).
 export default function RangePicker() {
   const { t } = useLang();
   const {
@@ -30,6 +58,9 @@ export default function RangePicker() {
 
   const [open, setOpen] = useState<DdKey | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
+  // Teks mentah yang lagi diketik di kotak "ketik sendiri" — null kalau kotak
+  // itu lagi gak difokus/gak dipakai (biar gak dipaksa ke-clamp tiap huruf).
+  const [customDraft, setCustomDraft] = useState<string | null>(null);
 
   // tingkatan baru dipilih → rentang kembali ke seluruh tingkatan, mode
   // kembali ke "Pilih Rentang", dan opsi jumlah acak disiapkan ulang.
@@ -72,6 +103,18 @@ export default function RangePicker() {
 
   const from = Math.max(0, Math.min(rangeFrom, total - 1));
   const to = Math.max(from, Math.min(rangeTo, total - 1));
+
+  // jumlah acak aktif = angka yang dipilih, dibatasi 1..total
+  const activeRandomCount = Math.min(Math.max(randomCount, 1), total);
+  const isCustomActive = !steps.includes(activeRandomCount);
+
+  const commitCustomDraft = (raw: string) => {
+    const n = parseInt(raw, 10);
+    if (!Number.isNaN(n) && n > 0) {
+      setRandomCount(Math.min(n, total));
+    }
+    setCustomDraft(null);
+  };
 
   const pick = (key: DdKey, index: number) => {
     if (key === "from") {
@@ -154,30 +197,31 @@ export default function RangePicker() {
       <div className="range-mode-toggle" id="range-mode-toggle">
         <button
           type="button"
-          className={`range-mode-btn ${rangeMode === "manual" ? "active" : ""}`}
-          onClick={() => {
-            setOpen(null);
-            setRangeMode("manual");
-          }}
-        >
-          <span>{t("range.chooseRange")}</span>
-        </button>
-        <button
-          type="button"
           className={`range-mode-btn ${rangeMode === "random" ? "active" : ""}`}
           onClick={() => {
             setOpen(null);
             setRangeMode("random");
           }}
         >
+          <ShuffleIcon />
           <span>{t("range.random")}</span>
+        </button>
+        <button
+          type="button"
+          className={`range-mode-btn ${rangeMode === "manual" ? "active" : ""}`}
+          onClick={() => {
+            setOpen(null);
+            setRangeMode("manual");
+          }}
+        >
+          <ListIcon />
+          <span>{t("range.chooseRange")}</span>
         </button>
       </div>
 
       {rangeMode === "manual" && (
         <div className="range-row" id="range-row">
           {renderDd("from", from)}
-          <span className="range-arrow" />
           {renderDd("to", to)}
         </div>
       )}
@@ -193,13 +237,40 @@ export default function RangePicker() {
                 key={n}
                 type="button"
                 className={`range-count-btn ${
-                  n === randomCount ? "active" : ""
+                  !isCustomActive && n === activeRandomCount ? "active" : ""
                 }`}
-                onClick={() => setRandomCount(n)}
+                onClick={() => {
+                  setRandomCount(n);
+                  setCustomDraft(null);
+                }}
               >
                 {n === total ? t("range.all", { n }) : String(n)}
               </button>
             ))}
+            <span className="range-count-custom">
+              <PencilIcon />
+              <input
+                type="number"
+                inputMode="numeric"
+                className={`range-count-btn range-count-input ${
+                  isCustomActive ? "active" : ""
+                }`}
+                aria-label={t("range.customCountAria")}
+                placeholder={t("range.customCount")}
+                min={1}
+                max={total}
+                value={
+                  customDraft ??
+                  (isCustomActive ? String(activeRandomCount) : "")
+                }
+                onChange={(e) => setCustomDraft(e.target.value)}
+                onFocus={(e) => setCustomDraft(e.target.value)}
+                onBlur={(e) => commitCustomDraft(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+                }}
+              />
+            </span>
           </div>
         </div>
       )}

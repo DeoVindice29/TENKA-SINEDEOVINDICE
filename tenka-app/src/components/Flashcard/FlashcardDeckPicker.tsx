@@ -1,5 +1,4 @@
 import { useLang } from "@/i18n/LangContext";
-import { useUI } from "@/state/UIContext";
 import { useFlash } from "@/state/FlashContext";
 import {
   buildDeckCardDescriptors,
@@ -8,6 +7,7 @@ import {
 } from "@/data/flashDecks";
 import FlashcardImport from "./FlashcardImport";
 import ScrollTopButton from "@/components/ScrollTopButton";
+import PageHero from "@/components/PageHero";
 
 type FlashcardDeckPickerProps = {
   onPickDeck: (ref: FlashDeckRef, label: string, forceAll: boolean) => void;
@@ -17,7 +17,6 @@ export default function FlashcardDeckPicker({
   onPickDeck,
 }: FlashcardDeckPickerProps) {
   const { t } = useLang();
-  const { setScreen } = useUI();
   const { dueSummary, getCustomDecks, deleteCustomDeck, reloadFlag, reload } =
     useFlash();
 
@@ -28,22 +27,12 @@ export default function FlashcardDeckPicker({
 
   return (
     <>
-      <div className="quiz-back-row">
-        <button
-          className="quiz-back"
-          type="button"
-          data-i18n="common.back"
-          onClick={() => setScreen("start")}
-        >
-          {t("common.back")}
-        </button>
-      </div>
-
-      <header className="learn-header">
-        <div className="eyebrow">{t("flash.eyebrow")}</div>
-        <h1 className="learn-title">{t("flash.title")}</h1>
-        <p className="sub">{t("flash.sub")}</p>
-      </header>
+      <PageHero
+        variant="flash"
+        eyebrow={t("flash.eyebrow")}
+        title={t("flash.title")}
+        sub={t("flash.sub")}
+      />
 
       <div className="flash-section-label">{t("flash.builtinHeading")}</div>
       <div className="flash-deck-grid">

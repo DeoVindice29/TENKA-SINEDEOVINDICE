@@ -1,0 +1,1454 @@
+/* ==========================================================================
+   Dashboard layout — sidebar navigation + blue "Sine Deo" theme.
+   Loaded AFTER styles.css (see styles/index.css), so rules here win on
+   equal specificity. Kept in its own file on purpose: everything the
+   redesign needed is here, nothing in styles.css was rewritten in place.
+   ========================================================================== */
+
+/* ---------- 1. re-theme the light palette to the blue look ----------
+   Scoped to light mode so it doesn't leak over the dark palette that
+   styles.css defines under [data-theme="dark"]. Keep in sync with
+   DEFAULT_LIGHT_VARS in hooks/useTheme.ts (the "default" theme). */
+:root:not([data-theme="dark"]) {
+    --app-bg: #EEF3FC;
+    --paper: #EEF3FC;
+    --paper-dark: #E4ECFC;
+    --card: #FFFFFF;
+    --ink: #16213E;
+    --ink-soft: #66748C;
+    --indigo: #2F5FDE;
+    --indigo-deep: #1E43B8;
+    --vermillion: #2F5FDE;
+    --on-accent: #FFFFFF;
+    --shadow: rgba(20, 33, 66, 0.16);
+    --shadow-soft: rgba(20, 33, 66, 0.08);
+    --line: rgba(20, 33, 66, 0.10);
+    --batch-a: #FFFFFF;
+    --batch-b: #E4ECFC;
+}
+
+/* ---------- 2. page shell: sidebar + main area instead of a centered card ---------- */
+/* overflow-x: hidden on <body> (from styles.css) turns body into its own scroll
+   container, which breaks `position: sticky` on the sidebar. `clip` gives the
+   same no-horizontal-scroll result without creating a scroll container. */
+body {
+    overflow-x: clip;
+    display: block;
+    padding: 0;
+    align-items: unset;
+    justify-content: unset;
+}
+
+#root {
+    display: block;
+    width: 100%;
+}
+
+.app-shell {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+.main-area {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.stage {
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 22px 32px 48px;
+}
+
+.app-shell.focus-mode .stage {
+    max-width: 640px;
+    padding: calc(24px + env(safe-area-inset-top)) 20px 60px;
+}
+
+.app-shell.focus-mode {
+    justify-content: center;
+}
+
+.app-shell.focus-mode .main-area {
+    align-items: center;
+}
+
+@media (max-width: 720px) {
+    .stage {
+        padding: 18px 16px 40px;
+    }
+}
+
+/* ---------- 3. topbar ---------- */
+.topbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 32px 0;
+}
+
+@media (max-width: 720px) {
+    .topbar {
+        padding: 16px 16px 0;
+    }
+}
+
+.topbar-spacer {
+    flex: 1 1 auto;
+}
+
+.topbar-hamburger {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+
+.topbar-hamburger span {
+    display: block;
+    width: 16px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--ink);
+}
+
+.topbar-icon-btn {
+    position: relative;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex: 0 0 auto;
+    transition: color .15s ease, border-color .15s ease;
+}
+
+.topbar-icon-btn:hover {
+    color: var(--indigo);
+    border-color: var(--indigo);
+}
+
+.topbar-icon-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.topbar-badge {
+    position: absolute;
+    top: 7px;
+    right: 8px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--vermillion);
+    border: 1.5px solid var(--card);
+}
+
+.topbar-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: none;
+    overflow: hidden;
+    background: var(--indigo);
+    color: var(--on-accent);
+    font-weight: 800;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+
+.topbar-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media (max-width: 980px) {
+    .topbar-hamburger {
+        display: flex;
+    }
+}
+
+/* ---------- 4. sidebar ---------- */
+.sidebar {
+    flex: 0 0 272px;
+    width: 272px;
+    background: var(--card);
+    border-right: 1px solid var(--line);
+    padding: 22px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: auto;
+}
+
+.sidebar-identity {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    width: 100%;
+    border-bottom: 1px solid var(--line);
+    padding: 2px 8px 18px;
+    margin-bottom: 14px;
+}
+
+.sidebar-identity--clickable {
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background .15s ease;
+}
+
+.sidebar-identity--clickable:hover,
+.sidebar-identity--clickable:focus-visible {
+    background: var(--paper-dark);
+}
+
+.sidebar-identity--clickable:focus-visible {
+    outline: 2px solid var(--vermillion);
+    outline-offset: 2px;
+}
+
+.sidebar-identity-icon {
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+    background: var(--indigo);
+    color: var(--on-accent);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-identity-icon svg {
+    width: 21px;
+    height: 21px;
+}
+
+.sidebar-identity-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sidebar-identity-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+    min-width: 0;
+}
+
+.sidebar-identity-text strong {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 15.5px;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar-identity-text small {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    font-family: var(--kana-font);
+}
+
+.sidebar-rank-emoji {
+    font-size: 12px;
+    font-family: initial;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sidebar-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    padding: 11px 12px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: background-color .15s ease, color .15s ease;
+}
+
+.sidebar-nav-icon {
+    width: 19px;
+    height: 19px;
+    flex: 0 0 auto;
+}
+
+.sidebar-nav-item:hover {
+    background: var(--app-bg);
+    color: var(--ink);
+}
+
+.sidebar-nav-item.active {
+    background: var(--indigo);
+    color: var(--on-accent);
+    box-shadow: 0 8px 18px rgba(47, 95, 222, .28);
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.sidebar-settings-item {
+    color: var(--ink-soft);
+}
+
+.sidebar-promo {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    padding: 16px 16px 0;
+    min-height: 196px;
+    background: linear-gradient(180deg, var(--card) 0%, var(--paper-dark) 100%);
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+}
+
+.sidebar-promo p {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    max-width: 70%;
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 1.45;
+}
+
+.sidebar-promo-quote-wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 70%;
+}
+
+.sidebar-promo-quote {
+    margin: 0;
+    max-width: none;
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 1.45;
+    transition: opacity .3s ease, transform .3s ease;
+}
+
+/* teks lama: numpuk di atas teks baru, lalu geser ke kanan & menghilang */
+.sidebar-promo-quote--exit {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.sidebar-promo-quote--exit.is-exiting {
+    opacity: 0;
+    transform: translateX(18px);
+}
+
+/* teks baru: masuk dari kiri ke posisi normalnya */
+.sidebar-promo-quote--enter {
+    opacity: 0;
+    transform: translateX(-18px);
+}
+
+.sidebar-promo-quote--enter.is-entered {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.sidebar-promo-sakura {
+    position: absolute;
+    z-index: 1;
+    top: 12px;
+    right: 14px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+/* illustration (assets/hero-sidebar.webp) — sits along the bottom edge of the card */
+.sidebar-promo-art {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    display: block;
+    pointer-events: none;
+    user-select: none;
+}
+
+[data-theme="dark"] .sidebar-promo-art,
+[data-theme="dark"] .hero-art {
+    opacity: 0.85;
+}
+
+.sidebar-scrim {
+    display: none;
+}
+
+@media (max-width: 980px) {
+    .sidebar {
+        position: fixed;
+        z-index: 60;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        height: 100dvh;
+        transform: translateX(-100%);
+        transition: transform .2s ease;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+        box-shadow: 24px 0 48px rgba(15, 23, 42, .18);
+    }
+
+    .sidebar-scrim {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 55;
+        background: rgba(15, 23, 42, .38);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .2s ease;
+    }
+
+    .sidebar-scrim.open {
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
+
+/* ---------- 5. hero banner ---------- */
+.hero-card {
+    position: relative;
+    overflow: hidden;
+    container: hero / inline-size;
+    align-items: flex-start;
+    min-height: 0;
+    padding: 26px 36px;
+    gap: 22px;
+    background: linear-gradient(120deg, var(--paper-dark) 0%, var(--paper) 55%, var(--card) 100%);
+    border: 1px solid var(--line);
+}
+
+.hero-icon {
+    width: 66px;
+    height: 66px;
+    margin-top: 10px;
+    border-radius: 18px;
+    background: var(--indigo);
+    box-shadow: 0 8px 18px rgba(47, 95, 222, 0.28);
+}
+
+.hero-icon svg {
+    width: 40px;
+    height: 40px;
+}
+
+.hero-icon .hero-sun {
+    display: none;
+}
+
+.hero-icon .hero-torii {
+    fill: var(--on-accent);
+}
+
+/* eyebrow di atas judul, keduanya rata kiri (bukan sebaris) */
+.hero-text {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 58%;
+}
+
+.eyebrow {
+    background: color-mix(in srgb, var(--indigo) 18%, var(--card));
+    display: inline-flex;
+    padding: 5px 12px;
+    margin-bottom: 8px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+}
+
+.eyebrow::before {
+    content: "";
+}
+
+.hero-card h1 {
+    display: block;
+    margin: 0;
+    font-family: inherit;
+    font-weight: 800;
+    font-size: clamp(20px, 2.2vw, 27px);
+    line-height: 1.25;
+    color: var(--ink);
+}
+
+.hero-card .sub {
+    margin-top: 10px;
+    max-width: 44ch;
+    font-size: 13.5px;
+}
+
+.hero-card .sub b {
+    font-weight: inherit;
+}
+
+/* illustration (assets/hero-start.webp) — ukuran tetap ~ proporsi referensi, nempel kanan-bawah,
+   memudar ke kiri supaya nyatu dengan kartu */
+.hero-art {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 118%;
+    width: auto;
+    max-width: none;
+    pointer-events: none;
+    user-select: none;
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 22%);
+    mask-image: linear-gradient(to right, transparent 0, #000 22%);
+}
+
+@container hero (max-width: 900px) {
+    .hero-art {
+        height: 100%;
+        opacity: 0.85;
+    }
+
+    .hero-text {
+        max-width: 64%;
+    }
+}
+
+@container hero (max-width: 620px) {
+    .hero-art {
+        height: 70%;
+        opacity: 0.3;
+    }
+
+    .hero-text {
+        max-width: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .hero-card {
+        padding: 20px;
+    }
+}
+
+/* ---------- 6. N4 badge bar (uses the existing #btn-open-n4 element) ---------- */
+button.secondary#btn-open-n4 {
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+    background: var(--card);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    font-weight: 600;
+    padding: 12px 18px;
+}
+
+button.secondary#btn-open-n4::before {
+    content: "N4";
+    flex: 0 0 auto;
+    background: var(--indigo);
+    color: var(--on-accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .02em;
+    border-radius: 8px;
+    padding: 4px 8px;
+}
+
+button.secondary#btn-open-n4::after {
+    content: "";
+    margin-left: auto;
+    flex: 0 0 auto;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid var(--ink-soft);
+    border-bottom: 2px solid var(--ink-soft);
+    transform: rotate(-45deg);
+}
+
+/* generic secondary pill (fallback for any other use) */
+button.secondary {
+    background: var(--card);
+    color: var(--ink);
+}
+
+/* ---------- 8. script tabs + white content panel ---------- */
+/* ScriptTabs → tombol Start dibungkus satu panel putih, seperti referensi */
+.start-panel {
+    margin-top: 16px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 22px;
+    box-shadow: 0 10px 30px var(--shadow-soft);
+}
+
+.start-panel > .script-tabs {
+    margin-top: 0;
+}
+
+.start-panel > button.primary {
+    margin-top: 20px;
+}
+
+.script-tab {
+    background: var(--paper);
+    border-color: var(--line);
+}
+
+.script-tab.active {
+    background: var(--indigo);
+    border-color: var(--indigo);
+}
+
+.script-tab-icon {
+    background: var(--paper-dark);
+}
+
+@media (max-width: 640px) {
+    .start-panel {
+        padding: 16px;
+        border-radius: 20px;
+    }
+}
+
+/* ---------- 9. level cards (Gojūon / Dakuten / Yōon / Mixed) ----------
+   Layout referensi: [lingkaran ikon] [pill tipe / sample / judul / deskripsi] [panah].
+   .kana-sample dibuat display:contents supaya .kana-icon & .kana-text jadi
+   grid item langsung. */
+.levels {
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.level-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+    column-gap: 14px;
+    row-gap: 2px;
+    align-items: start;
+    border-radius: 18px;
+    padding: 16px 18px;
+    box-shadow: 0 4px 14px var(--shadow-soft);
+}
+
+.level-card .tier {
+    grid-column: 2;
+    grid-row: 1;
+    position: static;
+    justify-self: start;
+    align-self: start;
+    margin-bottom: 4px;
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: var(--paper-dark);
+    color: var(--indigo-deep);
+}
+
+.level-card .tier-chapter-label,
+.level-card .tier-dots {
+    display: none;
+}
+
+.level-card .tier-type-label {
+    color: inherit;
+}
+
+.level-card .kana-sample {
+    display: contents;
+}
+
+.level-card .kana-icon {
+    grid-column: 1;
+    grid-row: 1 / span 4;
+    align-self: center;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--paper-dark);
+    color: var(--indigo);
+    font-family: var(--kana-font);
+    font-weight: 700;
+    font-size: 22px;
+}
+
+.level-card .kana-text {
+    grid-column: 2;
+    grid-row: 2;
+    font-family: var(--kana-font);
+    font-weight: 800;
+    font-size: 20px;
+    line-height: 1.3;
+    color: var(--ink);
+    overflow-wrap: anywhere;
+}
+
+.level-card h3 {
+    grid-column: 2;
+    grid-row: 3;
+    margin: 0;
+}
+
+.level-card p {
+    grid-column: 2;
+    grid-row: 4;
+}
+
+/* panah bulat di kanan */
+.level-card::after {
+    content: "\2192";
+    grid-column: 3;
+    grid-row: 1 / span 4;
+    align-self: center;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--paper);
+    color: var(--ink-soft);
+    font-size: 15px;
+    font-weight: 700;
+    transition: background-color .15s ease, color .15s ease;
+}
+
+.level-card:hover::after {
+    background: var(--paper-dark);
+    color: var(--indigo);
+}
+
+.level-card.selected::after {
+    background: var(--indigo);
+    color: var(--on-accent);
+}
+
+/* kartu di dalam accordion (Kotoba) lebih sempit: ikon kecil, tanpa panah */
+.tier-group-subgrid .level-card {
+    grid-template-columns: 40px minmax(0, 1fr);
+    column-gap: 12px;
+}
+
+.tier-group-subgrid .level-card .kana-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+}
+
+.tier-group-subgrid .level-card::after {
+    display: none;
+}
+
+/* per-card accent colors, matching the 4-card Hiragana/Katakana layout */
+.levels:not(.levels--accordion) .level-card:nth-child(1) .kana-icon,
+.levels:not(.levels--accordion) .level-card:nth-child(1) .tier {
+    background: #E4ECFC;
+    color: #2F5FDE;
+}
+
+.levels:not(.levels--accordion) .level-card:nth-child(2) .kana-icon,
+.levels:not(.levels--accordion) .level-card:nth-child(2) .tier {
+    background: #E1F5E6;
+    color: #2F9E52;
+}
+
+.levels:not(.levels--accordion) .level-card:nth-child(3) .kana-icon,
+.levels:not(.levels--accordion) .level-card:nth-child(3) .tier {
+    background: #FDEBD6;
+    color: #D9822B;
+}
+
+.levels:not(.levels--accordion) .level-card:nth-child(4) .kana-icon,
+.levels:not(.levels--accordion) .level-card:nth-child(4) .tier {
+    background: #EEE6FB;
+    color: #7C4FD1;
+}
+
+@media (max-width: 520px) {
+    .level-card .kana-text {
+        font-size: 18px;
+    }
+}
+
+/* ---------- 10. options panel: difficulty + timer side by side ---------- */
+#options-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 24px;
+    align-items: start;
+}
+
+#options-panel > .match-card,
+#options-panel > .quiz-variant-picker,
+#options-panel > .range-picker,
+#options-panel > #range-picker {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 640px) {
+    #options-panel {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* pilihan Difficulty / Timer / Question type — gaya referensi:
+   tombol pucat, yang dipilih terisi penuh warna aksen. */
+.difficulty-btn,
+.timer-btn,
+.quiz-variant-btn {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    box-shadow: none;
+}
+
+.difficulty-btn {
+    border-radius: 14px;
+    padding: 10px 8px;
+}
+
+.timer-btn {
+    border-radius: 999px;
+    padding: 9px 6px;
+    white-space: nowrap;
+}
+
+.quiz-variant-btn {
+    border-radius: 14px;
+    padding: 10px 8px;
+}
+
+.difficulty-btn.active,
+.timer-btn.active,
+.quiz-variant-btn.active,
+.difficulty-btn.active:hover:not(:disabled),
+.timer-btn.active:hover,
+.quiz-variant-btn.active:hover {
+    background: var(--indigo);
+    border-color: var(--indigo);
+    color: var(--on-accent);
+    box-shadow: 0 6px 14px color-mix(in srgb, var(--indigo) 28%, transparent);
+}
+
+.difficulty-btn.active .difficulty-sub {
+    color: var(--on-accent);
+    opacity: 0.85;
+}
+
+/* kartu Match Mode: hijau muda, ikon tanpa lingkaran */
+.match-card {
+    border-radius: 16px;
+    padding: 14px 18px;
+    background: color-mix(in srgb, var(--moss) 8%, var(--card));
+    border-color: color-mix(in srgb, var(--moss) 24%, var(--line));
+}
+
+.match-mode-icon {
+    background: transparent;
+}
+
+.match-mode-title,
+[data-theme="dark"] .match-mode-title {
+    font-family: inherit;
+    font-weight: 700;
+}
+
+/* kartu Conquer Hiragana/Katakana dkk: biru muda, ikon & judul memakai
+   warna indigo (bukan vermillion lagi) — sesuai referensi. */
+.conquest-card {
+    background: color-mix(in srgb, var(--indigo) 8%, var(--card));
+    border-color: color-mix(in srgb, var(--indigo) 24%, var(--line));
+}
+
+.conquest-icon {
+    color: var(--indigo);
+}
+
+.conquest-title {
+    font-family: inherit;
+    font-weight: 700;
+    color: var(--indigo-deep);
+}
+
+.conquest-arrow {
+    color: var(--indigo-deep);
+}
+
+/* ---------- 11. primary CTA ---------- */
+button.primary {
+    background: var(--indigo-deep);
+    color: var(--on-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+button.primary:not(:disabled):hover {
+    background: var(--indigo);
+}
+
+/* tetap terbaca jelas walau belum bisa diklik (sesuai referensi) */
+button.primary:disabled {
+    opacity: 0.9;
+}
+
+button.primary:not(:disabled)::before {
+    content: "\25B6";
+    font-size: 11px;
+}
+
+button.primary:not(:disabled)::after {
+    content: "\2192";
+}
+
+/* ---------- 12. empty state (Statistik placeholder) ---------- */
+.empty-state-card {
+    margin-top: 12px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 56px 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.empty-state-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--paper-dark);
+    color: var(--indigo);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+}
+
+.empty-state-icon svg {
+    width: 26px;
+    height: 26px;
+}
+
+.empty-state-card h2 {
+    margin: 0;
+    font-size: 17px;
+    font-family: 'Shippori Mincho', serif;
+    color: var(--ink);
+}
+
+.empty-state-card p {
+    margin: 0;
+    max-width: 42ch;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+}
+
+/* ---------- 13. footer ---------- */
+.site-footer {
+    margin-top: 56px;
+}
+
+/* ---------- Question Range: desain tombol pill + dropdown Dari/Sampai ke bawah ---------- */
+.range-mode-toggle {
+    gap: 12px;
+}
+
+.range-mode-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 14px;
+    border-radius: 14px;
+    background: var(--paper);
+    color: var(--indigo);
+    border: 1px solid var(--line);
+    box-shadow: none;
+}
+
+.range-mode-btn:hover {
+    background: var(--paper-dark);
+}
+
+.range-mode-btn.active {
+    background: var(--indigo);
+    border-color: var(--indigo);
+    color: #fff;
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--indigo) 30%, transparent);
+}
+
+/* Dari / Sampai disusun ke bawah, lebar penuh */
+.range-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+}
+
+.range-arrow {
+    display: none;
+}
+
+.range-field label,
+.range-random-label {
+    font-size: 12px;
+}
+
+.range-dd-trigger {
+    border-radius: 14px;
+    padding: 11px 14px;
+    background: var(--paper);
+}
+
+.range-dd-list {
+    border-radius: 14px;
+}
+
+.range-count-btn {
+    border-radius: 14px;
+    background: var(--paper);
+    color: var(--ink-soft);
+    padding: 12px 8px;
+    box-shadow: none;
+}
+
+.range-count-btn.active {
+    background: color-mix(in srgb, var(--indigo) 12%, var(--card));
+    border-color: var(--indigo);
+    color: var(--indigo);
+    box-shadow: none;
+}
+
+/* kotak "Custom…" dengan ikon pensil di kiri */
+.range-count-custom {
+    position: relative;
+    flex: 1 1 64px;
+    min-width: 0;
+    display: flex;
+}
+
+.range-count-custom > svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-soft);
+    pointer-events: none;
+}
+
+.range-count-custom > .range-count-input {
+    width: 100%;
+    padding-left: 38px;
+}
+
+@media (max-width: 420px) {
+    .range-random-options {
+        flex-wrap: wrap;
+    }
+}
+
+/* ---------- tombol + popup Misi Pangkat ---------- */
+.topbar-missions-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 38px;
+    padding: 0 14px 0 12px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--indigo);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    flex: 0 0 auto;
+    transition: border-color .15s ease, background-color .15s ease;
+}
+
+.topbar-missions-btn:hover {
+    border-color: var(--indigo);
+    background: var(--paper);
+}
+
+.topbar-missions-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.topbar-missions-count {
+    font-size: 11.5px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--indigo) 14%, var(--card));
+    color: var(--indigo);
+}
+
+@media (max-width: 480px) {
+    .topbar-missions-label {
+        display: none;
+    }
+}
+
+.modal-panel.missions-panel {
+    max-width: 440px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    border-radius: 20px;
+}
+
+.missions-panel h2 {
+    color: var(--ink);
+}
+
+.missions-hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 16px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+}
+
+.missions-rank {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    text-align: center;
+}
+
+.missions-rank.muted {
+    opacity: .7;
+}
+
+.missions-rank-emoji {
+    font-size: 26px;
+    line-height: 1.2;
+}
+
+.missions-rank small {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink-soft);
+}
+
+.missions-rank strong {
+    font-size: 14px;
+    color: var(--ink);
+}
+
+.missions-hero-arrow {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--indigo);
+}
+
+.missions-progress {
+    margin: 14px 0 6px;
+}
+
+.missions-bar {
+    height: 8px;
+    border-radius: 999px;
+    background: var(--paper-dark);
+    overflow: hidden;
+}
+
+.missions-bar span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--indigo);
+    transition: width .3s ease;
+}
+
+.missions-progress small {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-soft);
+}
+
+.missions-list {
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.missions-group {
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: var(--card);
+}
+
+.missions-group.current {
+    border-color: var(--indigo);
+    background: color-mix(in srgb, var(--indigo) 6%, var(--card));
+}
+
+.missions-group-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+}
+
+.mission-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+}
+
+.mission-check {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--on-accent);
+}
+
+.mission-row.done .mission-check {
+    background: var(--indigo);
+    border-color: var(--indigo);
+}
+
+.mission-text {
+    flex: 1;
+    min-width: 0;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.mission-row.done .mission-text {
+    color: var(--ink-soft);
+    text-decoration: line-through;
+}
+
+.mission-done {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--indigo);
+}
+
+.mission-go {
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--indigo);
+    background: var(--indigo);
+    color: var(--on-accent);
+    cursor: pointer;
+    margin: 0;
+}
+
+.mission-go:hover {
+    background: var(--indigo-deep);
+    border-color: var(--indigo-deep);
+}
+
+.missions-later {
+    margin: 12px 0 14px;
+    font-size: 12px;
+    color: var(--ink-soft);
+}
+
+/* ---------- header halaman Belajar / Flashcards / Latihan Soal (sama seperti Home) ---------- */
+.page-hero-wrap {
+    margin-bottom: 24px;
+}
+
+/* latar banner (transparansi asli) untuk header Belajar / Flashcards /
+   Latihan Soal — teks di kiri, pemandangan di kanan */
+.hero-card.page-hero {
+    margin-bottom: 0;
+    min-height: 150px;
+    padding: 30px 36px;
+    align-items: center;
+    border: none;
+    border-radius: 22px;
+    background: transparent no-repeat right 62% / cover;
+    box-shadow: 0 10px 26px var(--shadow-soft);
+}
+
+.hero-card.page-hero--learn {
+    background-image: url("../assets/page-hero-learn.webp");
+}
+
+.hero-card.page-hero--flash {
+    background-image: url("../assets/page-hero-flash.webp");
+}
+
+.hero-card.page-hero--practice {
+    background-image: url("../assets/page-hero-practice.webp");
+}
+
+/* lapisan pemudar di atas gambar (di bawah teks) */
+.hero-card.page-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    /* pudar tipis di sisi teks supaya deskripsi tetap terbaca di atas gunung/air */
+    background: linear-gradient(90deg, rgba(238, 243, 252, 0.6) 0%, rgba(238, 243, 252, 0.25) 40%, rgba(238, 243, 252, 0) 62%);
+}
+
+/* layar sempit: pemandangan menutupi teks → pudarkan dari kiri */
+@media (max-width: 640px) {
+    .hero-card.page-hero {
+        padding: 22px 20px;
+    }
+
+    .hero-card.page-hero::after {
+        background: linear-gradient(90deg, rgba(238, 243, 252, 0.94) 0%, rgba(238, 243, 252, 0.7) 65%, rgba(238, 243, 252, 0.35) 100%);
+    }
+}
+
+/* mode gelap: gambar terang diredupkan supaya teks tetap terbaca */
+[data-theme="dark"] .hero-card.page-hero::after {
+    background: rgba(16, 22, 29, 0.8);
+}
+
+.page-hero .hero-text {
+    max-width: none;
+}
+
+/* logo hero: karakter "天" (bukan gerbang torii) */
+.hero-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--on-accent);
+    font-family: 'Shippori Mincho', var(--kana-font), serif;
+    font-weight: 700;
+    font-size: 38px;
+    line-height: 1;
+}
+
+/* topbar (tombol Misi) ikut ke bawah saat scroll: bar-nya transparan dan
+   tidak menangkap klik, hanya tombol di dalamnya yang bisa diklik */
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    padding-bottom: 8px;
+    pointer-events: none;
+}
+
+.topbar > * {
+    pointer-events: auto;
+}
+
+.topbar-missions-btn {
+    box-shadow: 0 6px 16px var(--shadow-soft);
+}
+
+/* overlay tempat AdminPanel asli di-mount pas ikon sakura sidebar diklik.
+   AdminPanel tetap punya gate login Google + cek is_admin sendiri — ini
+   cuma wadah full-screen-nya di dalam SPA, bukan jalan pintas auth. */
+.admin-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    overflow: hidden;
+    background: #fff;
+}

@@ -27,14 +27,15 @@ export type KotobaLearnSection = {
   categoryRuns?: { label: Bilingual; start: number; count: number }[] | null;
 };
 
-// [pattern, example, meaning, segments, blankVersion, exampleTranslation]
+// [pattern, example, meaning, segments, blankVersion, exampleTranslation, usageNote]
 export type BunpoEntry = readonly [
   string,
   string,
   Bilingual,
   readonly [string, string][],
   string,
-  Bilingual
+  Bilingual,
+  (Bilingual | "")?
 ];
 
 export type BunpoLearnSection = {

@@ -9,7 +9,6 @@ import {
 } from "react";
 import { useLang } from "@/i18n/LangContext";
 import { useUI, type ScriptKey } from "@/state/UIContext";
-import { SCRIPTS } from "@/data/scripts";
 import {
   GOJUON_HIRAGANA,
   HIRAGANA_SOKUON_WORDS,
@@ -59,6 +58,7 @@ import {
   type LearnFilterOverride,
 } from "@/hooks/useLearnFilter";
 import { useDragScroll } from "@/hooks/useDragScroll";
+import PageHero from "@/components/PageHero";
 
 const TABS: { key: ScriptKey; glyph: string; label: string }[] = [
   { key: "hiragana", glyph: "あ", label: "Hiragana" },
@@ -563,9 +563,8 @@ const LearnTables = memo(function LearnTables({
 });
 
 export default function LearnScreen() {
-  const { t, tf, lang } = useLang();
-  const { setScreen, setCurrentScript, setPendingFlashDeck, currentScript } =
-    useUI();
+  const { t, lang } = useLang();
+  const { currentScript } = useUI();
   const [tab, setTab] = useState<ScriptKey>(currentScript);
 
   // pencarian: dikosongkan tiap masuk/keluar layar Learn (komponen ini
@@ -676,22 +675,12 @@ export default function LearnScreen() {
 
   return (
     <section id="screen-learn">
-      <div className="quiz-back-row">
-        <button
-          className="quiz-back"
-          type="button"
-          data-i18n="common.back"
-          onClick={() => setScreen("start")}
-        >
-          {t("common.back")}
-        </button>
-      </div>
-
-      <header className="learn-header">
-        <div className="eyebrow">{t("learn.eyebrow")}</div>
-        <h1 className="learn-title">{t("learn.title")}</h1>
-        <p className="sub">{t("learn.sub")}</p>
-      </header>
+      <PageHero
+        variant="learn"
+        eyebrow={t("learn.eyebrow")}
+        title={t("learn.title")}
+        sub={t("learn.sub")}
+      />
 
       <div className="script-tabs" id="learn-script-tabs" role="tablist">
         {TABS.map((item) => (
@@ -784,37 +773,6 @@ export default function LearnScreen() {
       </div>
 
       <ScrollTopButton id="btn-learn-scrolltop" />
-
-      <div className="learn-cta-row">
-        {(tab === "kotoba" || tab === "kanji") && (
-          <button
-            className="secondary"
-            id="btn-learn-flashcards"
-            type="button"
-            onClick={() => {
-              const meta = (SCRIPTS as any)[tab]?.levelText?.all;
-              const label = `${(SCRIPTS as any)[tab]?.label ?? tab} — ${
-                meta ? tf(meta.title) : "All"
-              }`;
-              setPendingFlashDeck({ kind: tab, tierKey: "all", label });
-              setScreen("flashcard");
-            }}
-          >
-            {t("learn.studyAsFlashcards")}
-          </button>
-        )}
-        <button
-          className="primary"
-          id="btn-learn-to-quiz"
-          type="button"
-          onClick={() => {
-            setCurrentScript(tab);
-            setScreen("start");
-          }}
-        >
-          {t("learn.readyStart")}
-        </button>
-      </div>
     </section>
   );
 }

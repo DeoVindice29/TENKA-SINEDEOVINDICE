@@ -25,13 +25,9 @@ export default function SpeedrunRecords() {
   );
 
   return (
-    <div className="settings-group">
-      <span className="settings-label">
-        {t("speedrunRecords.heading")}
-      </span>
-      <p className="title-collection-hint">
-        {t("speedrunRecords.hint")}
-      </p>
+    <details className="about-details">
+      <summary>{t("speedrunRecords.heading")}</summary>
+      <p className="about-intro">{t("speedrunRecords.hint")}</p>
       <div className="speedrun-records">
         {conqueredKeys.length === 0 ? (
           <p className="speedrun-records-empty">
@@ -62,6 +58,6 @@ export default function SpeedrunRecords() {
           })
         )}
       </div>
-    </div>
+    </details>
   );
 }

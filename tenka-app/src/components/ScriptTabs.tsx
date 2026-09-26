@@ -50,9 +50,11 @@ export default function ScriptTabs() {
           aria-selected={currentScript === s.key}
           onClick={() => handleClick(s.key)}
         >
-          {s.glyph}
-          <span>{s.label}</span>
-          <span className="tab-conquered-badge" />
+          <span className="script-tab-icon">
+            {s.glyph}
+            <span className="tab-conquered-badge" />
+          </span>
+          <span className="script-tab-label">{s.label}</span>
         </button>
       ))}
     </div>

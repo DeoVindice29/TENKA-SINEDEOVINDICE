@@ -79,6 +79,31 @@ export function useLearnFilter(
         const isMatch =
           !q || (item.textContent ?? "").toLowerCase().includes(q);
         item.classList.toggle("no-match", !isMatch);
+
+        if (item.classList.contains("grammar-card")) {
+          // kartu vocab/bunpo: tandai cuma bagian teks yang benar-benar
+          // cocok (kata, bacaan, arti, atau chip segmen), bukan seluruh
+          // kartu — biar mirip highlight kata, bukan border kotak besar.
+          item
+            .querySelectorAll<HTMLElement>(
+              ".vocab-word, .vocab-kanji, .vocab-reading, .grammar-meaning, .grammar-pattern",
+            )
+            .forEach((field) => {
+              const fieldMatch =
+                !!q && (field.textContent ?? "").toLowerCase().includes(q);
+              field.classList.toggle("search-hit", fieldMatch);
+            });
+          item.querySelectorAll<HTMLElement>(".segment-chip").forEach((chip) => {
+            const chipMatch =
+              !!q && (chip.textContent ?? "").toLowerCase().includes(q);
+            chip.classList.toggle("search-hit", chipMatch);
+          });
+        } else {
+          // kana-cell / kanji-cell: satu sel = satu karakter, jadi seluruh
+          // selnya sekalian yang jadi "chip" penandanya.
+          item.classList.toggle("search-hit", !!q && isMatch);
+        }
+
         if (isMatch) {
           sectionMatches++;
           totalMatches++;

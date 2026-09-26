@@ -8,14 +8,84 @@ export type I18NEntry = {
 };
 
 export const I18N: Record<string, I18NEntry> = {
+  "nav.home": { en: "Home", id: "Home" },
+  "nav.learn": { en: "Materi", id: "Materi" },
+  "nav.flashcard": { en: "Flashcard", id: "Flashcard" },
+  "nav.practice": { en: "Practice", id: "Latihan Soal" },
+  "nav.statistik": { en: "Statistics", id: "Statistik" },
+  "nav.settings": { en: "Settings", id: "Pengaturan" },
+  "nav.tagline": { en: "Learn Japanese", id: "天の学び" },
+  "statistik.title": { en: "Statistics", id: "Statistik" },
+  "statistik.comingSoonTitle": {
+    en: "Coming soon",
+    id: "Segera hadir",
+  },
+  "statistik.comingSoonDesc": {
+    en: "Your progress stats — streaks, accuracy, and time studied — will show up here once this feature is ready.",
+    id: "Statistik progres kamu — streak, akurasi, dan waktu belajar — akan muncul di sini setelah fitur ini siap.",
+  },
   "aria.openSettings": { en: "Open settings", id: "Buka pengaturan" },
   "aria.closeSettings": { en: "Close settings", id: "Tutup pengaturan" },
-  "aria.changePhoto": { en: "Change profile photo", id: "Ganti foto profil" },
+  "aria.changePhoto": { en: "Change profile image", id: "Ganti gambar profil" },
+  "aria.viewPhoto": { en: "View profile photo", id: "Lihat foto profil" },
+  "aria.closeZoom": { en: "Close photo", id: "Tutup foto" },
   "aria.setNickname": { en: "Set your nickname", id: "Atur nickname kamu" },
   "aria.chooseLanguage": { en: "Choose language", id: "Pilih bahasa" },
   "aria.chooseBorderStyle": {
     en: "Choose theme color",
     id: "Pilih warna tema",
+  },
+  "aria.pickCustomAccent": {
+    en: "Pick a custom accent color",
+    id: "Pilih warna aksen sendiri",
+  },
+  "aria.pickCustomText": {
+    en: "Pick a custom text color (outside colored backgrounds)",
+    id: "Pilih warna teks sendiri (di luar latar berwarna)",
+  },
+  "aria.pickCustomOnAccent": {
+    en: "Pick a custom text color (on colored backgrounds)",
+    id: "Pilih warna teks sendiri (di atas latar berwarna)",
+  },
+  "aria.pickCustomIcon": {
+    en: "Pick a custom icon color",
+    id: "Pilih warna ikon sendiri",
+  },
+  "aria.pickCustomBackground": {
+    en: "Pick a custom background color",
+    id: "Pilih warna latar sendiri",
+  },
+  "aria.pickCustomQuizCorrect": {
+    en: "Pick a custom correct-answer color",
+    id: "Pilih warna jawaban benar sendiri",
+  },
+  "aria.pickCustomQuizWrong": {
+    en: "Pick a custom wrong-answer color",
+    id: "Pilih warna jawaban salah sendiri",
+  },
+  "aria.pickCustomVermillion": {
+    en: "Pick a custom vermillion accent color",
+    id: "Pilih warna aksen vermillion sendiri",
+  },
+  "aria.pickCustomGold": {
+    en: "Pick a custom gold accent color",
+    id: "Pilih warna aksen emas sendiri",
+  },
+  "aria.pickCustomMoss": {
+    en: "Pick a custom moss accent color",
+    id: "Pilih warna aksen moss sendiri",
+  },
+  "aria.pickCustomChoiceBg": {
+    en: "Pick a custom answer choice background color",
+    id: "Pilih warna latar pilihan jawaban sendiri",
+  },
+  "aria.pickCustomChoiceSelected": {
+    en: "Pick a custom color for the selected answer in Match mode",
+    id: "Pilih warna jawaban terpilih di mode Match sendiri",
+  },
+  "aria.resetCustomTheme": {
+    en: "Reset custom theme colors to the rainbow defaults",
+    id: "Reset warna tema kustom ke warna rainbow default",
   },
   "aria.chooseScript": { en: "Choose a script", id: "Pilih aksara" },
   "aria.chooseScriptStudy": {
@@ -23,6 +93,338 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Pilih aksara untuk belajar",
   },
   "profile.addNickname": { en: "+ Add nickname", id: "+ Tambah nickname" },
+  "profile.viewProgress": { en: "View progress", id: "Lihat progres" },
+  "profile.changePhoto": { en: "Change image", id: "Ganti gambar" },
+  "auth.signOutConfirmTitle": {
+    en: "Sign out?",
+    id: "Yakin ingin keluar?",
+  },
+  "auth.signOutConfirmBody": {
+    en: "You'll need to sign in again to keep tracking your progress.",
+    id: "Kamu perlu masuk lagi untuk melanjutkan progres belajarmu.",
+  },
+  "auth.welcomeBadge": {
+    en: "ようこそ • Welcome",
+    id: "ようこそ • Selamat Datang",
+  },
+  "auth.tagline": {
+    en: "Master Japanese, Hold the World",
+    id: "Kuasai Bahasa Jepang, Genggam Dunia",
+  },
+  "auth.loginPrompt": {
+    en: "Sign in to save your progress and profile.",
+    id: "Masuk dulu buat nyimpen progress dan profile kamu.",
+  },
+  "auth.howSignupWorks": {
+    en: "How does signup work?",
+    id: "Gimana cara daftarnya?",
+  },
+  "auth.howSignupWorksTitle": {
+    en: "How signing up works",
+    id: "Cara kerja pendaftaran",
+  },
+  "auth.howSignupStep1": {
+    en: "Fill in your email, and password, then tap Sign Up.",
+    id: "Isi email, dan kata sandi, lalu ketuk Daftar.",
+  },
+  "auth.howSignupStep2": {
+    en: "We'll send a confirmation link to that email — check your inbox (and spam folder).",
+    id: "Kami kirim link konfirmasi ke email itu — cek inbox kamu (dan folder spam).",
+  },
+  "auth.howSignupStep3": {
+    en: "Tap the link in the email to activate your account.",
+    id: "Ketuk link di email itu buat mengaktifkan akun kamu.",
+  },
+  "auth.howSignupStep4": {
+    en: "Come back here and log in — you'll then pick a username and image.",
+    id: "Balik ke sini dan masuk — nanti kamu bisa pilih username dan gambar.",
+  },
+  "auth.howSignupGoogleNote": {
+    en: "Signing in with Google skips all of this — you're in right away.",
+    id: "Kalau masuk pakai Google, semua langkah ini dilewati — langsung masuk. Jadi mending sing up pake google aja dah",
+  },
+  "auth.gotIt": { en: "Got it", id: "Oke, mengerti" },
+  "auth.dismiss": { en: "Dismiss", id: "Tutup" },
+  "auth.loginWithGoogle": {
+    en: "Login with Google",
+    id: "Masuk dengan Google",
+  },
+  "auth.tabLogin": { en: "Log In", id: "Masuk" },
+  "auth.tabSignup": { en: "Sign Up", id: "Daftar" },
+  "auth.noAccountYet": {
+    en: "Don't have an account?",
+    id: "Belum punya akun?",
+  },
+  "auth.alreadyHaveAccount": {
+    en: "Already have an account?",
+    id: "Sudah punya akun?",
+  },
+  "auth.emailLabel": { en: "Email", id: "Email" },
+  "auth.emailPlaceholder": { en: "you@email.com", id: "nama@email.com" },
+  "auth.passwordLabel": { en: "Password", id: "Kata Sandi" },
+  "auth.passwordPlaceholder": { en: "••••••••", id: "••••••••" },
+  "auth.forgotPassword": { en: "Forgot password?", id: "Lupa kata sandi?" },
+  "auth.rememberMe": {
+    en: "Remember me on this device",
+    id: "Ingat saya di perangkat ini",
+  },
+  "auth.loginButton": { en: "Log in to 天下", id: "Masuk ke 天下" },
+  "auth.loginButtonLoading": { en: "Logging in…", id: "Sedang masuk…" },
+  "auth.signupNameLabel": {
+    en: "Full Name / Username",
+    id: "Nama Lengkap / Username",
+  },
+  "auth.namePlaceholder": { en: "e.g. Mike Miller", id: "Contoh: Mike Miller" },
+  "auth.signupEmailLabel": { en: "Activation Email", id: "Email Aktivasi" },
+  "auth.signupEmailPlaceholder": {
+    en: "Mike@domain.com",
+    id: "Mike@domain.com",
+  },
+  "auth.minChars": { en: "Min. 8 characters", id: "Min. 8 Karakter" },
+  "auth.strengthDefault": { en: "Strength", id: "Kekuatan" },
+  "auth.strengthWeak": { en: "Weak", id: "Lemah" },
+  "auth.strengthMedium": { en: "Medium", id: "Sedang" },
+  "auth.strengthStrong": { en: "Strong", id: "Kuat" },
+  "auth.signupButton": {
+    en: "Create Account",
+    id: "Buat Akun",
+  },
+  "auth.signupButtonLoading": { en: "Creating account…", id: "Membuat akun…" },
+  "auth.orContinueWith": {
+    en: "or continue with",
+    id: "atau lanjutkan dengan",
+  },
+  "auth.continueAsGuest": {
+    en: "Continue as Guest",
+    id: "Lanjutkan sebagai Tamu",
+  },
+  "auth.legalPrefix": {
+    en: "By continuing, you agree to",
+    id: "Dengan melanjutkan, Anda menyetujui",
+  },
+  "auth.termsOfService": { en: "Terms of Service", id: "Syarat Ketentuan" },
+  "auth.privacyPolicy": { en: "Privacy Policy", id: "Kebijakan Privasi" },
+  "auth.legalSuffix": { en: "of 『天下』.", id: "『天下』." },
+  "auth.showPassword": { en: "Show password", id: "Tampilkan kata sandi" },
+  "auth.hidePassword": { en: "Hide password", id: "Sembunyikan kata sandi" },
+  "auth.emailRequired": { en: "Email is required", id: "Email wajib diisi" },
+  "auth.passwordRequired": {
+    en: "Password is required",
+    id: "Kata sandi wajib diisi",
+  },
+  "auth.nameRequired": { en: "Name is required", id: "Nama wajib diisi" },
+  "auth.passwordMinLength": {
+    en: "Password must be at least 8 characters",
+    id: "Kata sandi minimal 8 karakter",
+  },
+  "auth.forgotEmailNeeded": {
+    en: "Enter your email above first, then tap “Forgot password?”",
+    id: "Isi email kamu di atas dulu, baru ketuk “Lupa kata sandi?”",
+  },
+  "auth.toastLoginTitle": {
+    en: "Okaeri! (おかえり)",
+    id: "Okaeri! (おかえり)",
+  },
+  "auth.toastLoginMessage": {
+    en: "Welcome back to 天下, {name}!",
+    id: "Selamat datang kembali di 天下, {name}!",
+  },
+  "auth.toastSignupTitle": {
+    en: "Hajimemashite! (はじめまして)",
+    id: "Hajimemashite! (はじめまして)",
+  },
+  "auth.toastSignupMessage": {
+    en: "Account created — check {email} to confirm it.",
+    id: "Akun dibuat — cek {email} buat konfirmasi.",
+  },
+  "auth.toastErrorTitle": { en: "Something went wrong", id: "Ada yang salah" },
+  "auth.toastForgotTitle": { en: "Forgot Password", id: "Lupa Kata Sandi" },
+  "auth.toastForgotMessage": {
+    en: "A recovery link has been sent to your email.",
+    id: "Tautan pemulihan telah dikirim ke email Anda.",
+  },
+
+  /* ---- friendly auth error messages (admin-chat tone) ---- */
+  /* "…" = full version shown in the toast. "…Short" = one-liner for the
+     small inline error box under the form (no room for long sentences). */
+  "auth.err.invalidCredentialsTitle": {
+    en: "Hmm, that didn't match",
+    id: "Hmm, itu belum cocok",
+  },
+  "auth.err.invalidCredentials": {
+    en: "Email or password is wrong — or if you just signed up, confirm your email first.",
+    id: "Email atau kata sandinya salah — atau kalau baru daftar, konfirmasi dulu emailnya ya.",
+  },
+  "auth.err.invalidCredentialsShort": {
+    en: "Email or password is wrong.",
+    id: "Email atau kata sandi salah.",
+  },
+  "auth.err.invalidEmailTitle": {
+    en: "That email looks off",
+    id: "Format emailnya kurang pas",
+  },
+  "auth.err.invalidEmail": {
+    en: "That's not a valid email — try the format name@email.com.",
+    id: "Formatnya belum valid — coba pakai format nama@email.com.",
+  },
+  "auth.err.invalidEmailShort": {
+    en: "Invalid email format.",
+    id: "Format email gak valid.",
+  },
+  "auth.err.emailNotConfirmedTitle": {
+    en: "Email not confirmed yet",
+    id: "Email belum dikonfirmasi",
+  },
+  "auth.err.emailNotConfirmed": {
+    en: "Confirm your email first — check your inbox for the link.",
+    id: "Konfirmasi dulu emailnya — cek link-nya di inbox kamu.",
+  },
+  "auth.err.emailNotConfirmedShort": {
+    en: "Confirm your email first.",
+    id: "Konfirmasi emailnya dulu.",
+  },
+  "auth.err.userExistsTitle": {
+    en: "You already have an account",
+    id: "Akun kamu udah ada",
+  },
+  "auth.err.userExists": {
+    en: "This email already has an account. Try logging in instead.",
+    id: "Email ini udah punya akun. Coba masuk lewat tab Log In ya.",
+  },
+  "auth.err.userExistsShort": {
+    en: "Email already registered.",
+    id: "Email udah terdaftar.",
+  },
+  "auth.err.weakPasswordTitle": {
+    en: "Password's too short",
+    id: "Kata sandinya kependekan",
+  },
+  "auth.err.weakPassword": {
+    en: "Use at least 8 characters for your password.",
+    id: "Pakai minimal 8 karakter buat kata sandinya ya.",
+  },
+  "auth.err.weakPasswordShort": {
+    en: "Min. 8 characters.",
+    id: "Min. 8 karakter.",
+  },
+  "auth.err.rateLimitTitle": {
+    en: "Whoa, slow down a bit",
+    id: "Waduh, pelan-pelan dulu",
+  },
+  "auth.err.rateLimit": {
+    en: "Too many tries — wait a minute, then try again.",
+    id: "Kebanyakan coba — tunggu semenit, terus coba lagi.",
+  },
+  "auth.err.rateLimitShort": {
+    en: "Too many attempts.",
+    id: "Kebanyakan percobaan.",
+  },
+  "auth.err.networkTitle": {
+    en: "Can't reach the server",
+    id: "Gagal menghubungi server",
+  },
+  "auth.err.network": {
+    en: "Can't reach the server — check your connection.",
+    id: "Gagal konek ke server — cek koneksi internet kamu.",
+  },
+  "auth.err.networkShort": {
+    en: "Connection problem.",
+    id: "Masalah koneksi.",
+  },
+  "auth.err.genericTitle": { en: "Something went wrong", id: "Ada yang salah" },
+  "auth.err.generic": {
+    en: "Couldn't complete that — please try again.",
+    id: "Belum berhasil — coba lagi ya.",
+  },
+  "auth.err.genericShort": {
+    en: "Something went wrong.",
+    id: "Ada yang salah.",
+  },
+  "auth.err.resendButton": {
+    en: "Resend confirmation email",
+    id: "Kirim ulang email konfirmasi",
+  },
+  "auth.err.resendSentTitle": {
+    en: "Confirmation email sent",
+    id: "Email konfirmasi terkirim",
+  },
+  "auth.err.resendSentMessage": {
+    en: "Check {email} for the new confirmation link.",
+    id: "Cek {email} buat link konfirmasi yang baru.",
+  },
+
+  /* ---- extra login-form logic/security copy ---- */
+  "auth.err.invalidEmailFormat": {
+    en: "That doesn't look like a valid email.",
+    id: "Itu belum kelihatan kayak email yang valid.",
+  },
+  "auth.confirmPasswordLabel": {
+    en: "Confirm Password",
+    id: "Konfirmasi Kata Sandi",
+  },
+  "auth.confirmPasswordPlaceholder": {
+    en: "Re-enter your password",
+    id: "Ketik ulang kata sandinya",
+  },
+  "auth.passwordMismatch": {
+    en: "Passwords don't match.",
+    id: "Kata sandinya gak sama.",
+  },
+  "auth.passwordsMatch": {
+    en: "Passwords match",
+    id: "Password cocok",
+  },
+  "auth.emailInvalidInline": {
+    en: "Enter a valid email address",
+    id: "Masukin alamat email yang valid",
+  },
+  "auth.passwordTooShortInline": {
+    en: "At least 8 characters",
+    id: "Minimal 8 karakter",
+  },
+  "auth.signupFixFields": {
+    en: "Fix the highlighted fields to continue.",
+    id: "Perbaiki kolom yang ditandai dulu buat lanjut.",
+  },
+  "auth.capsLockWarning": {
+    en: "Heads up — Caps Lock is on.",
+    id: "Eh, Caps Lock kamu lagi nyala.",
+  },
+  "auth.tooManyAttempts": {
+    en: "Too many attempts. Try again in {seconds}s.",
+    id: "Kebanyakan percobaan. Coba lagi dalam {seconds}d.",
+  },
+  "auth.setupTitle": {
+    en: "Complete your journey's look",
+    id: "Complete your journey's look",
+  },
+  "auth.setupSubtitle": {
+    en: "Let's set up your profile",
+    id: "Ayo set up profile kamu",
+  },
+  "auth.usernameRequired": {
+    en: "Username is required",
+    id: "Username wajib diisi",
+  },
+  "auth.tapToChangePhoto": {
+    en: "Tap to change image",
+    id: "Ketuk buat ganti gambar",
+  },
+  "auth.usernameTaken": {
+    en: "That username is already taken",
+    id: "Username itu udah dipakai orang lain",
+  },
+  "crop.title": { en: "Adjust your image", id: "Atur gambar kamu" },
+  "crop.hint": {
+    en: "Drag to reposition, use the slider to zoom.",
+    id: "Geser buat atur posisi, pakai slider buat zoom.",
+  },
+  "crop.zoom": { en: "Zoom", id: "Zoom" },
+  "crop.cancel": { en: "Cancel", id: "Batal" },
+  "crop.apply": { en: "Apply", id: "Terapkan" },
+  "auth.saving": { en: "Saving…", id: "Menyimpan…" },
+  "auth.continue": { en: "Start Exploring", id: "Mulai Menjelajah" },
+  "auth.signOut": { en: "Sign out", id: "Keluar" },
   "profile.nicknamePlaceholder": {
     en: "Your nickname...",
     id: "Nickname kamu...",
@@ -66,6 +468,8 @@ export const I18N: Record<string, I18NEntry> = {
   "quiz.next": { en: "Next", id: "Lanjut" },
   "quiz.seeResults": { en: "See Results", id: "Lihat Hasil" },
   "quiz.guessRomaji": { en: "Guess the romaji", id: "Tebak romaji" },
+  "quiz.guessHiragana": { en: "Guess the hiragana", id: "Tebak hiragana" },
+  "quiz.hiragana": { en: "Hiragana", id: "Hiragana" },
   "quiz.guessMeaning": { en: "Guess the meaning", id: "Tebak artinya" },
   "quiz.guessKanjiForm": { en: "Which kanji is it?", id: "Kanji yang mana?" },
   "quiz.guessFunction": { en: "Guess the function", id: "Tebak fungsinya" },
@@ -96,6 +500,10 @@ export const I18N: Record<string, I18NEntry> = {
   "quiz.readingLabel": { en: "Reading: {value}", id: "Bacaan: {value}" },
   "quiz.functionLabel": { en: "Function: {value}", id: "Fungsi: {value}" },
   "quiz.kalimatLabel": { en: "Example: {value}", id: "Kalimat: {value}" },
+  "quiz.translationLabel": {
+    en: "Translation: {value}",
+    id: "Arti kalimat: {value}",
+  },
   "quiz.hiraganaLabel": { en: "Hiragana: {value}", id: "Hiragana: {value}" },
   "quiz.kanjiLabel": { en: "Kanji: {value}", id: "Kanji: {value}" },
   "quiz.usageNote": { en: "Note: {value}", id: "Catatan: {value}" },
@@ -120,6 +528,11 @@ export const I18N: Record<string, I18NEntry> = {
   "range.randomCountLabel": {
     en: "Number of questions (picked randomly from this whole tier)",
     id: "Jumlah soal (diambil acak dari seluruh tingkatan ini)",
+  },
+  "range.customCount": { en: "Custom…", id: "Ketik sendiri…" },
+  "range.customCountAria": {
+    en: "Type a custom number of questions",
+    id: "Ketik jumlah soal sendiri",
   },
   "learn.eyebrow": { en: "study mode", id: "mode belajar" },
   "learn.title": { en: "Character Tables", id: "Tabel Aksara" },
@@ -152,6 +565,39 @@ export const I18N: Record<string, I18NEntry> = {
   },
   "levels.groupChapter": { en: "Chapter {n}", id: "Chapter {n}" },
   "levels.subTiers": { en: "sub-tiers", id: "sub-tier" },
+  "n4.eyebrow": { en: "N4 · beta", id: "N4 · beta" },
+  "n4.title": { en: "Kotoba, Kanji & Bunpō N4", id: "Kotoba, Kanji & Bunpō N4" },
+  "n4.sub": {
+    en: "N4 data is pulled straight from the database — this section is still early and will keep growing.",
+    id: "Data N4 diambil langsung dari database — bagian ini masih tahap awal dan bakal terus ditambah.",
+  },
+  "n4.loading": { en: "Loading data…", id: "Memuat data…" },
+  "n4.loadError": { en: "Failed to load data", id: "Gagal memuat data" },
+  "n4.emptyKotoba": {
+    en: "No N4 vocabulary yet.",
+    id: "Belum ada data kotoba N4.",
+  },
+  "n4.emptyKanji": { en: "No N4 kanji yet.", id: "Belum ada data kanji N4." },
+  "n4.emptyBunpo": {
+    en: "No N4 grammar patterns yet.",
+    id: "Belum ada data bunpō N4.",
+  },
+  "n4.subTierDescKotoba": {
+    en: "Vocabulary from this sub-tier.",
+    id: "Kosakata dari sub-tier ini.",
+  },
+  "n4.subTierDescKanji": {
+    en: "Kanji from this sub-tier.",
+    id: "Kanji dari sub-tier ini.",
+  },
+  "n4.subTierDescBunpo": {
+    en: "Grammar patterns from this sub-tier.",
+    id: "Pola tata bahasa dari sub-tier ini.",
+  },
+  "n4.chapterDesc": {
+    en: "{count} {label} across {groups} sub-tier",
+    id: "{count} {label} dalam {groups} sub-tier",
+  },
   "learn.usageNote": { en: "Notes", id: "Catatan" },
   "learn.listenPronunciation": {
     en: "Listen to {text}, read {reading}",
@@ -219,12 +665,18 @@ export const I18N: Record<string, I18NEntry> = {
     en: "A grammar pattern appears — pick its function.",
     id: "Sebuah pola tata bahasa muncul — pilih fungsinya.",
   },
-  "practice.bunpo.particle": { en: "Choose the Particle", id: "Tebak Partikel" },
+  "practice.bunpo.particle": {
+    en: "Choose the Particle",
+    id: "Tebak Partikel",
+  },
   "practice.bunpo.particleDesc": {
     en: "Sentence with a blank — pick the particle that fits.",
     id: "Kalimat dengan bagian kosong — pilih partikel yang tepat.",
   },
-  "practice.bunpo.conjugation": { en: "Verb Conjugation", id: "Konjugasi Kata Kerja" },
+  "practice.bunpo.conjugation": {
+    en: "Verb Conjugation",
+    id: "Konjugasi Kata Kerja",
+  },
   "practice.bunpo.conjugationDesc": {
     en: "Sentence with a blank verb — pick the correct form.",
     id: "Kalimat dengan kata kerja kosong — pilih bentuk yang tepat.",
@@ -234,7 +686,10 @@ export const I18N: Record<string, I18NEntry> = {
     en: "Four sentences use the pattern — pick the correct one.",
     id: "Empat kalimat memakai pola itu — pilih yang benar.",
   },
-  "practice.bunpo.arrange": { en: "Arrange the Sentence (★)", id: "Susun Kalimat (★)" },
+  "practice.bunpo.arrange": {
+    en: "Arrange the Sentence (★)",
+    id: "Susun Kalimat (★)",
+  },
   "practice.bunpo.arrangeDesc": {
     en: "Put four pieces in order — pick the one that lands on ★.",
     id: "Susun empat potongan — pilih yang jatuh di posisi ★.",
@@ -289,17 +744,37 @@ export const I18N: Record<string, I18NEntry> = {
     en: "Switch to dark mode",
     id: "Ganti ke mode gelap",
   },
-  "borderStyle.bw": { en: "Default", id: "Default" },
-  "borderStyle.rainbow": { en: "Rainbow", id: "Pelangi" },
-  "borderStyle.pink": { en: "Pink", id: "Pink" },
-  "borderStyle.purple": { en: "Purple", id: "Ungu" },
-  "borderStyle.cyan": { en: "Cyan", id: "Cyan" },
-  "borderStyle.blue": { en: "Blue", id: "Biru" },
-  "borderStyle.green": { en: "Green", id: "Hijau" },
-  "borderStyle.yellow": { en: "Yellow", id: "Kuning" },
-  "borderStyle.orange": { en: "Orange", id: "Oranye" },
-  "borderStyle.rose": { en: "Red", id: "Merah" },
-  "borderStyle.teal": { en: "Teal", id: "Toska" },
+  "borderStyle.default": { en: "Default", id: "Default" },
+  "borderStyle.custom": { en: "Custom", id: "Kustom" },
+  "borderStyle.customAccent": { en: "Accent", id: "Aksen" },
+  "borderStyle.customText": { en: "Text (outside)", id: "Teks (di luar)" },
+  "borderStyle.customOnAccent": {
+    en: "Text (on background)",
+    id: "Teks (di atas latar)",
+  },
+  "borderStyle.customIcon": { en: "Icon", id: "Ikon" },
+  "borderStyle.customBackground": { en: "Background", id: "Latar" },
+  "borderStyle.customQuizCorrect": { en: "Correct answer", id: "Jawaban benar" },
+  "borderStyle.customQuizWrong": { en: "Wrong answer", id: "Jawaban salah" },
+  "borderStyle.customVermillion": { en: "Vermillion accent", id: "Aksen vermillion" },
+  "borderStyle.customGold": { en: "Gold accent", id: "Aksen emas" },
+  "borderStyle.customMoss": { en: "Moss accent", id: "Aksen moss" },
+  "borderStyle.customChoiceBg": {
+    en: "Answer choice background",
+    id: "Latar pilihan jawaban",
+  },
+  "borderStyle.customChoiceSelected": {
+    en: "Selected answer (Match mode)",
+    id: "Jawaban terpilih (mode Match)",
+  },
+  "borderStyle.sectionTextIcon": { en: "Text & icons", id: "Teks & ikon" },
+  "borderStyle.sectionBackground": {
+    en: "Background & choices",
+    id: "Latar & pilihan",
+  },
+  "borderStyle.sectionQuiz": { en: "Quiz feedback", id: "Umpan balik kuis" },
+  "borderStyle.sectionAccents": { en: "Extra accents", id: "Aksen tambahan" },
+  "borderStyle.reset": { en: "Reset", id: "Reset" },
   "footer.copyright": {
     en: "© 2026 | Sine Deo Vindice",
     id: "© 2026 | Sine Deo Vindice",
@@ -312,6 +787,72 @@ export const I18N: Record<string, I18NEntry> = {
   "quiz.timeUpAnswerWas": {
     en: "⏰ Time's up! The answer was {answer}",
     id: "⏰ Waktu habis! Jawabannya {answer}",
+  },
+
+  "settings.menu.heading": { en: "Settings", id: "Pengaturan" },
+  "settings.menu.subheading": {
+    en: "Customize your experience",
+    id: "Sesuaikan pengalamanmu",
+  },
+  "settings.menu.account.heading": {
+    en: "Account & Experience",
+    id: "Akun & Pengalaman",
+  },
+  "settings.menu.about.heading": { en: "About the app", id: "Tentang aplikasi" },
+  "settings.about.appName": {
+    en: "『天下』 TENKA",
+    id: "『天下』 TENKA",
+  },
+  "settings.about.tagline": {
+    en: "Learn a little every day, toward your best self.",
+    id: "Belajar sedikit demi sedikit, menuju versi terbaik.",
+  },
+  "settings.menu.profile.title": { en: "Profile", id: "Profil" },
+  "settings.menu.profile.desc": {
+    en: "Name, title and profile",
+    id: "Nama, gelar, dan profil",
+  },
+  "settings.menu.appearance.title": { en: "Appearance", id: "Tampilan" },
+  "settings.menu.appearance.desc": {
+    en: "Theme, font and colors",
+    id: "Tema, font, dan warna",
+  },
+  "settings.menu.progress.title": { en: "Progress", id: "Progres" },
+  "settings.menu.progress.desc": {
+    en: "Titles and speedrun records",
+    id: "Title dan rekor speedrun",
+  },
+  "settings.menu.feedback.title": { en: "Feedback", id: "Masukan" },
+  "settings.menu.feedback.desc": {
+    en: "Suggestions and bug reports",
+    id: "Saran dan laporan bug",
+  },
+  "settings.profile.subheading": {
+    en: "Manage your profile information",
+    id: "Kelola informasi profilmu",
+  },
+  "settings.appearance.subheading": {
+    en: "Personalize your learning environment",
+    id: "Personalisasi tampilan belajarmu",
+  },
+  "settings.progress.subheading": {
+    en: "Your achievements and learning journey",
+    id: "Pencapaian dan perjalanan belajarmu",
+  },
+  "settings.feedback.subheading": {
+    en: "Have an idea? Found a bug? Let us know!",
+    id: "Ada ide? Nemu bug? Kasih tau kami!",
+  },
+  "settings.appearance.display": { en: "Display", id: "Tampilan" },
+  "settings.appearance.font": { en: "Font", id: "Font" },
+  "settings.appearance.customColors": {
+    en: "Customize colors",
+    id: "Kustomisasi warna",
+  },
+  "aria.backToSettings": { en: "Back to settings", id: "Kembali ke pengaturan" },
+  "sidebar.identity.editHint": {
+    en: "Double-click to edit name and photo",
+    id: "Klik dua kali untuk edit nama dan foto",
   },
 
   "titles.heading": {
@@ -344,6 +885,36 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Taklukkan tiap Chapter Trial untuk naik dari rakyat jelata sampai kaisar.",
   },
   "rank.comingSoon": { en: "Coming soon", id: "Segera hadir" },
+
+  "missions.open": { en: "Rank missions", id: "Misi kenaikan pangkat" },
+  "missions.button": { en: "Missions", id: "Misi" },
+  "missions.title": { en: "Rank Missions", id: "Misi Pangkat" },
+  "missions.sub": {
+    en: "Finish these targets to climb the noble ranks.",
+    id: "Selesaikan target ini untuk naik pangkat bangsawan.",
+  },
+  "missions.current": { en: "Current", id: "Sekarang" },
+  "missions.next": { en: "Next", id: "Berikutnya" },
+  "missions.progress": {
+    en: "{done} of {total} targets done",
+    id: "{done} dari {total} target selesai",
+  },
+  "missions.conquer": {
+    en: "Conquer all of {label}",
+    id: "Taklukkan seluruh {label}",
+  },
+  "missions.unlocks": { en: "Unlocks {rank}", id: "Membuka {rank}" },
+  "missions.done": { en: "Done", id: "Selesai" },
+  "missions.go": { en: "Go", id: "Mulai" },
+  "missions.allN5": {
+    en: "All N5 targets complete!",
+    id: "Semua target N5 selesai!",
+  },
+  "missions.later": {
+    en: "N4 – N1 missions are coming soon.",
+    id: "Misi N4 – N1 segera hadir.",
+  },
+  "missions.close": { en: "Close", id: "Tutup" },
 
   "feedback.heading": { en: "Send Feedback", id: "Kirim Masukan" },
   "feedback.button": { en: "Send Feedback", id: "Kirim Masukan" },
@@ -774,10 +1345,13 @@ export const I18N: Record<string, I18NEntry> = {
     en: "Highest rank reached — take the throne, Emperor! 👑",
     id: "Tingkatan tertinggi tercapai — bertahtalah, Emperor! 👑",
   },
-  
+
   "borderStyle.heading": { en: "Theme Color", id: "Warna Tema" },
 
-    "flash.importing": { en: "Reading your .apkg file…", id: "Membaca file .apkg kamu…" },
+  "flash.importing": {
+    en: "Reading your .apkg file…",
+    id: "Membaca file .apkg kamu…",
+  },
   "flash.importSuccess": {
     en: '✅ Imported "{name}" — {count} card(s) added.',
     id: '✅ "{name}" diimpor — {count} kartu ditambahkan.',

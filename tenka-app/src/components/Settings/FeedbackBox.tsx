@@ -12,18 +12,15 @@ export default function FeedbackBox() {
   };
 
   return (
-    <div className="settings-group">
-      <span className="settings-label">
-        {t("feedback.heading")}
-      </span>
+    <div className="settings-card feedback-card">
       <textarea
         className="feedback-textarea"
-        rows={3}
+        rows={5}
         value={msg}
         onChange={(e) => setMsg(e.target.value)}
         placeholder={t("feedback.placeholder")}
       />
-      <button className="secondary" type="button" onClick={send}>
+      <button className="primary feedback-send-btn" type="button" onClick={send}>
         {t("feedback.button")}
       </button>
     </div>

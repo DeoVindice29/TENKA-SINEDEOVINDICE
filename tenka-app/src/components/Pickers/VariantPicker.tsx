@@ -10,8 +10,10 @@ export default function VariantPicker() {
   if (!scriptsWithVariant.includes(currentScript)) return null;
 
   const isBunpo = currentScript === "bunpo";
+  const isKanji = currentScript === "kanji";
   // Bunpō tidak punya soal Romaji: tipenya Fungsi / Partikel (kalimat
-  // rumpang) / Campuran.
+  // rumpang) / Campuran. Kanji N5 juga tidak pakai Romaji — soal bacaannya
+  // pakai Hiragana (sama seperti Latihan Tipe Soal & Mode Penaklukan).
   const options = isBunpo
     ? [
         { key: "meaning", label: t("quiz.function") },
@@ -20,7 +22,7 @@ export default function VariantPicker() {
       ]
     : [
         { key: "meaning", label: t("quiz.meaning") },
-        { key: "romaji", label: "Romaji" },
+        { key: "romaji", label: isKanji ? t("quiz.hiragana") : "Romaji" },
         { key: "both", label: t("quiz.mixed") },
       ];
   // pilihan lama dari script lain yang tidak ada di daftar ini → anggap

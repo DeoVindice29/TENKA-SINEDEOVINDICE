@@ -12,6 +12,7 @@ import {
   type JlptScriptKey,
   type PracticeTypeKey,
 } from "@/data/jlptConquest";
+import PageHero from "@/components/PageHero";
 
 // Latihan Tipe Soal — section terpisah (dibuka dari tombol di kanan atas, sama
 // seperti Flashcard). Isinya tipe-tipe soal Penaklukan yang bisa dilatih
@@ -29,9 +30,9 @@ const TYPE_ICONS: Record<PracticeTypeKey, string> = {
   arrange: "🧱",
 };
 
-// Pilihan jumlah soal: 10 / 20 / 50 selama masih di bawah total, lalu "Semua".
+// Pilihan jumlah soal: 10 / 20 selama masih di bawah total, lalu "Semua".
 function countSteps(total: number): number[] {
-  const steps = [10, 20, 50].filter((n) => n < total);
+  const steps = [10, 20].filter((n) => n < total);
   steps.push(total);
   return steps;
 }
@@ -83,22 +84,12 @@ export default function PracticeScreen() {
 
   return (
     <section id="screen-practice">
-      <div className="quiz-back-row">
-        <button
-          className="quiz-back"
-          type="button"
-          data-i18n="common.back"
-          onClick={() => setScreen("start")}
-        >
-          {t("common.back")}
-        </button>
-      </div>
-
-      <header className="learn-header">
-        <div className="eyebrow">{t("practice.eyebrow")}</div>
-        <h1 className="learn-title">{t("practice.title")}</h1>
-        <p className="sub">{t("practice.sub")}</p>
-      </header>
+      <PageHero
+        variant="practice"
+        eyebrow={t("practice.eyebrow")}
+        title={t("practice.title")}
+        sub={t("practice.sub")}
+      />
 
       <div className="quiz-variant-picker practice-script-picker">
         <span className="settings-label">{t("practice.scriptLabel")}</span>

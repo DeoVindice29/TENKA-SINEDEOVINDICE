@@ -10,46 +10,39 @@ export default function RankLadder() {
     lang === "id" ? (RANK_REQ_ID as Record<string, string>)[str] || str : str;
 
   return (
-    <div className="settings-group">
-      <span className="settings-label">
-        {t("about.heading")}
-      </span>
-      <details className="about-details">
-        <summary>
-          {t("about.summary")}
-        </summary>
-        <p className="about-intro">
-          {t("about.intro")}
-        </p>
-        <ol className="rank-ladder">
-          {RANK_LEVELS.map((r, i) => {
-            const status = r.locked
-              ? "locked"
-              : i < rankIndex
-              ? "done"
-              : i === rankIndex
-              ? "current"
-              : "todo";
-            return (
-              <li key={i} className={`rank-item ${status}`}>
-                <span className="rank-emoji">{r.emoji}</span>
-                <span className="rank-body">
-                  <span className="rank-name">
-                    {r.title}{" "}
-                    <span className="rank-jp">{r.subtitle}</span>
-                  </span>
-                  <span className="rank-req">{loc(r.req)}</span>
+    <details className="about-details">
+      <summary>{t("about.summary")}</summary>
+      <p className="about-intro">
+        {t("about.intro")}
+      </p>
+      <ol className="rank-ladder">
+        {RANK_LEVELS.map((r, i) => {
+          const status = r.locked
+            ? "locked"
+            : i < rankIndex
+            ? "done"
+            : i === rankIndex
+            ? "current"
+            : "todo";
+          return (
+            <li key={i} className={`rank-item ${status}`}>
+              <span className="rank-emoji">{r.emoji}</span>
+              <span className="rank-body">
+                <span className="rank-name">
+                  {r.title}{" "}
+                  <span className="rank-jp">{r.subtitle}</span>
                 </span>
-                {r.locked && (
-                  <span className="rank-soon">
-                    {t("rank.comingSoon")}
-                  </span>
-                )}
-              </li>
-            );
-          })}
-        </ol>
-      </details>
-    </div>
+                <span className="rank-req">{loc(r.req)}</span>
+              </span>
+              {r.locked && (
+                <span className="rank-soon">
+                  {t("rank.comingSoon")}
+                </span>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </details>
   );
 }

@@ -175,7 +175,10 @@ function QuizScreenInner() {
   }
 
   const currentType = state.queue[state.index]?.[2];
-  let modeLabel = t("quiz.guessRomaji");
+  // Kanji N5 tidak pakai romaji — tipe soal "romaji" isinya bacaan hiragana,
+  // jadi judulnya juga "Tebak hiragana", bukan "Tebak romaji".
+  let modeLabel =
+    state.script === "kanji" ? t("quiz.guessHiragana") : t("quiz.guessRomaji");
   if (state.conquest) {
     const script = SCRIPTS[state.script as keyof typeof SCRIPTS];
     if (state.conquestPhaseBoundaries) {

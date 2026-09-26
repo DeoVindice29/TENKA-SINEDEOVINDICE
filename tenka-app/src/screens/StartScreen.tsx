@@ -1,4 +1,5 @@
 import { useState } from "react";
+import heroArt from "@/assets/hero-start.webp";
 import { useLang } from "@/i18n/LangContext";
 import { useUI } from "@/state/UIContext";
 import { useQuiz } from "@/state/QuizContext";
@@ -117,51 +118,37 @@ export default function StartScreen() {
   return (
     <section id="screen-start">
       <header>
-        <div className="eyebrow">Learning Japanese — From Zero to Hero</div>
-        <h1>
-          Commoner 『平民』 To Emperor 『天皇』
-          <svg viewBox="0 0 300 14" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="titleRainbowGrad" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="#C2185B" />
-                <stop offset="16%" stopColor="#C2410C" />
-                <stop offset="33%" stopColor="#A16207" />
-                <stop offset="50%" stopColor="#047857" />
-                <stop offset="66%" stopColor="#0E7490" />
-                <stop offset="83%" stopColor="#1E40AF" />
-                <stop offset="100%" stopColor="#7C3AED" />
-              </linearGradient>
-            </defs>
-            <path
-              className="title-underline"
-              d="M2 8 C 80 2, 220 12, 298 6"
-              strokeWidth="3"
-              fill="none"
-              strokeLinecap="round"
-            />
-          </svg>
-        </h1>
-        <p className="sub">
-          "You are an ordinary person with a dream.
-          <br />
-          Train hard, conquer every trial in your way, and claim your throne as{" "}
-          <b>Emperor</b>."
-        </p>
+        <div className="hero-card">
+          <img className="hero-art" src={heroArt} alt="" aria-hidden="true" />
+          <div className="hero-icon" aria-hidden="true">
+            天
+          </div>
+          <div className="hero-text">
+            <div className="eyebrow">Learning Japanese — From Zero to Hero</div>
+            <h1>Commoner 「平民」 To Emperor 「天皇」</h1>
+            <p className="sub">
+              "You are an ordinary person with a dream. Train hard, conquer
+              every trial in your way, and claim your throne as{" "}
+              <b>Emperor</b>."
+            </p>
+          </div>
+        </div>
       </header>
 
-      <ScriptTabs />
-
+      {/* tombol N4 sengaja terpisah dari ScriptTabs/Levels di bawah — N4
+          belum masuk sistem quiz/conquest yang sama kayak N5, masih
+          layar baca-data terpisah yang narik dari Supabase. */}
       <button
         className="secondary"
-        id="btn-open-learn"
+        id="btn-open-n4"
         type="button"
-        data-i18n="start.studyFirst"
-        onClick={() => setScreen("learn")}
+        onClick={() => setScreen("n4")}
       >
-        {t("start.studyScriptFirst", {
-          label: script.label,
-        })}
+        N4 (Beta) — lihat data terbaru
       </button>
+
+      <div className="start-panel">
+      <ScriptTabs />
 
       <Levels />
 
@@ -228,6 +215,7 @@ export default function StartScreen() {
             )
           : t("start.chooseTierFirst")}
       </button>
+      </div>
 
       <button
         className={`conquest-card ${speedrunMode ? "speedrun-mode" : ""} ${

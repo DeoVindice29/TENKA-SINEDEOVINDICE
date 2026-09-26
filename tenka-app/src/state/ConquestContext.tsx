@@ -14,6 +14,7 @@ import {
 import { getLocalizedConquestStory } from "@/data/conquestStory";
 import { getJlptStory, isJlptScript } from "@/data/jlptConquest";
 import { useLang } from "@/i18n/LangContext";
+import { useAuth } from "@/state/AuthContext";
 import { getSpeedrunBest, saveSpeedrunTime } from "@/utils/speedrun";
 import { promoteIfHigher, computeRankIndex } from "@/data/ranks";
 
@@ -45,6 +46,7 @@ const ConquestContext = createContext<ConquestContextValue | null>(null);
 
 export function ConquestProvider({ children }: { children: ReactNode }) {
   const { lang } = useLang();
+  const { isAdmin } = useAuth();
   const [reloadFlag, setReloadFlag] = useState(0);
 
   const reload = useCallback(() => setReloadFlag((n) => n + 1), []);
@@ -54,9 +56,11 @@ export function ConquestProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+  // akun admin lolos semua gate progression (chapter trials, dll) —
+  // gak perlu urut menaklukkan yang sebelumnya dulu.
   const isLocked = useCallback(
-    (scriptKey: string) => checkLockReason(scriptKey),
-    [],
+    (scriptKey: string) => (isAdmin ? null : checkLockReason(scriptKey)),
+    [isAdmin],
   );
 
   const getStory = useCallback(

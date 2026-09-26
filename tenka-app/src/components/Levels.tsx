@@ -82,6 +82,19 @@ export default function Levels() {
       dashIdx >= 0 ? titleText.slice(0, dashIdx).trim() : titleText;
     const titleRest = dashIdx >= 0 ? titleText.slice(dashIdx + 1).trim() : "";
 
+    // lingkaran ikon = karakter pertama sample, teks besar = sample penuh.
+    // Pola Bunpō diawali "_" / tanda kurung (mis. "_は_です", "_（辞書形）"),
+    // jadi yang dipakai huruf/kanji pertama yang sebenarnya, bukan penanda itu.
+    const sampleChars = Array.from(info.sample ?? "");
+    const iconChar =
+      sampleChars.find((c) => /[\p{L}\p{N}]/u.test(c)) ?? sampleChars[0];
+    const sampleNode = (
+      <span className="kana-sample">
+        <span className="kana-icon">{iconChar}</span>
+        <span className="kana-text">{info.sample}</span>
+      </span>
+    );
+
     return (
       <button
         key={meta.id}
@@ -105,18 +118,18 @@ export default function Levels() {
               <span className="tier-chapter-label">{chapterLabel}</span>
               {meta.rank}
             </span>
-            <span className="kana-sample">{info.sample}</span>
+            {sampleNode}
             <h3>{titleRest}</h3>
             <p>{tf(info.desc, lang)}</p>
           </>
         ) : usesTypeLabel ? (
           <>
             <span className="tier">
-              <span className="tier-chapter-label">
+              <span className="tier-type-label">
                 {info.type ? tf(info.type, lang) : meta.rank}
               </span>
             </span>
-            <span className="kana-sample">{info.sample}</span>
+            {sampleNode}
             <h3>{tf(info.title, lang)}</h3>
             <p>{tf(info.desc, lang)}</p>
           </>
@@ -132,7 +145,7 @@ export default function Levels() {
               </span>
               {meta.rank}
             </span>
-            <span className="kana-sample">{info.sample}</span>
+            {sampleNode}
             <h3>{tf(info.title, lang)}</h3>
             <p>{tf(info.desc, lang)}</p>
           </>

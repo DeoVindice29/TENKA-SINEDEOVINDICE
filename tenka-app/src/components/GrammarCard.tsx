@@ -9,6 +9,7 @@ type BunpoItem = readonly [
   readonly (readonly [string, string])[],
   string,
   Bilingual,
+  (Bilingual | "")?,
 ];
 
 type GrammarCardProps = {
@@ -16,7 +17,7 @@ type GrammarCardProps = {
 };
 
 export default function GrammarCard({ items }: GrammarCardProps) {
-  const { lang } = useLang();
+  const { lang, t } = useLang();
   const { speak } = useSpeech();
 
   const tf = (entry: Bilingual | string | null | undefined): string => {
@@ -33,6 +34,7 @@ export default function GrammarCard({ items }: GrammarCardProps) {
         const meaning = item[2];
         const segments = item[3];
         const translation = item[5];
+        const usage = item[6];
 
         return (
           <div key={idx} className="grammar-card">
@@ -68,6 +70,15 @@ export default function GrammarCard({ items }: GrammarCardProps) {
               <span className="vocab-example-translation">
                 {tf(translation)}
               </span>
+            )}
+
+            {usage && (
+              <div className="vocab-usage grammar-usage">
+                <span className="vocab-usage-label">
+                  {t("learn.usageNote")}
+                </span>
+                <p className="vocab-usage-text">{tf(usage)}</p>
+              </div>
             )}
           </div>
         );

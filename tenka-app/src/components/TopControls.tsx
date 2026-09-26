@@ -1,5 +1,6 @@
 import { useUI } from "@/state/UIContext";
 import { useLang } from "@/i18n/LangContext";
+import { useQuiz } from "@/state/QuizContext";
 
 type TopControlsProps = {
   onOpenSettings: () => void;
@@ -8,15 +9,20 @@ type TopControlsProps = {
 export default function TopControls({ onOpenSettings }: TopControlsProps) {
   const { screen, setScreen } = useUI();
   const { t } = useLang();
+  const { state } = useQuiz();
 
-  // Sembunyikan di layar kuis/match/sesi belajar flashcard (biar fokus)
+  // Lagi Penaklukan (cerita atau sesi kuisnya) → sembunyikan semua tombol,
+  // termasuk Settings, biar bener-bener fokus & gak keganggu di tengah sesi.
+  const inConquest =
+    screen === "conquest-story" || (screen === "quiz" && state.conquest);
+
+  if (inConquest) return null;
+
+  // Sembunyikan tombol practice & flashcards di layar kuis (non-Penaklukan)/
+  // match/sesi belajar flashcard (biar fokus) — tombol Settings TETAP muncul
+  // di semua layar ini.
   const hidden =
-    screen === "quiz" ||
-    screen === "conquest-story" ||
-    screen === "match" ||
-    screen === "flashcard";
-
-  if (hidden) return null;
+    screen === "quiz" || screen === "match" || screen === "flashcard";
 
   // Di lobby flashcard (pilih deck) tombol pengaturan TETAP ada; tombol
   // flashcard disembunyikan karena kita udah ada di lobby-nya.
@@ -26,7 +32,7 @@ export default function TopControls({ onOpenSettings }: TopControlsProps) {
 
   return (
     <div className="top-controls">
-      {!inPracticeLobby && (
+      {!hidden && !inPracticeLobby && (
         <button
           className="icon-btn"
           id="practice-toggle"
@@ -35,7 +41,7 @@ export default function TopControls({ onOpenSettings }: TopControlsProps) {
           onClick={() => setScreen("practice")}
         />
       )}
-      {!inFlashLobby && (
+      {!hidden && !inFlashLobby && (
         <button
           className="icon-btn"
           id="flashcards-toggle"

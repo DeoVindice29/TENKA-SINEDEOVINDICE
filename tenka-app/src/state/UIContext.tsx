@@ -5,6 +5,7 @@ import {
   useCallback,
   type ReactNode,
 } from "react";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 export type Screen =
   | "start"
@@ -15,9 +16,19 @@ export type Screen =
   | "quiz"
   | "conquest-story"
   | "match"
-  | "results";
+  | "results"
+  | "n4"
+  | "statistik";
 
 export type ScriptKey = "hiragana" | "katakana" | "kotoba" | "bunpo" | "kanji";
+
+// Layar yang aman buat "diingat" lewat refresh — state-nya cuma butuh
+// context ini sendiri. Layar sesi (quiz/match/flashcard/practice/
+// conquest-story/results) butuh data dari QuizContext/FlashContext/
+// ConquestContext yang TIDAK ikut disimpan, jadi kalau di-resume abis
+// refresh malah nyangkut di layar kosong/rusak — mending balik ke "start".
+const RESUMABLE_SCREENS = new Set<Screen>(["start", "learn", "n4", "statistik"]);
+const SCREEN_STORAGE_KEY = "tenka:screen";
 
 export type PendingFlashDeck = {
   kind: "kotoba" | "kanji";
@@ -78,7 +89,10 @@ type UIContextValue = {
 const UIContext = createContext<UIContextValue | null>(null);
 
 export function UIProvider({ children }: { children: ReactNode }) {
-  const [screen, setScreen] = useState<Screen>("start");
+  const [storedScreen, setStoredScreen] = useLocalStorage<Screen>(SCREEN_STORAGE_KEY, "start");
+  const [screen, setScreenState] = useState<Screen>(
+    RESUMABLE_SCREENS.has(storedScreen) ? storedScreen : "start"
+  );
   const [currentScript, setCurrentScript] = useState<ScriptKey>("hiragana");
   const [selectedMode, setSelectedMode] = useState<string | null>(null);
   const [selectedDifficulty, setSelectedDifficulty] =
@@ -94,7 +108,16 @@ export function UIProvider({ children }: { children: ReactNode }) {
   const [pendingFlashDeck, setPendingFlashDeck] =
     useState<PendingFlashDeck | null>(null);
 
-  const goBack = useCallback(() => setScreen("start"), []);
+  const setScreen = useCallback(
+    (s: Screen) => {
+      setScreenState(s);
+      // Cuma layar "aman" yang disimpan — lihat catatan RESUMABLE_SCREENS.
+      setStoredScreen(RESUMABLE_SCREENS.has(s) ? s : "start");
+    },
+    [setStoredScreen]
+  );
+
+  const goBack = useCallback(() => setScreen("start"), [setScreen]);
 
   return (
     <UIContext.Provider
