@@ -449,8 +449,8 @@ function kanjiFormDistractors(correct: Candidate, all: Candidate[]): string[] {
   return out;
 }
 
-// Sub-tier (27) → Chapter (8: orang, waktu, benda, tempat, kata kerja, ...).
-// Pilihan salah Tier 3 diambil dari CHAPTER lain, bukan cuma sub-tier lain —
+// Sub Chapter (27) → Chapter (8: orang, waktu, benda, tempat, kata kerja, ...).
+// Pilihan salah Tier 3 diambil dari CHAPTER lain, bukan cuma sub chapter lain —
 // kalau tidak, jawaban "かない" bisa ditemani "わたし" / "あなた" yang sama-sama
 // cocok di kalimatnya.
 function chapterOfSubTier(subTier: number): number {

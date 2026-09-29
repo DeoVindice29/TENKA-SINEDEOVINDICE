@@ -59,6 +59,20 @@ import {
 } from "@/hooks/useLearnFilter";
 import { useDragScroll } from "@/hooks/useDragScroll";
 import PageHero from "@/components/PageHero";
+import ContentSourceSwitch, {
+  resolveOrganize,
+  type OrganizeBy,
+} from "@/components/ContentSourceSwitch";
+import { useOrganizeSources } from "@/hooks/useOrganizeSources";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useKotobaLevel } from "@/hooks/useKotobaLevel";
+import { LessonsLoading } from "@/components/ui/Loader";
+import { useLevelUnlock } from "@/hooks/useLevelUnlock";
+import {
+  searchKotobaView,
+  type KotobaLevel,
+  type KotobaLevelView,
+} from "@/lib/kotobaSupabase";
 
 const TABS: { key: ScriptKey; glyph: string; label: string }[] = [
   { key: "hiragana", glyph: "あ", label: "Hiragana" },
@@ -84,6 +98,8 @@ type LearnTablesProps = {
   tab: ScriptKey;
   syncOpenIds: string[];
   onMountedIdsChange: (ids: string[]) => void;
+  /** kalau ada: Kotoba dirender dari data Supabase (N5-N1), bukan data bawaan */
+  sbView?: KotobaLevelView | null;
 };
 
 // Isi tabel/kartu Learn. Di-memo supaya mengetik di kotak pencarian (yang
@@ -93,12 +109,39 @@ const LearnTables = memo(function LearnTables({
   tab,
   syncOpenIds,
   onMountedIdsChange,
+  sbView,
 }: LearnTablesProps) {
   const { t } = useLang();
 
   const kotobaGroups = useMemo(
-    () =>
-      KOTOBA_TIER_GROUPS.map((g) => ({
+    () => {
+      // sumber Supabase: satu grup accordion per Chapter, isinya Sub Chapter
+      if (sbView) {
+        return sbView.chapters.map((ch) => ({
+          id: ch.id,
+          chapterNum: ch.chapter,
+          sample: ch.sample,
+          title: ch.title,
+          desc: ch.desc,
+          render: () => (
+            <>
+              {ch.subGroups.map((sg) => (
+                <LearnSection
+                  key={sg.key}
+                  id={sg.sectionId}
+                  title={sg.title}
+                  count={sg.items.length}
+                  countLabel={t("learn.words")}
+                  desc={sg.desc}
+                >
+                  <VocabList items={sg.items as any} />
+                </LearnSection>
+              ))}
+            </>
+          ),
+        }));
+      }
+      return KOTOBA_TIER_GROUPS.map((g) => ({
         id: g.id,
         chapterNum: g.chapterNum,
         sample: g.sample,
@@ -131,9 +174,10 @@ const LearnTables = memo(function LearnTables({
             })}
           </>
         ),
-      })),
+      }));
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [t],
+    [t, sbView],
   );
 
   return (
@@ -567,6 +611,33 @@ export default function LearnScreen() {
   const { currentScript } = useUI();
   const [tab, setTab] = useState<ScriptKey>(currentScript);
 
+  // Kotoba di Lessons punya dua pilihan yang berdiri sendiri, keduanya
+  // diingat lewat refresh:
+  //  - level JLPT (N5..N1)
+  //  - "Organize by": Topic (data bawaan app, tidak ada yang dihapus) atau
+  //    salah satu Organize by dari Supabase (Minna no Nihongo, dst — admin
+  //    bisa menambah yang baru).
+  // Data bawaan cuma ada untuk N5, jadi level lain otomatis pakai Supabase.
+  const [kotobaLevel, setKotobaLevel] = useLocalStorage<KotobaLevel>(
+    "tenka:lvl:learn:kotoba",
+    "N5",
+  );
+  const [organizeBy, setOrganizeBy] = useLocalStorage<OrganizeBy>(
+    "tenka:org:learn:kotoba",
+    "topic",
+  );
+  // level yang masih terkunci (belum menaklukkan N5 di akun ini) jatuh ke N5.
+  // Cuma diturunkan saat render — pilihan tersimpannya tidak ditimpa, jadi kalau
+  // progres akun baru selesai tersinkron dari Supabase, pilihan lama balik lagi.
+  const { resolveLevel } = useLevelUnlock();
+  const activeLevel = resolveLevel(kotobaLevel);
+  const { sources: organizeSources, ready: organizeReady } = useOrganizeSources("kotoba");
+  const organize = resolveOrganize(activeLevel, organizeBy, organizeSources, organizeReady);
+  const showBuiltIn = organize.value === "topic";
+  const sbLevel = tab === "kotoba" && !showBuiltIn ? activeLevel : null;
+  const sb = useKotobaLevel(sbLevel, organize.sourceId);
+  const sbView = sb.status === "ready" ? sb.view : null;
+
   // pencarian: dikosongkan tiap masuk/keluar layar Learn (komponen ini
   // di-mount ulang), tapi tetap dipakai saat pindah tab script.
   const [query, setQuery] = useState("");
@@ -591,6 +662,32 @@ export default function LearnScreen() {
   // Kotoba dihitung dari data, bukan DOM (panelnya di-mount malas)
   const kotobaOverride = useMemo<LearnFilterOverride | null>(() => {
     if (tab !== "kotoba") return null;
+
+    // sumber Supabase: hitung dari data hasil fetch (kosong selama loading)
+    if (sbLevel) {
+      if (!sbView) {
+        return { chips: [], noMatchIds: [], total: 0, matchingGroupIds: [] };
+      }
+      const found = searchKotobaView(sbView, deferredQuery, lang);
+      const sbChips: { id: string; label: string }[] = [];
+      const sbNoMatch: string[] = [];
+      sbView.chapters.forEach((ch) =>
+        ch.subGroups.forEach((sg) => {
+          sbChips.push({
+            id: sg.sectionId,
+            label: sg.title[lang] || sg.title.en,
+          });
+          if ((found.perKey[sg.key] ?? 0) === 0) sbNoMatch.push(sg.sectionId);
+        }),
+      );
+      return {
+        chips: sbChips,
+        noMatchIds: deferredQuery.trim() ? sbNoMatch : [],
+        total: found.total,
+        matchingGroupIds: found.groupIds,
+      };
+    }
+
     const res = searchKotoba(deferredQuery, lang);
     const chips: { id: string; label: string }[] = [];
     const noMatchIds: string[] = [];
@@ -608,7 +705,7 @@ export default function LearnScreen() {
       total: res.total,
       matchingGroupIds: res.groupIds,
     };
-  }, [tab, deferredQuery, lang]);
+  }, [tab, deferredQuery, lang, sbLevel, sbView]);
 
   const { chips, noMatchIds, total, matchingGroupIds } = useLearnFilter(
     tablesRef,
@@ -652,7 +749,7 @@ export default function LearnScreen() {
       // Kotoba: section-nya ada di Chapter yang panelnya belum di-mount.
       // Buka Chapter-nya dulu (sama seperti klik manual), baru scroll.
       const tierKey = id.replace("learn-sec-kotoba-", "");
-      const groupId = KOTOBA_GROUP_OF_TIER[tierKey];
+      const groupId = KOTOBA_GROUP_OF_TIER[tierKey] ?? sbView?.groupOfKey[tierKey];
       if (!groupId) return;
       const header = tablesRef.current?.querySelector<HTMLButtonElement>(
         `.tier-group[data-group-id="${groupId}"] .tier-group-header`,
@@ -700,6 +797,16 @@ export default function LearnScreen() {
           </button>
         ))}
       </div>
+
+      {tab === "kotoba" && (
+        <ContentSourceSwitch
+          level={activeLevel}
+          organize={organize}
+          sources={organizeSources}
+          onLevelChange={setKotobaLevel}
+          onOrganizeChange={setOrganizeBy}
+        />
+      )}
 
       <div className="learn-toolbar" id="learn-toolbar">
         <div className="learn-search-box">
@@ -764,12 +871,42 @@ export default function LearnScreen() {
         </div>
       )}
 
-      <div id="learn-tables" ref={tablesRef} key={tab}>
-        <LearnTables
-          tab={tab}
-          syncOpenIds={matchingGroupIds}
-          onMountedIdsChange={handleMountedIdsChange}
-        />
+      <div
+        id="learn-tables"
+        ref={tablesRef}
+        key={`${tab}:${sbLevel ?? "local"}:${organize.sourceId ?? ""}`}
+      >
+        {sbLevel && (sb.status === "loading" || organize.pending) && (
+          <LessonsLoading label={t("source.loading", { level: sbLevel })} />
+        )}
+        {sbLevel && sb.status === "error" && (
+          <div className="learn-no-results">
+            <p style={{ color: "#c0392b" }}>
+              {t("source.loadError")}: {sb.error}
+            </p>
+            <button type="button" className="source-retry" onClick={sb.retry}>
+              {t("source.retry")}
+            </button>
+          </div>
+        )}
+        {sbLevel && !organize.pending && organize.sourceId === null && (
+          <p className="learn-no-results">
+            {t("source.emptyKotoba", { level: sbLevel })}
+          </p>
+        )}
+        {sbLevel && sbView && sbView.total === 0 && (
+          <p className="learn-no-results">
+            {t("source.emptyKotoba", { level: sbLevel })}
+          </p>
+        )}
+        {(!sbLevel || (sbView && sbView.total > 0)) && (
+          <LearnTables
+            tab={tab}
+            syncOpenIds={matchingGroupIds}
+            onMountedIdsChange={handleMountedIdsChange}
+            sbView={sbView}
+          />
+        )}
       </div>
 
       <ScrollTopButton id="btn-learn-scrolltop" />

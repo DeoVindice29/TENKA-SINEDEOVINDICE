@@ -1,28 +1,64 @@
+import { useState } from "react";
 import { useLang } from "@/i18n/LangContext";
 import { useUI, type ScriptKey } from "@/state/UIContext";
 import Modal from "@/components/ui/Modal";
+import ChibiGuide from "@/components/RankMissions/ChibiGuide";
 import { SCRIPTS } from "@/data/scripts";
+import { isJlptScript, jlptTierCount } from "@/data/jlptConquest";
 import {
   MISSION_TOTAL,
   RANK_LEVELS,
   RANK_MISSIONS,
   getConquery,
+  type MissionScriptKey,
 } from "@/data/ranks";
-import { useRankIndex } from "@/hooks/useRankIndex";
+import { pickGuideMood } from "@/data/chibiGuide";
+import { CHIBI_QUOTES, pickQuoteIndex } from "@/data/chibiQuotes";
 
 type Props = {
   open: boolean;
   onClose: () => void;
 };
 
-// Popup "Misi Pangkat": daftar target (taklukkan tiap aksara N5) yang harus
-// diselesaikan supaya naik pangkat. Status diambil dari data Penaklukan yang
-// sudah tersimpan (getConquery), dibaca ulang tiap popup dibuka.
+// Glyph + warna tiap kartu misi (dipakai class .rm-tone-*, lihat dashboard.css).
+const MISSION_GLYPH: Record<MissionScriptKey, { glyph: string; tone: string }> = {
+  hiragana: { glyph: "あ", tone: "teal" },
+  katakana: { glyph: "ア", tone: "orange" },
+  kotoba: { glyph: "語", tone: "gold" },
+  bunpo: { glyph: "文", tone: "pink" },
+  kanji: { glyph: "漢", tone: "purple" },
+};
+
+// Jumlah tier yang harus dilewati buat menaklukkan tiap materi, sesuai ujian
+// Penaklukan: hiragana & katakana = 3 tier (tahap); kotoba/bunpō/kanji =
+// ujian ala JLPT (jlptTierCount: kotoba 4, bunpō 5, kanji 4).
+function tierCount(key: MissionScriptKey): number {
+  return isJlptScript(key) ? jlptTierCount(key) : 3;
+}
+
+// Popup "Rank Missions": atas = pangkat sekarang → pangkat berikutnya,
+// bawah = langkah-langkah (taklukkan tiap aksara/materi N5) yang harus
+// diselesaikan buat naik ke pangkat itu. Status diambil dari data Penaklukan
+// yang sudah tersimpan (getConquery), dibaca ulang tiap popup dibuka.
 export default function RankMissionsModal({ open, onClose }: Props) {
   const { t } = useLang();
-  const { setScreen, setCurrentScript, setSelectedMode, setQuizVariant } =
-    useUI();
-  const rankIndex = useRankIndex();
+  const {
+    setScreen,
+    setCurrentScript,
+    setSelectedMode,
+    setQuizVariant,
+    setPendingConquestOpen,
+  } = useUI();
+
+  // Kutipan chibi: dipilih ulang (acak, beda dari sebelumnya) TIAP popup
+  // dibuka. Di-set saat render begitu `open` berubah jadi true, jadi kutipan
+  // baru langsung tampil tanpa sempat berkedip kutipan lama.
+  const [wasOpen, setWasOpen] = useState(open);
+  const [quoteIdx, setQuoteIdx] = useState<number>(() => pickQuoteIndex(null));
+  if (open !== wasOpen) {
+    setWasOpen(open);
+    if (open) setQuoteIdx(pickQuoteIndex(quoteIdx));
+  }
 
   const conquered = open ? getConquery() : {};
   const groups = RANK_MISSIONS.map((g) => ({
@@ -37,14 +73,39 @@ export default function RankMissionsModal({ open, onClose }: Props) {
   const allDone = done === MISSION_TOTAL;
   const currentGroup = groups.findIndex((g) => g.items.some((i) => !i.done));
 
-  const current = RANK_LEVELS[rankIndex] ?? RANK_LEVELS[0];
   const next = allDone ? null : groups[currentGroup]?.rank ?? null;
-  const pct = Math.round((done / MISSION_TOTAL) * 100);
+
+  // Judul bagian bawah: "Path to Knighthood" (nyambung sama Commoner → Knight).
+  // Kalau semua N5 sudah tuntas, tetap nunjuk pangkat tujuan terakhir.
+  const targetTitle = (next ?? groups[groups.length - 1].rank).title;
+  const stepsTitle = t("missions.steps", {
+    rank: targetTitle === "Knight" ? "Knighthood" : targetTitle,
+  });
+
+  // Langkah yang harus dilakukan buat naik ke pangkat berikutnya: semua
+  // syarat dari awal sampai pangkat itu, urut (yang udah beres tetap
+  // ditampilin sebagai "Completed"). Kalau semua N5 tuntas, tampilin semuanya.
+  const stepGroups = allDone ? groups : groups.slice(0, currentGroup + 1);
+  const steps = stepGroups.flatMap((g) => g.items);
+  const stepsDone = steps.filter((i) => i.done).length;
+
+  // Pose si peri pemandu ngikutin progress grup misi yang sedang aktif
+  // (bukan progress total), biar reaksinya relevan sama yang lagi dikerjain.
+  const activeGroup = groups[currentGroup];
+  const activeDone = activeGroup ? activeGroup.items.filter((i) => i.done).length : 0;
+  const activeTotal = activeGroup ? activeGroup.items.length : 0;
+  const mood = pickGuideMood(activeDone, activeTotal, allDone);
+
+  // index terakhir = kutipan kontekstual sesuai progres misi
+  const quote =
+    quoteIdx < CHIBI_QUOTES.length ? CHIBI_QUOTES[quoteIdx] : mood;
 
   const go = (key: ScriptKey) => {
     setCurrentScript(key);
     setSelectedMode(null);
     setQuizVariant("meaning");
+    // langsung buka popup Penaklukan aksara ini, bukan cuma pindah layar
+    setPendingConquestOpen(true);
     setScreen("start");
     onClose();
   };
@@ -56,88 +117,110 @@ export default function RankMissionsModal({ open, onClose }: Props) {
       labelledBy="missions-title"
       panelClassName="missions-panel"
     >
-      <h2 id="missions-title">{t("missions.title")}</h2>
-      <p className="modal-text">{t("missions.sub")}</p>
-
-      <div className="missions-hero">
-        <div className="missions-rank">
-          <span className="missions-rank-emoji">{current.emoji}</span>
-          <small>{t("missions.current")}</small>
-          <strong>{current.title}</strong>
-        </div>
-        <span className="missions-hero-arrow" aria-hidden="true">
-          ›
-        </span>
-        <div className={`missions-rank ${next ? "" : "muted"}`}>
-          <span className="missions-rank-emoji">{next ? next.emoji : "🏆"}</span>
-          <small>{t("missions.next")}</small>
-          <strong>{next ? next.title : "N4"}</strong>
-        </div>
-      </div>
-
-      <div className="missions-progress">
-        <div
-          className="missions-bar"
-          role="progressbar"
-          aria-valuemin={0}
-          aria-valuemax={MISSION_TOTAL}
-          aria-valuenow={done}
+      <header className="rm-hero">
+        <button
+          type="button"
+          className="rm-close"
+          aria-label={t("missions.close")}
+          onClick={onClose}
         >
-          <span style={{ width: `${pct}%` }} />
-        </div>
-        <small>{t("missions.progress", { done, total: MISSION_TOTAL })}</small>
-      </div>
-
-      <ol className="missions-list">
-        {groups.map((g, gi) => (
-          <li
-            key={g.rankIndex}
-            className={`missions-group ${
-              gi === currentGroup ? "current" : ""
-            }`}
-          >
-            <div className="missions-group-head">
-              <span>{g.rank.emoji}</span>
-              <span>{t("missions.unlocks", { rank: g.rank.title })}</span>
-            </div>
-            {g.items.map((it) => (
-              <div
-                key={it.key}
-                className={`mission-row ${it.done ? "done" : ""}`}
-              >
-                <span className="mission-check" aria-hidden="true">
-                  {it.done ? "✓" : ""}
-                </span>
-                <span className="mission-text">
-                  {t("missions.conquer", { label: SCRIPTS[it.key].label })}
-                </span>
-                {it.done ? (
-                  <span className="mission-done">{t("missions.done")}</span>
-                ) : (
-                  <button
-                    type="button"
-                    className="mission-go"
-                    onClick={() => go(it.key)}
-                  >
-                    {t("missions.go")}
-                  </button>
-                )}
-              </div>
-            ))}
-          </li>
-        ))}
-      </ol>
-
-      <p className="missions-later">
-        {allDone ? `${t("missions.allN5")} ` : ""}
-        {t("missions.later")}
-      </p>
-
-      <div className="modal-actions">
-        <button className="ghost" type="button" onClick={onClose}>
-          {t("missions.close")}
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M1.5 1.5 12.5 12.5M12.5 1.5 1.5 12.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </svg>
         </button>
-      </div>
+
+        {/* judul tetap ada buat screen reader (aria-labelledby), tapi gak
+            ditampilin — bagian atas sekarang diisi bubble ucapan chibi */}
+        <h2 id="missions-title" className="sr-only">
+          {t("missions.title")}
+        </h2>
+
+        <div className="rm-hero-top">
+          <ChibiGuide expression={quote.expression} />
+          <div className="rm-bubble" key={`${quoteIdx}:${quote.messageKey}`}>
+            <span className="rm-bubble-petals" aria-hidden="true" />
+            <p className="rm-bubble-text">{t(quote.messageKey)}</p>
+          </div>
+        </div>
+      </header>
+
+      <section className="rm-steps" aria-labelledby="missions-steps-title">
+        <div className="rm-steps-head">
+          <div>
+            <h3 id="missions-steps-title">
+              <svg width="16" height="20" viewBox="0 0 16 20" fill="currentColor" aria-hidden="true">
+                <path d="M8 0C3.6 0 0 3.5 0 7.9 0 13.6 8 20 8 20s8-6.4 8-12.1C16 3.5 12.4 0 8 0zm0 10.8a2.9 2.9 0 1 1 0-5.8 2.9 2.9 0 0 1 0 5.8z" />
+              </svg>
+              {stepsTitle}
+            </h3>
+            <p>
+              {allDone
+                ? t("missions.allN5")
+                : t("missions.stepsSub", { rank: next?.title ?? "" })}
+            </p>
+          </div>
+          <span className="rm-count">
+            {t("missions.progress", { done: stepsDone, total: steps.length })}
+          </span>
+        </div>
+
+        <ol className="rm-cards">
+          {steps.map((it, i) => {
+            const meta = MISSION_GLYPH[it.key];
+            const label = SCRIPTS[it.key].label;
+            return (
+              <li key={it.key} className="rm-cell">
+                {i > 0 && (
+                  <span className="rm-cards-arrow" aria-hidden="true">
+                    <svg width="8" height="13" viewBox="0 0 10 16" fill="none">
+                      <path d="M2 2l6 6-6 6" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                )}
+                <div className={`rm-card ${it.done ? "done" : ""}`}>
+                  <span className="rm-card-num">{i + 1}</span>
+                  <span className={`rm-card-icon rm-tone-${meta.tone}`} aria-hidden="true">
+                    {meta.glyph}
+                  </span>
+                  <div className="rm-card-body">
+                    <strong>{t("missions.conquer", { label })}</strong>
+                    <span>{t("missions.desc", { label, count: tierCount(it.key) })}</span>
+                  </div>
+                  {it.done ? (
+                    <span className="rm-card-status">
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                        <circle cx="7" cy="7" r="7" fill="currentColor" />
+                        <path d="M4 7.2l2 2 4-4.2" stroke="var(--card)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      {t("missions.completed")}
+                    </span>
+                  ) : (
+                    <button
+                      type="button"
+                      className="rm-card-go"
+                      onClick={() => go(it.key)}
+                    >
+                      {t("missions.go")}
+                    </button>
+                  )}
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+
+        <p className="rm-later">{t("missions.later")}</p>
+      </section>
+
+      <footer className="rm-foot">
+        <span className="rm-foot-line" aria-hidden="true" />
+        <span className="rm-foot-text">
+          <span aria-hidden="true">✦</span>
+          {t("missions.footer")}
+          <span aria-hidden="true">✦</span>
+        </span>
+        <span className="rm-foot-line" aria-hidden="true" />
+      </footer>
     </Modal>
   );
 }

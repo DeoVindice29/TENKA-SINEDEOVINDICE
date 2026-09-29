@@ -10,6 +10,8 @@ export type SegmentPair = readonly [string, string];
 export type KotobaRow = {
   id: number;
   tier: string;
+  /** Organize by (organize_sources.id) tempat entri ini berada. */
+  source_id: number;
   chapter: number;
   sub_tier: number;
   kana: string;
@@ -30,6 +32,8 @@ export type KotobaRow = {
 export type KanjiRow = {
   id: number;
   tier: string;
+  /** Organize by (organize_sources.id) tempat entri ini berada. */
+  source_id: number;
   chapter: number;
   sub_tier: number;
   kanji: string;
@@ -43,6 +47,8 @@ export type KanjiRow = {
 export type BunpoRow = {
   id: number;
   tier: string;
+  /** Organize by (organize_sources.id) tempat entri ini berada. */
+  source_id: number;
   chapter: number;
   sub_tier: number;
   pattern: string;
@@ -60,24 +66,56 @@ export type BunpoRow = {
 
 export type ContentKind = "kotoba" | "kanji" | "bunpo";
 
+// Nama dasar tabel per jenis konten. Datanya sudah dipisah per level JLPT,
+// jadi jangan dipakai langsung di supabase.from(...) — pakai tableFor().
 export const TABLE_NAME: Record<ContentKind, string> = {
   kotoba: "kotoba_entries",
   kanji: "kanji_entries",
   bunpo: "bunpo_entries",
 };
 
+export const TIER_LEVELS = ["N5", "N4", "N3", "N2", "N1"] as const;
+
+/** Tabel Supabase untuk satu jenis konten di satu level, mis. kotoba_entries_n5. */
+export function tableFor(kind: ContentKind, tier: string): string {
+  return `${TABLE_NAME[kind]}_${tier.toLowerCase()}`;
+}
+
 /**
  * Satu baris = nama untuk satu grup (tier, chapter, sub_tier) — misal
- * "Tier 1.1 — Personal Pronouns & Greetings". Dipakai bareng oleh semua
- * ContentKind (kotoba/kanji/bunpo boleh berbagi chapter+sub_tier yang
- * sama), makanya disimpan di tabel terpisah, bukan diulang di tiap entry.
+ * "Sub Chapter 1.1 — Personal Pronouns & Greetings". Disimpan di tabel terpisah dari
+ * entri (bukan diulang di tiap entry), satu tabel per ContentKind.
  */
 export type SectionTitleRow = {
   tier: string;
+  source_id: number;
   chapter: number;
   sub_tier: number;
   title_en: string;
   title_id: string;
 };
 
-export const SECTION_TITLES_TABLE = "section_titles";
+/**
+ * Nama Chapter / Sub Chapter disimpan per jenis konten, jadi Kotoba, Kanji,
+ * dan Bunpō masing-masing punya daftar chapter sendiri:
+ * section_titles_kotoba, section_titles_kanji, section_titles_bunpo.
+ */
+export function sectionTitlesTable(kind: ContentKind): string {
+  return `section_titles_${kind}`;
+}
+
+/**
+ * "Organize by" = cara/sumber menyusun materi di satu level, mis. "Minna no
+ * Nihongo", "Genki", "Tema Harian". Ada di antara Level dan Chapter:
+ * Level -> Organize by -> Chapter -> Sub Chapter -> entri. Daftarnya per jenis
+ * konten + level (tabel organize_sources), jadi menghapus satu sumber di
+ * Kotoba tidak menyentuh Kanji/Bunpō.
+ */
+export type OrganizeSourceRow = {
+  id: number;
+  kind: ContentKind;
+  tier: string;
+  name_id: string;
+  name_en: string;
+  sort_order: number;
+};

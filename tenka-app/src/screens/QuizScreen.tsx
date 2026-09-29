@@ -4,13 +4,14 @@ import { useUI } from "@/state/UIContext";
 import { useQuiz } from "@/state/QuizContext";
 import { SCRIPTS } from "@/data/scripts";
 import { useConquest } from "@/state/ConquestContext";
-import QuizHeader from "@/components/Quiz/QuizHeader";
+import QuizHeader, { QuizStreak } from "@/components/Quiz/QuizHeader";
 import QuizStamp from "@/components/Quiz/QuizStamp";
 import Choices from "@/components/Quiz/Choices";
 import HardInput from "@/components/Quiz/HardInput";
 import Feedback from "@/components/Quiz/Feedback";
 import ResultsScreen from "@/screens/ResultsScreen";
 import ConquestStory from "@/components/Conquest/ConquestStory";
+import AdminQuizTools from "@/components/Quiz/AdminQuizTools";
 import { practiceTypeKeyOfQueueType } from "@/data/jlptConquest";
 
 function fmtTime(ms: number): string {
@@ -27,7 +28,12 @@ export default function QuizScreen() {
   const { state } = useQuiz();
   // key = runId → Restart/Retry me-mount ulang seluruh layar kuis (timer,
   // input, cerita Chapter, dll. kembali bersih)
-  return <QuizScreenInner key={state.runId} />;
+  return (
+    <>
+      <QuizScreenInner key={state.runId} />
+      <AdminQuizTools />
+    </>
+  );
 }
 
 function QuizScreenInner() {
@@ -45,6 +51,12 @@ function QuizScreenInner() {
     );
   });
   const [speedrunElapsed, setSpeedrunElapsed] = useState(0);
+
+  // soal sudah maju (mis. admin skip Tier/Chapter dari layar cerita awal) →
+  // jangan tampilkan lagi cerita pembuka
+  useEffect(() => {
+    if (state.index > 0) setShowStory(false);
+  }, [state.index]);
 
   // Tombol Back "armed": klik pertama minta konfirmasi (3 detik), klik kedua
   // baru benar-benar keluar dari kuis.
@@ -220,6 +232,10 @@ function QuizScreenInner() {
     if (typeKey) modeLabel = t(`practice.${state.script}.${typeKey}`);
   }
 
+  const position = state.index + 1;
+  const total = state.queue.length;
+  const pct = total > 0 ? Math.min(100, (position / total) * 100) : 0;
+
   return (
     <section
       id="screen-quiz"
@@ -231,42 +247,78 @@ function QuizScreenInner() {
             : ""
       }
     >
-           <div className="quiz-back-row">
+      <div className="quiz-topbar">
         <button
-          className={`quiz-back ${backArmed ? "armed" : ""}`}
+          className={`quiz-pill-btn quiz-back ${backArmed ? "armed" : ""}`}
           type="button"
           data-i18n="common.back"
           onClick={handleBack}
         >
-          {backArmed ? t("common.backArmed") : t("common.back")}
+          <span>{backArmed ? t("common.backArmed") : t("common.back")}</span>
         </button>
+
+        <div className="quiz-progress-center">
+          <div className="quiz-progress-text">
+            {position} / {total}
+          </div>
+          <div className="quiz-progress-bar" aria-hidden="true">
+            <div className="quiz-progress-fill" style={{ width: `${pct}%` }} />
+          </div>
+        </div>
+
         <button
-          className="quiz-back"
+          className="quiz-pill-btn quiz-restart"
           type="button"
           onClick={restartQuiz}
         >
-          Restart
+          <svg
+            className="quiz-pill-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M20 11A8 8 0 1 0 18.5 15.5"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M20 5v6h-6"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <span>Restart</span>
         </button>
       </div>
 
-      {state.speedrun && (
-        <div className="quiz-top">
-          <div className="quiz-progress-text">
-            {state.index + 1}/{state.queue.length}
+      <div className="quiz-card">
+        {state.speedrun && (
+          <div className="quiz-substatus-row">
+            <div className="speedrun-timer">⏱️ {fmtTime(speedrunElapsed)}</div>
           </div>
-          <div className="speedrun-timer">⏱️ {fmtTime(speedrunElapsed)}</div>
+        )}
+
+        {!state.speedrun && <QuizHeader />}
+
+        <QuizStamp />
+
+        <div className="quiz-mode-label">
+          <span className="mode-label-line" aria-hidden="true" />
+          <span className="mode-label-text">{modeLabel}</span>
+          <span className="mode-label-line" aria-hidden="true" />
         </div>
-      )}
 
-      {!state.speedrun && <QuizHeader />}
+        {state.difficulty === "hard" ? <HardInput /> : <Choices />}
 
-      <QuizStamp />
+        <Feedback />
 
-      <div className="quiz-mode-label">{modeLabel}</div>
-
-      {state.difficulty === "hard" ? <HardInput /> : <Choices />}
-
-      <Feedback />
+        <QuizStreak />
+      </div>
     </section>
   );
 }

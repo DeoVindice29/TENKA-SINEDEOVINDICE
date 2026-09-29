@@ -120,8 +120,8 @@ export const SCRIPTS = {
         type: { en: "Mixed", id: "Campuran" },
         sample: "ん づ りょ",
         desc: {
-          en: "All hiragana characters shuffled into one Chapter.",
-          id: "Seluruh karakter hiragana diacak menjadi satu Chapter.",
+          en: "All hiragana characters shuffled into one Tier.",
+          id: "Seluruh karakter hiragana diacak menjadi satu Tier.",
         },
       },
     },
@@ -229,8 +229,8 @@ export const SCRIPTS = {
         type: { en: "Mixed", id: "Campuran" },
         sample: "ン ヅ リョ",
         desc: {
-          en: "All katakana characters shuffled into one Chapter.",
-          id: "Seluruh karakter katakana diacak menjadi satu Chapter.",
+          en: "All katakana characters shuffled into one Tier.",
+          id: "Seluruh karakter katakana diacak menjadi satu Tier.",
         },
       },
     },
@@ -657,13 +657,13 @@ export const SCRIPTS = {
       { key: "romaji", icon: "🔤", label: "Romaji" },
       { key: "both", icon: "🎲", i18nKey: "quiz.mixed" },
     ],
-    // Kotoba N5 sekarang punya 7 Tier / 21 Sub-Tier (bukan lagi cuma tier1/2/3) —
+    // Kotoba N5 sekarang punya 7 Tier / 21 Sub Chapter (bukan lagi cuma tier1/2/3) —
     // tierKeys + levelMeta custom ini dipakai renderLevels() sebagai pengganti
     // LEVEL_META global, sama persis seperti pola yang dipakai Kanji N5 (9 Chapter)
-    // & Bunpō N5 (15 Sub-Tier).
+    // & Bunpō N5 (15 Sub Chapter).
     tierKeys: KOTOBA_TIER_KEYS,
     levelMeta: KOTOBA_N5_LEVEL_META,
-    // groups: dipakai renderLevels() utk nge-render 24 sub-tier di atas sebagai
+    // groups: dipakai renderLevels() utk nge-render 24 sub chapter di atas sebagai
     // Nested Accordion (7 Chapter + kartu "All Mixed" berdiri sendiri = 8).
     groups: KOTOBA_TIER_GROUPS,
     data: Object.fromEntries(
@@ -724,7 +724,7 @@ export const SCRIPTS = {
       { key: "kalimat", icon: "📝", i18nKey: "quiz.kalimat" },
       { key: "both", icon: "🎲", i18nKey: "quiz.mixed" },
     ],
-    // Bunpō N5 sekarang 100 pola / 15 sub-tier (bukan 36 pola / 3 tier lagi) —
+    // Bunpō N5 sekarang 100 pola / 15 sub chapter (bukan 36 pola / 3 tier lagi) —
     // tierKeys + levelMeta custom ini dipakai renderLevels() sebagai pengganti
     // LEVEL_META global, sama persis seperti pola yang dipakai Kanji N5 (9 Chapter).
     tierKeys: BUNPO_N5_TIER_KEYS,
@@ -823,7 +823,7 @@ Object.values(SCRIPTS).forEach((s) => {
     );
   }
   // Bunpō: pool "all" utk catatan cara pakai di feedback kuis, sama kayak
-  // dataUsage di Kotoba, biar tetap kebaca pas mode "Semua Sub-Tier" juga.
+  // dataUsage di Kotoba, biar tetap kebaca pas mode "Semua Sub Chapter" juga.
   if (anyS.dataNote) {
     anyS.dataNote.all = cat(anyS.dataNote as Record<string, unknown[]>);
   }

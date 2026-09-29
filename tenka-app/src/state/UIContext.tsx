@@ -84,15 +84,23 @@ type UIContextValue = {
    */
   pendingFlashDeck: PendingFlashDeck | null;
   setPendingFlashDeck: (d: PendingFlashDeck | null) => void;
+
+  /**
+   * Sekali pakai: tombol "Go" di Rank Missions menyalakan ini, lalu layar
+   * Start langsung membuka popup Penaklukan aksara yang dipilih dan
+   * mengosongkannya lagi. Sengaja tidak disimpan (bukan localStorage).
+   */
+  pendingConquestOpen: boolean;
+  setPendingConquestOpen: (v: boolean) => void;
 };
 
 const UIContext = createContext<UIContextValue | null>(null);
 
 export function UIProvider({ children }: { children: ReactNode }) {
   const [storedScreen, setStoredScreen] = useLocalStorage<Screen>(SCREEN_STORAGE_KEY, "start");
-  const [screen, setScreenState] = useState<Screen>(
-    RESUMABLE_SCREENS.has(storedScreen) ? storedScreen : "start"
-  );
+  // Selalu mulai dari Home tiap app dibuka / login (tidak resume layar terakhir).
+  void storedScreen;
+  const [screen, setScreenState] = useState<Screen>("start");
   const [currentScript, setCurrentScript] = useState<ScriptKey>("hiragana");
   const [selectedMode, setSelectedMode] = useState<string | null>(null);
   const [selectedDifficulty, setSelectedDifficulty] =
@@ -107,6 +115,7 @@ export function UIProvider({ children }: { children: ReactNode }) {
   const [matchMode, setMatchMode] = useState<string | null>(null);
   const [pendingFlashDeck, setPendingFlashDeck] =
     useState<PendingFlashDeck | null>(null);
+  const [pendingConquestOpen, setPendingConquestOpen] = useState(false);
 
   const setScreen = useCallback(
     (s: Screen) => {
@@ -149,6 +158,8 @@ export function UIProvider({ children }: { children: ReactNode }) {
         setMatchMode,
         pendingFlashDeck,
         setPendingFlashDeck,
+        pendingConquestOpen,
+        setPendingConquestOpen,
       }}
     >
       {children}

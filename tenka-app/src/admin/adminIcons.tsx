@@ -215,6 +215,19 @@ export function IconUsers(props: IconProps) {
   );
 }
 
+export function IconFolder(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path
+        d="M4 6.8A1.8 1.8 0 0 1 5.8 5h4.3l1.9 2.2h6.2A1.8 1.8 0 0 1 20 9v8.2A1.8 1.8 0 0 1 18.2 19H5.8A1.8 1.8 0 0 1 4 17.2Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function IconSakura(props: IconProps) {
   return (
     <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>

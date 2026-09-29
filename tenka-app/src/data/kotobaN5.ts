@@ -1138,7 +1138,7 @@ export const KOTOBA_N5_CH1_1: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 1.2: Keluarga & Hubungan (24)
+// Sub Chapter 1.2: Keluarga & Hubungan (24)
 export const KOTOBA_N5_CH1_2: KotobaEntry[] = [
   [
     "かぞく",
@@ -1904,7 +1904,7 @@ export const KOTOBA_N5_CH1_2: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 1.3: Profesi & Peran (3)
+// Sub Chapter 1.3: Profesi & Peran (3)
 export const KOTOBA_N5_CH1_3: KotobaEntry[] = [
   [
     "きょうし",
@@ -2517,7 +2517,7 @@ export const KOTOBA_N5_CH1_3: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 2.1: Waktu Harian & Keterangan Waktu (5)
+// Sub Chapter 2.1: Waktu Harian & Keterangan Waktu (5)
 export const KOTOBA_N5_CH2_1: KotobaEntry[] = [
   [
     "いま",
@@ -3092,7 +3092,7 @@ export const KOTOBA_N5_CH2_1: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 2.2: Hari, Bulan, & Jam (26)
+// Sub Chapter 2.2: Hari, Bulan, & Jam (26)
 export const KOTOBA_N5_CH2_2: KotobaEntry[] = [
   [
     "げつようび",
@@ -4473,7 +4473,7 @@ export const KOTOBA_N5_CH2_2: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 2.3: Bilangan & Satuan Penghitung (35)
+// Sub Chapter 2.3: Bilangan & Satuan Penghitung (35)
 export const KOTOBA_N5_CH2_3: KotobaEntry[] = [
   [
     "ひとつ",
@@ -5274,8 +5274,8 @@ export const KOTOBA_N5_CH2_3: KotobaEntry[] = [
     "三",
     "三時にお茶を飲みます。",
     {
-      en: "This さん is the number 3 (三) — not the suffix さん (Mr./Ms.) in the Pronouns & Greetings sub-tier. Some counters change its sound: さんぼん, さんびき, さんぷん.",
-      id: "さん ini adalah angka 3 (三) — bukan akhiran さん (Tuan/Nyonya) di sub-tier Kata Ganti & Sapaan. Beberapa satuan penghitung mengubah bunyinya: さんぼん, さんびき, さんぷん.",
+      en: "This さん is the number 3 (三) — not the suffix さん (Mr./Ms.) in the Pronouns & Greetings sub chapter. Some counters change its sound: さんぼん, さんびき, さんぷん.",
+      id: "さん ini adalah angka 3 (三) — bukan akhiran さん (Tuan/Nyonya) di sub chapter Kata Ganti & Sapaan. Beberapa satuan penghitung mengubah bunyinya: さんぼん, さんびき, さんぷん.",
     },
   ],
   [
@@ -5379,8 +5379,8 @@ export const KOTOBA_N5_CH2_3: KotobaEntry[] = [
     "八",
     "八時に会社へ行きます。",
     {
-      en: "This はち is the number 8 (八) — not the はち (蜂, bee) in the Animals sub-tier. Some counters shorten it to はっ: はっぷん, はっぽん, はっさい.",
-      id: "はち ini adalah angka 8 (八) — bukan はち (蜂, lebah) di sub-tier Hewan. Beberapa satuan penghitung memendekkannya menjadi はっ: はっぷん, はっぽん, はっさい.",
+      en: "This はち is the number 8 (八) — not the はち (蜂, bee) in the Animals sub chapter. Some counters shorten it to はっ: はっぷん, はっぽん, はっさい.",
+      id: "はち ini adalah angka 8 (八) — bukan はち (蜂, lebah) di sub chapter Hewan. Beberapa satuan penghitung memendekkannya menjadi はっ: はっぷん, はっぽん, はっさい.",
     },
   ],
   [
@@ -5471,7 +5471,7 @@ export const KOTOBA_N5_CH2_3: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 2.4: Frekuensi & Durasi (21)
+// Sub Chapter 2.4: Frekuensi & Durasi (21)
 export const KOTOBA_N5_CH2_4: KotobaEntry[] = [
   [
     "よく",
@@ -5947,7 +5947,7 @@ export const KOTOBA_N5_CH2_4: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 3.1: Makanan & Minuman (36)
+// Sub Chapter 3.1: Makanan & Minuman (36)
 export const KOTOBA_N5_CH3_1: KotobaEntry[] = [
   [
     "ごはん",
@@ -6781,8 +6781,8 @@ export const KOTOBA_N5_CH3_1: KotobaEntry[] = [
     "",
     "昼ご飯にサラダを食べます。",
     {
-      en: "サラダ is a loanword from English, so it is written in katakana — like パン, ケーキ and ジュース in this same sub-tier.",
-      id: "サラダ adalah kata serapan dari bahasa Inggris, jadi ditulis dengan katakana — seperti パン, ケーキ dan ジュース di sub-tier yang sama.",
+      en: "サラダ is a loanword from English, so it is written in katakana — like パン, ケーキ and ジュース in this same sub chapter.",
+      id: "サラダ adalah kata serapan dari bahasa Inggris, jadi ditulis dengan katakana — seperti パン, ケーキ dan ジュース di sub chapter yang sama.",
     },
   ],
   [
@@ -6801,13 +6801,13 @@ export const KOTOBA_N5_CH3_1: KotobaEntry[] = [
     "箸",
     "箸でご飯を食べます。",
     {
-      en: "箸 (chopsticks) and 橋 (bridge, in the transportation sub-tier) are both はし — the kanji and the pitch of the voice tell them apart. The particle で marks the tool: はしで たべる.",
-      id: "箸 (sumpit) dan 橋 (jembatan, di sub-tier transportasi) sama-sama はし — kanji dan nada suara yang membedakannya. Partikel で menandai alat: はしで たべる.",
+      en: "箸 (chopsticks) and 橋 (bridge, in the transportation sub chapter) are both はし — the kanji and the pitch of the voice tell them apart. The particle で marks the tool: はしで たべる.",
+      id: "箸 (sumpit) dan 橋 (jembatan, di sub chapter transportasi) sama-sama はし — kanji dan nada suara yang membedakannya. Partikel で menandai alat: はしで たべる.",
     },
   ],
 ];
 
-// Sub-Tier 3.2: Benda-benda Pribadi & Rumah (47)
+// Sub Chapter 3.2: Benda-benda Pribadi & Rumah (47)
 export const KOTOBA_N5_CH3_2: KotobaEntry[] = [
   [
     "かばん",
@@ -8002,8 +8002,8 @@ export const KOTOBA_N5_CH3_2: KotobaEntry[] = [
     "番号",
     "電話番号を教えてください。",
     {
-      en: "番号 is a number used as an identifier — a phone number, room number, ID number — not a quantity. It shares 番 with ばん (番, 'number N') in the counters sub-tier.",
-      id: "番号 adalah nomor yang berfungsi sebagai pengenal — nomor telepon, nomor kamar, nomor identitas — bukan jumlah. Memakai 番 yang sama dengan ばん (番, 'nomor N') di sub-tier satuan penghitung.",
+      en: "番号 is a number used as an identifier — a phone number, room number, ID number — not a quantity. It shares 番 with ばん (番, 'number N') in the counters sub chapter.",
+      id: "番号 adalah nomor yang berfungsi sebagai pengenal — nomor telepon, nomor kamar, nomor identitas — bukan jumlah. Memakai 番 yang sama dengan ばん (番, 'nomor N') di sub chapter satuan penghitung.",
     },
   ],
 
@@ -8034,7 +8034,7 @@ export const KOTOBA_N5_CH3_2: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 3.3: Pakaian & Aksesori (21)
+// Sub Chapter 3.3: Pakaian & Aksesori (21)
 export const KOTOBA_N5_CH3_3: KotobaEntry[] = [
   [
     "ふく",
@@ -8481,7 +8481,7 @@ export const KOTOBA_N5_CH3_3: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 4.1: Lokasi & Fasilitas Publik (16)
+// Sub Chapter 4.1: Lokasi & Fasilitas Publik (16)
 export const KOTOBA_N5_CH4_1: KotobaEntry[] = [
   [
     "がっこう",
@@ -9193,8 +9193,8 @@ export const KOTOBA_N5_CH4_1: KotobaEntry[] = [
     "中国",
     "中国は大きい国です。",
     {
-      en: "中国 literally means 'middle country'. The same character 国 appears in くに (country) and がいこく (foreign country) in this sub-tier.",
-      id: "中国 secara harfiah berarti 'negara tengah'. Karakter 国 yang sama muncul pada くに (negara) dan がいこく (luar negeri) di sub-tier ini.",
+      en: "中国 literally means 'middle country'. The same character 国 appears in くに (country) and がいこく (foreign country) in this sub chapter.",
+      id: "中国 secara harfiah berarti 'negara tengah'. Karakter 国 yang sama muncul pada くに (negara) dan がいこく (luar negeri) di sub chapter ini.",
     },
   ],
   [
@@ -9216,8 +9216,8 @@ export const KOTOBA_N5_CH4_1: KotobaEntry[] = [
     "教室",
     "教室に学生がいます。",
     {
-      en: "教室 combines 教 (teach) and 室 (room). Don't confuse it with きょうし (教師, teacher) in the Occupations sub-tier — similar sound, different word.",
-      id: "教室 menggabungkan 教 (mengajar) dan 室 (ruangan). Jangan tertukar dengan きょうし (教師, guru) di sub-tier Profesi — bunyinya mirip tetapi kata berbeda.",
+      en: "教室 combines 教 (teach) and 室 (room). Don't confuse it with きょうし (教師, teacher) in the Occupations sub chapter — similar sound, different word.",
+      id: "教室 menggabungkan 教 (mengajar) dan 室 (ruangan). Jangan tertukar dengan きょうし (教師, guru) di sub chapter Profesi — bunyinya mirip tetapi kata berbeda.",
     },
   ],
   [
@@ -9245,7 +9245,7 @@ export const KOTOBA_N5_CH4_1: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 4.2: Arah & Posisi (11)
+// Sub Chapter 4.2: Arah & Posisi (11)
 export const KOTOBA_N5_CH4_2: KotobaEntry[] = [
   [
     "うえ",
@@ -9701,7 +9701,7 @@ export const KOTOBA_N5_CH4_2: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 4.3: Transportasi & Fitur Kota (4)
+// Sub Chapter 4.3: Transportasi & Fitur Kota (4)
 export const KOTOBA_N5_CH4_3: KotobaEntry[] = [
   [
     "でんしゃ",
@@ -10168,7 +10168,7 @@ export const KOTOBA_N5_CH4_3: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 5.1: Aktivitas Dasar Harian (5)
+// Sub Chapter 5.1: Aktivitas Dasar Harian (5)
 export const KOTOBA_N5_CH5_1: KotobaEntry[] = [
   [
     "たべる",
@@ -11148,7 +11148,7 @@ export const KOTOBA_N5_CH5_1: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 5.2: Perpindahan & Mobilisasi (4)
+// Sub Chapter 5.2: Perpindahan & Mobilisasi (4)
 export const KOTOBA_N5_CH5_2: KotobaEntry[] = [
   [
     "いく",
@@ -11626,7 +11626,7 @@ export const KOTOBA_N5_CH5_2: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 5.3: Interaksi, Transaksi, & Kerja (4)
+// Sub Chapter 5.3: Interaksi, Transaksi, & Kerja (4)
 export const KOTOBA_N5_CH5_3: KotobaEntry[] = [
   [
     "はたらく",
@@ -12186,7 +12186,7 @@ export const KOTOBA_N5_CH5_3: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 6.1: Kata Sifat-i Deskriptif (4)
+// Sub Chapter 6.1: Kata Sifat-i Deskriptif (4)
 export const KOTOBA_N5_CH6_1: KotobaEntry[] = [
   [
     "おおきい",
@@ -12839,8 +12839,8 @@ export const KOTOBA_N5_CH6_1: KotobaEntry[] = [
     "近い",
     "駅は家から近いです。",
     {
-      en: "The opposite is とおい. The noun ちかく (nearby, in the Directions & Positions sub-tier) uses the same kanji 近 but is a different word.",
-      id: "Lawannya とおい. Kata benda ちかく (dekat, di sub-tier Arah & Posisi) memakai kanji 近 yang sama tetapi merupakan kata yang berbeda.",
+      en: "The opposite is とおい. The noun ちかく (nearby, in the Directions & Positions sub chapter) uses the same kanji 近 but is a different word.",
+      id: "Lawannya とおい. Kata benda ちかく (dekat, di sub chapter Arah & Posisi) memakai kanji 近 yang sama tetapi merupakan kata yang berbeda.",
     },
   ],
   [
@@ -13017,7 +13017,7 @@ export const KOTOBA_N5_CH6_1: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 6.2: Kata Sifat-i Cuaca & Sensori (4)
+// Sub Chapter 6.2: Kata Sifat-i Cuaca & Sensori (4)
 export const KOTOBA_N5_CH6_2: KotobaEntry[] = [
   [
     "あつい",
@@ -13318,7 +13318,7 @@ export const KOTOBA_N5_CH6_2: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 6.3: Kata Sifat-na & Status (5)
+// Sub Chapter 6.3: Kata Sifat-na & Status (5)
 export const KOTOBA_N5_CH6_3: KotobaEntry[] = [
   [
     "すき",
@@ -13379,8 +13379,8 @@ export const KOTOBA_N5_CH6_3: KotobaEntry[] = [
     "上手",
     "彼は日本語が上手です。",
     {
-      en: "上手 reuses 上 (up/top) from Tier 4.2's うえ — describing yourself as じょうず can sound boastful, so it's more often used about other people.",
-      id: "上手 memakai kembali 上 (atas) dari うえ pada Tier 4.2 — menyebut diri sendiri じょうず bisa terdengar sombong, jadi kata ini lebih sering dipakai untuk orang lain.",
+      en: "上手 reuses 上 (up/top) from Sub Chapter 4.2's うえ — describing yourself as じょうず can sound boastful, so it's more often used about other people.",
+      id: "上手 memakai kembali 上 (atas) dari うえ pada Sub Chapter 4.2 — menyebut diri sendiri じょうず bisa terdengar sombong, jadi kata ini lebih sering dipakai untuk orang lain.",
     },
   ],
   [
@@ -13585,8 +13585,8 @@ export const KOTOBA_N5_CH6_3: KotobaEntry[] = [
     "忙しい",
     "来週はとても忙しいです。",
     {
-      en: "Unlike the other words in this Sub-Tier, 忙しい is an i-adjective, not a na-adjective — it's grouped here since it's most often paired with, and is the opposite of, ひま (free/not busy).",
-      id: "Berbeda dari kata lain di Sub-Tier ini, 忙しい adalah kata sifat-i, bukan kata sifat-na — dikelompokkan di sini karena paling sering dipasangkan dengan, dan menjadi lawan kata dari, ひま (senggang/tidak sibuk).",
+      en: "Unlike the other words in this Sub Chapter, 忙しい is an i-adjective, not a na-adjective — it's grouped here since it's most often paired with, and is the opposite of, ひま (free/not busy).",
+      id: "Berbeda dari kata lain di Sub Chapter ini, 忙しい adalah kata sifat-i, bukan kata sifat-na — dikelompokkan di sini karena paling sering dipasangkan dengan, dan menjadi lawan kata dari, ひま (senggang/tidak sibuk).",
     },
   ],
   [
@@ -13665,8 +13665,8 @@ export const KOTOBA_N5_CH6_3: KotobaEntry[] = [
     "下手",
     "私は料理が下手です。",
     {
-      en: "下手 is the direct opposite of じょうず and reuses 下 (down/below) from した in Tier 4.2 — unlike じょうず, it's fine to describe yourself as へた without sounding boastful.",
-      id: "下手 adalah lawan langsung dari じょうず dan memakai kembali 下 (bawah) dari した pada Tier 4.2 — berbeda dari じょうず, menyebut diri sendiri へた tidak terdengar sombong.",
+      en: "下手 is the direct opposite of じょうず and reuses 下 (down/below) from した in Sub Chapter 4.2 — unlike じょうず, it's fine to describe yourself as へた without sounding boastful.",
+      id: "下手 adalah lawan langsung dari じょうず dan memakai kembali 下 (bawah) dari した pada Sub Chapter 4.2 — berbeda dari じょうず, menyebut diri sendiri へた tidak terdengar sombong.",
     },
   ],
   [
@@ -13732,8 +13732,8 @@ export const KOTOBA_N5_CH6_3: KotobaEntry[] = [
     "大切",
     "家族は私にとって大切です。",
     {
-      en: '大切 is a na-adjective often used with に とって ("for/to [someone]") to state what matters to a person — its kanji 切 also appears in しんせつ (kind, earlier in this Sub-Tier).',
-      id: '大切 adalah kata sifat-na yang sering dipakai bersama に とって ("bagi [seseorang]") untuk menyatakan apa yang penting bagi seseorang — kanji 切-nya juga muncul pada しんせつ (ramah, sebelumnya di Sub-Tier ini).',
+      en: '大切 is a na-adjective often used with に とって ("for/to [someone]") to state what matters to a person — its kanji 切 also appears in しんせつ (kind, earlier in this Sub Chapter).',
+      id: '大切 adalah kata sifat-na yang sering dipakai bersama に とって ("bagi [seseorang]") untuk menyatakan apa yang penting bagi seseorang — kanji 切-nya juga muncul pada しんせつ (ramah, sebelumnya di Sub Chapter ini).',
     },
   ],
   [
@@ -13799,7 +13799,7 @@ export const KOTOBA_N5_CH6_3: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 7.1: Alam & Cuaca (5)
+// Sub Chapter 7.1: Alam & Cuaca (5)
 export const KOTOBA_N5_CH7_1: KotobaEntry[] = [
   [
     "てんき",
@@ -13818,8 +13818,8 @@ export const KOTOBA_N5_CH7_1: KotobaEntry[] = [
     "天気",
     "今日の天気はいいです。",
     {
-      en: "天気 combines 天 (heaven/sky) + 気 (energy/spirit) — the same 気 appears in げんき (healthy, Tier 6.3) and びょうき (sickness).",
-      id: "天気 menggabungkan 天 (langit) + 気 (energi/semangat) — 気 yang sama muncul pada げんき (sehat, Tier 6.3) dan びょうき (sakit).",
+      en: "天気 combines 天 (heaven/sky) + 気 (energy/spirit) — the same 気 appears in げんき (healthy, Sub Chapter 6.3) and びょうき (sickness).",
+      id: "天気 menggabungkan 天 (langit) + 気 (energi/semangat) — 気 yang sama muncul pada げんき (sehat, Sub Chapter 6.3) dan びょうき (sakit).",
     },
   ],
   [
@@ -14252,7 +14252,7 @@ export const KOTOBA_N5_CH7_1: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 7.2: Warna (12)
+// Sub Chapter 7.2: Warna (12)
 export const KOTOBA_N5_CH7_2: KotobaEntry[] = [
   [
     "あか",
@@ -14551,7 +14551,7 @@ export const KOTOBA_N5_CH7_2: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 7.3: Kata Tanya & Kata Keterangan (21)
+// Sub Chapter 7.3: Kata Tanya & Kata Keterangan (21)
 export const KOTOBA_N5_CH7_3: KotobaEntry[] = [
   [
     "なに",
@@ -14887,7 +14887,7 @@ export const KOTOBA_N5_CH7_3: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 7.4: Kata Hubung & Sambungan (9)
+// Sub Chapter 7.4: Kata Hubung & Sambungan (9)
 export const KOTOBA_N5_CH7_4: KotobaEntry[] = [
   [
     "そして",
@@ -15099,7 +15099,7 @@ export const KOTOBA_N5_CH7_4: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 7.5: Kata Keterangan Derajat & Tata Bahasa (12)
+// Sub Chapter 7.5: Kata Keterangan Derajat & Tata Bahasa (12)
 export const KOTOBA_N5_CH7_5: KotobaEntry[] = [
   [
     "とても",
@@ -15301,8 +15301,8 @@ export const KOTOBA_N5_CH7_5: KotobaEntry[] = [
     "大概",
     "日曜日はたいがい家にいます。",
     {
-      en: 'たいがい overlaps closely with たいてい (usually, Tier 7.3) and だいたい (roughly) — all three describe "most of the time/most of it", but たいがい leans slightly more formal and written than たいてい.',
-      id: 'たいがい tumpang tindih erat dengan たいてい (biasanya, Tier 7.3) dan だいたい (kira-kira) — ketiganya menggambarkan "sebagian besar waktu/sebagian besar bagian", tetapi たいがい sedikit lebih formal dan tertulis dibanding たいてい.',
+      en: 'たいがい overlaps closely with たいてい (usually, Sub Chapter 7.3) and だいたい (roughly) — all three describe "most of the time/most of it", but たいがい leans slightly more formal and written than たいてい.',
+      id: 'たいがい tumpang tindih erat dengan たいてい (biasanya, Sub Chapter 7.3) dan だいたい (kira-kira) — ketiganya menggambarkan "sebagian besar waktu/sebagian besar bagian", tetapi たいがい sedikit lebih formal dan tertulis dibanding たいてい.',
     },
   ],
   [
@@ -15416,7 +15416,7 @@ export const KOTOBA_N5_CH7_5: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 8.1: Tubuh & Kesehatan
+// Sub Chapter 8.1: Tubuh & Kesehatan
 export const KOTOBA_N5_CH8_1: KotobaEntry[] = [
   [
     "あたま",
@@ -16224,8 +16224,8 @@ export const KOTOBA_N5_CH8_1: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 8.2: Hewan, Musim, Olahraga, Hobi, & Sekolah
-// Sub-Tier 8.2: Hewan & Serangga
+// Sub Chapter 8.2: Hewan, Musim, Olahraga, Hobi, & Sekolah
+// Sub Chapter 8.2: Hewan & Serangga
 export const KOTOBA_N5_CH8_2: KotobaEntry[] = [
   [
     "いぬ",
@@ -16557,7 +16557,7 @@ export const KOTOBA_N5_CH8_2: KotobaEntry[] = [
   ],
 ];
 
-// Sub-Tier 8.3: Olahraga, Hobi, & Sekolah
+// Sub Chapter 8.3: Olahraga, Hobi, & Sekolah
 export const KOTOBA_N5_CH8_3: KotobaEntry[] = [
   [
     "うんどう",
@@ -17131,210 +17131,210 @@ const KOTOBA_N5_TOTAL = KOTOBA_N5_CHAPTERS.reduce((sum, c) => sum + c.length, 0)
 export const KOTOBA_N5_LEVEL_TEXT = {
   tier1: {
     title: {
-      en: "Tier 1.1 — Personal Pronouns & Greetings",
-      id: "Tier 1.1 — Kata Ganti Orang & Sapaan",
+      en: "Sub Chapter 1.1 — Personal Pronouns & Greetings",
+      id: "Sub Chapter 1.1 — Kata Ganti Orang & Sapaan",
     },
     sample: "わたし あなた こんにちは",
     desc: wordCountDesc(KOTOBA_N5_CH1_1),
   },
   tier2: {
     title: {
-      en: "Tier 1.2 — Family & Relationships",
-      id: "Tier 1.2 — Keluarga & Hubungan",
+      en: "Sub Chapter 1.2 — Family & Relationships",
+      id: "Sub Chapter 1.2 — Keluarga & Hubungan",
     },
     sample: "かぞく ちち はは",
     desc: wordCountDesc(KOTOBA_N5_CH1_2),
   },
   tier3: {
     title: {
-      en: "Tier 1.3 — Occupations & Roles",
-      id: "Tier 1.3 — Profesi & Peran",
+      en: "Sub Chapter 1.3 — Occupations & Roles",
+      id: "Sub Chapter 1.3 — Profesi & Peran",
     },
     sample: "がくせい かいしゃいん",
     desc: wordCountDesc(KOTOBA_N5_CH1_3),
   },
   tier4: {
     title: {
-      en: "Tier 2.1 — Daily Time & Time Expressions",
-      id: "Tier 2.1 — Waktu Harian & Keterangan Waktu",
+      en: "Sub Chapter 2.1 — Daily Time & Time Expressions",
+      id: "Sub Chapter 2.1 — Waktu Harian & Keterangan Waktu",
     },
     sample: "いま きょう あした",
     desc: wordCountDesc(KOTOBA_N5_CH2_1),
   },
   tier5: {
     title: {
-      en: "Tier 2.2 — Days, Months, & Hours",
-      id: "Tier 2.2 — Hari, Bulan, & Jam",
+      en: "Sub Chapter 2.2 — Days, Months, & Hours",
+      id: "Sub Chapter 2.2 — Hari, Bulan, & Jam",
     },
     sample: "げつようび いちじかん",
     desc: wordCountDesc(KOTOBA_N5_CH2_2),
   },
   tier6: {
     title: {
-      en: "Tier 2.3 — Numbers & Counters",
-      id: "Tier 2.3 — Bilangan & Satuan Penghitung",
+      en: "Sub Chapter 2.3 — Numbers & Counters",
+      id: "Sub Chapter 2.3 — Bilangan & Satuan Penghitung",
     },
     sample: "ひとつ ひとり まい",
     desc: wordCountDesc(KOTOBA_N5_CH2_3),
   },
   tier7: {
     title: {
-      en: "Tier 2.4 — Frequency & Duration",
-      id: "Tier 2.4 — Frekuensi & Durasi",
+      en: "Sub Chapter 2.4 — Frequency & Duration",
+      id: "Sub Chapter 2.4 — Frekuensi & Durasi",
     },
     sample: "いつも よく たまに",
     desc: wordCountDesc(KOTOBA_N5_CH2_4),
   },
   tier8: {
     title: {
-      en: "Tier 3.1 — Food & Drinks",
-      id: "Tier 3.1 — Makanan & Minuman",
+      en: "Sub Chapter 3.1 — Food & Drinks",
+      id: "Sub Chapter 3.1 — Makanan & Minuman",
     },
     sample: "ごはん たまご くだもの",
     desc: wordCountDesc(KOTOBA_N5_CH3_1),
   },
   tier9: {
     title: {
-      en: "Tier 3.2 — Personal Items & Home",
-      id: "Tier 3.2 — Benda-benda Pribadi & Rumah",
+      en: "Sub Chapter 3.2 — Personal Items & Home",
+      id: "Sub Chapter 3.2 — Benda-benda Pribadi & Rumah",
     },
     sample: "ほん つくえ でんわ",
     desc: wordCountDesc(KOTOBA_N5_CH3_2),
   },
   tier10: {
     title: {
-      en: "Tier 3.3 — Clothing & Accessories",
-      id: "Tier 3.3 — Pakaian & Aksesori",
+      en: "Sub Chapter 3.3 — Clothing & Accessories",
+      id: "Sub Chapter 3.3 — Pakaian & Aksesori",
     },
     sample: "ふく くつ ぼうし",
     desc: wordCountDesc(KOTOBA_N5_CH3_3),
   },
   tier11: {
     title: {
-      en: "Tier 4.1 — Locations & Public Facilities",
-      id: "Tier 4.1 — Lokasi & Fasilitas Publik",
+      en: "Sub Chapter 4.1 — Locations & Public Facilities",
+      id: "Sub Chapter 4.1 — Lokasi & Fasilitas Publik",
     },
     sample: "がっこう びょういん こうえん",
     desc: wordCountDesc(KOTOBA_N5_CH4_1),
   },
   tier12: {
     title: {
-      en: "Tier 4.2 — Direction & Position",
-      id: "Tier 4.2 — Arah & Posisi",
+      en: "Sub Chapter 4.2 — Direction & Position",
+      id: "Sub Chapter 4.2 — Arah & Posisi",
     },
     sample: "うえ した みぎ",
     desc: wordCountDesc(KOTOBA_N5_CH4_2),
   },
   tier13: {
     title: {
-      en: "Tier 4.3 — Transportation & City Features",
-      id: "Tier 4.3 — Transportasi & Fitur Kota",
+      en: "Sub Chapter 4.3 — Transportation & City Features",
+      id: "Sub Chapter 4.3 — Transportasi & Fitur Kota",
     },
     sample: "でんしゃ くるま バス",
     desc: wordCountDesc(KOTOBA_N5_CH4_3),
   },
   tier14: {
     title: {
-      en: "Tier 5.1 — Basic Daily Activities",
-      id: "Tier 5.1 — Aktivitas Dasar Harian",
+      en: "Sub Chapter 5.1 — Basic Daily Activities",
+      id: "Sub Chapter 5.1 — Aktivitas Dasar Harian",
     },
     sample: "たべる のむ みる",
     desc: wordCountDesc(KOTOBA_N5_CH5_1),
   },
   tier15: {
     title: {
-      en: "Tier 5.2 — Movement & Mobility",
-      id: "Tier 5.2 — Perpindahan & Mobilisasi",
+      en: "Sub Chapter 5.2 — Movement & Mobility",
+      id: "Sub Chapter 5.2 — Perpindahan & Mobilisasi",
     },
     sample: "いく くる かえる",
     desc: wordCountDesc(KOTOBA_N5_CH5_2),
   },
   tier16: {
     title: {
-      en: "Tier 5.3 — Interaction, Transactions, & Work",
-      id: "Tier 5.3 — Interaksi, Transaksi, & Kerja",
+      en: "Sub Chapter 5.3 — Interaction, Transactions, & Work",
+      id: "Sub Chapter 5.3 — Interaksi, Transaksi, & Kerja",
     },
     sample: "はなす かく かう",
     desc: wordCountDesc(KOTOBA_N5_CH5_3),
   },
   tier17: {
     title: {
-      en: "Tier 6.1 — Descriptive i-Adjectives",
-      id: "Tier 6.1 — Kata Sifat-i Deskriptif",
+      en: "Sub Chapter 6.1 — Descriptive i-Adjectives",
+      id: "Sub Chapter 6.1 — Kata Sifat-i Deskriptif",
     },
     sample: "おおきい ちいさい",
     desc: wordCountDesc(KOTOBA_N5_CH6_1),
   },
   tier18: {
     title: {
-      en: "Tier 6.2 — Weather & Sensory i-Adjectives",
-      id: "Tier 6.2 — Kata Sifat-i Cuaca & Sensori",
+      en: "Sub Chapter 6.2 — Weather & Sensory i-Adjectives",
+      id: "Sub Chapter 6.2 — Kata Sifat-i Cuaca & Sensori",
     },
     sample: "あつい さむい いたい",
     desc: wordCountDesc(KOTOBA_N5_CH6_2),
   },
   tier19: {
     title: {
-      en: "Tier 6.3 — na-Adjectives & Status",
-      id: "Tier 6.3 — Kata Sifat-na & Status",
+      en: "Sub Chapter 6.3 — na-Adjectives & Status",
+      id: "Sub Chapter 6.3 — Kata Sifat-na & Status",
     },
     sample: "すき きらい げんき",
     desc: wordCountDesc(KOTOBA_N5_CH6_3),
   },
   tier20: {
-    title: { en: "Tier 7.1 — Nature & Weather", id: "Tier 7.1 — Alam & Cuaca" },
+    title: { en: "Sub Chapter 7.1 — Nature & Weather", id: "Sub Chapter 7.1 — Alam & Cuaca" },
     sample: "てんき あめ やま",
     desc: wordCountDesc(KOTOBA_N5_CH7_1),
   },
   tier21: {
-    title: { en: "Tier 7.2 — Colors", id: "Tier 7.2 — Warna" },
+    title: { en: "Sub Chapter 7.2 — Colors", id: "Sub Chapter 7.2 — Warna" },
     sample: "あか あお きいろ",
     desc: wordCountDesc(KOTOBA_N5_CH7_2),
   },
   tier22: {
     title: {
-      en: "Tier 7.3 — Question Words & Adverbs",
-      id: "Tier 7.3 — Kata Tanya & Kata Keterangan",
+      en: "Sub Chapter 7.3 — Question Words & Adverbs",
+      id: "Sub Chapter 7.3 — Kata Tanya & Kata Keterangan",
     },
     sample: "どこ だれ いつも",
     desc: wordCountDesc(KOTOBA_N5_CH7_3),
   },
   tier23: {
     title: {
-      en: "Tier 7.4 — Conjunctions & Connectors",
-      id: "Tier 7.4 — Kata Hubung & Sambungan",
+      en: "Sub Chapter 7.4 — Conjunctions & Connectors",
+      id: "Sub Chapter 7.4 — Kata Hubung & Sambungan",
     },
     sample: "そして でも だから",
     desc: wordCountDesc(KOTOBA_N5_CH7_4),
   },
   tier24: {
     title: {
-      en: "Tier 7.5 — Adverbs & Modifiers",
-      id: "Tier 7.5 — Kata Keterangan Derajat & Tata Bahasa",
+      en: "Sub Chapter 7.5 — Adverbs & Modifiers",
+      id: "Sub Chapter 7.5 — Kata Keterangan Derajat & Tata Bahasa",
     },
     sample: "とても すこし もっと",
     desc: wordCountDesc(KOTOBA_N5_CH7_5),
   },
   tier25: {
     title: {
-      en: "Tier 8.1 — Body & Health",
-      id: "Tier 8.1 — Tubuh & Kesehatan",
+      en: "Sub Chapter 8.1 — Body & Health",
+      id: "Sub Chapter 8.1 — Tubuh & Kesehatan",
     },
     sample: "あたま かお びょうき",
     desc: wordCountDesc(KOTOBA_N5_CH8_1),
   },
   tier26: {
     title: {
-      en: "Tier 8.2 — Animals & Insects",
-      id: "Tier 8.2 — Hewan & Serangga",
+      en: "Sub Chapter 8.2 — Animals & Insects",
+      id: "Sub Chapter 8.2 — Hewan & Serangga",
     },
     sample: "いぬ ねこ むし",
     desc: wordCountDesc(KOTOBA_N5_CH8_2),
   },
   tier27: {
     title: {
-      en: "Tier 8.3 — Sports, Hobbies, & School",
-      id: "Tier 8.3 — Olahraga, Hobi, & Sekolah",
+      en: "Sub Chapter 8.3 — Sports, Hobbies, & School",
+      id: "Sub Chapter 8.3 — Olahraga, Hobi, & Sekolah",
     },
     sample: "サッカー えいが テスト",
     desc: wordCountDesc(KOTOBA_N5_CH8_3),
@@ -17349,9 +17349,9 @@ export const KOTOBA_N5_LEVEL_TEXT = {
   },
 };
 
-// Kotoba N5 py 24 sub-tier (tier1..tier24) + "all" — kepanjangan kalau ditampilkan
+// Kotoba N5 py 24 sub chapter (tier1..tier24) + "all" — kepanjangan kalau ditampilkan
 // flat sekaligus, jadi dikelompokkan jadi Nested Accordion: 7 kelompok "Chapter"
-// (masing-masing menaungi 3-5 sub-tier, total 24) + kartu "All Mixed" berdiri
+// (masing-masing menaungi 3-5 sub chapter, total 24) + kartu "All Mixed" berdiri
 // sendiri di luar kelompok manapun, jadi totalnya 8 tingkatan teratas.
 // renderLevels() memakai array ini kalau script.groups ada; kalau tidak ada,
 // script lain (hiragana/katakana/kanji/bunpō) tetap dirender flat seperti biasa.
@@ -17430,14 +17430,14 @@ export const KOTOBA_TIER_GROUPS = KOTOBA_TIER_GROUP_DEFS.map((g, gi) => {
     title: g.title,
     sample: g.sample,
     desc: {
-      en: `${wordCount} N5 vocabulary words across ${g.tierKeys.length} sub-tiers.`,
-      id: `${wordCount} kosakata N5 dalam ${g.tierKeys.length} sub-tier.`,
+      en: `${wordCount} N5 vocabulary words across ${g.tierKeys.length} sub chapters.`,
+      id: `${wordCount} kosakata N5 dalam ${g.tierKeys.length} sub chapter.`,
     },
   };
 });
 
-/* ---- Kotoba N5 — pengelompokan isi tiap Sub-Tier berdasarkan JENIS kata ----
-   Seluruh 24 Sub-Tier (1.1 s/d 7.5) urutan aslinya masih
+/* ---- Kotoba N5 — pengelompokan isi tiap Sub Chapter berdasarkan JENIS kata ----
+   Seluruh 24 Sub Chapter (1.1 s/d 7.5) urutan aslinya masih
    campur (mis. di Makanan & Minuman, "minuman" nyempil di antara "lauk").
    KOTOBA_CATEGORY_DEFS di bawah menata ulang urutan kartu di Mode Belajar
    jadi berkelompok per jenis + dikasih pemisah kategori, TANPA mengubah data
@@ -18761,7 +18761,7 @@ export const KOTOBA_CATEGORY_DEFS = {
   ],
 };
 
-/* Menata ulang `items` satu Sub-Tier sesuai KOTOBA_CATEGORY_DEFS, lalu
+/* Menata ulang `items` satu Sub Chapter sesuai KOTOBA_CATEGORY_DEFS, lalu
    mengembalikan array baru + daftar "run" (kategori, indeks awal, jumlah)
    yang dipakai renderVocabTables() buat nyisipin baris pemisah kategori.
    Array aslinya TIDAK dimutasi, jadi Mode Kuis tetap pakai urutan lama. */
@@ -19001,8 +19001,8 @@ export const KOTOBA_N5_LEARN: KotobaLearnSection[] = [
   },
 ];
 
-// urutkan ulang kartu tiap Sub-Tier Kotoba berdasarkan jenis katanya (khusus
-// Sub-Tier yang terdaftar di KOTOBA_CATEGORY_DEFS — saat ini semuanya, Tier 1.1-7.5).
+// urutkan ulang kartu tiap Sub Chapter Kotoba berdasarkan jenis katanya (khusus
+// Sub Chapter yang terdaftar di KOTOBA_CATEGORY_DEFS — saat ini semuanya, Sub Chapter 1.1-7.5).
 KOTOBA_N5_LEARN.forEach((section) => {
   const built = buildCategorizedVocab(section.tierKey, section.items);
   section.items = built.items;

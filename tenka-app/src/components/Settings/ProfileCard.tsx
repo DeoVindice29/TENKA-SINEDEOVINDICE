@@ -4,6 +4,8 @@ import { useAuth } from "@/state/AuthContext";
 import { supabase } from "@/lib/supabaseClient";
 import AvatarCropModal from "@/components/AvatarCropModal";
 import AvatarZoomModal from "@/components/AvatarZoomModal";
+import { CONQUEST_TITLES, getConqueredTitles } from "@/data/titles";
+import { useConquest } from "@/state/ConquestContext";
 
 type ProfileCardProps = {
   /** "hero" = kartu besar dengan bg sakura & avatar di tengah (dipakai di
@@ -12,8 +14,10 @@ type ProfileCardProps = {
 };
 
 export default function ProfileCard({ variant = "default" }: ProfileCardProps) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { user, profile, updateProfile } = useAuth();
+  const { reloadFlag } = useConquest();
+  void reloadFlag;
   const [editing, setEditing] = useState(false);
   const [tempNick, setTempNick] = useState(profile?.username || "");
   const [uploading, setUploading] = useState(false);
@@ -30,6 +34,24 @@ export default function ProfileCard({ variant = "default" }: ProfileCardProps) {
   }, [cropSrc]);
 
   const hasAvatar = Boolean(profile?.avatar_url && !avatarBroken);
+
+  // "Bergabung sejak ..." di atas avatar (kartu hero) — dari created_at
+  // bawaan Supabase auth.users, gak perlu kolom/query tambahan.
+  const joinedLabel = user?.created_at
+    ? new Date(user.created_at).toLocaleDateString(lang === "id" ? "id-ID" : "en-US", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })
+    : null;
+
+  // Title yang udah ditaklukkan, buat ditampilin sebagai deretan lencana
+  // kecil di bawah nickname (kartu hero) — sumbernya sama kayak yang
+  // dipakai TitleCollection di subview Progress.
+  const earnedTitleKeys = (() => {
+    const earned = getConqueredTitles();
+    return Object.keys(CONQUEST_TITLES).filter((key) => !!earned[key]);
+  })();
 
   const openFilePicker = () => fileInputRef.current?.click();
 
@@ -183,9 +205,25 @@ export default function ProfileCard({ variant = "default" }: ProfileCardProps) {
   if (variant === "hero") {
     return (
       <div className="profile-card profile-card--hero">
+        {joinedLabel && (
+          <span className="profile-joined-hero">
+            {t("profile.joinedOn", { date: joinedLabel })}
+          </span>
+        )}
+
         {avatarButton}
         {fileInput}
         <div className="profile-nickname-wrap profile-nickname-wrap--hero">{nicknameField}</div>
+
+        {earnedTitleKeys.length > 0 && (
+          <div className="profile-hero-titles">
+            {earnedTitleKeys.map((key) => (
+              <span key={key} className="profile-hero-title-badge" title={CONQUEST_TITLES[key].title}>
+                {CONQUEST_TITLES[key].emoji}
+              </span>
+            ))}
+          </div>
+        )}
 
         {error && <p className="auth-error profile-error profile-error--hero">{error}</p>}
 

@@ -105,7 +105,7 @@ export const BUNPO_N5_TIER1: BunpoEntry[] = [
   ],
 ];
 
-// Sub-Tier 1.2: Partikel Utama (8)
+// Sub Chapter 1.2: Partikel Utama (8)
 export const BUNPO_N5_TIER2: BunpoEntry[] = [
   [
     "_は_",
@@ -220,7 +220,7 @@ export const BUNPO_N5_TIER2: BunpoEntry[] = [
   ],
 ];
 
-// Sub-Tier 2.1: Keberadaan (Ada/Tinggal) (7)
+// Sub Chapter 2.1: Keberadaan (Ada/Tinggal) (7)
 export const BUNPO_N5_TIER3: BunpoEntry[] = [
   [
     "_があります",
@@ -314,7 +314,7 @@ export const BUNPO_N5_TIER3: BunpoEntry[] = [
   ],
 ];
 
-// Sub-Tier 2.2: Arah & Perpindahan (7)
+// Sub Chapter 2.2: Arah & Perpindahan (7)
 export const BUNPO_N5_TIER4: BunpoEntry[] = [
   [
     "_へ/に行きます・来ます・帰ります",
@@ -416,7 +416,7 @@ export const BUNPO_N5_TIER4: BunpoEntry[] = [
   ],
 ];
 
-// Sub-Tier 3.1: Bentuk Sopan (Masu Form) (6)
+// Sub Chapter 3.1: Bentuk Sopan (Masu Form) (6)
 export const BUNPO_N5_TIER5: BunpoEntry[] = [
   [
     "_ます",
@@ -507,7 +507,7 @@ export const BUNPO_N5_TIER5: BunpoEntry[] = [
   ],
 ];
 
-// Sub-Tier 3.2: Bentuk Te (Te Form) (8)
+// Sub Chapter 3.2: Bentuk Te (Te Form) (8)
 export const BUNPO_N5_TIER6: BunpoEntry[] = [
   [
     "_ています",
@@ -629,7 +629,7 @@ export const BUNPO_N5_TIER6: BunpoEntry[] = [
   ],
 ];
 
-// Sub-Tier 3.3: Bentuk Nai (Nai Form) (7)
+// Sub Chapter 3.3: Bentuk Nai (Nai Form) (7)
 export const BUNPO_N5_TIER7: BunpoEntry[] = [
   [
     "_ない",
@@ -727,7 +727,7 @@ export const BUNPO_N5_TIER7: BunpoEntry[] = [
   ],
 ];
 
-// Sub-Tier 3.4: Bentuk Kamus (Dictionary Form) (7)
+// Sub Chapter 3.4: Bentuk Kamus (Dictionary Form) (7)
 export const BUNPO_N5_TIER8: BunpoEntry[] = [
   [
     "_（辞書形）",
@@ -838,7 +838,7 @@ export const BUNPO_N5_TIER8: BunpoEntry[] = [
   ],
 ];
 
-// Sub-Tier 3.5: Bentuk Ta (Past Form) (7)
+// Sub Chapter 3.5: Bentuk Ta (Past Form) (7)
 export const BUNPO_N5_TIER9: BunpoEntry[] = [
   [
     "_た",
@@ -942,7 +942,7 @@ export const BUNPO_N5_TIER9: BunpoEntry[] = [
   ],
 ];
 
-// Sub-Tier 4.1: Kata Sifat-i (i-Adj) (6)
+// Sub Chapter 4.1: Kata Sifat-i (i-Adj) (6)
 export const BUNPO_N5_TIER10: BunpoEntry[] = [
   [
     "_い（普通形）",
@@ -1019,7 +1019,7 @@ export const BUNPO_N5_TIER10: BunpoEntry[] = [
   ],
 ];
 
-// Sub-Tier 4.2: Kata Sifat-na (na-Adj) (6)
+// Sub Chapter 4.2: Kata Sifat-na (na-Adj) (6)
 export const BUNPO_N5_TIER11: BunpoEntry[] = [
   [
     "_です",
@@ -1102,7 +1102,7 @@ export const BUNPO_N5_TIER11: BunpoEntry[] = [
   ],
 ];
 
-// Sub-Tier 5.1: Keinginan & Ajakan (7)
+// Sub Chapter 5.1: Keinginan & Ajakan (7)
 export const BUNPO_N5_TIER12: BunpoEntry[] = [
   [
     "_たいです",
@@ -1203,7 +1203,7 @@ export const BUNPO_N5_TIER12: BunpoEntry[] = [
   ],
 ];
 
-// Sub-Tier 5.2: Alasan & Perbandingan (7)
+// Sub Chapter 5.2: Alasan & Perbandingan (7)
 export const BUNPO_N5_TIER13: BunpoEntry[] = [
   [
     "_から_",
@@ -1320,7 +1320,7 @@ export const BUNPO_N5_TIER13: BunpoEntry[] = [
   ],
 ];
 
-// Sub-Tier 6.1: Kata Tunjuk (Ko-So-A-Do) (5)
+// Sub Chapter 6.1: Kata Tunjuk (Ko-So-A-Do) (5)
 export const BUNPO_N5_TIER14: BunpoEntry[] = [
   [
     "これ／それ／あれ／どれ_",
@@ -1402,7 +1402,7 @@ export const BUNPO_N5_TIER14: BunpoEntry[] = [
   ],
 ];
 
-// Sub-Tier 6.2: Partikel Akhir & Penghubung Kalimat (5)
+// Sub Chapter 6.2: Partikel Akhir & Penghubung Kalimat (5)
 export const BUNPO_N5_TIER15: BunpoEntry[] = [
   [
     "_か",
@@ -1539,114 +1539,114 @@ export const BUNPO_N5_LEVEL_TEXT: Record<
 > = {
   tier1: {
     title: {
-      en: "Tier 1.1 — Predicate & Basic Sentences",
-      id: "Tier 1.1 — Predikat & Kalimat Dasar",
+      en: "Sub Chapter 1.1 — Predicate & Basic Sentences",
+      id: "Sub Chapter 1.1 — Predikat & Kalimat Dasar",
     },
     sample: "_は_です",
     desc: patternCountDesc(BUNPO_N5_TIER1),
   },
   tier2: {
-    title: { en: "Tier 1.2 — Main Particles", id: "Tier 1.2 — Partikel Utama" },
+    title: { en: "Sub Chapter 1.2 — Main Particles", id: "Sub Chapter 1.2 — Partikel Utama" },
     sample: "_は_",
     desc: patternCountDesc(BUNPO_N5_TIER2),
   },
   tier3: {
     title: {
-      en: "Tier 2.1 — Existence (There is / Living)",
-      id: "Tier 2.1 — Keberadaan (Ada/Tinggal)",
+      en: "Sub Chapter 2.1 — Existence (There is / Living)",
+      id: "Sub Chapter 2.1 — Keberadaan (Ada/Tinggal)",
     },
     sample: "_があります",
     desc: patternCountDesc(BUNPO_N5_TIER3),
   },
   tier4: {
     title: {
-      en: "Tier 2.2 — Direction & Movement",
-      id: "Tier 2.2 — Arah & Perpindahan",
+      en: "Sub Chapter 2.2 — Direction & Movement",
+      id: "Sub Chapter 2.2 — Arah & Perpindahan",
     },
     sample: "_へ/に行きます・来ます・帰ります",
     desc: patternCountDesc(BUNPO_N5_TIER4),
   },
   tier5: {
     title: {
-      en: "Tier 3.1 — Polite Form (Masu Form)",
-      id: "Tier 3.1 — Bentuk Sopan (Masu Form)",
+      en: "Sub Chapter 3.1 — Polite Form (Masu Form)",
+      id: "Sub Chapter 3.1 — Bentuk Sopan (Masu Form)",
     },
     sample: "_ます",
     desc: patternCountDesc(BUNPO_N5_TIER5),
   },
   tier6: {
-    title: { en: "Tier 3.2 — Te Form", id: "Tier 3.2 — Bentuk Te (Te Form)" },
+    title: { en: "Sub Chapter 3.2 — Te Form", id: "Sub Chapter 3.2 — Bentuk Te (Te Form)" },
     sample: "_ています",
     desc: patternCountDesc(BUNPO_N5_TIER6),
   },
   tier7: {
     title: {
-      en: "Tier 3.3 — Nai Form",
-      id: "Tier 3.3 — Bentuk Nai (Nai Form)",
+      en: "Sub Chapter 3.3 — Nai Form",
+      id: "Sub Chapter 3.3 — Bentuk Nai (Nai Form)",
     },
     sample: "_ない",
     desc: patternCountDesc(BUNPO_N5_TIER7),
   },
   tier8: {
     title: {
-      en: "Tier 3.4 — Dictionary Form",
-      id: "Tier 3.4 — Bentuk Kamus (Dictionary Form)",
+      en: "Sub Chapter 3.4 — Dictionary Form",
+      id: "Sub Chapter 3.4 — Bentuk Kamus (Dictionary Form)",
     },
     sample: "_（辞書形）",
     desc: patternCountDesc(BUNPO_N5_TIER8),
   },
   tier9: {
     title: {
-      en: "Tier 3.5 — Past Form (Ta Form)",
-      id: "Tier 3.5 — Bentuk Ta (Past Form)",
+      en: "Sub Chapter 3.5 — Past Form (Ta Form)",
+      id: "Sub Chapter 3.5 — Bentuk Ta (Past Form)",
     },
     sample: "_た",
     desc: patternCountDesc(BUNPO_N5_TIER9),
   },
   tier10: {
     title: {
-      en: "Tier 4.1 — i-Adjectives",
-      id: "Tier 4.1 — Kata Sifat-i (i-Adj)",
+      en: "Sub Chapter 4.1 — i-Adjectives",
+      id: "Sub Chapter 4.1 — Kata Sifat-i (i-Adj)",
     },
     sample: "_い（普通形）",
     desc: patternCountDesc(BUNPO_N5_TIER10),
   },
   tier11: {
     title: {
-      en: "Tier 4.2 — na-Adjectives",
-      id: "Tier 4.2 — Kata Sifat-na (na-Adj)",
+      en: "Sub Chapter 4.2 — na-Adjectives",
+      id: "Sub Chapter 4.2 — Kata Sifat-na (na-Adj)",
     },
     sample: "_です",
     desc: patternCountDesc(BUNPO_N5_TIER11),
   },
   tier12: {
     title: {
-      en: "Tier 5.1 — Wants & Invitations",
-      id: "Tier 5.1 — Keinginan & Ajakan",
+      en: "Sub Chapter 5.1 — Wants & Invitations",
+      id: "Sub Chapter 5.1 — Keinginan & Ajakan",
     },
     sample: "_たいです",
     desc: patternCountDesc(BUNPO_N5_TIER12),
   },
   tier13: {
     title: {
-      en: "Tier 5.2 — Reasons & Comparisons",
-      id: "Tier 5.2 — Alasan & Perbandingan",
+      en: "Sub Chapter 5.2 — Reasons & Comparisons",
+      id: "Sub Chapter 5.2 — Alasan & Perbandingan",
     },
     sample: "_から_",
     desc: patternCountDesc(BUNPO_N5_TIER13),
   },
   tier14: {
     title: {
-      en: "Tier 6.1 — Demonstratives (Ko-So-A-Do)",
-      id: "Tier 6.1 — Kata Tunjuk (Ko-So-A-Do)",
+      en: "Sub Chapter 6.1 — Demonstratives (Ko-So-A-Do)",
+      id: "Sub Chapter 6.1 — Kata Tunjuk (Ko-So-A-Do)",
     },
     sample: "これ／それ／あれ／どれ_",
     desc: patternCountDesc(BUNPO_N5_TIER14),
   },
   tier15: {
     title: {
-      en: "Tier 6.2 — Sentence-final Particles & Connectors",
-      id: "Tier 6.2 — Partikel Akhir & Penghubung Kalimat",
+      en: "Sub Chapter 6.2 — Sentence-final Particles & Connectors",
+      id: "Sub Chapter 6.2 — Partikel Akhir & Penghubung Kalimat",
     },
     sample: "_か",
     desc: patternCountDesc(BUNPO_N5_TIER15),
@@ -1665,23 +1665,23 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
   {
     tierKey: "tier1",
     title: {
-      en: "Tier 1.1 — Predicate & Basic Sentences",
-      id: "Tier 1.1 — Predikat & Kalimat Dasar",
+      en: "Sub Chapter 1.1 — Predicate & Basic Sentences",
+      id: "Sub Chapter 1.1 — Predikat & Kalimat Dasar",
     },
     desc: patternCountDesc(BUNPO_N5_TIER1),
     items: BUNPO_N5_TIER1,
   },
   {
     tierKey: "tier2",
-    title: { en: "Tier 1.2 — Main Particles", id: "Tier 1.2 — Partikel Utama" },
+    title: { en: "Sub Chapter 1.2 — Main Particles", id: "Sub Chapter 1.2 — Partikel Utama" },
     desc: patternCountDesc(BUNPO_N5_TIER2),
     items: BUNPO_N5_TIER2,
   },
   {
     tierKey: "tier3",
     title: {
-      en: "Tier 2.1 — Existence (There is / Living)",
-      id: "Tier 2.1 — Keberadaan (Ada/Tinggal)",
+      en: "Sub Chapter 2.1 — Existence (There is / Living)",
+      id: "Sub Chapter 2.1 — Keberadaan (Ada/Tinggal)",
     },
     desc: patternCountDesc(BUNPO_N5_TIER3),
     items: BUNPO_N5_TIER3,
@@ -1689,8 +1689,8 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
   {
     tierKey: "tier4",
     title: {
-      en: "Tier 2.2 — Direction & Movement",
-      id: "Tier 2.2 — Arah & Perpindahan",
+      en: "Sub Chapter 2.2 — Direction & Movement",
+      id: "Sub Chapter 2.2 — Arah & Perpindahan",
     },
     desc: patternCountDesc(BUNPO_N5_TIER4),
     items: BUNPO_N5_TIER4,
@@ -1698,23 +1698,23 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
   {
     tierKey: "tier5",
     title: {
-      en: "Tier 3.1 — Polite Form (Masu Form)",
-      id: "Tier 3.1 — Bentuk Sopan (Masu Form)",
+      en: "Sub Chapter 3.1 — Polite Form (Masu Form)",
+      id: "Sub Chapter 3.1 — Bentuk Sopan (Masu Form)",
     },
     desc: patternCountDesc(BUNPO_N5_TIER5),
     items: BUNPO_N5_TIER5,
   },
   {
     tierKey: "tier6",
-    title: { en: "Tier 3.2 — Te Form", id: "Tier 3.2 — Bentuk Te (Te Form)" },
+    title: { en: "Sub Chapter 3.2 — Te Form", id: "Sub Chapter 3.2 — Bentuk Te (Te Form)" },
     desc: patternCountDesc(BUNPO_N5_TIER6),
     items: BUNPO_N5_TIER6,
   },
   {
     tierKey: "tier7",
     title: {
-      en: "Tier 3.3 — Nai Form",
-      id: "Tier 3.3 — Bentuk Nai (Nai Form)",
+      en: "Sub Chapter 3.3 — Nai Form",
+      id: "Sub Chapter 3.3 — Bentuk Nai (Nai Form)",
     },
     desc: patternCountDesc(BUNPO_N5_TIER7),
     items: BUNPO_N5_TIER7,
@@ -1722,8 +1722,8 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
   {
     tierKey: "tier8",
     title: {
-      en: "Tier 3.4 — Dictionary Form",
-      id: "Tier 3.4 — Bentuk Kamus (Dictionary Form)",
+      en: "Sub Chapter 3.4 — Dictionary Form",
+      id: "Sub Chapter 3.4 — Bentuk Kamus (Dictionary Form)",
     },
     desc: patternCountDesc(BUNPO_N5_TIER8),
     items: BUNPO_N5_TIER8,
@@ -1731,8 +1731,8 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
   {
     tierKey: "tier9",
     title: {
-      en: "Tier 3.5 — Past Form (Ta Form)",
-      id: "Tier 3.5 — Bentuk Ta (Past Form)",
+      en: "Sub Chapter 3.5 — Past Form (Ta Form)",
+      id: "Sub Chapter 3.5 — Bentuk Ta (Past Form)",
     },
     desc: patternCountDesc(BUNPO_N5_TIER9),
     items: BUNPO_N5_TIER9,
@@ -1740,8 +1740,8 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
   {
     tierKey: "tier10",
     title: {
-      en: "Tier 4.1 — i-Adjectives",
-      id: "Tier 4.1 — Kata Sifat-i (i-Adj)",
+      en: "Sub Chapter 4.1 — i-Adjectives",
+      id: "Sub Chapter 4.1 — Kata Sifat-i (i-Adj)",
     },
     desc: patternCountDesc(BUNPO_N5_TIER10),
     items: BUNPO_N5_TIER10,
@@ -1749,8 +1749,8 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
   {
     tierKey: "tier11",
     title: {
-      en: "Tier 4.2 — na-Adjectives",
-      id: "Tier 4.2 — Kata Sifat-na (na-Adj)",
+      en: "Sub Chapter 4.2 — na-Adjectives",
+      id: "Sub Chapter 4.2 — Kata Sifat-na (na-Adj)",
     },
     desc: patternCountDesc(BUNPO_N5_TIER11),
     items: BUNPO_N5_TIER11,
@@ -1758,8 +1758,8 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
   {
     tierKey: "tier12",
     title: {
-      en: "Tier 5.1 — Wants & Invitations",
-      id: "Tier 5.1 — Keinginan & Ajakan",
+      en: "Sub Chapter 5.1 — Wants & Invitations",
+      id: "Sub Chapter 5.1 — Keinginan & Ajakan",
     },
     desc: patternCountDesc(BUNPO_N5_TIER12),
     items: BUNPO_N5_TIER12,
@@ -1767,8 +1767,8 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
   {
     tierKey: "tier13",
     title: {
-      en: "Tier 5.2 — Reasons & Comparisons",
-      id: "Tier 5.2 — Alasan & Perbandingan",
+      en: "Sub Chapter 5.2 — Reasons & Comparisons",
+      id: "Sub Chapter 5.2 — Alasan & Perbandingan",
     },
     desc: patternCountDesc(BUNPO_N5_TIER13),
     items: BUNPO_N5_TIER13,
@@ -1776,8 +1776,8 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
   {
     tierKey: "tier14",
     title: {
-      en: "Tier 6.1 — Demonstratives (Ko-So-A-Do)",
-      id: "Tier 6.1 — Kata Tunjuk (Ko-So-A-Do)",
+      en: "Sub Chapter 6.1 — Demonstratives (Ko-So-A-Do)",
+      id: "Sub Chapter 6.1 — Kata Tunjuk (Ko-So-A-Do)",
     },
     desc: patternCountDesc(BUNPO_N5_TIER14),
     items: BUNPO_N5_TIER14,
@@ -1785,8 +1785,8 @@ export const BUNPO_N5_LEARN: BunpoLearnSection[] = [
   {
     tierKey: "tier15",
     title: {
-      en: "Tier 6.2 — Sentence-final Particles & Connectors",
-      id: "Tier 6.2 — Partikel Akhir & Penghubung Kalimat",
+      en: "Sub Chapter 6.2 — Sentence-final Particles & Connectors",
+      id: "Sub Chapter 6.2 — Partikel Akhir & Penghubung Kalimat",
     },
     desc: patternCountDesc(BUNPO_N5_TIER15),
     items: BUNPO_N5_TIER15,

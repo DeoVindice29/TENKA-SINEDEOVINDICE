@@ -3,20 +3,29 @@ import {
   useContext,
   useState,
   useCallback,
+  useEffect,
   type ReactNode,
 } from "react";
 import {
   CONQUEST_TITLES,
   getConqueredTitles,
   earnConquestTitle,
+  revokeConquestTitles,
   getConquestLockReason as checkLockReason,
+  TITLES_EVENT,
 } from "@/data/titles";
 import { getLocalizedConquestStory } from "@/data/conquestStory";
 import { getJlptStory, isJlptScript } from "@/data/jlptConquest";
 import { useLang } from "@/i18n/LangContext";
 import { useAuth } from "@/state/AuthContext";
 import { getSpeedrunBest, saveSpeedrunTime } from "@/utils/speedrun";
-import { promoteIfHigher, computeRankIndex } from "@/data/ranks";
+import {
+  promoteIfHigher,
+  computeRankIndex,
+  setRankIndex,
+  unmarkScriptsConquered,
+  RANK_EVENT,
+} from "@/data/ranks";
 
 export type ConquestStory = {
   epilogue: string;
@@ -33,6 +42,9 @@ type ConquestContextValue = {
     rankIndex: number;
     titleInfo: { title: string; emoji: string } | null;
   };
+  /** Khusus dev: reset status takluk satu aksara (atau "all") — title,
+   *  status misi, dan pangkat dihitung ulang. Rekor speedrun tidak disentuh. */
+  resetConquest: (target: string) => void;
   getSpeedrunBestTime: (scriptKey: string) => number | null;
   submitSpeedrunTime: (
     scriptKey: string,
@@ -46,21 +58,34 @@ const ConquestContext = createContext<ConquestContextValue | null>(null);
 
 export function ConquestProvider({ children }: { children: ReactNode }) {
   const { lang } = useLang();
-  const { isAdmin } = useAuth();
+  const { isDev } = useAuth();
   const [reloadFlag, setReloadFlag] = useState(0);
 
   const reload = useCallback(() => setReloadFlag((n) => n + 1), []);
+
+  // pas progres pangkat/title ke-gabung ulang dari Supabase (login, ganti
+  // akun, atau logout ke tamu — lihat ranks.ts/titles.ts), ikut refresh
+  // isConquered/isLocked/badge title-nya tanpa perlu reload halaman.
+  useEffect(() => {
+    const bump = () => setReloadFlag((n) => n + 1);
+    window.addEventListener(RANK_EVENT, bump);
+    window.addEventListener(TITLES_EVENT, bump);
+    return () => {
+      window.removeEventListener(RANK_EVENT, bump);
+      window.removeEventListener(TITLES_EVENT, bump);
+    };
+  }, []);
 
   const isConquered = useCallback(
     (scriptKey: string) => !!getConqueredTitles()[scriptKey],
     [],
   );
 
-  // akun admin lolos semua gate progression (chapter trials, dll) —
+  // akun dev lolos semua gate progression (chapter trials, dll) —
   // gak perlu urut menaklukkan yang sebelumnya dulu.
   const isLocked = useCallback(
-    (scriptKey: string) => (isAdmin ? null : checkLockReason(scriptKey)),
-    [isAdmin],
+    (scriptKey: string) => (isDev ? null : checkLockReason(scriptKey)),
+    [isDev],
   );
 
   const getStory = useCallback(
@@ -87,6 +112,19 @@ export function ConquestProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  const resetConquest = useCallback(
+    (target: string) => {
+      if (!isDev) return; // cuma pengaman di sisi UI, bukan pengganti RLS Supabase
+      const keys = target === "all" ? Object.keys(CONQUEST_TITLES) : [target];
+      revokeConquestTitles(keys);
+      unmarkScriptsConquered(keys);
+      // pangkat turun ke hasil hitung ulang dari status takluk yang tersisa
+      setRankIndex(computeRankIndex());
+      setReloadFlag((n) => n + 1);
+    },
+    [isDev],
+  );
+
   const getSpeedrunBestTime = useCallback(
     (scriptKey: string) => getSpeedrunBest(scriptKey),
     [],
@@ -105,6 +143,7 @@ export function ConquestProvider({ children }: { children: ReactNode }) {
         isLocked,
         getStory,
         completeConquest,
+        resetConquest,
         getSpeedrunBestTime,
         submitSpeedrunTime,
         reloadFlag,

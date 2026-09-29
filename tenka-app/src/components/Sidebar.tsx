@@ -3,10 +3,9 @@ import { useUI, type Screen } from "@/state/UIContext";
 import { useLang } from "@/i18n/LangContext";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/state/AuthContext";
-import { useProfile } from "@/hooks/useProfile";
 import { useRankIndex } from "@/hooks/useRankIndex";
 import { RANK_LEVELS } from "@/data/ranks";
-import { SIDEBAR_QUOTES, type SidebarQuote } from "@/data/sidebarQuotes";
+import { SIDEBAR_QUOTES } from "@/data/sidebarQuotes";
 import navArt from "@/assets/hero-sidebar.webp";
 
 type IconProps = { className?: string };
@@ -131,53 +130,74 @@ export default function Sidebar({ open, onClose, onOpenSettings, onOpenAdmin }: 
   const { screen, setScreen } = useUI();
   const { t, lang } = useLang();
   const { profile } = useAuth();
-  const legacy = useProfile();
   const rankIndex = useRankIndex();
   const [brokenPhoto, setBrokenPhoto] = useState<string | null>(null);
-  // nama & foto ngikut profil akun (Supabase); localStorage lama cuma fallback
-  const photo = profile?.avatar_url || legacy.photo || "";
+  // nama & foto akun ini aja (Supabase) — dulu ada fallback ke localStorage
+  // global (useProfile) yang bisa nampilin nama/foto akun lain di browser
+  // yang sama, jadi udah dilepas.
+  const photo = profile?.avatar_url || "";
   const showPhoto = Boolean(photo) && brokenPhoto !== photo;
 
-  // kartu promo di bawah sidebar gonta-ganti kutipan/tips setiap 6 detik:
-  // teks lama geser ke kanan sambil menghilang, teks baru masuk dari kiri.
-  // Keduanya dirender bertumpuk (yang lama absolute di atas yang baru)
-  // selama masa transisi, lalu yang lama di-unmount.
+  // kartu promo di bawah sidebar gonta-ganti kutipan/tips: teksnya diketik
+  // huruf per huruf (total ±2.5 detik), ditahan penuh ±5 detik, lalu dihapus
+  // huruf per huruf juga (total ±2.5 detik) sebelum lanjut ke kutipan
+  // berikutnya.
   const [quoteIndex, setQuoteIndex] = useState(0);
-  const [prevQuote, setPrevQuote] = useState<SidebarQuote | null>(null);
-  const [exiting, setExiting] = useState(false);
-  const [entered, setEntered] = useState(true);
+  const [typedLength, setTypedLength] = useState(0);
 
   useEffect(() => {
-    if (SIDEBAR_QUOTES.length <= 1) return;
-    const rotate = setTimeout(() => {
-      setPrevQuote(SIDEBAR_QUOTES[quoteIndex]);
-      setExiting(false);
-      setEntered(false);
-      setQuoteIndex((quoteIndex + 1) % SIDEBAR_QUOTES.length);
-      // dua rAF: pastikan browser sempat "commit" posisi awal (rest utk yg
-      // lama, offset kiri utk yg baru) sebelum kelas transisinya dipasang,
-      // biar transition-nya benar-benar keplay bukan cuma lompat langsung.
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setExiting(true);
-          setEntered(true);
+    const TYPE_MS = 2500;
+    const HOLD_MS = 5000;
+    const DELETE_MS = 2500;
+
+    const q = SIDEBAR_QUOTES[quoteIndex] ?? SIDEBAR_QUOTES[0];
+    const fullText = q.lines[lang].join("\n");
+
+    setTypedLength(0);
+    const timers: number[] = [];
+    const after = (ms: number, fn: () => void) => {
+      timers.push(window.setTimeout(fn, ms));
+    };
+
+    const charDelay = fullText.length > 0 ? TYPE_MS / fullText.length : TYPE_MS;
+    const deleteDelay = fullText.length > 0 ? DELETE_MS / fullText.length : DELETE_MS;
+
+    const typeStep = (i: number) => {
+      setTypedLength(i);
+      if (i < fullText.length) {
+        after(charDelay, () => typeStep(i + 1));
+      } else {
+        after(HOLD_MS, () => deleteStep(fullText.length - 1));
+      }
+    };
+
+    const deleteStep = (i: number) => {
+      if (i < 0) {
+        setTypedLength(0);
+        after(300, () => {
+          if (SIDEBAR_QUOTES.length > 1) {
+            setQuoteIndex((prev) => (prev + 1) % SIDEBAR_QUOTES.length);
+          } else {
+            typeStep(1);
+          }
         });
-      });
-    }, 6000);
-    return () => clearTimeout(rotate);
-  }, [quoteIndex]);
+        return;
+      }
+      setTypedLength(i);
+      after(deleteDelay, () => deleteStep(i - 1));
+    };
 
-  useEffect(() => {
-    if (!prevQuote) return;
-    const clear = setTimeout(() => setPrevQuote(null), 320);
-    return () => clearTimeout(clear);
-  }, [prevQuote]);
+    after(charDelay, () => typeStep(1));
+
+    return () => timers.forEach((id) => window.clearTimeout(id));
+  }, [quoteIndex, lang]);
 
   const quote = SIDEBAR_QUOTES[quoteIndex] ?? SIDEBAR_QUOTES[0];
+  const fullQuoteText = quote.lines[lang].join("\n");
+  const typedLines = fullQuoteText.slice(0, typedLength).split("\n");
 
   const rank = RANK_LEVELS[rankIndex] ?? RANK_LEVELS[0];
-  const displayName =
-    profile?.username?.trim() || legacy.nickname?.trim() || "Traveler";
+  const displayName = profile?.username?.trim() || "Traveler";
 
   const go = (s: Screen) => {
     setScreen(s);
@@ -225,7 +245,7 @@ export default function Sidebar({ open, onClose, onOpenSettings, onOpenAdmin }: 
           <span className="sidebar-identity-text">
             <strong>{displayName}</strong>
             <small>
-              <span className="sidebar-rank-emoji">{rank.emoji}</span>
+              <img className="sidebar-rank-logo" src={rank.logo} alt="" aria-hidden="true" />
               {rank.subtitle} · {rank.title}
             </small>
           </span>
@@ -282,23 +302,14 @@ export default function Sidebar({ open, onClose, onOpenSettings, onOpenAdmin }: 
               <circle cx="12" cy="12" r="2.2" fill="#E5677F" />
             </svg>
             <div className="sidebar-promo-quote-wrap">
-              {prevQuote && (
-                <p className={`sidebar-promo-quote sidebar-promo-quote--exit ${exiting ? "is-exiting" : ""}`}>
-                  {prevQuote.lines[lang].map((line, i) => (
-                    <span key={i}>
-                      {line}
-                      {i < prevQuote.lines[lang].length - 1 && <br />}
-                    </span>
-                  ))}
-                </p>
-              )}
-              <p className={`sidebar-promo-quote sidebar-promo-quote--enter ${entered ? "is-entered" : ""}`}>
-                {quote.lines[lang].map((line, i) => (
+              <p className="sidebar-promo-quote">
+                {typedLines.map((line, i) => (
                   <span key={i}>
                     {line}
-                    {i < quote.lines[lang].length - 1 && <br />}
+                    {i < typedLines.length - 1 && <br />}
                   </span>
                 ))}
+                <span className="sidebar-promo-quote-cursor" aria-hidden="true" />
               </p>
             </div>
             <img className="sidebar-promo-art" src={navArt} alt="" aria-hidden="true" />

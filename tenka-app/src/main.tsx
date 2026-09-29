@@ -17,12 +17,15 @@ import "@/styles/index.css";
 // Catatan deploy: hosting-nya perlu di-setting SPA fallback (semua path
 // yang gak ketemu file statis diarahkan ke index.html), atau /admin-panel
 // bakal 404 pas di-refresh / dibuka langsung lewat URL.
-const isAdminRoute = window.location.pathname.replace(/\/$/, "") === "/admin-panel";
+const ADMIN_PATH = (import.meta.env.BASE_URL + "admin-panel").replace(/\/{2,}/g, "/");
+const isAdminRoute = window.location.pathname.replace(/\/$/, "") === ADMIN_PATH;
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     {isAdminRoute ? (
-      <AdminPanel />
+      <LangProvider>
+        <AdminPanel />
+      </LangProvider>
     ) : (
       <LangProvider>
         <AuthProvider>

@@ -8,6 +8,8 @@ import {
 } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase, setAuthPersistence } from "@/lib/supabaseClient";
+import { setProgressUserId } from "@/data/progressAccount";
+import { fetchAppRole, type AppRole } from "@/lib/appRole";
 
 export type Profile = {
   id: string;
@@ -23,7 +25,12 @@ type AuthContextValue = {
   profile: Profile | null;
   loading: boolean;
   isGuest: boolean;
+  /** role dari server: "dev" | "admin" | null (pengguna biasa/tamu) */
+  role: AppRole | null;
+  /** punya akses Admin Panel (admin ATAU dev) */
   isAdmin: boolean;
+  /** akses penuh: alat dev di app (skip soal, buka kunci, reset penaklukan) */
+  isDev: boolean;
   continueAsGuest: () => void;
   signInWithGoogle: () => void;
   signInWithPassword: (
@@ -70,23 +77,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
-  // akun admin (dicek via RPC is_admin di server, sama kayak AdminPanel)
-  // dipakai buat lepas semua gate "locked" di app biasa (bukan cuma
-  // /admin-panel) — jadi admin bisa preview/akses semua konten tanpa
-  // harus progress manual dulu.
-  const [isAdmin, setIsAdmin] = useState(false);
+  // role akun (dicek di server lewat fungsi SQL app_role(), sama kayak
+  // AdminPanel). Cuma "dev" yang dapat alat dev di app biasa (lepas semua
+  // gate "locked", skip soal, reset penaklukan); "admin" cuma bisa
+  // nambah materi & latihan di /admin-panel.
+  const [role, setRole] = useState<AppRole | null>(null);
+  const isAdmin = role !== null;
+  const isDev = role === "dev";
 
   const checkAdmin = useCallback(async (userId: string | undefined) => {
     if (!userId) {
-      setIsAdmin(false);
+      setRole(null);
       return;
     }
-    const { data, error } = await supabase.rpc("is_admin");
-    if (error) {
-      setIsAdmin(false);
-      return;
-    }
-    setIsAdmin(!!data);
+    setRole(await fetchAppRole());
   }, []);
   const [isGuest, setIsGuest] = useState(() => {
     try {
@@ -110,7 +114,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (isGuest) {
       setProfile(loadGuestProfile());
-      setIsAdmin(false);
+      setRole(null);
+      // mode tamu = gak ada akun Supabase buat progres pangkat/misi; ranks.ts/
+      // titles.ts otomatis balik ke storage lokal namespace "guest".
+      setProgressUserId(null);
       setLoading(false);
       return;
     }
@@ -118,13 +125,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     supabase.auth.getSession().then(async ({ data }) => {
       if (cancelled) return;
       setSession(data.session);
+      // penting: di-set SEBELUM loadProfile/checkAdmin biar ranks.ts/titles.ts
+      // udah baca-tulis ke localStorage key akun yang bener sejak awal.
+      setProgressUserId(data.session?.user.id ?? null);
       if (data.session) {
         await Promise.all([
           loadProfile(data.session.user.id),
           checkAdmin(data.session.user.id),
         ]);
       } else {
-        setIsAdmin(false);
+        setRole(null);
       }
       if (!cancelled) setLoading(false);
     });
@@ -132,11 +142,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { data: sub } = supabase.auth.onAuthStateChange(
       async (_event, next) => {
         setSession(next);
+        setProgressUserId(next?.user.id ?? null);
         if (next) {
           await Promise.all([loadProfile(next.user.id), checkAdmin(next.user.id)]);
         } else {
           setProfile(null);
-          setIsAdmin(false);
+          setRole(null);
         }
         setLoading(false);
       },
@@ -229,9 +240,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       setIsGuest(false);
       setProfile(null);
+      setProgressUserId(null);
       return;
     }
-    setIsAdmin(false);
+    setRole(null);
     supabase.auth.signOut();
   }, [isGuest]);
 
@@ -272,7 +284,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         profile,
         loading,
         isGuest,
+        role,
         isAdmin,
+        isDev,
         continueAsGuest,
         signInWithGoogle,
         signInWithPassword,

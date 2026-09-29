@@ -1,12 +1,7 @@
 import { useLang } from "@/i18n/LangContext";
 import { SCRIPTS } from "@/data/scripts";
 import { useConquest } from "@/state/ConquestContext";
-import { useQuiz } from "@/state/QuizContext";
-import {
-  isJlptScript,
-  jlptPassMark,
-  JLPT_PASS_PERCENT,
-} from "@/data/jlptConquest";
+import { isJlptScript } from "@/data/jlptConquest";
 
 type ConquestStoryProps = {
   scriptKey: string;
@@ -23,7 +18,6 @@ export default function ConquestStory({
 }: ConquestStoryProps) {
   const { t } = useLang();
   const { getStory } = useConquest();
-  const { state } = useQuiz();
 
   const story = getStory(scriptKey);
   if (!story) return null;
@@ -33,11 +27,6 @@ export default function ConquestStory({
 
   const script = SCRIPTS[scriptKey as keyof typeof SCRIPTS];
   const isFinal = phaseIndex === story.phases.length - 1;
-
-  const boundaries = state.conquestPhaseBoundaries;
-  const phaseLen = boundaries
-    ? boundaries[phaseIndex + 1] - boundaries[phaseIndex]
-    : 0;
 
   // Kotoba / Bunpō / Kanji: Penaklukan ala ujian JLPT (per Tier, pilihan ganda)
   const isJlpt = isJlptScript(scriptKey);
@@ -71,18 +60,6 @@ export default function ConquestStory({
           })}
         </h2>
         <p className="conquest-story-text">{phase.text}</p>
-        <p className="conquest-story-meta">
-          {isJlpt
-            ? t("conquestStory.jlptMeta", {
-                count: phaseLen,
-                percent: JLPT_PASS_PERCENT,
-                need: jlptPassMark(phaseLen),
-              })
-            : t("conquestStory.meta", {
-                count: phaseLen,
-                diff: t("conquestStory.diffLabel"),
-              })}
-        </p>
       </div>
 
       <button
@@ -91,9 +68,7 @@ export default function ConquestStory({
         data-i18n="conquest.startThisChapter"
         onClick={onContinue}
       >
-        {isJlpt
-          ? t("conquestStory.startThisTier")
-          : t("conquest.startThisChapter")}
+        {t("conquestStory.startThisTier")}
       </button>
     </section>
   );

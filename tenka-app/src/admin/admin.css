@@ -183,7 +183,11 @@ body:has(.adm-shell) {
     --a-indigo-deep: var(--indigo-deep, #1e43b8);
     --a-indigo-tint: color-mix(in srgb, var(--a-indigo, #2f5fde) 14%, var(--a-card, #fff));
     --a-indigo-tint-hover: color-mix(in srgb, var(--a-indigo, #2f5fde) 22%, var(--a-card, #fff));
-    --a-input-bg: var(--a-card, #fff);
+    /* Kotak input dibedakan dari kartu putihnya: isinya sedikit lebih gelap,
+       garisnya lebih tegas, dan balik ke warna kartu saat lagi diketik. */
+    --a-input-bg: color-mix(in srgb, var(--a-indigo, #2f5fde) 6%, var(--a-card, #fff));
+    --a-field-line: color-mix(in srgb, var(--a-ink, #16213e) 24%, var(--a-card, #fff));
+    --a-card-line: color-mix(in srgb, var(--a-ink, #16213e) 14%, var(--a-card, #fff));
     --a-surface-tint: color-mix(in srgb, var(--a-ink, #16213e) 4%, var(--a-card, #fff));
     --a-surface-hover: color-mix(in srgb, var(--a-ink, #16213e) 7%, var(--a-card, #fff));
     --a-danger-tint: color-mix(in srgb, #c0392b 15%, var(--a-card, #fff));
@@ -416,7 +420,17 @@ body:has(.adm-shell) {
     flex: 1;
     min-width: 0;
     overflow-y: auto;
-    padding: 64px 28px 60px;
+    padding: 0 28px 60px;
+}
+
+/* Jarak atas dibuat lewat spacer, bukan padding-top: padding di scroll container
+   ikut menggeser posisi elemen sticky (header Kotoba/Kanji/Bunpō jadi berhenti
+   di bawah tepi atas, bukan menempel). */
+.adm-main::before {
+    content: "";
+    display: block;
+    height: 64px;
+    flex-shrink: 0;
 }
 
 /* ---------- page header ---------- */
@@ -447,6 +461,17 @@ body:has(.adm-shell) {
     height: 22px;
 }
 
+.adm-page-header--sticky {
+    position: sticky;
+    top: 0;
+    z-index: 6;
+    box-sizing: border-box;
+    min-height: 76px;
+    margin-bottom: 8px;
+    padding: 12px 0 10px;
+    background: var(--a-bg);
+}
+
 .adm-page-header h1 {
     margin: 0;
     font-size: 22px;
@@ -471,10 +496,10 @@ body:has(.adm-shell) {
 
 .adm-card {
     background: var(--a-card);
-    border: 1px solid var(--a-line);
+    border: 1px solid var(--a-card-line);
     border-radius: 16px;
     padding: 20px 22px;
-    box-shadow: 0 2px 10px rgba(20, 33, 66, 0.04);
+    box-shadow: 0 2px 12px rgba(20, 33, 66, 0.08);
 }
 
 .adm-card-head {
@@ -564,6 +589,7 @@ body:has(.adm-shell) {
 .adm-field-hint {
     font-size: 11.5px;
     color: var(--a-ink-soft);
+    opacity: 0.9;
 }
 
 .adm-field input,
@@ -572,7 +598,7 @@ body:has(.adm-shell) {
     width: 100%;
     font-size: 14px;
     padding: 9px 11px;
-    border: 1px solid var(--a-line);
+    border: 1px solid var(--a-field-line);
     border-radius: 10px;
     font-family: inherit;
     background: var(--a-input-bg);
@@ -588,6 +614,7 @@ body:has(.adm-shell) {
 .adm-field select:focus,
 .adm-field textarea:focus {
     outline: none;
+    background: var(--a-card);
     border-color: var(--a-indigo);
     box-shadow: 0 0 0 3px rgba(47, 95, 222, 0.12);
 }
@@ -768,10 +795,11 @@ body:has(.adm-shell) {
     font-size: 11.5px;
     text-transform: uppercase;
     letter-spacing: 0.04em;
+    font-weight: 700;
     color: var(--a-ink-soft);
     padding: 12px 16px;
-    background: var(--a-surface-tint);
-    border-bottom: 1px solid var(--a-line);
+    background: var(--a-input-bg);
+    border-bottom: 1px solid var(--a-card-line);
 }
 
 .adm-table td {
@@ -1141,7 +1169,11 @@ body:has(.adm-shell) {
     }
 
     .adm-main {
-        padding: 18px 14px 50px;
+        padding: 0 14px 50px;
+    }
+
+    .adm-main::before {
+        height: 18px;
     }
 
     .adm-activity-item {
@@ -1151,4 +1183,723 @@ body:has(.adm-shell) {
     .adm-activity-time {
         margin-left: 46px;
     }
+}
+
+/* ---------- role akun di halaman Pengguna (dev / admin / user) ---------- */
+.adm-role-badge,
+.adm-role-select {
+    font-family: inherit;
+    font-size: 11.5px;
+    font-weight: 800;
+    line-height: 1;
+    padding: 5px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--a-line);
+    background: var(--a-surface-tint);
+    color: var(--a-ink-soft);
+    white-space: nowrap;
+}
+
+.adm-role-select {
+    cursor: pointer;
+    padding-right: 6px;
+}
+
+.adm-role-select:disabled {
+    opacity: .6;
+    cursor: progress;
+}
+
+.adm-role-badge.dev,
+.adm-role-select.dev {
+    color: var(--a-indigo-deep);
+    background: var(--a-indigo-tint);
+    border-color: color-mix(in srgb, var(--a-indigo) 35%, transparent);
+}
+
+.adm-role-badge.admin,
+.adm-role-select.admin {
+    color: #9a6a00;
+    background: color-mix(in srgb, #e0a100 16%, var(--a-card, #fff));
+    border-color: color-mix(in srgb, #e0a100 40%, transparent);
+}
+
+/* ---------- tabel Pengguna: kolom Nama | Role | Rank | Bergabung | aksi ---------- */
+.adm-table--users {
+    table-layout: fixed;
+}
+
+.adm-table--users .adm-col-name { width: 32%; }
+.adm-table--users .adm-col-role { width: 18%; }
+.adm-table--users .adm-col-rank { width: 20%; }
+.adm-table--users .adm-col-joined { width: 20%; }
+.adm-table--users .adm-col-action { width: 10%; }
+
+.adm-table--users td,
+.adm-table--users th {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* badge & dropdown role dibuat sama tinggi biar baris tabel rapi */
+.adm-table--users .adm-role-badge,
+.adm-table--users .adm-role-select {
+    display: inline-flex;
+    align-items: center;
+    height: 28px;
+    box-sizing: border-box;
+    min-width: 84px;
+}
+
+.adm-table--users .adm-role-badge {
+    justify-content: center;
+    gap: 4px;
+}
+
+/* ---------- Kotoba: tree explorer (folder tree + detail panel) ---------- */
+
+.adm-page-header--with-actions {
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.adm-page-header-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+}
+
+.adm-kotoba-layout {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 18px;
+    align-items: start;
+}
+
+.adm-tree-panel {
+    padding: 14px;
+    position: sticky;
+    top: 84px; /* tepat di bawah header Kotoba/Kanji/Bunpō yang juga sticky */
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+}
+
+.adm-th-no,
+.adm-td-no {
+    width: 48px;
+    text-align: center;
+    color: var(--a-ink-soft);
+    font-variant-numeric: tabular-nums;
+}
+
+.adm-tree-scroll {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.adm-tree-node {
+    display: flex;
+    flex-direction: column;
+}
+
+.adm-tree-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 6px;
+    border-radius: 8px;
+    min-height: 34px;
+}
+
+.adm-tree-row:hover {
+    background: var(--a-surface-hover);
+}
+
+.adm-tree-row--subtier.active {
+    background: var(--a-indigo-tint);
+}
+
+.adm-tree-toggle {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    border: none;
+    background: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--a-ink-soft);
+    cursor: pointer;
+}
+
+.adm-tree-toggle:disabled {
+    visibility: hidden;
+    cursor: default;
+}
+
+.adm-tree-caret {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.15s ease;
+    transform: rotate(-90deg);
+}
+
+.adm-tree-caret.open {
+    transform: rotate(0deg);
+}
+
+.adm-tree-icon {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    color: var(--a-indigo);
+    display: flex;
+}
+
+.adm-tree-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.adm-tree-label-btn {
+    border: none;
+    background: none;
+    padding: 2px 4px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--a-ink);
+    cursor: pointer;
+    text-align: left;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.adm-tree-row--leaf {
+    border: none;
+    background: none;
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-align: left;
+}
+
+.adm-tree-row--leaf .adm-tree-label {
+    white-space: nowrap;
+    font-weight: 600;
+    color: var(--a-ink);
+    font-size: 13px;
+}
+
+.adm-tree-row--leaf .adm-tree-leaf-icon {
+    width: 14px;
+    height: 14px;
+    color: var(--a-ink-soft);
+    flex-shrink: 0;
+    margin-left: 2px;
+}
+
+.adm-tree-leaf-meaning {
+    color: var(--a-ink-soft);
+    font-size: 12px;
+    margin-left: auto;
+    padding-left: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.adm-tree-badge {
+    flex-shrink: 0;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--a-surface-tint);
+    color: var(--a-ink-soft);
+    white-space: nowrap;
+}
+
+.adm-tree-row-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+}
+
+.adm-tree-row:hover .adm-tree-row-actions,
+.adm-tree-row:focus-within .adm-tree-row-actions {
+    opacity: 1;
+}
+
+.adm-tree-row-actions .adm-icon-btn {
+    width: 24px;
+    height: 24px;
+}
+
+.adm-tree-row-actions .adm-icon-btn svg {
+    width: 13px;
+    height: 13px;
+}
+
+.adm-tree-children {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-left: 19px;
+    padding-left: 10px;
+    border-left: 1.5px solid var(--a-line);
+}
+
+.adm-tree-leaves {
+    margin-left: 19px;
+}
+
+.adm-tree-add-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    background: none;
+    color: var(--a-indigo);
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 6px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    align-self: flex-start;
+}
+
+.adm-tree-add-link svg {
+    width: 13px;
+    height: 13px;
+}
+
+.adm-tree-add-link:hover {
+    background: var(--a-indigo-tint);
+}
+
+/* ---------- Kotoba: detail panel ---------- */
+
+.adm-tree-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+}
+
+.adm-tree-detail-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 60px 24px;
+    text-align: center;
+    color: var(--a-ink-soft);
+    min-height: 240px;
+}
+
+.adm-tree-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: var(--a-ink-soft);
+    flex-wrap: wrap;
+}
+
+.adm-tree-breadcrumb .sep {
+    opacity: 0.6;
+}
+
+.adm-tree-detail-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.adm-tree-detail-head h2 {
+    margin: 0 0 4px;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--a-indigo-deep);
+}
+
+.adm-tree-detail-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* ---------- Kotoba: small modal for Tambah/Edit Tier/Chapter/Sub Chapter ---------- */
+
+.adm-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(16, 24, 45, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 60;
+}
+
+.adm-modal-panel {
+    width: 100%;
+    max-width: 440px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    background: var(--a-card);
+    border: 1px solid var(--a-card-line);
+    border-radius: 18px;
+    padding: 20px 22px 22px;
+    box-shadow: 0 20px 50px rgba(16, 24, 45, 0.3);
+}
+
+.adm-modal-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.adm-modal-head h2 {
+    margin: 0;
+    font-size: 16.5px;
+    font-weight: 800;
+    color: var(--a-indigo-deep);
+}
+
+.adm-modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+@media (max-width: 960px) {
+    .adm-kotoba-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .adm-tree-panel {
+        position: static;
+        max-height: 360px;
+    }
+}
+
+@media (max-width: 680px) {
+    .adm-page-header--with-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .adm-page-header-actions {
+        justify-content: flex-start;
+    }
+
+    .adm-tree-detail-head {
+        flex-direction: column;
+    }
+
+    .adm-tree-detail-actions {
+        width: 100%;
+    }
+}
+
+.adm-node-number {
+  font-size: 0.8em;
+  font-weight: 400;
+}
+
+/* ---------- loading: skeleton & spinner ---------- */
+
+.admin-scene-spinner {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 14px;
+}
+
+.adm-skel {
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 8px;
+    background-color: color-mix(in srgb, var(--a-ink-soft) 16%, transparent);
+    background-image: linear-gradient(
+        90deg,
+        transparent 0%,
+        color-mix(in srgb, var(--a-ink-soft) 10%, transparent) 45%,
+        color-mix(in srgb, var(--a-ink-soft) 10%, transparent) 55%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
+    animation: tkShimmer 1.4s ease-in-out infinite;
+}
+
+.adm-skel--circle {
+    border-radius: 50%;
+}
+
+.adm-tree-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 8px 4px;
+}
+
+.adm-tree-skel-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .adm-skel {
+        animation: none;
+        background-image: none;
+    }
+}
+
+/* Organize by: lapisan di antara Tier dan Chapter */
+.adm-tree-row--source {
+    background: var(--a-indigo-tint);
+}
+
+.adm-tree-row--source:hover {
+    background: var(--a-indigo-tint);
+    filter: brightness(0.98);
+}
+
+.adm-tree-tag {
+    display: inline-block;
+    margin-right: 6px;
+    padding: 1px 7px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--a-ink-soft);
+    background: var(--a-surface-hover);
+    vertical-align: middle;
+}
+
+.adm-modal-note {
+    margin: 0 0 12px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* ---------- Quick switch akun (sidebar kiri bawah, khusus dev) ---------- */
+.adm-switch-trigger {
+    padding: 7px 8px;
+    border: 1px solid var(--a-line);
+    background: var(--a-surface-tint);
+    margin-bottom: 6px;
+}
+
+.adm-switch-avatar {
+    width: 28px;
+    height: 28px;
+}
+
+.adm-switch-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+    line-height: 1.25;
+}
+
+.adm-switch-name {
+    font-size: 13px;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.adm-switch-sub {
+    font-size: 11.5px;
+    color: var(--a-ink-soft);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.adm-switch-pop {
+    position: fixed;
+    z-index: 60;
+    background: var(--a-card);
+    border: 1px solid var(--a-card-line);
+    border-radius: 14px;
+    box-shadow: 0 12px 32px rgba(20, 33, 66, 0.18);
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.adm-switch-head {
+    padding: 4px 8px 6px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--a-ink-soft);
+}
+
+.adm-switch-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.adm-switch-row {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    border-radius: 10px;
+}
+
+.adm-switch-row.active {
+    background: var(--a-indigo-tint);
+}
+
+.adm-switch-pick {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    flex: 1;
+    min-width: 0;
+    padding: 7px 8px;
+    border: none;
+    background: none;
+    border-radius: 10px;
+    text-align: left;
+    color: var(--a-ink);
+    cursor: pointer;
+}
+
+.adm-switch-row:not(.active) .adm-switch-pick:hover {
+    background: var(--a-surface-hover);
+}
+
+.adm-switch-pick:disabled {
+    cursor: default;
+}
+
+.adm-switch-busy {
+    color: var(--a-ink-soft);
+    font-weight: 700;
+}
+
+.adm-switch-error {
+    margin: 4px 8px;
+    color: #c0392b;
+}
+
+.adm-switch-add {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 10px;
+    margin-top: 2px;
+    border: none;
+    border-top: 1px solid var(--a-line);
+    background: none;
+    border-radius: 0 0 10px 10px;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--a-indigo);
+    cursor: pointer;
+}
+
+.adm-switch-add svg {
+    width: 16px;
+    height: 16px;
+}
+
+.adm-switch-add:hover {
+    background: var(--a-surface-hover);
+}
+
+@media (max-width: 680px) {
+    .adm-switch-trigger {
+        margin-bottom: 0;
+        width: auto;
+        max-width: 190px;
+    }
+    .adm-switch-trigger .adm-switch-sub {
+        display: none;
+    }
+}
+
+/* Toggle bahasa EN | ID (di samping tombol tema; versi floating untuk layar login) */
+.adm-lang-toggle {
+    position: absolute;
+    top: 16px;
+    right: 66px;
+    z-index: 5;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    padding: 3px;
+    gap: 2px;
+    border-radius: 999px;
+    background: var(--a-card);
+    border: 1px solid var(--a-line);
+    box-shadow: 0 4px 14px rgba(20, 33, 66, 0.10);
+}
+
+.adm-lang-toggle.floating {
+    --a-card: var(--card, #ffffff);
+    --a-ink-soft: var(--ink-soft, #66748c);
+    --a-line: var(--line, rgba(20, 33, 66, 0.10));
+    --a-indigo: var(--indigo, #2f5fde);
+    position: fixed;
+    top: 16px;
+    right: 16px;
+}
+
+.adm-lang-toggle button {
+    height: 30px;
+    padding: 0 11px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--a-ink-soft);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.adm-lang-toggle button:hover {
+    color: var(--a-indigo);
+}
+
+.adm-lang-toggle button.active {
+    background: var(--a-indigo);
+    color: #fff;
 }

@@ -286,9 +286,12 @@ body {
     font-family: var(--kana-font);
 }
 
-.sidebar-rank-emoji {
-    font-size: 12px;
-    font-family: initial;
+.sidebar-rank-logo {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    vertical-align: -3px;
+    margin-right: 2px;
 }
 
 .sidebar-nav {
@@ -378,33 +381,23 @@ body {
     font-size: 12.5px;
     font-weight: 600;
     line-height: 1.45;
-    transition: opacity .3s ease, transform .3s ease;
 }
 
-/* teks lama: numpuk di atas teks baru, lalu geser ke kanan & menghilang */
-.sidebar-promo-quote--exit {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    opacity: 1;
-    transform: translateX(0);
+/* kursor kedip di akhir teks yang lagi "diketik" */
+.sidebar-promo-quote-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 0.95em;
+    margin-left: 1px;
+    background: currentColor;
+    opacity: 0.6;
+    vertical-align: text-bottom;
+    animation: sidebar-quote-blink 0.9s step-end infinite;
 }
 
-.sidebar-promo-quote--exit.is-exiting {
-    opacity: 0;
-    transform: translateX(18px);
-}
-
-/* teks baru: masuk dari kiri ke posisi normalnya */
-.sidebar-promo-quote--enter {
-    opacity: 0;
-    transform: translateX(-18px);
-}
-
-.sidebar-promo-quote--enter.is-entered {
-    opacity: 1;
-    transform: translateX(0);
+@keyframes sidebar-quote-blink {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 0; }
 }
 
 .sidebar-promo-sakura {
@@ -1166,190 +1159,1042 @@ button.primary:not(:disabled)::after {
     }
 }
 
+/* ========================================
+   RANK MISSIONS — popup Misi Pangkat
+   Atas: header (chibi + judul + pangkat sekarang → berikutnya)
+   Bawah: langkah-langkah yang harus dilakukan buat naik pangkat.
+   Warna ngikutin tema (--indigo, --card, --ink, ...), jadi ikut ganti
+   di mode terang/gelap/custom.
+   ======================================== */
+
 .modal-panel.missions-panel {
-    max-width: 440px;
+    max-width: 800px;
     max-height: calc(100vh - 40px);
-    overflow-y: auto;
-    border-radius: 20px;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 26px;
 }
 
-.missions-panel h2 {
-    color: var(--ink);
-}
+/* ---------- header ---------- */
+/* Susunan: baris atas = chibi + bubble ucapan (pemandangan gunung/sakura
+   cuma di baris ini, pudar ke bawah); baris bawah = pangkat sekarang →
+   berikutnya, DI TENGAH, di atas latar polos supaya logonya jelas. */
 
-.missions-hero {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
-    padding: 14px;
-    border-radius: 16px;
-    background: var(--paper);
-    border: 1px solid var(--line);
-}
-
-.missions-rank {
-    flex: 1;
+.rm-hero {
+    position: relative;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    text-align: center;
-}
-
-.missions-rank.muted {
-    opacity: .7;
-}
-
-.missions-rank-emoji {
-    font-size: 26px;
-    line-height: 1.2;
-}
-
-.missions-rank small {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--ink-soft);
-}
-
-.missions-rank strong {
-    font-size: 14px;
-    color: var(--ink);
-}
-
-.missions-hero-arrow {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--indigo);
-}
-
-.missions-progress {
-    margin: 14px 0 6px;
-}
-
-.missions-bar {
-    height: 8px;
-    border-radius: 999px;
-    background: var(--paper-dark);
+    gap: clamp(8px, 2vh, 16px);
+    padding: clamp(16px, 3vh, 26px) 30px clamp(12px, 2.4vh, 20px);
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg,
+        color-mix(in srgb, var(--indigo) 9%, var(--card)) 0%,
+        var(--card) 100%);
+    isolation: isolate;
     overflow: hidden;
 }
 
-.missions-bar span {
-    display: block;
-    height: 100%;
-    border-radius: 999px;
-    background: var(--indigo);
-    transition: width .3s ease;
+/* pemandangan: hanya di area atas, pudar ke kiri & ke bawah */
+.rm-hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 42%;
+    left: 34%;
+    z-index: -1;
+    background: url("../assets/page-hero-learn.webp") right center / cover no-repeat;
+    -webkit-mask-image:
+        linear-gradient(90deg, transparent 0%, #000 60%),
+        linear-gradient(180deg, #000 45%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+        linear-gradient(90deg, transparent 0%, #000 60%),
+        linear-gradient(180deg, #000 45%, transparent 100%);
+    mask-composite: intersect;
+    opacity: .9;
 }
 
-.missions-progress small {
-    display: block;
-    margin-top: 6px;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--ink-soft);
+[data-theme="dark"] .rm-hero::before {
+    opacity: .28;
 }
 
-.missions-list {
-    list-style: none;
-    margin: 12px 0 0;
+.rm-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 3;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
     padding: 0;
+    color: #4a5578;
+    background: rgba(255, 255, 255, 0.92);
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(20, 30, 60, 0.18);
+    cursor: pointer;
+    transition: transform .15s ease, background .15s ease;
+}
+
+.rm-close:hover {
+    background: #fff;
+    transform: scale(1.06);
+}
+
+.rm-hero-top {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-right: 30px;
+}
+
+.rm-chibi {
+    position: relative;
+    flex: 0 0 auto;
+    width: clamp(112px, 17vh, 150px);
+    height: clamp(112px, 17vh, 150px);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    border-radius: 26px;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 80% 18%, color-mix(in srgb, var(--indigo) 16%, transparent) 0 22%, transparent 23%),
+        linear-gradient(160deg,
+            color-mix(in srgb, var(--indigo) 12%, var(--card)) 0%,
+            color-mix(in srgb, var(--rb-purple) 10%, var(--card)) 100%);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--indigo) 12%, transparent);
+}
+
+.rm-chibi-img {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+    width: 94%;
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 3%;
+    object-fit: contain;
+    filter: drop-shadow(0 6px 10px rgba(20, 30, 60, 0.18));
+    animation: rmChibiIn .4s cubic-bezier(.2, .9, .3, 1.15) both;
+}
+
+.rm-chibi-spark {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    background: var(--gold);
+    clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+}
+
+.rm-chibi-spark--a { top: 16px; right: 22px; }
+.rm-chibi-spark--b { top: 34px; right: 10px; width: 6px; height: 6px; }
+
+/* ---------- bubble ucapan chibi ---------- */
+
+.rm-bubble {
+    --rm-bubble-line: color-mix(in srgb, var(--indigo) 42%, #fff);
+    --rm-bubble-mid: color-mix(in srgb, var(--indigo) 3%, #fff);
+    position: relative;
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: min(400px, 62%);
+    padding: 20px 26px;
+    border: 2.5px solid var(--rm-bubble-line);
+    border-radius: 26px;
+    background: linear-gradient(180deg, #fff 0%, color-mix(in srgb, var(--indigo) 6%, #fff) 100%);
+    box-shadow:
+        inset 0 3px 0 rgba(255, 255, 255, .9),
+        0 10px 24px color-mix(in srgb, var(--indigo) 16%, transparent);
+    transform-origin: left center;
+    animation: rmBubbleIn .38s cubic-bezier(.2, .9, .3, 1.15) both;
+}
+
+/* ekor bubble → nunjuk ke chibi di kiri */
+.rm-bubble::before {
+    content: "";
+    position: absolute;
+    left: -11px;
+    top: 50%;
+    width: 18px;
+    height: 18px;
+    margin-top: -9px;
+    background: var(--rm-bubble-mid);
+    border-left: 2.5px solid var(--rm-bubble-line);
+    border-bottom: 2.5px solid var(--rm-bubble-line);
+    border-bottom-left-radius: 5px;
+    transform: rotate(45deg);
+}
+
+/* kelopak sakura kecil di pojok kanan-atas bubble */
+.rm-bubble-petals {
+    position: absolute;
+    top: -16px;
+    right: -14px;
+    width: 40px;
+    height: 40px;
+    background: url("../assets/sakura-petals.webp") center / contain no-repeat;
+    filter: drop-shadow(0 3px 5px rgba(220, 80, 140, .22));
+    pointer-events: none;
+}
+
+.rm-bubble-text {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 700;
+    color: #2a3350;
+    overflow-wrap: anywhere;
+}
+
+@keyframes rmBubbleIn {
+    from { opacity: 0; transform: translateX(-8px) scale(.94); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes rmChibiIn {
+    from { opacity: 0; transform: translateY(8px) scale(.94); }
+    to { opacity: 1; transform: none; }
+}
+
+/* ---------- pangkat: sekarang → berikutnya (di tengah) ---------- */
+
+.rm-path {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 22px;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 460px;
+}
+
+.rm-rank {
+    flex: 1 1 0;
+    min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
 }
 
-.missions-group {
-    padding: 10px 12px;
-    border-radius: 14px;
-    border: 1px solid var(--line);
-    background: var(--card);
+.rm-rank.muted {
+    opacity: .8;
 }
 
-.missions-group.current {
-    border-color: var(--indigo);
-    background: color-mix(in srgb, var(--indigo) 6%, var(--card));
-}
-
-.missions-group-head {
+/* medali bulat terang: logo pangkat selalu kontras di tema terang & gelap */
+.rm-rank-icon {
+    --rm-tone: var(--indigo);
+    flex: 0 0 auto;
+    width: clamp(64px, 10vh, 88px);
+    height: clamp(64px, 10vh, 88px);
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    font-size: 38px;
+    line-height: 1;
+    background: none;
+    border: 0;
+    box-shadow: none;
+}
+
+.rm-rank-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 8px 14px color-mix(in srgb, var(--rm-tone) 35%, transparent));
+}
+
+.rm-rank--next .rm-rank-icon {
+    --rm-tone: var(--rb-purple);
+}
+
+.rm-rank-text {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+}
+
+.rm-rank-text small {
     font-size: 11.5px;
-    font-weight: 800;
-    letter-spacing: .02em;
+    font-weight: 700;
+    letter-spacing: .06em;
     text-transform: uppercase;
     color: var(--ink-soft);
-    margin-bottom: 6px;
 }
 
-.mission-row {
+.rm-rank-text strong {
+    max-width: 100%;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.rm-path-arrow {
+    flex: 0 0 auto;
+    display: flex;
+    align-self: flex-start;
+    margin-top: clamp(24px, 4.4vh, 38px);
+    padding: 0 2px;
+    color: var(--indigo);
+}
+
+/* ---------- langkah-langkah ---------- */
+
+.rm-steps {
+    padding: clamp(12px, 2.4vh, 22px) 30px 4px;
+}
+
+.rm-steps-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.rm-steps-head h3 {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 6px 0;
+    gap: 9px;
+    margin: 0 0 4px;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--ink);
 }
 
-.mission-check {
+.rm-steps-head h3 svg {
+    color: var(--indigo);
+}
+
+.rm-steps-head p {
+    margin: 0;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+}
+
+.rm-count {
     flex: 0 0 auto;
+    padding: 4px 11px;
+    font-size: 11.5px;
+    font-weight: 700;
+    white-space: nowrap;
+    color: var(--indigo);
+    background: color-mix(in srgb, var(--indigo) 12%, var(--card));
+    border-radius: 999px;
+}
+
+.rm-cards {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 22px;
+}
+
+/* semua kartu sama lebar; panah pemisah nempel di celah sebelum kartu
+   ke-2 dst (absolute), jadi gak nyempitin kartu pertama. */
+.rm-cell {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 190px;
+    display: flex;
+    align-items: stretch;
+}
+
+.rm-cards-arrow {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -22px;
+    width: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--indigo);
+    opacity: .75;
+}
+
+.rm-card {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 30px 12px 14px;
+    text-align: center;
+    border-radius: 16px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    box-shadow: 0 6px 16px var(--shadow-soft);
+}
+
+.rm-card-num {
+    position: absolute;
+    top: 9px;
+    left: 9px;
     width: 22px;
     height: 22px;
-    border-radius: 50%;
-    border: 2px solid var(--line);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 12px;
     font-weight: 800;
-    color: var(--on-accent);
+    color: var(--indigo);
+    background: color-mix(in srgb, var(--indigo) 16%, var(--card));
+    border-radius: 50%;
 }
 
-.mission-row.done .mission-check {
-    background: var(--indigo);
-    border-color: var(--indigo);
+.rm-card-icon {
+    flex: 0 0 auto;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--kana-font);
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
+    border-radius: 15px;
+    color: var(--tone);
+    background: color-mix(in srgb, var(--tone) 18%, var(--card));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone) 22%, transparent);
 }
 
-.mission-text {
+.rm-tone-teal { --tone: var(--rb-teal); }
+.rm-tone-orange { --tone: var(--rb-orange); }
+.rm-tone-gold { --tone: var(--gold); }
+.rm-tone-pink { --tone: var(--rb-pink); }
+.rm-tone-purple { --tone: var(--rb-purple); }
+
+.rm-card-body {
     flex: 1;
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.rm-card-body strong {
     font-size: 13.5px;
-    font-weight: 600;
+    font-weight: 800;
+    line-height: 1.3;
     color: var(--ink);
 }
 
-.mission-row.done .mission-text {
+.rm-card-body span {
+    font-size: 11.5px;
+    line-height: 1.35;
     color: var(--ink-soft);
-    text-decoration: line-through;
 }
 
-.mission-done {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--indigo);
-}
-
-.mission-go {
+.rm-card-status,
+.rm-card-go {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 0;
+    padding: 8px 10px;
     font-family: inherit;
     font-size: 12.5px;
     font-weight: 700;
-    padding: 6px 14px;
     border-radius: 999px;
-    border: 1px solid var(--indigo);
-    background: var(--indigo);
+    border: none;
+}
+
+.rm-card-status svg {
+    flex: 0 0 14px;
+}
+
+.rm-card-status {
+    color: var(--indigo);
+    background: color-mix(in srgb, var(--indigo) 14%, var(--card));
+}
+
+.rm-card-go {
     color: var(--on-accent);
+    background: var(--indigo);
+    box-shadow: 0 6px 14px color-mix(in srgb, var(--indigo) 35%, transparent);
     cursor: pointer;
-    margin: 0;
+    transition: transform .15s ease, background .15s ease;
 }
 
-.mission-go:hover {
+.rm-card-go:hover {
     background: var(--indigo-deep);
-    border-color: var(--indigo-deep);
+    transform: translateY(-1px);
 }
 
-.missions-later {
-    margin: 12px 0 14px;
-    font-size: 12px;
+.rm-later {
+    margin: 14px 0 0;
+    text-align: center;
+    font-size: 11.5px;
     color: var(--ink-soft);
+}
+
+/* ---------- footer ---------- */
+
+.rm-foot {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: clamp(8px, 1.6vh, 14px) 30px clamp(12px, 2vh, 20px);
+}
+
+.rm-foot-line {
+    flex: 1;
+    height: 2px;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--indigo) 22%, transparent);
+}
+
+.rm-foot-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-soft);
+}
+
+.rm-foot-text span {
+    color: var(--indigo);
+    font-size: 11px;
+}
+
+/* ---------- mobile: kartu jadi daftar vertikal ---------- */
+
+@media (max-width: 640px) {
+    .modal-panel.missions-panel {
+        border-radius: 22px;
+        overflow-y: auto; /* HP: kartu numpuk vertikal, scrollbar tetap disembunyiin */
+    }
+
+    .rm-hero {
+        gap: 18px;
+        padding: 20px 16px 20px;
+    }
+
+    .rm-hero-top {
+        gap: 16px;
+        padding-right: 34px; /* sisakan ruang buat tombol close */
+    }
+
+    .rm-chibi {
+        width: 104px;
+        height: 104px;
+        border-radius: 20px;
+    }
+
+    .rm-bubble {
+        max-width: 100%;
+        padding: 14px 18px;
+        border-radius: 20px;
+    }
+
+    .rm-bubble-text {
+        font-size: 13.5px;
+        line-height: 1.45;
+    }
+
+    .rm-bubble-petals {
+        top: -13px;
+        right: -8px;
+        width: 30px;
+        height: 30px;
+    }
+
+    .rm-path {
+        gap: 12px;
+        max-width: 340px;
+    }
+
+    .rm-rank {
+        gap: 8px;
+    }
+
+    .rm-rank-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 30px;
+    }
+
+    .rm-rank-text strong {
+        font-size: 15px;
+    }
+
+    .rm-path-arrow {
+        margin-top: 27px;
+    }
+
+    .rm-steps {
+        padding: 18px 16px 6px;
+    }
+
+    .rm-steps-head {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .rm-cards {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .rm-cell {
+        max-width: none;
+    }
+
+    .rm-cards-arrow {
+        display: none;
+    }
+
+    .rm-card {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        grid-template-areas: "icon body status";
+        align-items: center;
+        text-align: left;
+        gap: 12px;
+        padding: 12px 12px 12px 34px;
+    }
+
+    .rm-card-num {
+        top: 50%;
+        left: 8px;
+        transform: translateY(-50%);
+    }
+
+    .rm-card-icon {
+        grid-area: icon;
+        width: 42px;
+        height: 42px;
+        font-size: 21px;
+        border-radius: 13px;
+    }
+
+    .rm-card-body {
+        grid-area: body;
+        align-items: flex-start;
+        gap: 3px;
+    }
+
+    .rm-card-status,
+    .rm-card-go {
+        grid-area: status;
+        width: auto;
+        padding: 6px 10px;
+    }
+
+    .rm-card-status {
+        gap: 4px;
+        font-size: 11.5px;
+    }
+
+    .rm-card-status svg {
+        flex-basis: 12px;
+        width: 12px;
+        height: 12px;
+    }
+
+    .rm-card-body strong {
+        font-size: 13px;
+    }
+
+    .rm-card-body span {
+        font-size: 11px;
+    }
+
+    /* di layar sempit bubble lebar, jadi pemandangan cukup jadi aksen tipis */
+    .rm-hero::before {
+        left: 52%;
+        opacity: .55;
+    }
+
+    .rm-foot {
+        padding: 12px 16px 18px;
+        gap: 10px;
+    }
+
+    .rm-foot-text {
+        font-size: 11.5px;
+    }
+}
+
+/* ---------- IntroGuide: pemandu chibi pas pertama kali masuk web ---------- */
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.intro-guide-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(12, 18, 38, 0.58);
+    animation: introFadeIn .25s ease;
+}
+
+[data-theme="dark"] .intro-guide-overlay {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+@keyframes introFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.intro-guide-card {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    border-radius: 26px;
+    box-shadow: 0 24px 60px rgba(10, 16, 34, 0.35);
+    overflow: hidden;
+    animation: introPopIn .3s cubic-bezier(.2, .8, .3, 1.2);
+}
+
+@keyframes introPopIn {
+    from { transform: scale(.92) translateY(10px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.intro-guide-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 3;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4a5578;
+    background: rgba(255, 255, 255, 0.85);
+    border: none;
+    border-radius: 999px;
+    box-shadow: 0 4px 10px rgba(20, 30, 60, 0.18);
+    cursor: pointer;
+    transition: background .15s ease, transform .15s ease;
+}
+
+.intro-guide-close:hover {
+    background: #fff;
+    transform: scale(1.06);
+}
+
+.intro-guide-hero {
+    position: relative;
+    min-height: 300px;
+    /* padding bawah lebih besar: tinggi bubble sekarang ngikutin teks,
+       jadi ada ruang aman buat footer (tombol Lanjut) */
+    padding: 34px 24px 68px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    /* fallback langit di belakang intro-bg.png, soalnya tengah gambarnya
+       transparan — tanpa ini keliatan overlay gelap di belakang modal nembus. */
+    background: linear-gradient(165deg, #dbe7ff 0%, #eef1ff 55%, #fbe9f1 100%);
+}
+
+.intro-guide-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+}
+
+.intro-guide-sakura {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.intro-guide-chibi {
+    position: absolute;
+    left: -18px;
+    bottom: -26px;
+    z-index: 1;
+    width: clamp(150px, 34%, 240px);
+    height: auto;
+    filter: drop-shadow(0 12px 18px rgba(20, 30, 60, 0.28));
+    animation: introChibiIn .3s ease;
+}
+
+@keyframes introChibiIn {
+    from { transform: translateY(10px) scale(.94); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* ========================================
+   GUIDE SPEECH BUBBLE
+   Murni CSS: ukurannya ngikutin panjang teks (fit-content, dibatasi
+   max-width). Dekorasi bunga sakura cuma satu gambar kecil di pojok
+   kiri-atas (sakura-branch.webp), sisanya gradient + border + ekor.
+   ======================================== */
+
+.intro-guide-bubble {
+    --bubble-border: #8a8de0;
+    --bubble-fill-top: #fdfbff;
+    --bubble-fill-bottom: #f3effc;
+
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+
+    /* posisi desktop */
+    margin-left: clamp(90px, 24%, 170px);
+
+    /* lebar ngikutin isi, tapi jangan terlalu sempit / lebar */
+    width: fit-content;
+    min-width: 190px;
+    max-width: min(440px, 62%);
+
+    border: 3px solid var(--bubble-border);
+    border-radius: 30px;
+    background: linear-gradient(180deg, var(--bubble-fill-top) 0%, var(--bubble-fill-bottom) 100%);
+    box-shadow:
+        inset 0 -6px 14px rgba(255, 190, 215, 0.22),
+        inset 0 3px 0 rgba(255, 255, 255, 0.9),
+        0 10px 24px rgba(90, 90, 170, 0.18);
+}
+
+/* Ekor bubble (nunjuk ke chibi di kiri-bawah) */
+.intro-guide-bubble::after {
+    content: "";
+    position: absolute;
+    left: 34px;
+    bottom: -13px;
+    width: 22px;
+    height: 22px;
+    background: var(--bubble-fill-bottom);
+    border-right: 3px solid var(--bubble-border);
+    border-bottom: 3px solid var(--bubble-border);
+    border-bottom-right-radius: 5px;
+    transform: rotate(45deg) skew(8deg, 8deg);
+}
+
+/* Dekorasi bunga sakura — TENGAH bunganya di-anchor ke lengkungan border
+   pojok kiri-atas bubble, jadi tetap nempel berapa pun ukuran bubble-nya
+   (lebar/tinggi berubah gak ngaruh). Ukuran bunga fixed (--flower-w), bukan
+   persen dari bubble. --at-x/--at-y = titik di lengkungan border (dari
+   pojok bubble) tempat tengah bunga ditaruh; geser di sini kalau mau
+   nyesuain. */
+.intro-guide-bubble {
+    --flower-w: 88px;
+    --flower-rot: -24deg; /* miring berlawanan jarum jam; makin negatif makin miring */
+    --at-x: 9px;
+    --at-y: 9px;
+}
+
+.intro-guide-bubble::before {
+    content: "";
+    position: absolute;
+    left: calc(var(--flower-w) * -0.5 + var(--at-x));
+    top: calc(var(--flower-w) * 0.757 * -0.5 + var(--at-y));
+    z-index: 2;
+    width: var(--flower-w);
+    aspect-ratio: 640 / 485;
+    transform: rotate(var(--flower-rot));
+    transform-origin: center;
+    background: url("../assets/sakura-branch.webp") center / contain no-repeat;
+    filter: drop-shadow(0 4px 6px rgba(190, 90, 140, 0.22));
+    pointer-events: none;
+}
+
+/* Kelopak sakura di sisi kanan bubble — nempel ke sisi kanan (right) dan
+   tingginya ngikutin tinggi bubble (top/bottom), jadi tetap pas di border
+   kanan berapa pun ukuran bubble-nya. */
+.intro-guide-bubble-petals {
+    position: absolute;
+    top: 10%;
+    bottom: 10%;
+    right: -24px;
+    z-index: 2;
+    width: 44px;
+    max-height: 130px;
+    margin-block: auto;
+    background: url("../assets/sakura-petals.webp") center / contain no-repeat;
+    filter: drop-shadow(0 3px 5px rgba(220, 80, 140, 0.2));
+    pointer-events: none;
+}
+
+.intro-guide-bubble-text {
+    position: relative;
+    z-index: 1;
+    display: block;
+    box-sizing: border-box;
+
+    /* padding simetris biar teks pas di tengah bubble */
+    padding: 32px 34px;
+
+    font-size: 15px;
+    line-height: 1.5;
+    font-weight: 700;
+    color: #2a3350;
+    overflow-wrap: anywhere;
+
+    animation: introTextIn .22s ease;
+}
+
+
+/* ========================================
+   TABLET / MOBILE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .intro-guide-bubble {
+        margin-left: 18%;
+        max-width: 78%;
+    }
+
+    .intro-guide-bubble-text {
+        padding: 30px 28px;
+        font-size: 14px;
+        line-height: 1.45;
+    }
+}
+
+
+/* ========================================
+   SMALL MOBILE
+   ======================================== */
+
+@media (max-width: 480px) {
+    .intro-guide-bubble {
+        min-width: 170px;
+        border-width: 2.5px;
+        border-radius: 24px;
+        --flower-w: 74px;
+        --at-x: 7px;
+        --at-y: 7px;
+    }
+
+    .intro-guide-bubble-petals {
+        right: -17px;
+        width: 38px;
+        max-height: 104px;
+    }
+
+    .intro-guide-bubble-text {
+        padding: 28px 26px;
+        font-size: 13.5px;
+        line-height: 1.4;
+    }
+}
+
+@keyframes introTextIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.intro-guide-footer {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 18px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.intro-guide-next {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #fff;
+    background: var(--indigo);
+    border: none;
+    border-radius: 999px;
+    padding: 10px 18px;
+    box-shadow: 0 8px 18px rgba(60, 80, 200, 0.35);
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.intro-guide-next:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(60, 80, 200, 0.42);
+}
+
+.intro-guide-next span {
+    font-size: 15px;
+    line-height: 1;
+}
+
+@media (max-width: 560px) {
+    .intro-guide-hero {
+        min-height: 300px;
+        padding: 30px 16px 64px;
+        justify-content: center;
+    }
+
+    /* Chibi tetep di kiri-bawah kayak desktop (cuma diperkecil), jangan
+       dipindah ke atas-tengah lagi. */
+    .intro-guide-chibi {
+        width: clamp(110px, 40%, 150px);
+    }
+
+    /* Mobile: bubble ditaruh di tengah card (horizontal), lebarnya ngikutin
+       isi dibatasi max-width, dan teksnya rata tengah di dalam bubble. */
+    .intro-guide-bubble {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: min(340px, 86%);
+    }
+
+    .intro-guide-bubble-text {
+        text-align: center;
+    }
+
+    /* CATATAN: .intro-guide-footer SENGAJA gak disentuh di sini — dia harus
+       tetep pakai position:absolute + z-index:2 dari rule dasarnya. Kemarin
+       ini di-override jadi position:static buat coba numpuk ke bawah, tapi
+       akibatnya z-index-nya kebuang (static gak kena z-index sama sekali)
+       jadi ketutup .intro-guide-bg yang position:absolute — itu sebabnya
+       tombol Next kelihatan "ngumpet" di belakang bg gunung. */
 }
 
 /* ---------- header halaman Belajar / Flashcards / Latihan Soal (sama seperti Home) ---------- */
@@ -1451,4 +2296,954 @@ button.primary:not(:disabled)::after {
     z-index: 999;
     overflow: hidden;
     background: #fff;
+}
+
+/* ==========================================================================
+   Quiz screen — "scenic" look (torii/Mt Fuji/sakura background reference).
+   Scoped to #screen-quiz / .app-shell.quiz-scenic so nothing else changes.
+   ========================================================================== */
+
+.app-shell.quiz-scenic {
+    background-size: cover;
+    background-position: 20% center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* ---- kunci layar kuis: nggak boleh ada scroll halaman sama sekali.
+   Body dikunci ke tinggi viewport pas quiz-scenic aktif; kalau kontennya
+   (jarang) lebih tinggi dari layar, .stage yang nanggung scroll internal-nya
+   sendiri (pakai scrollbar tipis yg udah didefinisikan global), bukan
+   halamannya yang ikut lompat-lompat. ---- */
+html:has(.app-shell.quiz-scenic),
+body:has(.app-shell.quiz-scenic) {
+    height: 100dvh;
+    overflow: hidden;
+}
+
+.app-shell.quiz-scenic {
+    height: 100dvh;
+    overflow: hidden;
+}
+
+.app-shell.quiz-scenic .main-area {
+    height: 100%;
+    overflow: hidden;
+}
+
+.app-shell.quiz-scenic .stage {
+    background: transparent;
+    height: 100%;
+    overflow-y: auto;
+    padding: 16px 20px 18px;
+}
+
+#screen-quiz,
+#screen-match {
+    background: transparent;
+}
+
+/* ---- topbar: back / progress / restart, floating pills (no merged bg) ---- */
+#screen-quiz .quiz-topbar,
+#screen-match .quiz-topbar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0;
+    margin-bottom: 16px;
+    border-radius: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+#screen-quiz .quiz-pill-btn,
+#screen-match .quiz-pill-btn {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--vermillion);
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 999px;
+    padding: 8px 14px;
+    cursor: pointer;
+    box-shadow: 0 3px 8px var(--shadow-soft);
+    transition: transform .15s ease, background-color .15s ease;
+    white-space: nowrap;
+}
+
+#screen-quiz .quiz-pill-btn:hover,
+#screen-match .quiz-pill-btn:hover {
+    background: rgba(255, 255, 255, 0.75);
+    transform: translateY(-1px);
+}
+
+#screen-quiz .quiz-pill-btn.armed,
+#screen-match .quiz-pill-btn.armed {
+    color: var(--quiz-wrong);
+}
+
+#screen-quiz .quiz-pill-icon,
+#screen-match .quiz-pill-icon {
+    width: 15px;
+    height: 15px;
+    flex: none;
+}
+
+#screen-quiz .quiz-progress-center,
+#screen-match .quiz-progress-center {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+#screen-quiz .quiz-progress-text,
+#screen-match .quiz-progress-text {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: var(--indigo-deep);
+    letter-spacing: 0.02em;
+}
+
+#screen-quiz .quiz-progress-bar,
+#screen-match .quiz-progress-bar {
+    width: 100%;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.55);
+    overflow: hidden;
+}
+
+#screen-quiz .quiz-progress-fill,
+#screen-match .quiz-progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: var(--vermillion);
+    transition: width .3s ease;
+}
+
+/* ---- secondary row: per-question timer / streak / speedrun clock ---- */
+#screen-quiz .quiz-substatus-row,
+#screen-match .quiz-substatus-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+/* ---- streak badge, now living inside the card, bottom-centered ---- */
+#screen-quiz .quiz-card-streak-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 14px;
+}
+
+#screen-quiz .quiz-card-streak-row .streak {
+    font-size: 13px;
+}
+
+/* ---- kana stamp + mode label ---- */
+#screen-quiz .stamp-wrap {
+    margin: 4px 0 14px;
+}
+
+#screen-quiz .stamp .kana {
+    color: var(--vermillion);
+    font-size: clamp(42px, 11vw, 60px);
+}
+
+#screen-quiz .quiz-mode-label,
+#screen-match .quiz-mode-label {
+    color: var(--ink-soft);
+    font-weight: 800;
+}
+
+/* ---- choice buttons: soft glass cards, blue border, no rainbow tints ---- */
+#screen-quiz .choices {
+    gap: 10px;
+}
+
+#screen-quiz button.choice {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.78);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1.5px solid rgba(255, 255, 255, 0.85);
+    border-radius: 16px;
+    color: var(--ink);
+    font-weight: 800;
+    font-size: 15.5px;
+    box-shadow: 0 6px 16px var(--shadow-soft);
+    padding: 13px 32px;
+}
+
+#screen-quiz button.choice:nth-child(1),
+#screen-quiz button.choice:nth-child(2),
+#screen-quiz button.choice:nth-child(3),
+#screen-quiz button.choice:nth-child(4),
+#screen-quiz button.choice:nth-child(5),
+#screen-quiz button.choice:nth-child(6),
+#screen-quiz button.choice:nth-child(7),
+#screen-quiz button.choice:nth-child(8) {
+    background: rgba(255, 255, 255, 0.78);
+    border-color: rgba(255, 255, 255, 0.85);
+    color: var(--ink);
+}
+
+#screen-quiz button.choice:hover:not(:disabled) {
+    border-color: var(--vermillion);
+    background: rgba(255, 255, 255, 0.92);
+    transform: translateY(-2px);
+}
+
+#screen-quiz .choice-label {
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+#screen-quiz button.choice.correct {
+    background: color-mix(in srgb, var(--quiz-correct) 16%, white 84%);
+    border-color: color-mix(in srgb, var(--quiz-correct) 55%, white 45%);
+    color: var(--ink);
+    animation: none;
+}
+
+#screen-quiz button.choice.wrong {
+    background: color-mix(in srgb, var(--quiz-wrong) 14%, white 86%);
+    border-color: color-mix(in srgb, var(--quiz-wrong) 55%, white 45%);
+    color: var(--ink);
+}
+
+#screen-quiz .choice-badge {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+#screen-quiz .choice-badge svg {
+    width: 14px;
+    height: 14px;
+}
+
+#screen-quiz .choice-badge-correct {
+    background: var(--quiz-correct);
+}
+
+#screen-quiz .choice-badge-wrong {
+    background: var(--quiz-wrong);
+}
+
+@media (max-width: 720px) {
+    .app-shell.quiz-scenic {
+        background-attachment: scroll;
+    }
+
+    #screen-quiz .quiz-topbar,
+    #screen-match .quiz-topbar {
+        gap: 8px;
+        padding: 0;
+    }
+
+    #screen-quiz .quiz-pill-btn,
+    #screen-match .quiz-pill-btn {
+        font-size: 12.5px;
+        padding: 8px 12px;
+    }
+
+    #screen-quiz .quiz-pill-btn span:not(.quiz-pill-icon),
+    #screen-match .quiz-pill-btn span:not(.quiz-pill-icon) {
+        display: none;
+    }
+}
+
+/* ---- glass card wrapping the question + choices + feedback ---- */
+#screen-quiz .quiz-card,
+#screen-match .quiz-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    border-radius: 28px;
+    padding: 24px 20px 20px;
+    box-shadow: 0 16px 40px var(--shadow-soft), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+@media (max-width: 720px) {
+    #screen-quiz .quiz-card,
+    #screen-match .quiz-card {
+        padding: 18px 14px 16px;
+        border-radius: 22px;
+    }
+}
+
+/* ---- mode label: plain thin lines flanking the text, no filled box ---- */
+#screen-quiz .quiz-mode-label,
+#screen-match .quiz-mode-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 11px;
+    margin: -4px 0 12px;
+}
+
+#screen-quiz .mode-label-line,
+#screen-match .mode-label-line {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: color-mix(in srgb, var(--vermillion) 55%, transparent);
+    border-radius: 1px;
+}
+
+#screen-quiz .mode-label-text,
+#screen-match .mode-label-text {
+    white-space: nowrap;
+}
+
+/* ---- feedback: centered pill message + pill "Next" button ---- */
+#screen-quiz .feedback-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+    text-align: center;
+}
+
+#screen-quiz .feedback-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px 8px 8px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 13px;
+}
+
+#screen-quiz .feedback-pill.correct {
+    background: color-mix(in srgb, var(--quiz-correct) 16%, white 84%);
+    color: color-mix(in srgb, var(--quiz-correct) 75%, black 25%);
+}
+
+#screen-quiz .feedback-pill.wrong {
+    background: color-mix(in srgb, var(--quiz-wrong) 14%, white 86%);
+    color: color-mix(in srgb, var(--quiz-wrong) 75%, black 25%);
+}
+
+#screen-quiz .feedback-pill-badge {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex: none;
+}
+
+#screen-quiz .feedback-pill-badge svg {
+    width: 13px;
+    height: 13px;
+}
+
+#screen-quiz .feedback-pill.correct .feedback-pill-badge {
+    background: var(--quiz-correct);
+}
+
+#screen-quiz .feedback-pill.wrong .feedback-pill-badge {
+    background: var(--quiz-wrong);
+}
+
+#screen-quiz .feedback-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+#screen-quiz .quiz-next-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: inherit;
+    font-size: 14.5px;
+    font-weight: 800;
+    color: #fff;
+    background: var(--indigo-deep);
+    border: none;
+    border-radius: 999px;
+    padding: 11px 26px;
+    cursor: pointer;
+    box-shadow: 0 10px 22px var(--shadow-soft);
+    transition: transform .15s ease, background-color .15s ease;
+}
+
+#screen-quiz .quiz-next-btn:hover {
+    background: var(--indigo);
+    transform: translateY(-1px);
+}
+
+#screen-quiz .quiz-next-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* ---- note card: penjelasan tambahan (romaji/kanji/catatan) + avatar chibi ---- */
+#screen-quiz .quiz-note-card {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 12px;
+    padding: 12px 16px 12px 12px;
+    border-radius: 20px;
+    background: linear-gradient(
+        160deg,
+        color-mix(in srgb, var(--indigo) 10%, white 90%),
+        color-mix(in srgb, var(--indigo) 4%, white 96%)
+    );
+    border: 1px solid color-mix(in srgb, var(--indigo) 16%, white 84%);
+    box-shadow: 0 10px 24px var(--shadow-soft);
+    text-align: left;
+    overflow: hidden;
+}
+
+#screen-quiz .quiz-note-sparkle {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    width: 18px;
+    height: 18px;
+    color: color-mix(in srgb, var(--indigo) 35%, white 65%);
+}
+
+#screen-quiz .quiz-note-sparkle svg {
+    width: 100%;
+    height: 100%;
+}
+
+#screen-quiz .quiz-note-avatar {
+    flex: none;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--card);
+    border: 2px solid #fff;
+    box-shadow: 0 4px 10px var(--shadow-soft);
+}
+
+#screen-quiz .quiz-note-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+#screen-quiz .quiz-note-avatar svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+#screen-quiz .quiz-note-body {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 2px;
+}
+
+#screen-quiz .quiz-note-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 8px;
+    align-items: start;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+#screen-quiz .quiz-note-key {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+#screen-quiz .quiz-note-icon {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 7px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--indigo) 16%, white 84%);
+    color: var(--indigo-deep);
+}
+
+#screen-quiz .quiz-note-icon svg {
+    width: 12px;
+    height: 12px;
+}
+
+#screen-quiz .quiz-note-icon-glyph {
+    font-family: var(--kana-font);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+#screen-quiz .quiz-note-row-note .quiz-note-icon {
+    background: color-mix(in srgb, var(--gold) 22%, white 78%);
+    color: color-mix(in srgb, var(--gold) 70%, black 30%);
+}
+
+#screen-quiz .quiz-note-label {
+    flex: none;
+    font-weight: 800;
+    color: var(--indigo-deep);
+    min-width: 48px;
+}
+
+#screen-quiz .quiz-note-colon {
+    flex: none;
+    color: var(--ink-soft);
+}
+
+#screen-quiz .quiz-note-value {
+    min-width: 0;
+    color: var(--ink);
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+#screen-quiz .quiz-note-row-note .quiz-note-value {
+    font-weight: 500;
+    color: var(--ink-soft);
+}
+
+@media (max-width: 720px) {
+    #screen-quiz .quiz-note-card {
+        padding: 12px 14px;
+        gap: 10px;
+    }
+
+    #screen-quiz .quiz-note-avatar {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+/* ==========================================================================
+   Match screen — reuses the same scenic/glass look as the quiz screen.
+   Scoped to #screen-match so nothing else changes.
+   ========================================================================== */
+
+/* vertically center the glass card in the available space instead of it
+   sitting flush under the topbar */
+#screen-match {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+#screen-match .quiz-card {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+#screen-match .match-mistakes {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12.5px;
+    font-weight: 800;
+    color: var(--quiz-wrong);
+    background: rgba(255, 255, 255, 0.55);
+    padding: 6px 12px;
+    border-radius: 999px;
+}
+
+#screen-match .match-mode-instruction {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--ink-soft);
+    text-align: center;
+    letter-spacing: 0.01em;
+    margin: 0 0 14px;
+}
+
+#screen-match .match-board {
+    gap: 10px 14px;
+}
+
+#screen-match .match-col {
+    gap: 10px;
+}
+
+#screen-match button.match-tile {
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.78);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1.5px solid rgba(255, 255, 255, 0.85);
+    border-radius: 16px;
+    color: var(--ink);
+    font-weight: 800;
+    box-shadow: 0 6px 16px var(--shadow-soft);
+}
+
+#screen-match .match-col:first-child button.match-tile {
+    color: var(--vermillion);
+}
+
+#screen-match button.match-tile:hover:not(:disabled) {
+    border-color: var(--vermillion);
+    background: rgba(255, 255, 255, 0.92);
+}
+
+#screen-match button.match-tile.selected {
+    background: color-mix(in srgb, var(--indigo) 18%, white 82%);
+    border: 2px solid var(--indigo);
+    color: var(--indigo);
+    box-shadow: 0 6px 14px color-mix(in srgb, var(--indigo) 30%, transparent);
+    transform: translateY(-1px);
+}
+
+#screen-match button.match-tile.matched {
+    background: color-mix(in srgb, var(--quiz-correct) 16%, white 84%);
+    border-color: color-mix(in srgb, var(--quiz-correct) 55%, white 45%);
+    color: var(--ink);
+    opacity: 0.7;
+}
+
+#screen-match button.match-tile.wrong {
+    background: color-mix(in srgb, var(--quiz-wrong) 14%, white 86%);
+    border-color: color-mix(in srgb, var(--quiz-wrong) 55%, white 45%);
+    color: var(--ink);
+}
+
+#screen-match .match-bottom-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 16px;
+}
+
+#screen-match .match-progress-count {
+    color: var(--ink-soft);
+    font-size: 12.5px;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* ---- "all matched" screen: same glass card as the quiz results ---- */
+#screen-match .match-done {
+    padding: 8px 4px 4px;
+}
+
+#screen-match .match-done-title {
+    color: var(--indigo-deep);
+}
+
+#screen-match .match-done button {
+    border-radius: 999px;
+}
+
+/* ---------- popup sebelum Penaklukan, dijelasin chibi (ConquestGuide) ----------
+   Pakai kerangka .intro-guide-* yang sama; di sini cuma penyesuaian: teks
+   aturan Penaklukan lebih panjang dari sapaan intro, jadi bubble sedikit
+   lebih lebar & font lebih kecil, dan tombol terakhir ("Mulai Menaklukkan")
+   dibuat menonjol. */
+.conquest-guide .intro-guide-bubble {
+    max-width: min(480px, 66%);
+}
+
+.conquest-guide .intro-guide-bubble-text {
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 28px 30px;
+}
+
+.conquest-guide .intro-guide-bubble-text b {
+    color: var(--indigo);
+}
+
+.conquest-guide .conquest-guide-go {
+    background: linear-gradient(135deg, var(--indigo), #6a5ce0);
+}
+
+@media (max-width: 768px) {
+    .conquest-guide .intro-guide-bubble {
+        max-width: 80%;
+    }
+}
+
+@media (max-width: 560px) {
+    .conquest-guide .intro-guide-bubble {
+        max-width: min(340px, 88%);
+    }
+
+    .conquest-guide .intro-guide-bubble-text {
+        font-size: 13px;
+        padding: 26px 22px;
+    }
+}
+
+/* ---------- layar cerita Penaklukan: rata tengah + tombol batal "glass" ---------- */
+/* Di layar kuis (scenic) .stage sudah setinggi viewport, jadi section cerita
+   ikut setinggi itu → isinya (cancel + kartu + tombol mulai) ke tengah. */
+.app-shell.quiz-scenic #screen-conquest-story {
+    min-height: 100%;
+}
+
+.conquest-story .quiz-back-row {
+    justify-content: flex-start;
+}
+
+.conquest-story .quiz-back {
+    color: var(--ink);
+    padding: 8px 16px 8px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.22);
+    border: 1.5px solid rgba(255, 255, 255, 0.7);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    backdrop-filter: blur(12px) saturate(140%);
+    box-shadow:
+        0 6px 18px rgba(30, 50, 110, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.65);
+    transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+
+.conquest-story .quiz-back:hover {
+    color: var(--vermillion);
+    background: rgba(255, 255, 255, 0.38);
+    border-color: rgba(255, 255, 255, 0.9);
+    transform: translateY(-1px);
+}
+
+[data-theme="dark"] .conquest-story .quiz-back {
+    background: rgba(20, 26, 48, 0.35);
+    border-color: rgba(255, 255, 255, 0.28);
+}
+
+/* ---------- kuis: timer di kiri-atas, streak di kanan-atas kartu ----------
+   Dua-duanya di-absolute-kan ke pojok atas .quiz-card (yang sudah
+   position:relative). Ruang di atas kartu (padding-top) disediakan tetap,
+   jadi soal gak lompat naik-turun waktu timer/streak muncul atau hilang, dan
+   teks soal yang panjang gak nabrak badge-nya. Match screen gak ikut. */
+#screen-quiz .quiz-card {
+    padding-top: 46px;
+}
+
+#screen-quiz .quiz-substatus-row {
+    position: absolute;
+    top: 16px;
+    left: 22px;
+    margin: 0;
+    z-index: 1;
+    justify-content: flex-start;
+}
+
+#screen-quiz .quiz-card-streak-row {
+    position: absolute;
+    top: 16px;
+    right: 22px;
+    margin: 0;
+    z-index: 1;
+    justify-content: flex-end;
+}
+
+#screen-quiz .quiz-substatus-row .question-timer,
+#screen-quiz .quiz-substatus-row .speedrun-timer,
+#screen-quiz .quiz-card-streak-row .streak {
+    font-size: 13.5px;
+}
+
+@media (max-width: 720px) {
+    #screen-quiz .quiz-card {
+        padding-top: 42px;
+    }
+
+    #screen-quiz .quiz-substatus-row {
+        top: 13px;
+        left: 16px;
+    }
+
+    #screen-quiz .quiz-card-streak-row {
+        top: 13px;
+        right: 16px;
+    }
+}
+
+/* ---------- tombol skip khusus admin (AdminSkipTools) ---------- */
+.admin-skip-tools {
+    position: fixed;
+    left: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    z-index: 55;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.55);
+    border: 1.5px solid rgba(255, 255, 255, 0.8);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 22px rgba(30, 50, 110, 0.2);
+}
+
+[data-theme="dark"] .admin-skip-tools {
+    background: rgba(20, 26, 48, 0.6);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.admin-skip-tag {
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: #fff;
+    background: var(--vermillion);
+    padding: 4px 9px;
+    border-radius: 999px;
+}
+
+.admin-skip-btn {
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 800;
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 999px;
+    padding: 6px 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform .15s ease, background .15s ease;
+}
+
+.admin-skip-btn:hover {
+    background: #fff;
+    transform: translateY(-1px);
+}
+
+.admin-skip-btn--all {
+    color: #fff;
+    background: var(--indigo);
+    border-color: transparent;
+}
+
+.admin-skip-btn--all:hover {
+    background: var(--indigo);
+    filter: brightness(1.1);
+}
+
+@media (max-width: 560px) {
+    .admin-skip-tools {
+        left: 10px;
+        bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .admin-skip-btn {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+}
+
+.admin-skip-btn--phase {
+    color: #fff;
+    background: var(--vermillion);
+    border-color: transparent;
+}
+
+.admin-skip-btn--phase:hover {
+    background: var(--vermillion);
+    filter: brightness(1.1);
+}
+
+@media (max-width: 560px) {
+    .admin-skip-tools {
+        flex-wrap: wrap;
+        max-width: calc(100vw - 20px);
+        border-radius: 18px;
+    }
+}
+
+/* ---------- reset penaklukan khusus admin (AdminConquestReset) ---------- */
+.admin-reset-inline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.admin-reset-btn {
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 800;
+    color: var(--vermillion);
+    background: transparent;
+    border: 1.5px dashed var(--vermillion);
+    border-radius: 999px;
+    padding: 6px 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .15s ease, color .15s ease;
+}
+
+.admin-reset-btn:hover:not(:disabled) {
+    background: rgba(255, 90, 60, 0.1);
+}
+
+.admin-reset-btn.armed {
+    color: #fff;
+    background: var(--vermillion);
+    border-style: solid;
+}
+
+.admin-reset-btn:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+.admin-reset-btn--all {
+    align-self: flex-start;
+    margin-top: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .rm-bubble,
+    .rm-chibi-img {
+        animation: none;
+    }
 }

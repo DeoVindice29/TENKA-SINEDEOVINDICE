@@ -1,10 +1,28 @@
+import { useMemo } from "react";
 import { useLang } from "@/i18n/LangContext";
 import { useQuiz } from "@/state/QuizContext";
 import { SCRIPTS } from "@/data/scripts";
+import { getRandomChibiAvatar } from "@/lib/chibiAvatar";
+
+type ExtraItemKind = "romaji" | "kanji" | "note" | "meaning" | "generic";
+
+interface ExtraItem {
+  kind: ExtraItemKind;
+  label: string;
+  value: string;
+}
 
 export default function Feedback() {
   const { t } = useLang();
   const { state, dispatch } = useQuiz();
+
+  // avatar chibi stabil selama satu soal (nggak ganti tiap re-render) —
+  // begitu koleksi ekspresinya nambah di src/assets/chibi/, ini otomatis
+  // ikut ke-random dari situ.
+  const chibiSrc = useMemo(
+    () => getRandomChibiAvatar(state.index),
+    [state.index],
+  );
 
   if (!state.answered) {
     return <div className="feedback-row" />;
@@ -29,9 +47,16 @@ export default function Feedback() {
     feedbackMsg = t("quiz.missedAnswerWas", { answer: current[1] });
   }
 
+  // ambil cuma bagian label dari template "Label: {value}" (mis. "Romaji: ")
+  // tanpa perlu key terjemahan label-only terpisah — jadi tetap ikut bahasa
+  // aktif (en/id) apa adanya.
+  const labelOnly = (key: string) =>
+    t(key, { value: "" }).replace(/[:：]\s*$/, "");
+
   const extraValue = current[3];
   const type = current[2];
-  let extraLabel: string | null = null;
+  const extraItems: ExtraItem[] = [];
+
   if (extraValue) {
     // label info tambahan per tipe soal yang didefinisikan script-nya
     // (Bunpō: "meaning" → contoh kalimat, "kalimat" → fungsi pola)
@@ -44,22 +69,36 @@ export default function Feedback() {
 
     if (current[4]) {
       // soal Penaklukan ala JLPT: key label ikut dibawa di soalnya
-      extraLabel = t(current[4], { value: extraValue });
+      extraItems.push({
+        kind: "generic",
+        label: labelOnly(current[4]),
+        value: extraValue,
+      });
     } else if (scriptLabelKey) {
-      extraLabel = t(scriptLabelKey, { value: extraValue });
+      extraItems.push({
+        kind: "generic",
+        label: labelOnly(scriptLabelKey),
+        value: extraValue,
+      });
     } else if (type === "romaji") {
-      extraLabel = t("quiz.meaningLabel", { value: extraValue });
+      extraItems.push({
+        kind: "meaning",
+        label: labelOnly("quiz.meaningLabel"),
+        value: extraValue,
+      });
     } else if (type === "meaning") {
-      extraLabel = t("quiz.romajiLabel", { value: extraValue });
+      extraItems.push({
+        kind: "romaji",
+        label: labelOnly("quiz.romajiLabel"),
+        value: extraValue,
+      });
     }
   }
 
-  // Info tambahan lain di luar extraLabel di atas — khusus soal Kotoba biasa
+  // Info tambahan lain di luar item di atas — khusus soal Kotoba biasa
   // (meaning/romaji, bukan kalimat Penaklukan/Latihan): kalau katanya punya
   // bentuk kanji dan/atau catatan cara pakai, tampilkan juga sebagai baris
-  // tersendiri di bawah extraLabel, tepat kayak versi vanilla-nya.
-  const extraLines: string[] = [];
-  if (extraLabel) extraLines.push(extraLabel);
+  // tersendiri di bawah, tepat kayak versi vanilla-nya.
   if (
     state.script === "kotoba" &&
     state.mode &&
@@ -73,11 +112,23 @@ export default function Feedback() {
     const usagePool = kotobaCfg.dataUsage?.[state.mode];
     const kanjiForm = kanjiPool?.find((r) => r[0] === current[0])?.[1];
     const usageNote = usagePool?.find((r) => r[0] === current[0])?.[1];
-    if (kanjiForm) extraLines.push(t("quiz.kanjiLabel", { value: kanjiForm }));
-    if (usageNote) extraLines.push(t("quiz.usageNote", { value: usageNote }));
+    if (kanjiForm) {
+      extraItems.push({
+        kind: "kanji",
+        label: labelOnly("quiz.kanjiLabel"),
+        value: kanjiForm,
+      });
+    }
+    if (usageNote) {
+      extraItems.push({
+        kind: "note",
+        label: labelOnly("quiz.usageNote"),
+        value: usageNote,
+      });
+    }
   }
   // Bunpō biasa (meaning/kalimat, bukan Penaklukan/Latihan): tambahin arti
-  // kalimat contohnya juga, di bawah extraLabel (Kalimat/Fungsi). Kuncinya
+  // kalimat contohnya juga, di bawah item pertama (Kalimat/Fungsi). Kuncinya
   // selalu pola-nya sendiri — utk tipe "meaning" pola ada di current[0], utk
   // tipe "kalimat" pola-nya adalah jawaban benarnya (current[1]).
   if (
@@ -97,9 +148,19 @@ export default function Feedback() {
     )?.[1];
     const usageNote = notePool?.find((r) => r[0] === patternKey)?.[1];
     if (translation) {
-      extraLines.push(t("quiz.translationLabel", { value: translation }));
+      extraItems.push({
+        kind: "meaning",
+        label: labelOnly("quiz.translationLabel"),
+        value: translation,
+      });
     }
-    if (usageNote) extraLines.push(t("quiz.usageNote", { value: usageNote }));
+    if (usageNote) {
+      extraItems.push({
+        kind: "note",
+        label: labelOnly("quiz.usageNote"),
+        value: usageNote,
+      });
+    }
   }
 
   const handleNext = () => {
@@ -112,30 +173,135 @@ export default function Feedback() {
 
   return (
     <div className="feedback-row">
-      <div className="feedback-col">
-        <div
-          className={`feedback-text ${state.lastCorrect ? "correct" : "wrong"}`}
-        >
-          {feedbackMsg}
-        </div>
-        {extraLines.map((line, i) => (
-          <div key={i} className="feedback-extra">
-            {line}
-          </div>
-        ))}
+      <div
+        className={`feedback-pill ${state.lastCorrect ? "correct" : "wrong"}`}
+      >
+        <span className="feedback-pill-badge" aria-hidden="true">
+          {state.lastCorrect ? (
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M5 12.5l4.5 4.5L19 7.5"
+                stroke="currentColor"
+                strokeWidth="2.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M6 6l12 12M18 6L6 18"
+                stroke="currentColor"
+                strokeWidth="2.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          )}
+        </span>
+        <span>{feedbackMsg}</span>
       </div>
+
+      {extraItems.length > 0 && (
+        <div className="quiz-note-card">
+          <span className="quiz-note-sparkle" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2c.6 2.8 1.6 3.8 4 4-2.4.6-3.4 1.6-4 4-.6-2.4-1.6-3.4-4-4 2.4-.2 3.4-1.2 4-4Z" />
+              <path d="M20 13c.3 1.4.8 1.9 2 2-1.2.3-1.7.8-2 2-.3-1.2-.8-1.7-2-2 1.2-.1 1.7-.6 2-2Z" />
+            </svg>
+          </span>
+
+          <div className="quiz-note-avatar" aria-hidden="true">
+            {chibiSrc ? (
+              <img src={chibiSrc} alt="" />
+            ) : (
+              <svg viewBox="0 0 48 48" fill="none">
+                <circle cx="24" cy="24" r="24" fill="var(--indigo)" />
+                <circle cx="24" cy="26" r="13" fill="#fff" opacity="0.95" />
+                <circle cx="19" cy="25" r="1.8" fill="var(--indigo-deep)" />
+                <circle cx="29" cy="25" r="1.8" fill="var(--indigo-deep)" />
+                <path
+                  d="M19 31c1.6 1.4 8.4 1.4 10 0"
+                  stroke="var(--indigo-deep)"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  fill="none"
+                />
+                <path
+                  d="M11 20c1-6 6-10 13-10s12 4 13 10"
+                  fill="var(--indigo)"
+                />
+              </svg>
+            )}
+          </div>
+
+          <div className="quiz-note-body">
+            {extraItems.map((item, i) => (
+              <div key={i} className={`quiz-note-row quiz-note-row-${item.kind}`}>
+                <span className="quiz-note-key">
+                  <span className="quiz-note-icon" aria-hidden="true">
+                    {item.kind === "kanji" ? (
+                      <span className="quiz-note-icon-glyph">字</span>
+                    ) : item.kind === "note" ? (
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path
+                          d="M9 18h6M10 21h4M8 14a6 6 0 1 1 8 0c-.7.6-1 1.3-1 2.2V17H9v-.8c0-.9-.3-1.6-1-2.2Z"
+                          stroke="currentColor"
+                          strokeWidth="1.7"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    ) : (
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path
+                          d="M4 5.5C5.5 4.7 7.5 4.3 9 5v13.5c-1.5-.7-3.5-.3-5 .5v-13.5Z"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M20 5.5C18.5 4.7 16.5 4.3 15 5v13.5c1.5-.7 3.5-.3 5 .5v-13.5Z"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    )}
+                  </span>
+                  <span className="quiz-note-label">{item.label}</span>
+                  <span className="quiz-note-colon">:</span>
+                </span>
+                <span className="quiz-note-value">{item.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <button
         id="btn-next"
-        className="ghost"
+        className="quiz-next-btn"
         type="button"
         // fokus otomatis ke Next supaya Enter/Space langsung lanjut. Di mode
         // ketik (hard) fokus dibiarkan di input biar keyboard HP tidak turun.
         autoFocus={state.difficulty !== "hard"}
         onClick={handleNext}
       >
-        {conquestFailed || speedrunFailed || isLast
-          ? t("quiz.seeResults")
-          : t("quiz.next")}
+        <span>
+          {conquestFailed || speedrunFailed || isLast
+            ? t("quiz.seeResults")
+            : t("quiz.next")}
+        </span>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M5 12h13m0 0l-5-5m5 5l-5 5"
+            stroke="currentColor"
+            strokeWidth="2.3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
       </button>
     </div>
   );

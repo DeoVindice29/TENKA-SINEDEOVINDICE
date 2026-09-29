@@ -3,13 +3,14 @@ import { useLang } from "@/i18n/LangContext";
 import { useUI } from "@/state/UIContext";
 import { supabase } from "@/lib/supabaseClient";
 import {
-  TABLE_NAME,
+  tableFor,
   type KotobaRow,
   type KanjiRow,
   type BunpoRow,
   type SectionTitleRow,
 } from "@/lib/contentTypes";
-import { fetchSectionTitles } from "@/lib/sectionTitles";
+import { fetchSectionTitles, subChapterLabel } from "@/lib/sectionTitles";
+import { fetchOrganizeSources } from "@/lib/organizeSources";
 import type { Bilingual, KotobaEntry, KanjiEntry, BunpoEntry } from "@/data/types";
 import PageHero from "@/components/PageHero";
 import LearnAccordion from "@/components/LearnAccordion";
@@ -18,6 +19,7 @@ import VocabList from "@/components/VocabList";
 import KanjiGrid from "@/components/KanjiGrid";
 import GrammarCard from "@/components/GrammarCard";
 import ScrollTopButton from "@/components/ScrollTopButton";
+import { LessonsLoading } from "@/components/ui/Loader";
 
 type N4Tab = "kotoba" | "bunpo" | "kanji";
 
@@ -27,7 +29,7 @@ const TABS: { key: N4Tab; glyph: string; label: string }[] = [
   { key: "kanji", glyph: "漢", label: "Kanji" },
 ];
 
-/** Nama sub-tier dari section_titles kalau ada, kalau nggak "Bab/Chapter x.y". */
+/** Nama sub chapter dari section_titles kalau ada, kalau nggak "Bab/Chapter x.y". */
 function subTierTitle(
   titles: SectionTitleRow[],
   chapter: number,
@@ -37,9 +39,25 @@ function subTierTitle(
     (row) => row.chapter === chapter && row.sub_tier === subTier
   );
   return {
-    en: match?.title_en || `Chapter ${chapter}.${subTier}`,
-    id: match?.title_id || `Bab ${chapter}.${subTier}`,
+    en: subChapterLabel(chapter, subTier, match?.title_en),
+    id: subChapterLabel(chapter, subTier, match?.title_id),
   };
+}
+
+// Nama Chapter disimpan admin dengan sub_tier = 0 (lihat fetchChapterTitle /
+// upsertChapterTitle di lib/sectionTitles.ts) — beda dari nama sub chapter di
+// atas yang pakai sub_tier asli (>=1). Kalau admin belum mengisinya, tetap
+// fallback ke "Chapter N" / "Bab N" polos biar accordion-nya tidak kosong.
+function chapterTitle(titles: SectionTitleRow[], chapter: number): Bilingual {
+  const match = titles.find((row) => row.chapter === chapter && row.sub_tier === 0);
+  return {
+    en: match?.title_en || `Chapter ${chapter}`,
+    id: match?.title_id || `Bab ${chapter}`,
+  };
+}
+
+function plural(n: number, word: string): string {
+  return n === 1 ? word : `${word}s`;
 }
 
 function toKotobaEntry(row: KotobaRow): KotobaEntry {
@@ -83,7 +101,7 @@ type ChapterBucket<Row> = {
   subGroups: SubGroup<Row>[];
 };
 
-/** Kelompokkan baris flat jadi Chapter -> Sub-tier, keduanya terurut naik. */
+/** Kelompokkan baris flat jadi Chapter -> Sub Chapter, keduanya terurut naik. */
 function groupByChapter<Row extends { chapter: number; sub_tier: number }>(
   rows: Row[],
   sampleOf: (row: Row) => string
@@ -102,8 +120,15 @@ function groupByChapter<Row extends { chapter: number; sub_tier: number }>(
       const subGroups = Array.from(subMap.entries())
         .sort((a, b) => a[0] - b[0])
         .map(([subTier, items]) => ({ subTier, items }));
-      const firstRow = subGroups[0]?.items[0];
-      return { chapter, sample: firstRow ? sampleOf(firstRow) : "", subGroups };
+      // Contoh beberapa kata mewakili Chapter ini di header accordion — satu
+      // kata dari tiap sub chapter (maks 3), sama seperti referensi N5
+      // ("わたし かぞく がくせい" mewakili 3 sub chapter pertamanya).
+      const sample = subGroups
+        .slice(0, 3)
+        .map((sg) => sampleOf(sg.items[0]))
+        .filter(Boolean)
+        .join(" ");
+      return { chapter, sample, subGroups };
     });
 }
 
@@ -115,7 +140,12 @@ export default function N4Screen() {
   const [kotoba, setKotoba] = useState<KotobaRow[]>([]);
   const [kanji, setKanji] = useState<KanjiRow[]>([]);
   const [bunpo, setBunpo] = useState<BunpoRow[]>([]);
-  const [sectionTitles, setSectionTitles] = useState<SectionTitleRow[]>([]);
+  // Nama Chapter/Sub Chapter disimpan terpisah untuk tiap jenis konten.
+  const [sectionTitles, setSectionTitles] = useState<Record<"kotoba" | "kanji" | "bunpo", SectionTitleRow[]>>({
+    kotoba: [],
+    kanji: [],
+    bunpo: [],
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -125,11 +155,25 @@ export default function N4Screen() {
     async function load() {
       setLoading(true);
       setError(null);
-      const [k, kj, b, titles] = await Promise.all([
-        supabase.from(TABLE_NAME.kotoba).select("*").eq("tier", "N4").order("chapter").order("sub_tier").order("id"),
-        supabase.from(TABLE_NAME.kanji).select("*").eq("tier", "N4").order("chapter").order("sub_tier").order("id"),
-        supabase.from(TABLE_NAME.bunpo).select("*").eq("tier", "N4").order("chapter").order("sub_tier").order("id"),
-        fetchSectionTitles("N4"),
+      // Layar ini menampilkan satu daftar per jenis konten, jadi ambil dari
+      // Organize by pertama di N4 (Minna no Nihongo) supaya Chapter dari
+      // Organize by lain tidak tercampur.
+      const [kSrc, kjSrc, bSrc] = await Promise.all([
+        fetchOrganizeSources("kotoba", "N4"),
+        fetchOrganizeSources("kanji", "N4"),
+        fetchOrganizeSources("bunpo", "N4"),
+      ]);
+      const none = -1;
+      const kId = kSrc[0]?.id ?? none;
+      const kjId = kjSrc[0]?.id ?? none;
+      const bId = bSrc[0]?.id ?? none;
+      const [k, kj, b, kotobaTitles, kanjiTitles, bunpoTitles] = await Promise.all([
+        supabase.from(tableFor("kotoba", "N4")).select("*").eq("source_id", kId).order("chapter").order("sub_tier").order("id"),
+        supabase.from(tableFor("kanji", "N4")).select("*").eq("source_id", kjId).order("chapter").order("sub_tier").order("id"),
+        supabase.from(tableFor("bunpo", "N4")).select("*").eq("source_id", bId).order("chapter").order("sub_tier").order("id"),
+        fetchSectionTitles("kotoba", "N4", kId),
+        fetchSectionTitles("kanji", "N4", kjId),
+        fetchSectionTitles("bunpo", "N4", bId),
       ]);
       if (cancelled) return;
       const firstError = k.error || kj.error || b.error;
@@ -139,7 +183,7 @@ export default function N4Screen() {
         setKotoba((k.data ?? []) as KotobaRow[]);
         setKanji((kj.data ?? []) as KanjiRow[]);
         setBunpo((b.data ?? []) as BunpoRow[]);
-        setSectionTitles(titles);
+        setSectionTitles({ kotoba: kotobaTitles, kanji: kanjiTitles, bunpo: bunpoTitles });
       }
       setLoading(false);
     }
@@ -163,120 +207,115 @@ export default function N4Screen() {
     [bunpo]
   );
 
-  // Bentuk grup accordion (satu per Chapter) buat tab yang lagi aktif —
-  // sama persis strukturnya dengan accordion Kotoba di layar Belajar N5.
+  // Bentuk grup accordion (satu per Chapter) buat tab yang lagi aktif — sama
+  // persis strukturnya dengan accordion Kotoba di layar Belajar N5, termasuk
+  // judul Chapter asli (bukan generic) begitu admin sudah mengisinya.
   const kotobaGroups = useMemo(
     () =>
-      kotobaChapters.map((c) => ({
-        id: `n4-kotoba-ch-${c.chapter}`,
-        chapterNum: c.chapter,
-        sample: c.sample,
-        title: { en: `Chapter ${c.chapter}`, id: `Bab ${c.chapter}` },
-        desc: {
-          en: t("n4.chapterDesc", {
-            count: c.subGroups.reduce((sum, sg) => sum + sg.items.length, 0),
-            label: "words",
-            groups: c.subGroups.length,
-          }),
-          id: t("n4.chapterDesc", {
-            count: c.subGroups.reduce((sum, sg) => sum + sg.items.length, 0),
-            label: "kata",
-            groups: c.subGroups.length,
-          }),
-        },
-        render: () => (
-          <>
-            {c.subGroups.map((sg) => (
-              <LearnSection
-                key={sg.subTier}
-                title={subTierTitle(sectionTitles, c.chapter, sg.subTier)}
-                count={sg.items.length}
-                countLabel={t("learn.words")}
-                desc={{ en: t("n4.subTierDescKotoba"), id: t("n4.subTierDescKotoba") }}
-              >
-                <VocabList items={sg.items.map(toKotobaEntry)} />
-              </LearnSection>
-            ))}
-          </>
-        ),
-      })),
-    [kotobaChapters, sectionTitles, t]
+      kotobaChapters.map((c) => {
+        const total = c.subGroups.reduce((sum, sg) => sum + sg.items.length, 0);
+        return {
+          id: `n4-kotoba-ch-${c.chapter}`,
+          chapterNum: c.chapter,
+          sample: c.sample,
+          title: chapterTitle(sectionTitles.kotoba, c.chapter),
+          desc: {
+            en: `${total} N4 vocabulary ${plural(total, "word")} across ${c.subGroups.length} sub chapter${c.subGroups.length === 1 ? "" : "s"}.`,
+            id: `${total} kata kosakata N4 dalam ${c.subGroups.length} sub chapter.`,
+          },
+          render: () => (
+            <>
+              {c.subGroups.map((sg) => (
+                <LearnSection
+                  key={sg.subTier}
+                  title={subTierTitle(sectionTitles.kotoba, c.chapter, sg.subTier)}
+                  count={sg.items.length}
+                  countLabel={t("learn.words")}
+                  desc={{
+                    en: `${sg.items.length} N4 vocabulary ${plural(sg.items.length, "word")}.`,
+                    id: `${sg.items.length} kata kosakata N4.`,
+                  }}
+                >
+                  <VocabList items={sg.items.map(toKotobaEntry)} />
+                </LearnSection>
+              ))}
+            </>
+          ),
+        };
+      }),
+    [kotobaChapters, sectionTitles.kotoba, t]
   );
 
   const kanjiGroups = useMemo(
     () =>
-      kanjiChapters.map((c) => ({
-        id: `n4-kanji-ch-${c.chapter}`,
-        chapterNum: c.chapter,
-        sample: c.sample,
-        title: { en: `Chapter ${c.chapter}`, id: `Bab ${c.chapter}` },
-        desc: {
-          en: t("n4.chapterDesc", {
-            count: c.subGroups.reduce((sum, sg) => sum + sg.items.length, 0),
-            label: "characters",
-            groups: c.subGroups.length,
-          }),
-          id: t("n4.chapterDesc", {
-            count: c.subGroups.reduce((sum, sg) => sum + sg.items.length, 0),
-            label: "karakter",
-            groups: c.subGroups.length,
-          }),
-        },
-        render: () => (
-          <>
-            {c.subGroups.map((sg) => (
-              <LearnSection
-                key={sg.subTier}
-                title={subTierTitle(sectionTitles, c.chapter, sg.subTier)}
-                count={sg.items.length}
-                countLabel={t("learn.characters")}
-                desc={{ en: t("n4.subTierDescKanji"), id: t("n4.subTierDescKanji") }}
-              >
-                <KanjiGrid items={sg.items.map(toKanjiEntry)} />
-              </LearnSection>
-            ))}
-          </>
-        ),
-      })),
-    [kanjiChapters, sectionTitles, t]
+      kanjiChapters.map((c) => {
+        const total = c.subGroups.reduce((sum, sg) => sum + sg.items.length, 0);
+        return {
+          id: `n4-kanji-ch-${c.chapter}`,
+          chapterNum: c.chapter,
+          sample: c.sample,
+          title: chapterTitle(sectionTitles.kanji, c.chapter),
+          desc: {
+            en: `${total} N4 ${plural(total, "character")} across ${c.subGroups.length} sub chapter${c.subGroups.length === 1 ? "" : "s"}.`,
+            id: `${total} karakter N4 dalam ${c.subGroups.length} sub chapter.`,
+          },
+          render: () => (
+            <>
+              {c.subGroups.map((sg) => (
+                <LearnSection
+                  key={sg.subTier}
+                  title={subTierTitle(sectionTitles.kanji, c.chapter, sg.subTier)}
+                  count={sg.items.length}
+                  countLabel={t("learn.characters")}
+                  desc={{
+                    en: `${sg.items.length} N4 ${plural(sg.items.length, "character")}.`,
+                    id: `${sg.items.length} karakter N4.`,
+                  }}
+                >
+                  <KanjiGrid items={sg.items.map(toKanjiEntry)} />
+                </LearnSection>
+              ))}
+            </>
+          ),
+        };
+      }),
+    [kanjiChapters, sectionTitles.kanji, t]
   );
 
   const bunpoGroups = useMemo(
     () =>
-      bunpoChapters.map((c) => ({
-        id: `n4-bunpo-ch-${c.chapter}`,
-        chapterNum: c.chapter,
-        sample: c.sample,
-        title: { en: `Chapter ${c.chapter}`, id: `Bab ${c.chapter}` },
-        desc: {
-          en: t("n4.chapterDesc", {
-            count: c.subGroups.reduce((sum, sg) => sum + sg.items.length, 0),
-            label: "patterns",
-            groups: c.subGroups.length,
-          }),
-          id: t("n4.chapterDesc", {
-            count: c.subGroups.reduce((sum, sg) => sum + sg.items.length, 0),
-            label: "pola",
-            groups: c.subGroups.length,
-          }),
-        },
-        render: () => (
-          <>
-            {c.subGroups.map((sg) => (
-              <LearnSection
-                key={sg.subTier}
-                title={subTierTitle(sectionTitles, c.chapter, sg.subTier)}
-                count={sg.items.length}
-                countLabel={t("learn.patterns")}
-                desc={{ en: t("n4.subTierDescBunpo"), id: t("n4.subTierDescBunpo") }}
-              >
-                <GrammarCard items={sg.items.map(toBunpoEntry)} />
-              </LearnSection>
-            ))}
-          </>
-        ),
-      })),
-    [bunpoChapters, sectionTitles, t]
+      bunpoChapters.map((c) => {
+        const total = c.subGroups.reduce((sum, sg) => sum + sg.items.length, 0);
+        return {
+          id: `n4-bunpo-ch-${c.chapter}`,
+          chapterNum: c.chapter,
+          sample: c.sample,
+          title: chapterTitle(sectionTitles.bunpo, c.chapter),
+          desc: {
+            en: `${total} N4 ${plural(total, "pattern")} across ${c.subGroups.length} sub chapter${c.subGroups.length === 1 ? "" : "s"}.`,
+            id: `${total} pola N4 dalam ${c.subGroups.length} sub chapter.`,
+          },
+          render: () => (
+            <>
+              {c.subGroups.map((sg) => (
+                <LearnSection
+                  key={sg.subTier}
+                  title={subTierTitle(sectionTitles.bunpo, c.chapter, sg.subTier)}
+                  count={sg.items.length}
+                  countLabel={t("learn.patterns")}
+                  desc={{
+                    en: `${sg.items.length} N4 ${plural(sg.items.length, "pattern")}.`,
+                    id: `${sg.items.length} pola N4.`,
+                  }}
+                >
+                  <GrammarCard items={sg.items.map(toBunpoEntry)} />
+                </LearnSection>
+              ))}
+            </>
+          ),
+        };
+      }),
+    [bunpoChapters, sectionTitles.bunpo, t]
   );
 
   const activeGroups =
@@ -318,7 +357,7 @@ export default function N4Screen() {
         ))}
       </div>
 
-      {loading && <p className="learn-no-results">{t("n4.loading")}</p>}
+      {loading && <LessonsLoading label={t("n4.loading")} />}
       {error && (
         <p className="learn-no-results" style={{ color: "#c0392b" }}>
           {t("n4.loadError")}: {error}

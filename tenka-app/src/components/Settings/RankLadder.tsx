@@ -1,10 +1,13 @@
 import { useLang } from "@/i18n/LangContext";
 import { RANK_LEVELS, RANK_REQ_ID } from "@/data/ranks";
+import { useRankIndex } from "@/hooks/useRankIndex";
 
 export default function RankLadder() {
   const { t, lang } = useLang();
-  const rankIndex =
-    parseInt(localStorage.getItem("tebakAksara_rank_v1") || "0", 10) || 0;
+  // dulu baca localStorage mentah langsung (key global, gak ikut akun aktif
+  // & gak ke-update pas ganti akun) — sekarang lewat hook yang sama kayak
+  // Sidebar/RankMissionsModal.
+  const rankIndex = useRankIndex();
 
   const loc = (str: string) =>
     lang === "id" ? (RANK_REQ_ID as Record<string, string>)[str] || str : str;
@@ -26,7 +29,7 @@ export default function RankLadder() {
             : "todo";
           return (
             <li key={i} className={`rank-item ${status}`}>
-              <span className="rank-emoji">{r.emoji}</span>
+              <img className="rank-logo" src={r.logo} alt="" aria-hidden="true" />
               <span className="rank-body">
                 <span className="rank-name">
                   {r.title}{" "}

@@ -9,7 +9,7 @@ export type I18NEntry = {
 
 export const I18N: Record<string, I18NEntry> = {
   "nav.home": { en: "Home", id: "Home" },
-  "nav.learn": { en: "Materi", id: "Materi" },
+  "nav.learn": { en: "Lessons", id: "Lessons" },
   "nav.flashcard": { en: "Flashcard", id: "Flashcard" },
   "nav.practice": { en: "Practice", id: "Latihan Soal" },
   "nav.statistik": { en: "Statistics", id: "Statistik" },
@@ -93,6 +93,7 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Pilih aksara untuk belajar",
   },
   "profile.addNickname": { en: "+ Add nickname", id: "+ Tambah nickname" },
+  "profile.joinedOn": { en: "Joined {date}", id: "Bergabung {date}" },
   "profile.viewProgress": { en: "View progress", id: "Lihat progres" },
   "profile.changePhoto": { en: "Change image", id: "Ganti gambar" },
   "auth.signOutConfirmTitle": {
@@ -564,7 +565,7 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Pelajari Ini sebagai Flashcard",
   },
   "levels.groupChapter": { en: "Chapter {n}", id: "Chapter {n}" },
-  "levels.subTiers": { en: "sub-tiers", id: "sub-tier" },
+  "levels.subTiers": { en: "sub chapters", id: "sub chapter" },
   "n4.eyebrow": { en: "N4 · beta", id: "N4 · beta" },
   "n4.title": { en: "Kotoba, Kanji & Bunpō N4", id: "Kotoba, Kanji & Bunpō N4" },
   "n4.sub": {
@@ -582,22 +583,44 @@ export const I18N: Record<string, I18NEntry> = {
     en: "No N4 grammar patterns yet.",
     id: "Belum ada data bunpō N4.",
   },
-  "n4.subTierDescKotoba": {
-    en: "Vocabulary from this sub-tier.",
-    id: "Kosakata dari sub-tier ini.",
+
+  "source.label": { en: "Organize by", id: "Susun berdasarkan" },
+  "source.local": { en: "Topic", id: "Topik" },
+  "source.minna": { en: "Minna no Nihongo", id: "Minna no Nihongo" },
+  "source.level": { en: "Level", id: "Level" },
+  "source.topicOnlyN5": {
+    en: "Topic view is only available for N5.",
+    id: "Tampilan Topic hanya tersedia untuk N5.",
   },
-  "n4.subTierDescKanji": {
-    en: "Kanji from this sub-tier.",
-    id: "Kanji dari sub-tier ini.",
+  "source.lockedHint": {
+    en: "Conquer N5 to unlock N4, conquer N4 to unlock N3, and so on.",
+    id: "Taklukkan N5 untuk membuka N4, taklukkan N4 untuk membuka N3, dan seterusnya.",
   },
-  "n4.subTierDescBunpo": {
-    en: "Grammar patterns from this sub-tier.",
-    id: "Pola tata bahasa dari sub-tier ini.",
+  "source.lockedHintFor": {
+    en: "Conquer {prev} to unlock {level}.",
+    id: "Taklukkan {prev} untuk membuka {level}.",
   },
-  "n4.chapterDesc": {
-    en: "{count} {label} across {groups} sub-tier",
-    id: "{count} {label} dalam {groups} sub-tier",
+  "source.loading": {
+    en: "Loading {level} vocabulary…",
+    id: "Memuat kotoba {level}…",
   },
+  "source.loadError": { en: "Failed to load data", id: "Gagal memuat data" },
+  "source.retry": { en: "Try again", id: "Coba lagi" },
+  "loading.generic": { en: "Loading…", id: "Memuat…" },
+  "loading.auth": {
+    en: "Checking your session…",
+    id: "Mengecek sesi kamu…",
+  },
+  "loading.sync": {
+    en: "Syncing your progress…",
+    id: "Menyinkronkan progres kamu…",
+  },
+
+  "source.emptyKotoba": {
+    en: "No {level} vocabulary yet.",
+    id: "Belum ada data kotoba {level}.",
+  },
+
   "learn.usageNote": { en: "Notes", id: "Catatan" },
   "learn.listenPronunciation": {
     en: "Listen to {text}, read {reading}",
@@ -720,7 +743,7 @@ export const I18N: Record<string, I18NEntry> = {
   },
   "aria.learnSearch": {
     en: "Search this study set",
-    id: "Cari di materi ini",
+    id: "Cari di lessons ini",
   },
   "aria.clearSearch": {
     en: "Clear search",
@@ -881,23 +904,23 @@ export const I18N: Record<string, I18NEntry> = {
   "about.heading": { en: "About", id: "Tentang" },
   "about.summary": { en: "Noble Ranks", id: "Tingkatan Kebangsawanan" },
   "about.intro": {
-    en: "Conquer every Chapter Trial to climb from commoner to emperor.",
-    id: "Taklukkan tiap Chapter Trial untuk naik dari rakyat jelata sampai kaisar.",
+    en: "Conquer every Tier Trial to climb from commoner to emperor.",
+    id: "Taklukkan tiap Tier Trial untuk naik dari rakyat jelata sampai kaisar.",
   },
   "rank.comingSoon": { en: "Coming soon", id: "Segera hadir" },
 
-  "missions.open": { en: "Rank missions", id: "Misi kenaikan pangkat" },
-  "missions.button": { en: "Missions", id: "Misi" },
-  "missions.title": { en: "Rank Missions", id: "Misi Pangkat" },
+  "missions.open": { en: "Rank trials", id: "Trial kenaikan pangkat" },
+  "missions.button": { en: "Trials", id: "Trial" },
+  "missions.title": { en: "Rank Trials", id: "Trial Pangkat" },
   "missions.sub": {
-    en: "Finish these targets to climb the noble ranks.",
-    id: "Selesaikan target ini untuk naik pangkat bangsawan.",
+    en: "Finish these trials to climb the noble ranks.",
+    id: "Selesaikan trial ini untuk naik pangkat bangsawan.",
   },
   "missions.current": { en: "Current", id: "Sekarang" },
   "missions.next": { en: "Next", id: "Berikutnya" },
   "missions.progress": {
-    en: "{done} of {total} targets done",
-    id: "{done} dari {total} target selesai",
+    en: "{done} of {total} trials done",
+    id: "{done} dari {total} trial selesai",
   },
   "missions.conquer": {
     en: "Conquer all of {label}",
@@ -905,16 +928,182 @@ export const I18N: Record<string, I18NEntry> = {
   },
   "missions.unlocks": { en: "Unlocks {rank}", id: "Membuka {rank}" },
   "missions.done": { en: "Done", id: "Selesai" },
-  "missions.go": { en: "Go", id: "Mulai" },
+  "missions.go": {
+    en: "Begin",
+    id: "Mulai",
+  },
   "missions.allN5": {
-    en: "All N5 targets complete!",
-    id: "Semua target N5 selesai!",
+    en: "All N5 trials conquered!",
+    id: "Semua trial N5 ditaklukkan!",
   },
   "missions.later": {
-    en: "N4 – N1 missions are coming soon.",
-    id: "Misi N4 – N1 segera hadir.",
+    en: "N4 – N1 trials await in the lands ahead.",
+    id: "Trial N4 – N1 menanti di negeri seberang.",
   },
   "missions.close": { en: "Close", id: "Tutup" },
+  "missions.badge": { en: "LEARN", id: "BELAJAR" },
+  "missions.steps": { en: "Path to {rank}", id: "Jalan Menuju {rank}" },
+  "missions.stepsSub": {
+    en: "Complete these trials to earn your next rank.",
+    id: "Selesaikan trial ini untuk meraih pangkat berikutnya.",
+  },
+  "missions.desc": {
+    en: "Pass all {count} {label} tiers.",
+    id: "Lewati {count} tier {label}.",
+  },
+  "missions.completed": {
+    en: "Conquered",
+    id: "Ditaklukkan",
+  },
+  "missions.footer": {
+    en: "Every trial brings you closer to the throne.",
+    id: "Setiap trial membawamu lebih dekat ke tahta.",
+  },
+
+  "guide.msg.start": {
+    en: "Let's start today's trial together — you've got this!",
+    id: "Ayo kita mulai trial hari ini bareng-bareng — kamu pasti bisa!",
+  },
+  "guide.msg.progress": {
+    en: "You're on the right path, keep up the spirit!",
+    id: "Kamu sudah berada di jalan yang tepat, terus semangat!",
+  },
+  "guide.msg.almost": {
+    en: "Almost there — just one more step to finish this trial!",
+    id: "Sedikit lagi — satu langkah lagi buat menyelesaikan trial ini!",
+  },
+  "guide.msg.done": {
+    en: "Amazing, trial complete! Ready for the next one?",
+    id: "Keren, trial selesai! Siap lanjut ke trial berikutnya?",
+  },
+  "guide.msg.sub": {
+    en: "Every letter you learn is a step toward your goal.",
+    id: "Setiap huruf yang kamu pelajari adalah langkah menuju tujuanmu.",
+  },
+  "guide.intro.0": {
+    en: "Hiya, welcome to Tenka! 🎉",
+    id: "Halo, selamat datang di Tenka! 🎉",
+  },
+  "guide.intro.1": {
+    en: "I'm your little guide here — let me show you around real quick.",
+    id: "Aku pemandu kecilmu di sini — yuk kukenalin dulu tempat ini.",
+  },
+  "guide.intro.2": {
+    en: "Head to Learn to meet Hiragana, Katakana, Kanji, and everyday vocabulary.",
+    id: "Di halaman Belajar, kamu bisa kenalan sama Hiragana, Katakana, Kanji, sampai kosakata sehari-hari.",
+  },
+  "guide.intro.3": {
+    en: "Then sharpen what you've learned with Quizzes and Flashcards.",
+    id: "Habis itu, asah yang sudah kamu pelajari lewat Latihan Soal dan Flashcards.",
+  },
+  "guide.intro.4": {
+    en: "Feeling bold? Try Match mode to race your own brain for speed!",
+    id: "Berani tantangan? Coba mode Match buat ngadu kecepatan otakmu!",
+  },
+  "guide.intro.5": {
+    en: "Every script you conquer climbs your rank — from Commoner all the way to Emperor.",
+    id: "Setiap aksara yang kamu taklukkan bakal naikkin pangkatmu — dari Rakyat Jelata sampai Kaisar.",
+  },
+  "guide.intro.6": {
+    en: "Alright, your first trial is waiting — let's get started!",
+    id: "Nah, trial pertamamu sudah menunggu — yuk kita mulai!",
+  },
+  "guide.intro.next": { en: "Next", id: "Lanjut" },
+  "guide.intro.start": { en: "Let's start!", id: "Ayo mulai!" },
+  "guide.intro.skip": { en: "Skip intro", id: "Lewati intro" },
+  "guide.intro.step": {
+    en: "{current} of {total}",
+    id: "{current} dari {total}",
+  },
+  "guide.quote.0": {
+    en: "It's study time! Even 10 minutes counts.",
+    id: "Waktunya belajar! 10 menit pun berarti.",
+  },
+  "guide.quote.1": {
+    en: "Don't give up — every mistake is a step forward!",
+    id: "Jangan menyerah — setiap kesalahan adalah langkah maju!",
+  },
+  "guide.quote.2": {
+    en: "Write down one new word today. Future you says thanks!",
+    id: "Catat satu kata baru hari ini. Kamu di masa depan bakal berterima kasih!",
+  },
+  "guide.quote.3": {
+    en: "I'm proud of you for showing up today.",
+    id: "Aku bangga kamu mau belajar hari ini.",
+  },
+  "guide.quote.4": {
+    en: "Hmm… which script will you conquer next?",
+    id: "Hmm… aksara mana yang mau kamu taklukkan berikutnya?",
+  },
+  "guide.quote.5": {
+    en: "Ready to climb the ranks? Let's go!",
+    id: "Siap naik pangkat? Ayo berangkat!",
+  },
+  "guide.quote.6": {
+    en: "Sip some water, then back to the trial!",
+    id: "Minum dulu, terus lanjut trialnya!",
+  },
+  "guide.quote.7": {
+    en: "Consistency beats cramming. Little by little!",
+    id: "Rutin tiap hari lebih ampuh daripada belajar kebut. Sedikit demi sedikit!",
+  },
+  "guide.quote.8": {
+    en: "Fun fact: hiragana was born from cursive kanji!",
+    id: "Fun fact: hiragana lahir dari kanji yang ditulis sambung!",
+  },
+  "guide.quote.9": {
+    en: "Every noble started as a commoner. You've got this!",
+    id: "Bangsawan mana pun dulunya rakyat biasa. Kamu pasti bisa!",
+  },
+  "guide.quote.10": {
+    en: "Wow, you're getting faster every day!",
+    id: "Wow, kamu makin cepat tiap hari!",
+  },
+  "guide.quote.11": {
+    en: "Your next trial is right there — go for it!",
+    id: "Trial berikutnya sudah di depan mata — gas!",
+  },
+  "guide.quote.12": {
+    en: "Tired? Rest a little, then come back stronger.",
+    id: "Capek? Istirahat sebentar, lalu balik lebih kuat.",
+  },
+  "guide.quote.13": {
+    en: "Learning Japanese is a journey. I'm cheering for you!",
+    id: "Belajar bahasa Jepang itu perjalanan. Aku menyemangatimu!",
+  },
+  "guide.quote.14": {
+    en: "Every trial you finish deserves a celebration!",
+    id: "Setiap trial yang kamu selesaikan pantas dirayakan!",
+  },
+  "guide.tipsHeading": { en: "Tip of the Day", id: "Tips Hari Ini" },
+  "guide.tipsSource": {
+    en: "— A message from your companion",
+    id: "— Pesan dari temanmu",
+  },
+  "guide.tip.0": {
+    en: "「 Little by little, a little becomes a lot. 」",
+    id: "「 Sedikit demi sedikit, lama-lama jadi bukit. 」",
+  },
+  "guide.tip.1": {
+    en: "「 A journey of a thousand miles begins with a single step. 」",
+    id: "「 Perjalanan seribu mil dimulai dengan satu langkah. 」",
+  },
+  "guide.tip.2": {
+    en: "「 Review yesterday's letters before learning new ones. 」",
+    id: "「 Ulangi huruf kemarin sebelum belajar yang baru. 」",
+  },
+  "guide.tip.3": {
+    en: "「 Ten minutes a day beats one long session a week. 」",
+    id: "「 Sepuluh menit tiap hari lebih baik dari sekali seminggu. 」",
+  },
+  "guide.tip.4": {
+    en: "「 Mistakes are proof that you're actually trying. 」",
+    id: "「 Salah itu tanda kamu benar-benar sedang mencoba. 」",
+  },
+  "guide.tip.5": {
+    en: "「 Say it out loud — your ears learn too. 」",
+    id: "「 Ucapkan dengan suara — telingamu juga ikut belajar. 」",
+  },
 
   "feedback.heading": { en: "Send Feedback", id: "Kirim Masukan" },
   "feedback.button": { en: "Send Feedback", id: "Kirim Masukan" },
@@ -1041,16 +1230,16 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Batalkan penaklukkan",
   },
   "conquest.startThisChapter": {
-    en: "Start This Chapter",
-    id: "Mulai Chapter Ini",
+    en: "Enter This Tier",
+    id: "Masuki Tier Ini",
   },
   "conquest.cardTitleWithLabel": {
     en: "Conquer {label}",
     id: "Taklukkan {label}",
   },
   "conquest.jlptRetryCardTitleWithLabel": {
-    en: "Retake {label} Exam",
-    id: "Ulangi Ujian {label}",
+    en: "Retake the {label} Trial",
+    id: "Ulangi Trial {label}",
   },
   "conquest.desc": {
     en: "Conquer all of {label} at once — {count} questions, one mistake and it's over.",
@@ -1068,10 +1257,17 @@ export const I18N: Record<string, I18NEntry> = {
     en: "⚔️ Conquer {label}",
     id: "⚔️ Taklukkan {label}",
   },
-  "conquestModal.confirm": { en: "Start Conquering", id: "Mulai Menaklukkan" },
+  "conquestModal.confirm": {
+    en: "Begin the Conquest",
+    id: "Mulai Penaklukkan",
+  },
+  "conquestGuide.ready": {
+    en: "Ready? Take a deep breath — the trial begins the moment you press start! ⚔️",
+    id: "Siap? Tarik napas dalam-dalam — ujiannya dimulai begitu kamu menekan mulai! ⚔️",
+  },
   "conquestModal.threePhaseIntro": {
-    en: "This isn't an ordinary trial — this is the Knight's Trial. Conquering {label} is split into 3 story Chapters (basic → dotted → combined), {count} questions in total.",
-    id: "Ini bukan trial biasa — ini Ujian Ksatria. Penaklukkan {label} terbagi menjadi 3 Chapter cerita (dasar → bertitik → gabungan), total {count} soal.",
+    en: "This isn't an ordinary trial — this is the Knight's Trial. Conquering {label} is split into 3 story Tiers (basic → dotted → combined), {count} questions in total.",
+    id: "Ini bukan trial biasa — ini Ujian Ksatria. Penaklukkan {label} terbagi menjadi 3 Tier cerita (dasar → bertitik → gabungan), total {count} soal.",
   },
   "conquestModal.singleIntro": {
     en: "You'll face all {count} {label} questions at once, shuffled.",
@@ -1098,28 +1294,28 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Semua tier berupa <b>pilihan ganda 4 opsi</b>. Soal diambil acak dari {label} setiap percobaan.",
   },
   "conquestModal.rule.jlptPassMark": {
-    en: "You need <b>at least {percent}% correct in every tier</b>. Fall below that and the conquest <b>FAILS</b> right away.",
-    id: "Kamu harus <b>minimal {percent}% benar di setiap tier</b>. Kalau nilainya sudah tidak mungkin cukup, penaklukkan langsung <b>GAGAL</b>.",
+    en: "You need <b>at least {percent}% correct in every tier</b>. Fall below that and the conquest ends in <b>DEFEAT</b> right away.",
+    id: "Kamu harus <b>minimal {percent}% benar di setiap tier</b>. Kalau nilainya sudah tidak mungkin cukup, penaklukkan langsung berakhir <b>KEKALAHAN</b>.",
   },
   "conquestModal.rule.jlptFailRestart": {
-    en: "If you fail, you'll have to start over from Tier 1.",
-    id: "Kalau gagal, kamu harus mengulang lagi dari Tier 1.",
+    en: "If you fall, you'll have to march again from Tier 1.",
+    id: "Kalau kalah, kamu harus maju lagi dari Tier 1.",
   },
   "conquestModal.rule.typeOnly": {
-    en: "In <b>every Chapter</b>, you must <b>type your own</b> answer — there's no multiple choice at all.",
-    id: "Di <b>seluruh Chapter</b>, kamu harus <b>mengetik sendiri</b> jawabannya — tidak ada pilihan ganda sama sekali.",
+    en: "In <b>every Tier</b>, you must <b>type your own</b> answer — there's no multiple choice at all.",
+    id: "Di <b>seluruh Tier</b>, kamu harus <b>mengetik sendiri</b> jawabannya — tidak ada pilihan ganda sama sekali.",
   },
   "conquestModal.rule.oneWrongFails": {
-    en: "Get <b>even one</b> answer wrong and the conquest instantly <b>FAILS</b>.",
-    id: "Salah <b>satu saja</b> jawaban, penaklukkan langsung <b>GAGAL</b>.",
+    en: "Get <b>even one</b> answer wrong and the conquest instantly ends in <b>DEFEAT</b>.",
+    id: "Salah <b>satu saja</b> jawaban, penaklukkan langsung berakhir <b>KEKALAHAN</b>.",
   },
   "conquestModal.rule.failRestartChapter": {
-    en: "If you fail, you'll have to start over from Chapter 1.",
-    id: "Kalau gagal, kamu harus mengulang lagi dari Chapter 1.",
+    en: "If you fall, you'll have to march again from Tier 1.",
+    id: "Kalau kalah, kamu harus maju lagi dari Tier 1.",
   },
   "conquestModal.rule.failRestartFirst": {
-    en: "If you fail, you'll have to start over from the first question.",
-    id: "Kalau gagal, kamu harus mengulang lagi dari soal pertama.",
+    en: "If you fall, you'll have to march again from the first question.",
+    id: "Kalau kalah, kamu harus maju lagi dari soal pertama.",
   },
   "conquestModal.rule.allAtOnce": {
     en: "All questions for this script will be shuffled and shown all at once, <b>without breaks</b>.",
@@ -1138,12 +1334,12 @@ export const I18N: Record<string, I18NEntry> = {
     id: "⚔️ Ujian Ksatria dimulai",
   },
   "conquestStory.eyebrowFinal": {
-    en: "⚔️ Final chapter",
-    id: "⚔️ Chapter terakhir",
+    en: "⚔️ Final tier",
+    id: "⚔️ Tier terakhir",
   },
   "conquestStory.eyebrowNext": {
-    en: "⚔️ Next chapter",
-    id: "⚔️ Chapter berikutnya",
+    en: "⚔️ Next tier",
+    id: "⚔️ Tier berikutnya",
   },
   "conquestStory.titleWithScript": {
     en: "{label} — {script}",
@@ -1166,20 +1362,20 @@ export const I18N: Record<string, I18NEntry> = {
     id: "{count} soal di tier ini · 4 pilihan · minimal {percent}% benar untuk lulus ({need} dari {count}).",
   },
   "conquestStory.startThisTier": {
-    en: "Start This Tier",
-    id: "Mulai Tier Ini",
+    en: "Enter This Tier",
+    id: "Masuki Tier Ini",
   },
   "conquestStory.startThisChapter": {
-    en: "Start This Chapter",
-    id: "Mulai Chapter Ini",
+    en: "Enter This Tier",
+    id: "Masuki Tier Ini",
   },
   "conquestStory.diffLabel": {
     en: "🔥 type your own answer",
     id: "🔥 ketik jawaban sendiri",
   },
   "conquestStory.meta": {
-    en: "{count} questions in this Chapter · {diff} · one mistake and the whole conquest fails.",
-    id: "{count} soal di Chapter ini · {diff} · satu kali salah, seluruh penaklukkan gagal.",
+    en: "{count} questions in this Tier · {diff} · one mistake and the whole conquest fails.",
+    id: "{count} soal di Tier ini · {diff} · satu kali salah, seluruh penaklukkan gagal.",
   },
   "speedrun.cardTitleWithLabel": {
     en: "Speedrun {label}",
@@ -1198,6 +1394,10 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Balapan menjawab seluruh {count} soal {label} secepat mungkin — rekormu: <b>{time}</b>.",
   },
   "speedrun.confirm": { en: "Ready?", id: "Siap?" },
+  "speedrunGuide.ready": {
+    en: "Ready? The timer starts the moment the countdown ends — go for a new record! ⚡",
+    id: "Siap? Timer mulai begitu hitung mundur selesai — kejar rekor barumu! ⚡",
+  },
   "speedrun.intro": {
     en: "You'll face all {count} {label} questions at once, shuffled — type the answer yourself, timed from the moment the countdown ends.",
     id: "Kamu akan menghadapi seluruh {count} soal {label} sekaligus, diacak — ketik sendiri jawabannya, waktu berjalan begitu hitung mundur selesai.",
@@ -1338,8 +1538,8 @@ export const I18N: Record<string, I18NEntry> = {
     id: "{req} untuk naik menjadi {emoji} {title}",
   },
   "profile.highestN5": {
-    en: "Highest N5 rank reached — {emoji} {title} unlocks once N4 material arrives.",
-    id: "Tingkatan N5 tertinggi tercapai — {emoji} {title} akan terbuka begitu materi N4 hadir.",
+    en: "Highest N5 rank reached — {emoji} {title} unlocks once N4 lessons arrive.",
+    id: "Tingkatan N5 tertinggi tercapai — {emoji} {title} akan terbuka begitu lessons N4 hadir.",
   },
   "profile.highestReached": {
     en: "Highest rank reached — take the throne, Emperor! 👑",
@@ -1363,5 +1563,125 @@ export const I18N: Record<string, I18NEntry> = {
   "flash.storageFull": {
     en: "not enough space in this browser's storage",
     id: "ruang penyimpanan browser ini tidak cukup",
+  },
+  "admin.loading.title": {
+    en: "Loading…",
+    id: "Memuat…",
+  },
+  "admin.loading.desc": {
+    en: "One moment, checking your login session.",
+    id: "Sebentar, lagi ngecek sesi login kamu.",
+  },
+  "admin.signedOut.title": {
+    en: "Sign In Required",
+    id: "Masuk Diperlukan",
+  },
+  "admin.signedOut.desc": {
+    en: "Please sign in with your admin Google account\nto access the Tenka Admin Panel.",
+    id: "Silakan login pakai akun Google admin\nuntuk mengakses Tenka Admin Panel.",
+  },
+  "admin.login.google": {
+    en: "Login with Google",
+    id: "Login with Google",
+  },
+  "admin.back.home": {
+    en: "← Back to Home",
+    id: "← Kembali ke Beranda",
+  },
+  "admin.denied.title": {
+    en: "Admin Access Restricted",
+    id: "Akses Admin Dibatasi",
+  },
+  "admin.denied.desc1": {
+    en: "Your account doesn't have permission\nto access the Tenka Admin Panel.",
+    id: "Akun kamu belum memiliki izin\nuntuk mengakses Tenka Admin Panel.",
+  },
+  "admin.denied.desc2": {
+    en: "If you are an administrator,\nplease use the appropriate admin account.",
+    id: "Jika kamu adalah administrator,\nsilakan gunakan akun admin yang sesuai.",
+  },
+  "admin.denied.switch": {
+    en: "Switch account",
+    id: "Ganti akun",
+  },
+  "admin.denied.current": {
+    en: "Current account: {email}",
+    id: "Akun saat ini: {email}",
+  },
+  "admin.session.expired": {
+    en: "This account's session has expired. Remove it from the list, then add it again via Google login.",
+    id: "Sesi akun ini sudah kedaluwarsa. Hapus dari daftar lalu tambahkan lagi lewat login Google.",
+  },
+  "admin.nav.dashboard": {
+    en: "Dashboard",
+    id: "Dashboard",
+  },
+  "admin.nav.stats": {
+    en: "Statistics",
+    id: "Statistik",
+  },
+  "admin.nav.users": {
+    en: "Users",
+    id: "Pengguna",
+  },
+  "admin.nav.lessons": {
+    en: "Lessons",
+    id: "Lessons",
+  },
+  "admin.nav.practice": {
+    en: "Practice",
+    id: "Latihan",
+  },
+  "admin.nav.questions": {
+    en: "Questions",
+    id: "Soal",
+  },
+  "admin.nav.backToApp": {
+    en: "Back to App",
+    id: "Kembali ke Aplikasi",
+  },
+  "admin.nav.signOut": {
+    en: "Sign out",
+    id: "Sign out",
+  },
+  "admin.theme.toLight": {
+    en: "Switch to light mode",
+    id: "Ganti ke mode terang",
+  },
+  "admin.theme.toDark": {
+    en: "Switch to dark mode",
+    id: "Ganti ke mode gelap",
+  },
+  "admin.theme.light": {
+    en: "Light mode",
+    id: "Mode terang",
+  },
+  "admin.theme.dark": {
+    en: "Dark mode",
+    id: "Mode gelap",
+  },
+  "admin.lang.label": {
+    en: "Language",
+    id: "Bahasa",
+  },
+  "admin.switch.title": {
+    en: "Switch account",
+    id: "Ganti akun",
+  },
+  "admin.switch.sub": {
+    en: "Quick switch",
+    id: "Quick switch",
+  },
+  "admin.switch.add": {
+    en: "Add account",
+    id: "Tambah akun",
+  },
+  "admin.switch.remove": {
+    en: "Remove {email} from list",
+    id: "Hapus {email} dari daftar",
+  },
+  "admin.switch.removeHint": {
+    en: "Remove from list (does not delete the account)",
+    id: "Hapus dari daftar (tidak menghapus akunnya)",
   },
 };

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import heroArt from "@/assets/hero-start.webp";
 import { useLang } from "@/i18n/LangContext";
 import { useUI } from "@/state/UIContext";
@@ -13,6 +13,7 @@ import TimerPicker from "@/components/Pickers/TimerPicker";
 import RangePicker from "@/components/Pickers/RangePicker";
 import SpeedrunCountdown from "@/components/Quiz/SpeedrunCountdown";
 import ConquestModal from "@/components/Conquest/ConquestModal";
+import AdminConquestReset from "@/components/Admin/AdminConquestReset";
 import ScrollTopButton from "@/components/ScrollTopButton";
 import { supportsSpeedrun } from "@/utils/speedrun";
 import {
@@ -57,12 +58,24 @@ export default function StartScreen() {
     randomCount,
     setMatchScript,
     setMatchMode,
+    pendingConquestOpen,
+    setPendingConquestOpen,
   } = useUI();
   const { startQuiz, startConquest, startSpeedrun } = useQuiz();
   const { isConquered, isLocked, getSpeedrunBestTime } = useConquest();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [countdownOpen, setCountdownOpen] = useState(false);
+
+  // Datang dari tombol "Go" di Rank Missions: langsung buka popup Penaklukan
+  // aksara yang dipilih. Kalau aksaranya masih terkunci (harus takluk aksara
+  // sebelumnya dulu), popup tidak dibuka — kartu Penaklukan yang menampilkan
+  // catatan kuncinya seperti biasa.
+  useEffect(() => {
+    if (!pendingConquestOpen) return;
+    setPendingConquestOpen(false);
+    if (!isLocked(currentScript)) setModalOpen(true);
+  }, [pendingConquestOpen, currentScript, isLocked, setPendingConquestOpen]);
 
   const script = SCRIPTS[currentScript as keyof typeof SCRIPTS];
 
@@ -134,18 +147,6 @@ export default function StartScreen() {
           </div>
         </div>
       </header>
-
-      {/* tombol N4 sengaja terpisah dari ScriptTabs/Levels di bawah — N4
-          belum masuk sistem quiz/conquest yang sama kayak N5, masih
-          layar baca-data terpisah yang narik dari Supabase. */}
-      <button
-        className="secondary"
-        id="btn-open-n4"
-        type="button"
-        onClick={() => setScreen("n4")}
-      >
-        N4 (Beta) — lihat data terbaru
-      </button>
 
       <div className="start-panel">
       <ScriptTabs />
@@ -238,18 +239,25 @@ export default function StartScreen() {
                 : t("conquest.cardTitleWithLabel", { label: script.label }) +
                   (conquered ? " ✓" : "")}
           </span>
+          {speedrunMode && bestTime !== null ? (
+            // teks rekor mengandung <b>…</b>, jadi harus dirender sebagai HTML
+            <span
+              className="conquest-desc"
+              dangerouslySetInnerHTML={{
+                __html: t("speedrun.descWithRecord", {
+                  count: totalAll,
+                  label: script.label,
+                  time: fmtSpeedrunTime(bestTime),
+                }),
+              }}
+            />
+          ) : (
           <span className="conquest-desc">
             {speedrunMode
-              ? bestTime !== null
-                ? t("speedrun.descWithRecord", {
-                    count: totalAll,
-                    label: script.label,
-                    time: fmtSpeedrunTime(bestTime),
-                  })
-                : t("speedrun.descNoRecord", {
-                    count: totalAll,
-                    label: script.label,
-                  })
+              ? t("speedrun.descNoRecord", {
+                  count: totalAll,
+                  label: script.label,
+                })
               : isJlpt
                 ? t("conquest.jlptDesc", {
                     tiers: jlptTierCount(currentScript),
@@ -261,6 +269,7 @@ export default function StartScreen() {
                     count: totalAll,
                   })}
           </span>
+          )}
           {lockKey && (
             <span className="conquest-lock-note">
               {t("conquest.lockNote", {
@@ -273,6 +282,8 @@ export default function StartScreen() {
         </span>
         <span className="conquest-arrow" />
       </button>
+
+      <AdminConquestReset scriptKey={currentScript} />
 
       <ConquestModal
         open={modalOpen}

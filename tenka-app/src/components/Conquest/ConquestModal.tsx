@@ -3,6 +3,9 @@ import { useLang } from "@/i18n/LangContext";
 import { SCRIPTS } from "@/data/scripts";
 import { useConquest } from "@/state/ConquestContext";
 import { supportsSpeedrun } from "@/utils/speedrun";
+import ConquestGuide, {
+  type ConquestGuideStep,
+} from "@/components/Conquest/ConquestGuide";
 import {
   isJlptScript,
   JLPT_PASS_PERCENT,
@@ -28,17 +31,14 @@ export default function ConquestModal({
   const { t } = useLang();
   const { isConquered } = useConquest();
 
-  const confirmRef = useRef<HTMLButtonElement>(null);
   const cancelRef = useRef(onCancel);
   useEffect(() => {
     cancelRef.current = onCancel;
   });
 
-  // fokus ke tombol konfirmasi saat modal dibuka, Esc menutup, dan fokus
-  // kembali ke kartu Conquest/Speedrun saat ditutup.
+  // Esc menutup, dan fokus kembali ke kartu Conquest/Speedrun saat ditutup.
   useEffect(() => {
     if (!open) return;
-    confirmRef.current?.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") cancelRef.current();
     };
@@ -51,11 +51,6 @@ export default function ConquestModal({
 
   if (!open) return null;
 
-  // klik area gelap di luar panel = batal
-  const onBackdrop = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) onCancel();
-  };
-
   const script = SCRIPTS[scriptKey as keyof typeof SCRIPTS];
   if (!script) return null;
 
@@ -66,40 +61,36 @@ export default function ConquestModal({
   const isThreePhase = scriptKey === "hiragana" || scriptKey === "katakana";
   const isJlpt = isJlptScript(scriptKey);
 
-  // Speedrun mode
+  // Speedrun mode — sekarang dijelasin si chibi juga (sama kayak Penaklukan):
+  // intro + satu bubble per aturan, tombol terakhir = "Siap?" → hitung mundur.
   if (conquered) {
+    const SPEEDRUN_EXPRESSIONS = ["its-time", "startled", "nerd", "proud"];
+    const speedrunRules = [
+      t("speedrun.rule.timed"),
+      t("speedrun.rule.mistakesCost"),
+      t("speedrun.rule.autoNext"),
+      t("speedrun.rule.recordSaved"),
+    ];
+    const speedrunSteps: ConquestGuideStep[] = [
+      {
+        expression: "pointing",
+        html: t("speedrun.intro", { count: total, label: script.label }),
+      },
+      ...speedrunRules.map((r, i) => ({
+        expression: SPEEDRUN_EXPRESSIONS[i % SPEEDRUN_EXPRESSIONS.length],
+        html: r,
+      })),
+      { expression: "ready", html: t("speedrunGuide.ready") },
+    ];
+
     return (
-      <div
-        className="modal-overlay open"
-        aria-hidden="false"
-        onClick={onBackdrop}
-      >
-        <div className="modal-panel" role="alertdialog" aria-modal="true">
-          <h2>{t("speedrun.modalTitleWithLabel", { label: script.label })}</h2>
-          <p className="modal-text">
-            {t("speedrun.intro", { count: total, label: script.label })}
-          </p>
-          <ul className="modal-rules">
-            <li>{t("speedrun.rule.timed")}</li>
-            <li>{t("speedrun.rule.mistakesCost")}</li>
-            <li>{t("speedrun.rule.autoNext")}</li>
-            <li>{t("speedrun.rule.recordSaved")}</li>
-          </ul>
-          <div className="modal-actions">
-            <button className="ghost" type="button" onClick={onCancel}>
-              {t("common.cancel")}
-            </button>
-            <button
-              ref={confirmRef}
-              className="primary"
-              type="button"
-              onClick={onConfirmSpeedrun}
-            >
-              {t("speedrun.confirm")}
-            </button>
-          </div>
-        </div>
-      </div>
+      <ConquestGuide
+        key={`${scriptKey}-speedrun`}
+        steps={speedrunSteps}
+        confirmLabel={t("speedrun.confirm")}
+        onCancel={onCancel}
+        onConfirm={onConfirmSpeedrun}
+      />
     );
   }
 
@@ -127,58 +118,48 @@ export default function ConquestModal({
     rules.push(t("conquestModal.rule.failRestartFirst"));
   }
 
+  const introText = isJlpt
+    ? t(
+        scriptKey === "kotoba"
+          ? "conquestModal.jlptIntroKotoba"
+          : scriptKey === "bunpo"
+            ? "conquestModal.jlptIntroBunpo"
+            : "conquestModal.jlptIntroKanji",
+        {
+          label: script.label,
+          count: jlptQuestionsPerTier(scriptKey),
+          total: jlptQuestionsPerTier(scriptKey) * jlptTierCount(scriptKey),
+        },
+      )
+    : isThreePhase
+      ? t("conquestModal.threePhaseIntro", {
+          label: script.label,
+          count: total,
+        })
+      : t("conquestModal.singleIntro", {
+          count: total,
+          label: script.label,
+        });
+
+  // Popup sebelum Penaklukan sekarang dijelasin si chibi (kayak intro): satu
+  // bubble per aturan, ekspresinya ikut isi omongannya. Urutan aturan dari
+  // `rules` di atas tetap sama — cuma ditampilin bertahap.
+  const RULE_EXPRESSIONS = ["nerd", "startled", "afraid", "proud"];
+  const guideSteps: ConquestGuideStep[] = [
+    { expression: "pointing", html: introText },
+    ...rules.map((r, i) => ({
+      expression: RULE_EXPRESSIONS[i % RULE_EXPRESSIONS.length],
+      html: r,
+    })),
+    { expression: "ready", html: t("conquestGuide.ready") },
+  ];
+
   return (
-    <div
-      className="modal-overlay open"
-      aria-hidden="false"
-      onClick={onBackdrop}
-    >
-      <div className="modal-panel" role="alertdialog" aria-modal="true">
-        <h2>{t("conquest.modalTitleWithLabel", { label: script.label })}</h2>
-        <p className="modal-text">
-          {isJlpt
-            ? t(
-                scriptKey === "kotoba"
-                  ? "conquestModal.jlptIntroKotoba"
-                  : scriptKey === "bunpo"
-                    ? "conquestModal.jlptIntroBunpo"
-                    : "conquestModal.jlptIntroKanji",
-                {
-                  label: script.label,
-                  count: jlptQuestionsPerTier(scriptKey),
-                  total:
-                    jlptQuestionsPerTier(scriptKey) * jlptTierCount(scriptKey),
-                },
-              )
-            : isThreePhase
-              ? t("conquestModal.threePhaseIntro", {
-                  label: script.label,
-                  count: total,
-                })
-              : t("conquestModal.singleIntro", {
-                  count: total,
-                  label: script.label,
-                })}
-        </p>
-        <ul className="modal-rules">
-          {rules.map((r, i) => (
-            <li key={i} dangerouslySetInnerHTML={{ __html: r }} />
-          ))}
-        </ul>
-        <div className="modal-actions">
-          <button className="ghost" type="button" onClick={onCancel}>
-            {t("common.cancel")}
-          </button>
-          <button
-            ref={confirmRef}
-            className="primary danger"
-            type="button"
-            onClick={onConfirmConquest}
-          >
-            {t("conquestModal.confirm")}
-          </button>
-        </div>
-      </div>
-    </div>
+    <ConquestGuide
+      key={scriptKey}
+      steps={guideSteps}
+      onCancel={onCancel}
+      onConfirm={onConfirmConquest}
+    />
   );
 }

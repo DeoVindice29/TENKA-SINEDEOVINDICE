@@ -48,14 +48,15 @@ export function activityKindLabel(kind: ContentKind): string {
   return KIND_LABEL[kind];
 }
 
-export function formatRelativeTime(at: number): string {
+export function formatRelativeTime(at: number, lang: "en" | "id" = "id"): string {
+  const en = lang === "en";
   const diffSec = Math.max(0, Math.floor((Date.now() - at) / 1000));
-  if (diffSec < 45) return "Baru saja";
+  if (diffSec < 45) return en ? "Just now" : "Baru saja";
   const diffMin = Math.floor(diffSec / 60);
-  if (diffMin < 60) return `${diffMin} menit lalu`;
+  if (diffMin < 60) return en ? `${diffMin} min ago` : `${diffMin} menit lalu`;
   const diffHour = Math.floor(diffMin / 60);
-  if (diffHour < 24) return `${diffHour} jam lalu`;
+  if (diffHour < 24) return en ? `${diffHour} h ago` : `${diffHour} jam lalu`;
   const diffDay = Math.floor(diffHour / 24);
-  if (diffDay < 7) return `${diffDay} hari lalu`;
-  return new Date(at).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
+  if (diffDay < 7) return en ? `${diffDay} d ago` : `${diffDay} hari lalu`;
+  return new Date(at).toLocaleDateString(en ? "en-US" : "id-ID", { day: "numeric", month: "short", year: "numeric" });
 }

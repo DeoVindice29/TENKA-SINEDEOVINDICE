@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import { useLang } from "@/i18n/LangContext";
 import { useUI, type ScriptKey } from "@/state/UIContext";
-import { useProfile } from "@/hooks/useProfile";
+import { useAuth } from "@/state/AuthContext";
 import { useQuiz } from "@/state/QuizContext";
 import { useConquest } from "@/state/ConquestContext";
 import { SCRIPTS } from "@/data/scripts";
-import { RANK_LEVELS, getRankIndex, promoteIfHigher } from "@/data/ranks";
+import {
+  RANK_LEVELS,
+  getRankIndex,
+  promoteIfHigher,
+  rankLogoHtml,
+} from "@/data/ranks";
 import { formatSpeedrunTime } from "@/utils/formatTime";
 import { supportsSpeedrun } from "@/utils/speedrun";
 import {
@@ -17,7 +22,11 @@ import {
 export default function ResultsScreen() {
   const { t } = useLang();
   const { setScreen, setCurrentScript } = useUI();
-  const { nickname } = useProfile();
+  // nama akun dari Supabase (per akun); dulu ini baca localStorage global
+  // lewat useProfile() jadi bisa nampilin nickname akun lain di browser
+  // yang sama.
+  const { profile } = useAuth();
+  const nickname = profile?.username?.trim() || "";
   const { state, restartQuiz } = useQuiz();
   const { completeConquest, submitSpeedrunTime, getStory } = useConquest();
 
@@ -85,19 +94,19 @@ export default function ResultsScreen() {
             const rank = RANK_LEVELS[result.rankIndex];
             if (rank.title === "Knight") {
               msg += t("results.knightCeremony", {
-                emoji: rank.emoji,
+                emoji: rankLogoHtml(rank),
                 title: rank.title,
                 subtitle: rank.subtitle,
               });
             } else if (rank.title === "Baron") {
               msg += t("results.baronCeremony", {
-                emoji: rank.emoji,
+                emoji: rankLogoHtml(rank),
                 title: rank.title,
                 subtitle: rank.subtitle,
               });
             } else {
               msg += t("results.rankUp", {
-                emoji: rank.emoji,
+                emoji: rankLogoHtml(rank),
                 title: rank.title,
                 subtitle: rank.subtitle,
               });
@@ -154,7 +163,7 @@ export default function ResultsScreen() {
           const rank = RANK_LEVELS[getRankIndex()];
           setPromoMsg(
             t("results.rankUpPlain", {
-              emoji: rank.emoji,
+              emoji: rankLogoHtml(rank),
               title: rank.title,
               subtitle: rank.subtitle,
             }),

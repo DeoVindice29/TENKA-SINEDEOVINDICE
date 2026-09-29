@@ -53,7 +53,33 @@ export default function Choices() {
                 <span className="choice-text">{opt}</span>
               </>
             ) : (
-              opt
+              <span className="choice-label">{opt}</span>
+            )}
+            {state.answered && isCorrect && (
+              <span className="choice-badge choice-badge-correct" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M5 12.5l4.5 4.5L19 7.5"
+                    stroke="currentColor"
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
+            )}
+            {state.answered && wasChosen && !isCorrect && (
+              <span className="choice-badge choice-badge-wrong" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M6 6l12 12M18 6L6 18"
+                    stroke="currentColor"
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
             )}
           </button>
         );

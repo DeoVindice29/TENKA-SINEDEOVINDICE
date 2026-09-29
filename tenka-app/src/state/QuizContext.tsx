@@ -71,6 +71,8 @@ type QuizAction =
   | { type: "ANSWER"; chosen: string }
   | { type: "NEXT_QUESTION" }
   | { type: "FAIL_QUIZ" }
+  | { type: "ADMIN_SKIP_ALL" }
+  | { type: "ADMIN_SKIP_PHASE"; phaseIndex: number }
   | { type: "ENTER_PHASE"; phaseIndex: number }
   | { type: "RESET" };
 
@@ -186,8 +188,64 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
     case "FAIL_QUIZ":
       return { ...state, index: state.queue.length };
 
+    // Khusus admin (lihat AdminQuizTools): anggap SEMUA soal dijawab benar,
+    // langsung lompat ke layar hasil sebagai lulus — buat ngecek UI Penaklukan
+    // /Speedrun/kuis biasa tanpa ngerjain soalnya.
+    case "ADMIN_SKIP_ALL": {
+      const n = state.queue.length;
+      const b = state.conquestPhaseBoundaries;
+      return {
+        ...state,
+        results: state.queue.map(() => true),
+        score: n,
+        streak: n,
+        maxStreak: Math.max(state.maxStreak, n),
+        missed: [],
+        conquestFailed: false,
+        speedrunFailed: false,
+        speedrunMistakes: 0,
+        // Tier terakhir, biar pesan hasilnya sesuai kondisi "tamat"
+        conquestPhaseIndex: b ? Math.max(0, b.length - 2) : state.conquestPhaseIndex,
+        index: n,
+        answered: false,
+        lastChosen: null,
+        lastCorrect: false,
+      };
+    }
+
+    // Khusus admin: lulusin satu Tier sekaligus (semua soal di dalamnya
+    // dianggap benar), lalu lompat ke awal Tier berikutnya (layar cerita
+    // muncul) — atau ke layar hasil kalau ini yang terakhir.
+    case "ADMIN_SKIP_PHASE": {
+      const b = state.conquestPhaseBoundaries;
+      if (!b || b.length < 2) return state;
+      const p = Math.max(0, Math.min(action.phaseIndex, b.length - 2));
+      const start = b[p];
+      const end = b[p + 1];
+      const results = state.queue.map((_, i) =>
+        i >= start && i < end ? true : state.results[i],
+      );
+      const phaseItems = new Set(state.queue.slice(start, end));
+      const skipped = Math.max(0, end - Math.max(start, state.index));
+      const streak = state.streak + skipped;
+      return {
+        ...state,
+        results,
+        score: results.filter((r) => r === true).length,
+        streak,
+        maxStreak: Math.max(state.maxStreak, streak),
+        missed: state.missed.filter((m) => !phaseItems.has(m)),
+        conquestFailed: false,
+        conquestPhaseIndex: p,
+        index: end,
+        answered: false,
+        lastChosen: null,
+        lastCorrect: false,
+      };
+    }
+
     case "ENTER_PHASE":
-      // PENTING: jangan reset index — biar lanjut ke soal Chapter berikutnya
+      // PENTING: jangan reset index — biar lanjut ke soal Tier berikutnya
       return { ...state, conquestPhaseIndex: action.phaseIndex };
 
     case "RESET":

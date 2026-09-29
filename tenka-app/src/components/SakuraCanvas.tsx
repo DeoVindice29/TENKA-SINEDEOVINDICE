@@ -17,11 +17,18 @@ const COLORS = ["#FF79C6", "#F8A5C2"];
 /**
  * Decorative falling sakura petals, rendered behind the auth card.
  * Purely cosmetic — respects prefers-reduced-motion by skipping the animation.
+ * `density` (petal count) and `speed` (multiplier on fall/drift speed) let
+ * callers tone it down for smaller/busier spots (e.g. IntroGuide) without
+ * touching the default look used on the login page.
  */
 export default function SakuraCanvas({
   className = "login-sakura-canvas",
+  density = 35,
+  speed = 1,
 }: {
   className?: string;
+  density?: number;
+  speed?: number;
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -44,15 +51,15 @@ export default function SakuraCanvas({
       x: Math.random() * width,
       y: Math.random() * -height,
       size: Math.random() * 8 + 6,
-      speedY: Math.random() * 1.2 + 0.8,
-      speedX: Math.random() * 0.8 - 0.4,
+      speedY: (Math.random() * 1.2 + 0.8) * speed,
+      speedX: (Math.random() * 0.8 - 0.4) * speed,
       angle: Math.random() * Math.PI * 2,
-      spin: Math.random() * 0.03 - 0.015,
+      spin: (Math.random() * 0.03 - 0.015) * speed,
       opacity: Math.random() * 0.5 + 0.3,
       color: COLORS[Math.random() > 0.5 ? 0 : 1],
     });
 
-    const petals: Petal[] = Array.from({ length: 35 }, makePetal);
+    const petals: Petal[] = Array.from({ length: density }, makePetal);
 
     const resize = () => {
       width = canvas.width = canvas.offsetWidth;

@@ -23,7 +23,7 @@ function tf(entry: Bilingual | string | null | undefined, lang: Lang): string {
 }
 
 /** Teks yang sama dengan yang dirender VocabList, supaya hasilnya identik. */
-function entryText(entry: KotobaEntry, lang: Lang): string {
+export function entryText(entry: KotobaEntry, lang: Lang): string {
   const [
     word,
     reading,

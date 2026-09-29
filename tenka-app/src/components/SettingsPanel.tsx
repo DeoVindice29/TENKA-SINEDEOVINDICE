@@ -8,6 +8,7 @@ import FontSelector from "@/components/Settings/FontSelector";
 import RankLadder from "@/components/Settings/RankLadder";
 import TitleCollection from "@/components/Settings/TitleCollection";
 import SpeedrunRecords from "@/components/Settings/SpeedrunRecords";
+import AdminConquestReset from "@/components/Admin/AdminConquestReset";
 import FeedbackBox from "@/components/Settings/FeedbackBox";
 import SignOutModal from "@/components/Settings/SignOutModal";
 import {
@@ -738,6 +739,7 @@ export default function SettingsPanel({
               <TitleCollection />
             </section>
             <SpeedrunRecords />
+            <AdminConquestReset />
             <RankLadder />
           </div>
         )}

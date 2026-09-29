@@ -9,7 +9,7 @@ export type KotobaEntry = readonly [
   string,
   Bilingual,
   string,
-  readonly [string, string][],
+  readonly (readonly [string, string])[],
   Bilingual,
   string,
   string,
@@ -32,7 +32,7 @@ export type BunpoEntry = readonly [
   string,
   string,
   Bilingual,
-  readonly [string, string][],
+  readonly (readonly [string, string])[],
   string,
   Bilingual,
   (Bilingual | "")?

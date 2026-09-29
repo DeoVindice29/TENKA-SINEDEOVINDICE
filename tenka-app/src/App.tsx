@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useUI } from "@/state/UIContext";
+import { useAuth } from "@/state/AuthContext";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import StartScreen from "@/screens/StartScreen";
 import QuizScreen from "@/screens/QuizScreen";
@@ -14,9 +15,14 @@ import SettingsPanel, { type SettingsView } from "@/components/SettingsPanel";
 import { useLang } from "@/i18n/LangContext";
 import { useTheme } from "@/hooks/useTheme";
 import RankMissionsModal from "@/components/RankMissions/RankMissionsModal";
+import IntroGuide from "@/components/Intro/IntroGuide";
 import { useRankIndex } from "@/hooks/useRankIndex";
-import { MISSION_TOTAL, countMissionsDone } from "@/data/ranks";
+import { useMissionProgress } from "@/hooks/useMissionProgress";
+import { useProgressSyncing } from "@/hooks/useProgressSyncing";
+import { SyncBar } from "@/components/ui/Loader";
+import { INTRO_SEEN_KEY } from "@/data/introGuide";
 import AdminPanel from "@/admin/AdminPanel";
+import quizSceneBg from "@/assets/bg-quiz.png";
 
 // Layar-layar yang sengaja fokus penuh (sesi kuis/Match/Penaklukan/kartu
 // flash aktif) — sidebar & topbar disembunyikan biar gak keganggu, sama
@@ -24,8 +30,9 @@ import AdminPanel from "@/admin/AdminPanel";
 const FOCUS_SCREENS = new Set(["quiz", "match", "flashcard", "conquest-story"]);
 
 export default function App() {
-  const { screen } = useUI();
+  const { screen, setScreen } = useUI();
   const { t } = useLang();
+  const { user, isGuest } = useAuth();
   const themeApi = useTheme();
   useRankIndex(); // re-render saat pangkat berubah → hitungan misi ikut segar
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -34,7 +41,38 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [missionsOpen, setMissionsOpen] = useState(false);
   const [adminOpen, setAdminOpen] = useLocalStorage<boolean>("tenka:adminOpen", false);
-  const missionsDone = countMissionsDone();
+  const missionProgress = useMissionProgress();
+  const syncing = useProgressSyncing();
+
+  // Peri pemandu chibi cuma nongol sekali per AKUN (bukan per-browser) —
+  // di-scope pakai user id Supabase (atau "guest" buat mode tamu) supaya
+  // login akun baru di browser yang sama tetap dapet intro-nya sendiri,
+  // gak ketiban status "udah pernah lihat" dari akun sebelumnya. Baru
+  // setelah bubble terakhir diklik, Misi Pangkat otomatis kebuka — kalau
+  // di-skip, misinya tetap bisa dibuka manual lewat tombol Misi di topbar.
+  const accountKey = user?.id ?? (isGuest ? "guest" : "anon");
+  const [introSeen, setIntroSeen] = useLocalStorage<boolean>(
+    `${INTRO_SEEN_KEY}:${accountKey}`,
+    false,
+  );
+  const [introOpen, setIntroOpen] = useState(false);
+
+  useEffect(() => {
+    if (!introSeen) setIntroOpen(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const finishIntro = () => {
+    setIntroSeen(true);
+    setIntroOpen(false);
+    // Setelah intro selesai jangan auto-buka Trial — langsung ke Home.
+    setScreen("start");
+  };
+
+  const skipIntro = () => {
+    setIntroSeen(true);
+    setIntroOpen(false);
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -48,8 +86,18 @@ export default function App() {
 
   return (
     <>
+      {syncing && <SyncBar label={t("loading.sync")} />}
       <div className="washi-noise" />
-      <div className={`app-shell ${focusMode ? "focus-mode" : ""}`}>
+      <div
+        className={`app-shell ${focusMode ? "focus-mode" : ""} ${
+          screen === "quiz" || screen === "match" ? "quiz-scenic" : ""
+        }`}
+        style={
+          screen === "quiz" || screen === "match"
+            ? { backgroundImage: `url(${quizSceneBg})` }
+            : undefined
+        }
+      >
         {!focusMode && (
           <Sidebar
             open={sidebarOpen}
@@ -88,7 +136,7 @@ export default function App() {
                 </svg>
                 <span className="topbar-missions-label">{t("missions.button")}</span>
                 <span className="topbar-missions-count">
-                  {missionsDone}/{MISSION_TOTAL}
+                  {missionProgress.done}/{missionProgress.total}
                 </span>
               </button>
             </header>
@@ -104,7 +152,9 @@ export default function App() {
             )}
             {screen === "n4" && <N4Screen />}
             {screen === "statistik" && <StatistikScreen />}
-            <footer className="site-footer">{t("footer.copyright")}</footer>
+            {screen !== "quiz" && screen !== "match" && (
+              <footer className="site-footer">{t("footer.copyright")}</footer>
+            )}
           </div>
         </div>
       </div>
@@ -112,6 +162,7 @@ export default function App() {
         open={missionsOpen}
         onClose={() => setMissionsOpen(false)}
       />
+      <IntroGuide open={introOpen} onFinish={finishIntro} onSkip={skipIntro} />
       <SettingsPanel
         open={settingsOpen}
         onClose={() => setSettingsOpen(false)}

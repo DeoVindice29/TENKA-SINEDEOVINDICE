@@ -154,7 +154,7 @@ export default function Levels() {
     );
   };
 
-  // Kotoba (satu-satunya script yang punya `groups` saat ini): 24 sub-tier
+  // Kotoba (satu-satunya script yang punya `groups` saat ini): 24 sub chapter
   // dikelompokkan jadi accordion 7 Chapter, sama seperti Mode Belajar, plus
   // kartu "All Mixed" berdiri sendiri di luar kelompok = 8 tingkatan teratas.
   // Hanya 1 Chapter yang bisa kebuka dalam satu waktu.

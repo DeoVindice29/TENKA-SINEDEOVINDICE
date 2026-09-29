@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useLang } from "@/i18n/LangContext";
 import { useFlash } from "@/state/FlashContext";
 import { parseApkgFile } from "@/utils/apkgParser";
+import { Spinner } from "@/components/ui/Loader";
 
 type FlashcardImportProps = {
   onImported?: () => void;
@@ -48,12 +49,14 @@ export default function FlashcardImport({ onImported }: FlashcardImportProps) {
   return (
     <div className="flash-import-box">
       <button
-        className="secondary"
+        className={`secondary${busy ? " is-loading" : ""}`}
         type="button"
         disabled={busy}
+        aria-busy={busy}
         onClick={handleClick}
       >
-        {t("flash.importBtn")}
+        {busy && <Spinner size={14} />}
+        {busy ? t("flash.importing") : t("flash.importBtn")}
       </button>
       <input
         ref={inputRef}

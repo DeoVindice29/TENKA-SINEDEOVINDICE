@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import AdminSkipTools from "@/components/Admin/AdminSkipTools";
 import { useLang } from "@/i18n/LangContext";
 import { useUI } from "@/state/UIContext";
 import { SCRIPTS } from "@/data/scripts";
@@ -194,17 +195,19 @@ export default function MatchScreen() {
   if (pairs.length === 0) {
     return (
       <section id="screen-match">
-        <div className="quiz-back-row">
+        <div className="quiz-topbar">
           <button
-            className="quiz-back"
+            className="quiz-pill-btn quiz-back"
             type="button"
             data-i18n="common.back"
             onClick={() => setScreen("start")}
           >
-            {t("common.back")}
+            <span>{t("common.back")}</span>
           </button>
         </div>
-        <p>No match started.</p>
+        <div className="quiz-card">
+          <p>No match started.</p>
+        </div>
       </section>
     );
   }
@@ -212,65 +215,90 @@ export default function MatchScreen() {
   if (done) {
     return (
       <section id="screen-match">
-        <div className="quiz-back-row">
+        <div className="quiz-topbar">
           <button
-            className="quiz-back"
+            className="quiz-pill-btn quiz-back"
             type="button"
             data-i18n="common.back"
             onClick={() => setScreen("start")}
           >
-            {t("common.back")}
+            <span>{t("common.back")}</span>
           </button>
         </div>
-        <div className="match-done">
-          <p className="match-done-title">{t("matchMode.doneTitle")}</p>
-          <p className="match-done-sub">
-            {t("matchMode.doneSub", {
-              pairs: totalPairs,
-              mistakes: String(mistakes),
-              time: fmtTime(elapsed),
-            })}
-          </p>
-          <button
-            className="primary"
-            type="button"
-            onClick={() => {
-              setRounds(buildRounds(pairs));
-              setRoundIndex(0);
-              setMistakes(0);
-              setMatchedCount(0);
-              setDone(false);
-              setStartTime(Date.now());
-            }}
-          >
-            {t("matchMode.playAgain")}
-          </button>
-          <button
-            className="ghost"
-            type="button"
-            data-i18n="common.back"
-            onClick={() => setScreen("start")}
-          >
-            {t("common.back")}
-          </button>
+        <div className="quiz-card">
+          <div className="match-done">
+            <p className="match-done-title">{t("matchMode.doneTitle")}</p>
+            <p className="match-done-sub">
+              {t("matchMode.doneSub", {
+                pairs: totalPairs,
+                mistakes: String(mistakes),
+                time: fmtTime(elapsed),
+              })}
+            </p>
+            <button
+              className="primary"
+              type="button"
+              onClick={() => {
+                setRounds(buildRounds(pairs));
+                setRoundIndex(0);
+                setMistakes(0);
+                setMatchedCount(0);
+                setDone(false);
+                setStartTime(Date.now());
+              }}
+            >
+              {t("matchMode.playAgain")}
+            </button>
+            <button
+              className="ghost"
+              type="button"
+              data-i18n="common.back"
+              onClick={() => setScreen("start")}
+            >
+              {t("common.back")}
+            </button>
+          </div>
         </div>
       </section>
     );
   }
 
+  const roundPct =
+    rounds.length > 0 ? ((roundIndex + 1) / rounds.length) * 100 : 0;
+
   return (
     <section id="screen-match">
-      <div className="quiz-back-row">
+      <AdminSkipTools
+        skipAllLabel="Skip → selesai"
+        onSkipAll={() => setDone(true)}
+      />
+      <div className="quiz-topbar">
         <button
-          className="quiz-back"
+          className="quiz-pill-btn quiz-back"
           type="button"
           data-i18n="common.back"
           onClick={() => setScreen("start")}
         >
-          {t("common.back")}
+          <span>{t("common.back")}</span>
         </button>
+
+        <div className="quiz-progress-center">
+          <div className="quiz-progress-text">
+            {t("matchMode.roundProgress", {
+              current: roundIndex + 1,
+              total: rounds.length,
+            })}
+          </div>
+          <div className="quiz-progress-bar" aria-hidden="true">
+            <div
+              className="quiz-progress-fill"
+              style={{ width: `${roundPct}%` }}
+            />
+          </div>
+        </div>
+
         <button
-          className="quiz-back"
+          className="quiz-pill-btn quiz-restart"
           type="button"
           data-i18n="matchMode.restart"
           onClick={() => {
@@ -281,25 +309,16 @@ export default function MatchScreen() {
             setStartTime(Date.now());
           }}
         >
-          {t("matchMode.restart")}
+          <span>{t("matchMode.restart")}</span>
         </button>
       </div>
 
-      <div className="quiz-top">
-        <div className="quiz-progress-text">
-          {t("matchMode.roundProgress", {
-            current: roundIndex + 1,
-            total: rounds.length,
-          })}
-        </div>
-        <div className="match-mistakes">
-          <span className="match-mistakes-icon" /> {mistakes}
-        </div>
-      </div>
+      <div className="quiz-card">
+        <p className="match-mode-instruction">
+          {t("matchMode.instruction")}
+        </p>
 
-      <p className="match-mode-instruction">{t("matchMode.instruction")}</p>
-
-      <div className="match-board">
+        <div className="match-board">
         <div className="match-col">
           {kanaTiles.map((tile, idx) => {
             const classes = ["match-tile"];
@@ -341,17 +360,15 @@ export default function MatchScreen() {
         </div>
       </div>
 
-      {matchedCount > 0 && (
-        <p
-          style={{
-            textAlign: "center",
-            color: "var(--ink-soft)",
-            fontSize: 12,
-          }}
-        >
+      <div className="match-bottom-row">
+        <p className="match-progress-count">
           {matchedCount} / {totalPairs}
         </p>
-      )}
+        <div className="match-mistakes">
+          <span className="match-mistakes-icon" /> {mistakes}
+        </div>
+      </div>
+      </div>
     </section>
   );
 }
