@@ -1,3 +1,4 @@
+import { pickLang } from "../lib/quizLang";
 import {
   KOTOBA_N5_CHAPTERS,
   KOTOBA_TIER_KEYS,
@@ -76,14 +77,14 @@ export function getBuiltinDeckDefs() {
     const count = KOTOBA_N5_CHAPTERS[idx].length;
     defs.push({
       ref: { kind: "kotoba", tierKey: tk },
-      label: `Kotoba — ${meta?.title?.en ?? tk}`,
+      label: `Kotoba — ${meta?.title ? pickLang(meta.title) : tk}`,
       total: count,
     });
   });
 
   defs.push({
     ref: { kind: "kotoba", tierKey: "all" },
-    label: "Kotoba — All Mixed",
+    label: `Kotoba — ${pickLang({ en: "All Mixed", id: "Semua Campur" })}`,
     total: KOTOBA_N5_CHAPTERS.reduce((sum, c) => sum + c.length, 0),
   });
 
@@ -92,14 +93,14 @@ export function getBuiltinDeckDefs() {
     const count = KANJI_N5_CHAPTERS[i].length;
     defs.push({
       ref: { kind: "kanji", tierKey: tk },
-      label: `Kanji N5 — ${meta?.id ?? tk}`,
+      label: `Kanji — ${meta?.id ?? tk}`,
       total: count,
     });
   });
 
   defs.push({
     ref: { kind: "kanji", tierKey: "all" },
-    label: "Kanji N5 — All Mixed",
+    label: `Kanji — ${pickLang({ en: "All Mixed", id: "Semua Campur" })}`,
     total: KANJI_N5_CHAPTERS.reduce((sum, c) => sum + c.length, 0),
   });
 

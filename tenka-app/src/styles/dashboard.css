@@ -1924,7 +1924,7 @@ button.primary:not(:disabled)::after {
     display: flex;
     align-items: center;
     overflow: hidden;
-    /* fallback langit di belakang intro-bg.png, soalnya tengah gambarnya
+    /* fallback langit di belakang intro-bg.webp, soalnya tengah gambarnya
        transparan — tanpa ini keliatan overlay gelap di belakang modal nembus. */
     background: linear-gradient(165deg, #dbe7ff 0%, #eef1ff 55%, #fbe9f1 100%);
 }
@@ -2910,6 +2910,53 @@ body:has(.app-shell.quiz-scenic) {
     gap: 10px;
 }
 
+/* Match Kotoba: isi tile berupa kata + arti (bisa panjang, bisa 2 baris),
+   jadi rasio tetap 4:1 milik Hiragana/Katakana dilepas — tinggi tile
+   mengikuti isi, dengan tinggi minimum biar gampang diketuk. */
+#screen-match .match-board.words {
+    align-items: stretch;
+}
+
+#screen-match .match-board.words .match-col {
+    justify-content: space-between;
+}
+
+#screen-match .match-board.words button.match-tile {
+    aspect-ratio: auto;
+    max-height: none;
+    min-height: 60px;
+    flex: 1 1 0;
+    padding: 8px 12px;
+    line-height: 1.3;
+    font-size: clamp(12.5px, 3.3vw, 15px);
+    overflow-wrap: anywhere;
+}
+
+#screen-match .match-board.words .match-col:first-child button.match-tile {
+    font-size: clamp(16px, 4.6vw, 21px);
+}
+
+/* Bunpō "Kalimat": kolom kiri berisi kalimat rumpang (panjang) — huruf lebih
+   kecil & rata kiri biar terbaca, kolom kanan (pola) tetap Jepang besar. */
+#screen-match .match-board.words.sentences .match-col:first-child button.match-tile {
+    font-size: clamp(12px, 3.2vw, 14px);
+    text-align: left;
+    justify-content: flex-start;
+}
+
+#screen-match .match-board.words.sentences .match-col:last-child button.match-tile {
+    font-family: var(--kana-font);
+    font-size: clamp(15px, 4vw, 18px);
+}
+
+@media (max-width: 768px) {
+    #screen-match .match-board.words button.match-tile {
+        aspect-ratio: auto;
+        max-height: none;
+        min-height: 64px;
+    }
+}
+
 #screen-match button.match-tile {
     font-family: inherit;
     background: rgba(255, 255, 255, 0.78);
@@ -2926,7 +2973,10 @@ body:has(.app-shell.quiz-scenic) {
     color: var(--vermillion);
 }
 
-#screen-match button.match-tile:hover:not(:disabled) {
+/* Hover tidak boleh menimpa state selected / wrong. Di HP :hover "nyangkut" di
+   tile yang terakhir disentuh, jadi tile kedua yang salah tampil putih (bukan
+   merah) dan seolah cuma tile pertama yang ditandai salah. */
+#screen-match button.match-tile:hover:not(:disabled):not(.selected):not(.wrong) {
     border-color: var(--vermillion);
     background: rgba(255, 255, 255, 0.92);
 }
@@ -2939,17 +2989,29 @@ body:has(.app-shell.quiz-scenic) {
     transform: translateY(-1px);
 }
 
-#screen-match button.match-tile.matched {
-    background: color-mix(in srgb, var(--quiz-correct) 16%, white 84%);
-    border-color: color-mix(in srgb, var(--quiz-correct) 55%, white 45%);
-    color: var(--ink);
-    opacity: 0.7;
+/* Benar: border hijau muda + latar agak hijau, teks hijau tua (bukan hitam
+   polos). Selector .match-col ikut dicantumkan biar menang atas warna teks
+   kolom kiri (vermillion) dan state selected (indigo) yang baru saja lepas. */
+#screen-match button.match-tile.matched,
+#screen-match .match-col button.match-tile.matched {
+    background: color-mix(in srgb, var(--quiz-correct) 24%, white 76%);
+    border: 2px solid color-mix(in srgb, var(--quiz-correct) 45%, #a7f3d0 55%);
+    color: color-mix(in srgb, var(--quiz-correct) 72%, black 28%);
+    box-shadow: 0 6px 14px color-mix(in srgb, var(--quiz-correct) 22%, transparent);
+    transform: none;
+    opacity: 1;
 }
 
-#screen-match button.match-tile.wrong {
-    background: color-mix(in srgb, var(--quiz-wrong) 14%, white 86%);
-    border-color: color-mix(in srgb, var(--quiz-wrong) 55%, white 45%);
-    color: var(--ink);
+/* Salah: KEDUA tile (kiri & kanan) merah dengan gaya yang sama persis. Selector
+   .match-col ikut dicantumkan biar menang atas warna teks kolom kiri (vermillion)
+   dan atas state selected (indigo) yang masih menempel di tile itu. */
+#screen-match button.match-tile.wrong,
+#screen-match .match-col button.match-tile.wrong {
+    background: color-mix(in srgb, var(--quiz-wrong) 22%, white 78%);
+    border: 2px solid var(--quiz-wrong);
+    color: var(--quiz-wrong);
+    box-shadow: 0 6px 14px color-mix(in srgb, var(--quiz-wrong) 30%, transparent);
+    transform: none;
 }
 
 #screen-match .match-bottom-row {
@@ -3246,4 +3308,902 @@ body:has(.app-shell.quiz-scenic) {
     .rm-chibi-img {
         animation: none;
     }
+}
+
+
+/* ==========================================================================
+   Flashcards — disamakan dengan gaya app lain (kartu membulat, shadow lembut,
+   chip/pill, tombol gradient). Semua warna pakai token (--card, --indigo,
+   --line, dst.) + color-mix, jadi otomatis ikut mode terang & gelap.
+   ========================================================================== */
+
+/* ---------- daftar deck ---------- */
+.flash-section-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 30px 0 12px;
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+}
+
+.flash-section-label::before {
+    content: "";
+    width: 4px;
+    height: 14px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, var(--indigo), color-mix(in srgb, var(--indigo) 40%, var(--card)));
+}
+
+.flash-deck-grid {
+    gap: 12px;
+}
+
+.flash-deck-card {
+    position: relative;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    background: linear-gradient(120deg, color-mix(in srgb, var(--indigo) 6%, var(--card)) 0%, var(--card) 55%);
+    box-shadow: 0 2px 10px var(--shadow-soft);
+    overflow: hidden;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.flash-deck-card:hover {
+    border-color: color-mix(in srgb, var(--indigo) 45%, var(--line));
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px color-mix(in srgb, var(--indigo) 16%, transparent);
+}
+
+.flash-deck-card:active {
+    transform: translateY(0);
+}
+
+.flash-deck-glyph {
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    font-size: 22px;
+    background: color-mix(in srgb, var(--indigo) 12%, var(--card));
+    border: 1px solid color-mix(in srgb, var(--indigo) 20%, var(--line));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.flash-deck-info {
+    gap: 6px;
+}
+
+.flash-deck-name {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -0.005em;
+}
+
+.flash-deck-count {
+    align-self: flex-start;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: var(--paper-dark);
+    font-size: 11.5px;
+    font-weight: 600;
+}
+
+/* Baru / Belajar / Ulang jadi chip berwarna */
+.flash-deck-stats {
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.fds-item {
+    align-items: center;
+    gap: 6px;
+    padding: 3px 5px 3px 10px;
+    border-radius: 999px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    font-size: 11.5px;
+    font-weight: 600;
+}
+
+.fds-num {
+    min-width: 22px;
+    padding: 1px 7px;
+    border-radius: 999px;
+    text-align: center;
+    font-size: 11.5px;
+    font-variant-numeric: tabular-nums;
+    color: #fff;
+}
+
+.fds-new {
+    background: var(--indigo);
+    color: #fff;
+}
+
+.fds-learn {
+    background: var(--quiz-wrong);
+    color: #fff;
+}
+
+.fds-due {
+    background: var(--moss);
+    color: #fff;
+}
+
+.flash-deck-caughtup {
+    align-self: flex-start;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--moss) 12%, var(--card));
+    border: 1px solid color-mix(in srgb, var(--moss) 28%, var(--line));
+    color: var(--moss);
+    font-size: 11.5px;
+    font-weight: 700;
+}
+
+.flash-deck-arrow {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--paper-dark);
+    color: var(--indigo);
+    font-size: 15px;
+    transition: transform .18s ease, background .18s ease, color .18s ease;
+}
+
+.flash-deck-card:hover .flash-deck-arrow {
+    transform: translateX(3px);
+    background: var(--indigo);
+    color: var(--on-accent);
+}
+
+.flash-deck-custom {
+    padding: 0;
+}
+
+.flash-deck-main {
+    padding: 14px 16px;
+    gap: 14px;
+}
+
+.flash-deck-delete {
+    align-self: stretch;
+    padding: 0 16px;
+    border-left: 1px solid var(--line);
+    font-size: 15px;
+}
+
+.flash-deck-delete:hover {
+    background: color-mix(in srgb, var(--quiz-wrong) 10%, var(--card));
+}
+
+.flash-empty-hint {
+    padding: 22px 16px;
+    border: 1.5px dashed var(--line);
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--indigo) 3%, var(--card));
+    text-align: center;
+    font-size: 13px;
+}
+
+.flash-import-box {
+    margin-top: 26px;
+    padding: 18px;
+    border: 1.5px dashed color-mix(in srgb, var(--indigo) 30%, var(--line));
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--indigo) 4%, var(--card));
+}
+
+/* ---------- layar belajar ---------- */
+.flash-back-row {
+    margin-bottom: 16px;
+}
+
+.flash-back-btn {
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    box-shadow: 0 2px 8px var(--shadow-soft);
+    color: var(--ink);
+    transition: color .15s ease, border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+
+.flash-back-btn:hover {
+    color: var(--indigo);
+    border-color: color-mix(in srgb, var(--indigo) 40%, var(--line));
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px var(--shadow-soft);
+}
+
+.quiz-top:has(> .flash-progress) {
+    justify-content: center;
+    margin-bottom: 18px;
+}
+
+.flash-progress {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--indigo) 12%, var(--card));
+    border: 1px solid color-mix(in srgb, var(--indigo) 22%, var(--line));
+    color: var(--indigo-deep);
+    font-size: 12.5px;
+    font-weight: 800;
+}
+
+.flash-progress::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--indigo);
+}
+
+[data-theme="dark"] .flash-progress {
+    color: var(--ink);
+}
+
+.flashcard-stage {
+    margin: 4px 0 20px;
+}
+
+.flashcard {
+    max-width: 460px;
+    min-height: 360px;
+}
+
+.flashcard-inner {
+    min-height: 360px;
+    cursor: pointer;
+}
+
+.flashcard-face {
+    border-radius: 24px;
+    border: 1px solid color-mix(in srgb, var(--indigo) 16%, var(--line));
+    background:
+        radial-gradient(120% 60% at 50% 0%, color-mix(in srgb, var(--indigo) 9%, var(--card)) 0%, transparent 70%),
+        var(--card);
+    box-shadow:
+        0 18px 40px color-mix(in srgb, var(--indigo) 14%, transparent),
+        0 2px 6px var(--shadow-soft);
+    padding: 34px 24px 30px;
+}
+
+/* garis aksen tipis di atas kartu */
+.flashcard-face::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 64px;
+    height: 5px;
+    transform: translateX(-50%);
+    border-radius: 0 0 6px 6px;
+    background: linear-gradient(90deg, var(--indigo), color-mix(in srgb, var(--indigo) 45%, var(--card)));
+}
+
+.flashcard-back {
+    background:
+        radial-gradient(120% 60% at 50% 0%, color-mix(in srgb, var(--moss) 8%, var(--card)) 0%, transparent 70%),
+        var(--card);
+}
+
+.flashcard-back::before {
+    background: linear-gradient(90deg, var(--moss), color-mix(in srgb, var(--moss) 45%, var(--card)));
+}
+
+/* petunjuk kecil "ketuk untuk membalik" di kartu depan */
+.flashcard-front::after {
+    content: "\21BB";
+    position: absolute;
+    right: 16px;
+    bottom: 12px;
+    font-size: 16px;
+    color: var(--ink-soft);
+    opacity: 0.55;
+}
+
+.fc-kana,
+.fc-kanji-char {
+    text-shadow: 0 2px 14px color-mix(in srgb, var(--indigo) 18%, transparent);
+}
+
+.flashcard-face hr {
+    width: 44%;
+    border-top: 1.5px solid color-mix(in srgb, var(--indigo) 18%, var(--line));
+    margin: 4px 0;
+}
+
+.fc-romaji {
+    padding: 3px 12px;
+    border-radius: 999px;
+    background: var(--paper-dark);
+    font-size: 13.5px;
+}
+
+.fc-meaning {
+    font-size: 19px;
+}
+
+.fc-example {
+    padding: 8px 14px;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--indigo) 6%, var(--card));
+}
+
+.fc-usage.vocab-usage {
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--gold) 12%, var(--card));
+    border: 1px solid color-mix(in srgb, var(--gold) 28%, var(--line));
+}
+
+.flash-study-ahead-note {
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto 12px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--gold) 14%, var(--card));
+    border: 1px solid color-mix(in srgb, var(--gold) 32%, var(--line));
+    color: var(--ink);
+    font-size: 11.5px;
+    font-weight: 600;
+}
+
+/* counter Baru / Belajar / Ulang */
+.flash-queue-counts {
+    width: fit-content;
+    margin: 0 auto 16px;
+    gap: 6px;
+    padding: 6px;
+    border-radius: 16px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    box-shadow: 0 2px 10px var(--shadow-soft);
+}
+
+.flash-queue-counts .fqc-item {
+    min-width: 72px;
+    padding: 7px 10px 6px;
+    border-radius: 11px;
+    gap: 2px;
+}
+
+.flash-queue-counts .fqc-item:nth-child(1) {
+    background: color-mix(in srgb, var(--indigo) 10%, var(--card));
+}
+
+.flash-queue-counts .fqc-item:nth-child(2) {
+    background: color-mix(in srgb, var(--quiz-wrong) 9%, var(--card));
+}
+
+.flash-queue-counts .fqc-item:nth-child(3) {
+    background: color-mix(in srgb, var(--moss) 11%, var(--card));
+}
+
+.flash-queue-counts .fqc-num {
+    font-size: 20px;
+}
+
+/* tombol Tampilkan Jawaban */
+.flash-show-answer-btn {
+    border-radius: 16px;
+    padding: 15px;
+    margin-bottom: 22px;
+    font-size: 15.5px;
+    background: linear-gradient(180deg, var(--indigo) 0%, var(--indigo-deep) 100%);
+    box-shadow: 0 10px 22px color-mix(in srgb, var(--indigo) 32%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.flash-show-answer-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px color-mix(in srgb, var(--indigo) 38%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.flash-show-answer-btn:active {
+    transform: translateY(0);
+}
+
+/* tombol rating: tiap level punya warna sendiri */
+.flash-rate-row {
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.flash-rate-btn {
+    --rc: var(--indigo);
+    padding: 13px 6px 11px;
+    border-radius: 16px;
+    border: 1.5px solid color-mix(in srgb, var(--rc) 38%, var(--line));
+    background: color-mix(in srgb, var(--rc) 8%, var(--card));
+    color: var(--rc);
+    box-shadow: 0 2px 8px var(--shadow-soft);
+    transition: transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease;
+}
+
+.flash-rate-btn.again { --rc: var(--quiz-wrong); }
+.flash-rate-btn.hard { --rc: var(--gold); }
+.flash-rate-btn.good { --rc: var(--indigo); }
+.flash-rate-btn.easy { --rc: var(--moss); }
+
+.flash-rate-btn.again,
+.flash-rate-btn.hard,
+.flash-rate-btn.good,
+.flash-rate-btn.easy {
+    border-color: color-mix(in srgb, var(--rc) 38%, var(--line));
+}
+
+.flash-rate-btn:hover {
+    transform: translateY(-3px);
+    background: color-mix(in srgb, var(--rc) 15%, var(--card));
+    border-color: var(--rc);
+    box-shadow: 0 10px 20px color-mix(in srgb, var(--rc) 24%, transparent);
+}
+
+.flash-rate-btn:active {
+    transform: translateY(0);
+}
+
+.flash-rate-btn.hard {
+    color: color-mix(in srgb, var(--gold) 70%, var(--ink));
+}
+
+.flash-rate-btn .fr-interval {
+    margin-top: 4px;
+    padding: 1px 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--rc) 14%, var(--card));
+    font-size: 10.5px;
+    font-weight: 700;
+    opacity: 1;
+}
+
+/* layar selesai / menunggu */
+.flash-done {
+    max-width: 520px;
+    margin: 12px auto 0;
+    padding: 40px 24px 28px;
+    border-radius: 24px;
+    border: 1px solid var(--line);
+    background:
+        radial-gradient(100% 70% at 50% 0%, color-mix(in srgb, var(--indigo) 9%, var(--card)) 0%, transparent 70%),
+        var(--card);
+    box-shadow: 0 14px 34px var(--shadow-soft);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.flash-done::before {
+    content: "\2713";
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--moss) 16%, var(--card));
+    border: 1px solid color-mix(in srgb, var(--moss) 30%, var(--line));
+    color: var(--moss);
+    font-size: 26px;
+    font-weight: 800;
+}
+
+.flash-done-title {
+    margin: 0;
+    font-size: 21px;
+}
+
+.flash-done-sub {
+    max-width: 40ch;
+    margin: 0 0 12px;
+    line-height: 1.55;
+}
+
+.flash-done button {
+    width: 100%;
+    max-width: 320px;
+}
+
+@media (max-width: 520px) {
+    .flashcard,
+    .flashcard-inner {
+        min-height: 320px;
+    }
+
+    .flashcard-face {
+        border-radius: 20px;
+        padding: 30px 16px 26px;
+    }
+
+    .flash-rate-row {
+        gap: 6px;
+    }
+
+    .flash-rate-btn {
+        border-radius: 14px;
+        padding: 11px 3px 9px;
+    }
+
+    .flash-queue-counts .fqc-item {
+        min-width: 62px;
+    }
+
+    .flash-deck-card,
+    .flash-deck-main {
+        padding: 12px 12px;
+    }
+
+    .flash-deck-glyph {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* ---------- Flashcard belajar: muat 1 layar, tanpa scroll luar ---------- */
+html:has(#screen-flashcard),
+body:has(#screen-flashcard) {
+    overflow: hidden;
+}
+
+.app-shell:has(#screen-flashcard) {
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.app-shell:has(#screen-flashcard) .main-area {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.app-shell:has(#screen-flashcard) .stage {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding-top: 8px;
+    padding-bottom: 14px;
+    overflow: hidden;
+}
+
+#screen-flashcard {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+#screen-flashcard > * {
+    flex: 0 0 auto;
+}
+
+#screen-flashcard .flash-back-row {
+    margin-bottom: 10px;
+}
+
+#screen-flashcard .quiz-top:has(> .flash-progress) {
+    margin-bottom: 10px;
+}
+
+/* kartu mengisi sisa tinggi; kalau isinya panjang, scroll di dalam kartu */
+#screen-flashcard .flashcard-stage {
+    flex: 1 1 auto;
+    min-height: 0;
+    margin: 4px 0 12px;
+    align-items: stretch;
+}
+
+#screen-flashcard .flashcard,
+#screen-flashcard .flashcard-inner {
+    min-height: 0;
+    height: 100%;
+}
+
+#screen-flashcard .flash-study-ahead-note {
+    margin-bottom: 8px;
+}
+
+#screen-flashcard .flash-queue-counts {
+    margin-bottom: 10px;
+}
+
+#screen-flashcard .flash-show-answer-btn {
+    margin-bottom: 0;
+}
+
+#screen-flashcard .flash-rate-row {
+    margin-bottom: 0;
+}
+
+/* ---------- Statistik ---------- */
+.st-title { font-family: Georgia, serif; font-size: 30px; margin: 0 0 4px; }
+.st-sub { color: var(--ink-soft); margin: 0 0 20px; }
+.st-tabs { display: inline-flex; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 4px; margin-bottom: 18px; }
+.st-tabs button { border: 0; background: none; padding: 8px 18px; border-radius: 999px; font-weight: 700; font-size: 14px; color: var(--ink-soft); cursor: pointer; }
+.st-tabs button.on { background: var(--indigo); color: #fff; }
+.st-card { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 22px; box-shadow: 0 10px 28px var(--shadow-soft); }
+.st-card h2 { font-size: 16px; margin: 0 0 16px; display: flex; justify-content: space-between; align-items: center; }
+.st-card h2 span { font-size: 12.5px; color: var(--ink-soft); font-weight: 600; }
+.st-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px; }
+.st-kpi small { color: var(--ink-soft); font-weight: 700; font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; }
+.st-kpi .n { font-size: 32px; font-weight: 800; margin: 6px 0 2px; }
+.st-kpi .d { font-size: 13px; font-weight: 700; }
+.st-kpi .up { color: var(--moss); }
+.st-kpi .dn { color: var(--quiz-wrong); }
+.st-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; margin-bottom: 16px; }
+.st-two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.st-bars { display: flex; align-items: flex-end; gap: 14px; height: 190px; padding-top: 10px; }
+.st-bar { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; height: 100%; justify-content: flex-end; }
+.st-bar i { width: 100%; max-width: 46px; border-radius: 10px 10px 4px 4px; background: linear-gradient(180deg, var(--indigo), color-mix(in srgb, var(--indigo) 55%, var(--card))); }
+.st-bar i.today { background: linear-gradient(180deg, var(--moss), color-mix(in srgb, var(--moss) 50%, var(--card))); }
+.st-bar em { font-style: normal; font-size: 12px; color: var(--ink-soft); font-weight: 700; }
+.st-bar b { font-size: 12px; }
+.st-ring { display: grid; place-items: center; margin-bottom: 14px; }
+.st-ring > div { width: 150px; height: 150px; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(var(--moss) 0 74%, var(--gold) 74% 90%, var(--quiz-wrong) 90% 100%); }
+.st-ring span { width: 108px; height: 108px; border-radius: 50%; background: var(--card); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 30px; font-weight: 800; line-height: 1; }
+.st-ring small { font-size: 11px; color: var(--ink-soft); font-weight: 700; margin-top: 4px; }
+.st-leg { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; font-weight: 700; color: var(--ink-soft); }
+.st-leg i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; }
+.st-row { margin-bottom: 16px; }
+.st-row:last-child { margin-bottom: 0; }
+.st-row .h { display: flex; justify-content: space-between; font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+.st-row .h span { color: var(--ink-soft); font-weight: 600; }
+.st-row .track { height: 10px; background: var(--paper); border-radius: 99px; overflow: hidden; }
+.st-row .track i { display: block; height: 100%; border-radius: 99px; background: var(--indigo); }
+.st-weak { display: flex; flex-wrap: wrap; gap: 10px; }
+.st-weak span { background: color-mix(in srgb, var(--quiz-wrong) 10%, var(--card)); color: var(--quiz-wrong); border-radius: 12px; padding: 8px 14px; font-weight: 700; font-size: 15px; }
+.st-weak small { color: var(--ink-soft); font-weight: 600; margin-left: 6px; }
+.st-heat { display: grid; grid-template-columns: repeat(15, 1fr); gap: 6px; }
+.st-heat i { aspect-ratio: 1; border-radius: 6px; background: var(--paper); }
+.st-heat .l1 { background: color-mix(in srgb, var(--indigo) 22%, var(--card)); }
+.st-heat .l2 { background: color-mix(in srgb, var(--indigo) 45%, var(--card)); }
+.st-heat .l3 { background: color-mix(in srgb, var(--indigo) 72%, var(--card)); }
+.st-heat .l4 { background: var(--indigo); }
+@media (max-width: 900px) {
+  .st-kpis { grid-template-columns: 1fr 1fr; }
+  .st-grid, .st-two { grid-template-columns: 1fr; }
+}
+.st-empty { margin-bottom: 16px; color: var(--ink-soft); font-weight: 600; }
+.st-tabs-src { margin-left: 10px; }
+@media (max-width: 900px) { .st-tabs-src { margin-left: 0; } }
+
+/* nama penulis kutipan: kanan bawah kartu, putih di light mode */
+.sidebar-promo-author {
+    position: absolute;
+    right: 12px;
+    bottom: 8px;
+    z-index: 3;
+    max-width: 60%;
+    font-family: "Dancing Script", "Segoe Script", "Brush Script MT", cursive;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.1;
+    color: #fff;
+    text-align: right;
+    text-shadow:
+        -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000,
+        0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000, 1px 0 0 #000,
+        0 1px 4px rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+}
+
+/* huruf nama yang belum "diketik": tetap makan tempat tapi tak terlihat */
+.sidebar-promo-author-rest {
+    visibility: hidden;
+}
+
+[data-theme="dark"] .sidebar-promo-author {
+    color: var(--ink-soft);
+    text-shadow: none;
+}
+
+/* ==========================================================================
+   Ganti akun (pengguna) — daftar akun tersimpan di Pengaturan & layar Login
+   ========================================================================== */
+.acct-chevron {
+    transition: transform .15s ease;
+}
+
+.acct-chevron.open {
+    transform: rotate(90deg);
+}
+
+.acct-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: -2px 0 4px;
+    padding: 12px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+}
+
+.acct-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.acct-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.acct-pick {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    font-family: inherit;
+    text-align: left;
+    color: var(--ink);
+    background: var(--paper-dark, rgba(0, 0, 0, 0.04));
+    border: 1.5px solid transparent;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: border-color .15s ease, background .15s ease;
+}
+
+.acct-row:not(.active) .acct-pick:hover:not(:disabled) {
+    border-color: var(--indigo);
+}
+
+.acct-row.active .acct-pick {
+    cursor: default;
+    border-color: color-mix(in srgb, var(--moss) 55%, transparent);
+}
+
+.acct-pick:disabled {
+    opacity: 0.7;
+    cursor: wait;
+}
+
+.acct-avatar {
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.acct-avatar--fallback {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+    color: #fff;
+    background: var(--indigo);
+}
+
+.acct-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+    line-height: 1.3;
+}
+
+.acct-name {
+    font-size: 13.5px;
+    font-weight: 800;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.acct-email {
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.acct-badge {
+    flex: 0 0 auto;
+    font-size: 10.5px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 999px;
+    color: var(--moss);
+    background: color-mix(in srgb, var(--moss) 14%, transparent);
+}
+
+.acct-busy {
+    flex: 0 0 auto;
+    color: var(--ink-soft);
+    font-weight: 800;
+}
+
+.acct-remove {
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-soft);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.acct-remove:hover {
+    color: var(--quiz-wrong);
+    border-color: var(--quiz-wrong);
+}
+
+.acct-error {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--quiz-wrong);
+}
+
+.acct-add {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--indigo);
+    background: transparent;
+    border: 1.5px dashed color-mix(in srgb, var(--indigo) 55%, transparent);
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.acct-add:hover {
+    background: color-mix(in srgb, var(--indigo) 8%, transparent);
+}
+
+.acct-hint {
+    margin: 0;
+    font-size: 11.5px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+}
+
+/* layar Login: blok "Akun tersimpan" di atas tombol Google / Tamu */
+.acct-login {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 0 14px;
+}
+
+.acct-login-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
 }

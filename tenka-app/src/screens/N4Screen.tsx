@@ -1,7 +1,7 @@
+import { selectOrderedEntries } from "@/lib/orderedEntries";
 import { useEffect, useMemo, useState } from "react";
 import { useLang } from "@/i18n/LangContext";
 import { useUI } from "@/state/UIContext";
-import { supabase } from "@/lib/supabaseClient";
 import {
   tableFor,
   type KotobaRow,
@@ -168,9 +168,9 @@ export default function N4Screen() {
       const kjId = kjSrc[0]?.id ?? none;
       const bId = bSrc[0]?.id ?? none;
       const [k, kj, b, kotobaTitles, kanjiTitles, bunpoTitles] = await Promise.all([
-        supabase.from(tableFor("kotoba", "N4")).select("*").eq("source_id", kId).order("chapter").order("sub_tier").order("id"),
-        supabase.from(tableFor("kanji", "N4")).select("*").eq("source_id", kjId).order("chapter").order("sub_tier").order("id"),
-        supabase.from(tableFor("bunpo", "N4")).select("*").eq("source_id", bId).order("chapter").order("sub_tier").order("id"),
+        selectOrderedEntries(tableFor("kotoba", "N4"), kId),
+        selectOrderedEntries(tableFor("kanji", "N4"), kjId),
+        selectOrderedEntries(tableFor("bunpo", "N4"), bId),
         fetchSectionTitles("kotoba", "N4", kId),
         fetchSectionTitles("kanji", "N4", kjId),
         fetchSectionTitles("bunpo", "N4", bId),

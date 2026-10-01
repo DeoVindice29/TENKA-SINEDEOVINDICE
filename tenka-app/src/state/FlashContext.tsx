@@ -11,6 +11,7 @@ import {
   type FlashRating,
 } from "./flashCategory";
 import { capLearnDue, nextInterval } from "./flashSchedule";
+import { appendFlashLog } from "./flashStats";
 
 const FLASH_SRS_KEY = "tebakAksara_flashSRS_v1";
 const FLASH_CUSTOM_DECKS_KEY = "tebakAksara_flashCustomDecks_v1";
@@ -128,6 +129,7 @@ export function FlashProvider({ children }: { children: ReactNode }) {
       st.lastReviewed = now;
       all[id] = st;
       saveSRS(all);
+      appendFlashLog(id, rating, now);
       setReloadFlag((n) => n + 1);
     },
     [],

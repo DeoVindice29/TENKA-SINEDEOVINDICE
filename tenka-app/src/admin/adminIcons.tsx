@@ -244,3 +244,133 @@ export function IconSakura(props: IconProps) {
     </svg>
   );
 }
+
+export function IconArrowRight(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function IconChevronRight(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="m9 6 6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function IconBolt(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12L13 2Z" fill="currentColor" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function IconClock(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="9" fill="currentColor" />
+      <path d="M12 7v5.2l3.4 2" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function IconStar(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path
+        d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8-4.3-4.1 5.9-.9L12 3.5Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function IconSearch(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="11" cy="11" r="6.5" stroke="currentColor" strokeWidth="2" />
+      <path d="m16 16 4.5 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function IconFilter(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M4 5h16l-6.2 7.4V19l-3.6-1.8v-4.8L4 5Z" fill="currentColor" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function IconDotsVertical(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="5.5" r="1.7" fill="currentColor" />
+      <circle cx="12" cy="12" r="1.7" fill="currentColor" />
+      <circle cx="12" cy="18.5" r="1.7" fill="currentColor" />
+    </svg>
+  );
+}
+
+export function IconCalendar(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="3.5" y="5" width="17" height="15.5" rx="2.5" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M3.5 10h17M8 3v4M16 3v4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M8 14h.01M12 14h.01M16 14h.01M8 17.2h.01M12 17.2h.01" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function IconShield(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M12 3.2 5 6v5.6c0 4.3 2.9 7.6 7 9.2 4.1-1.6 7-4.9 7-9.2V6l-7-2.8Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+      <path d="M12 8.5v5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function IconCode(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="m8.5 7-5 5 5 5M15.5 7l5 5-5 5M13.5 5.5l-3 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function IconUser(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="8" r="3.6" stroke="currentColor" strokeWidth="2" />
+      <path d="M4.8 20c0-3.6 3.2-6 7.2-6s7.2 2.4 7.2 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function IconCheck(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function IconQuote(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path
+        d="M9.5 6.5C6.6 7 5 9 5 12v5.5h5.5V12H7.6c.1-1.6.9-2.5 2.4-2.9ZM19 6.5c-2.9.5-4.5 2.5-4.5 5.5v5.5H20V12h-2.9c.1-1.6.9-2.5 2.4-2.9Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}

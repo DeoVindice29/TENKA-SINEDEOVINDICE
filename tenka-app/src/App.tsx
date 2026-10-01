@@ -22,7 +22,7 @@ import { useProgressSyncing } from "@/hooks/useProgressSyncing";
 import { SyncBar } from "@/components/ui/Loader";
 import { INTRO_SEEN_KEY } from "@/data/introGuide";
 import AdminPanel from "@/admin/AdminPanel";
-import quizSceneBg from "@/assets/bg-quiz.png";
+import quizSceneBg from "@/assets/bg-quiz.webp";
 
 // Layar-layar yang sengaja fokus penuh (sesi kuis/Match/Penaklukan/kartu
 // flash aktif) — sidebar & topbar disembunyikan biar gak keganggu, sama
@@ -152,7 +152,10 @@ export default function App() {
             )}
             {screen === "n4" && <N4Screen />}
             {screen === "statistik" && <StatistikScreen />}
-            {screen !== "quiz" && screen !== "match" && (
+            {screen !== "quiz" &&
+              screen !== "match" &&
+              screen !== "flashdeck" &&
+              screen !== "flashcard" && (
               <footer className="site-footer">{t("footer.copyright")}</footer>
             )}
           </div>

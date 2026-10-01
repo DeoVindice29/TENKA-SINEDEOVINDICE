@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/state/AuthContext";
+import { SavedAccountsList } from "@/components/Settings/AccountSwitch";
 import { useLang } from "@/i18n/LangContext";
 import GoogleLogo from "@/components/GoogleLogo";
 import SakuraCanvas from "@/components/SakuraCanvas";
@@ -552,6 +553,8 @@ export default function LoginScreen() {
             </>
           )}
         </p>
+
+        <SavedAccountsList />
 
         <div className="login-quick-row">
           <button

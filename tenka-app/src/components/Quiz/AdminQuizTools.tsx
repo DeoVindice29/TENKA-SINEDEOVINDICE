@@ -34,7 +34,7 @@ export default function AdminQuizTools() {
       });
       return;
     }
-    dispatch({ type: "ANSWER", chosen: current[1] });
+    dispatch({ type: "ANSWER", chosen: current[1], silent: true });
     dispatch({ type: "NEXT_QUESTION" });
   };
 

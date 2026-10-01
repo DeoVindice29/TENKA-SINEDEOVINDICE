@@ -19,6 +19,8 @@ export type ActivityEntry = {
   /** arti (meaning_id) buat konteks tambahan, opsional */
   meaning?: string;
   tier?: string;
+  /** nama admin yang melakukan aksi (dari akun yang lagi login) */
+  by?: string;
   /** epoch ms */
   at: number;
 };

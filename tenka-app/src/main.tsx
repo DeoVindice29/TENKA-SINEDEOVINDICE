@@ -17,6 +17,15 @@ import "@/styles/index.css";
 // Catatan deploy: hosting-nya perlu di-setting SPA fallback (semua path
 // yang gak ketemu file statis diarahkan ke index.html), atau /admin-panel
 // bakal 404 pas di-refresh / dibuka langsung lewat URL.
+// Pulihkan path asli yang dititipkan public/404.html (GitHub Pages SPA fallback).
+(() => {
+  const params = new URLSearchParams(window.location.search);
+  const redirect = params.get("redirect");
+  if (redirect !== null) {
+    window.history.replaceState(null, "", import.meta.env.BASE_URL + redirect.replace(/^\/+/, ""));
+  }
+})();
+
 const ADMIN_PATH = (import.meta.env.BASE_URL + "admin-panel").replace(/\/{2,}/g, "/");
 const isAdminRoute = window.location.pathname.replace(/\/$/, "") === ADMIN_PATH;
 

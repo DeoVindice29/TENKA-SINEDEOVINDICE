@@ -66,10 +66,14 @@ export default function AvatarCropModal({
 
   // Matikan scroll layar di belakang selagi modal crop ini kebuka.
   useEffect(() => {
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    // Kunci di <html>, bukan <body>: overflow di body bikin body jadi scroll
+    // container sendiri dan merusak `position: sticky` sidebar (sidebar ikut
+    // ke-scroll keluar layar).
+    const root = document.documentElement;
+    const prevOverflow = root.style.overflow;
+    root.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = prevOverflow;
+      root.style.overflow = prevOverflow;
     };
   }, []);
 

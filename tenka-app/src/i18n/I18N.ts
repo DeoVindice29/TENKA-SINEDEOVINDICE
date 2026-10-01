@@ -397,7 +397,7 @@ export const I18N: Record<string, I18NEntry> = {
   },
   "auth.setupTitle": {
     en: "Complete your journey's look",
-    id: "Complete your journey's look",
+    id: "Lengkapi tampilan perjalananmu",
   },
   "auth.setupSubtitle": {
     en: "Let's set up your profile",
@@ -465,6 +465,12 @@ export const I18N: Record<string, I18NEntry> = {
   },
   "quiz.timerLabel": { en: "Timer", id: "Timer" },
   "quiz.timerOff": { en: "No Timer", id: "Tanpa Waktu" },
+  "quiz.timerCustom": { en: "Custom", id: "Kustom" },
+  "quiz.timerCustomAria": {
+    en: "Custom timer in seconds (1-600)",
+    id: "Timer kustom dalam detik (1-600)",
+  },
+  "quiz.timerCustomUnit": { en: "seconds per question", id: "detik per soal" },
   "quiz.streak": { en: "streak", id: "beruntun" },
   "quiz.next": { en: "Next", id: "Lanjut" },
   "quiz.seeResults": { en: "See Results", id: "Lihat Hasil" },
@@ -619,6 +625,22 @@ export const I18N: Record<string, I18NEntry> = {
   "source.emptyKotoba": {
     en: "No {level} vocabulary yet.",
     id: "Belum ada data kotoba {level}.",
+  },
+  "source.emptyBunpo": {
+    en: "No {level} grammar yet.",
+    id: "Belum ada data bunpō {level}.",
+  },
+  "source.emptyKanji": {
+    en: "No {level} kanji yet.",
+    id: "Belum ada data kanji {level}.",
+  },
+  "source.loadingBunpo": {
+    en: "Loading {level} grammar…",
+    id: "Memuat bunpō {level}…",
+  },
+  "source.loadingKanji": {
+    en: "Loading {level} kanji…",
+    id: "Memuat kanji {level}…",
   },
 
   "learn.usageNote": { en: "Notes", id: "Catatan" },
@@ -827,8 +849,8 @@ export const I18N: Record<string, I18NEntry> = {
     id: "『天下』 TENKA",
   },
   "settings.about.tagline": {
-    en: "Learn a little every day, toward your best self.",
-    id: "Belajar sedikit demi sedikit, menuju versi terbaik.",
+    en: "Signifies the ultimate ambition—to stand beneath the open sky and hold the fate of the world within one's hands.",
+    id: "Melambangkan ambisi tertinggi — berdiri di bawah langit terbuka dan menggenggam nasib dunia di tangan sendiri.",
   },
   "settings.menu.profile.title": { en: "Profile", id: "Profil" },
   "settings.menu.profile.desc": {
@@ -948,8 +970,8 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Selesaikan trial ini untuk meraih pangkat berikutnya.",
   },
   "missions.desc": {
-    en: "Pass all {count} {label} tiers.",
-    id: "Lewati {count} tier {label}.",
+    en: "Conquer all {count} {label} tiers.",
+    id: "Taklukkan semua {count} tier {label}.",
   },
   "missions.completed": {
     en: "Conquered",
@@ -1075,6 +1097,54 @@ export const I18N: Record<string, I18NEntry> = {
     en: "Every trial you finish deserves a celebration!",
     id: "Setiap trial yang kamu selesaikan pantas dirayakan!",
   },
+  "guide.progress.start.0": {
+    en: "Your journey starts with {script}. Take the first step — I'm right here with you!",
+    id: "Perjalananmu dimulai dari {script}. Ayo ambil langkah pertama — aku temani!",
+  },
+  "guide.progress.start.1": {
+    en: "No trials conquered yet, and that's okay. {script} is a great place to begin!",
+    id: "Belum ada trial yang ditaklukkan, nggak apa-apa. {script} tempat yang pas buat mulai!",
+  },
+  "guide.progress.start.2": {
+    en: "Ready? Conquer {script} first and you're on your way to {rank}!",
+    id: "Siap? Taklukkan {script} dulu, dan kamu mulai melangkah menuju {rank}!",
+  },
+  "guide.progress.mid.0": {
+    en: "{done} of {total} trials done — nice pace! Next up: {script}.",
+    id: "{done} dari {total} trial sudah beres — lumayan banget! Berikutnya: {script}.",
+  },
+  "guide.progress.mid.1": {
+    en: "You're on the right path to {rank}. Keep the momentum with {script}!",
+    id: "Kamu sudah di jalur yang tepat menuju {rank}. Jaga semangatnya di {script}!",
+  },
+  "guide.progress.mid.2": {
+    en: "Look at you go — {done} trials down! {script} is waiting for you.",
+    id: "Lihat kamu sekarang — {done} trial sudah ditaklukkan! {script} sudah menunggu.",
+  },
+  "guide.progress.last.0": {
+    en: "So close! Only {script} stands between you and {rank}!",
+    id: "Tinggal sedikit lagi! Cuma {script} yang tersisa sebelum kamu jadi {rank}!",
+  },
+  "guide.progress.last.1": {
+    en: "One more trial and you'll be a {rank}. You've got this — go for {script}!",
+    id: "Satu trial lagi dan kamu jadi {rank}. Kamu pasti bisa — gas {script}!",
+  },
+  "guide.progress.last.2": {
+    en: "{done} of {total} done. Finish {script} and the {rank} rank is yours!",
+    id: "{done} dari {total} beres. Selesaikan {script} dan pangkat {rank} jadi milikmu!",
+  },
+  "guide.progress.done.0": {
+    en: "All {total} N5 trials conquered! I'm so proud of you!",
+    id: "Semua {total} trial N5 sudah kamu taklukkan! Aku bangga banget sama kamu!",
+  },
+  "guide.progress.done.1": {
+    en: "You did it — the whole N5 is yours! N4 is waiting in the lands ahead.",
+    id: "Kamu berhasil — seluruh N5 jadi milikmu! N4 sudah menanti di negeri seberang.",
+  },
+  "guide.progress.done.2": {
+    en: "N5 complete! Want to keep sharpening your skills? Head to Practice!",
+    id: "N5 tuntas! Mau terus mengasah kemampuan? Ayo ke Practice!",
+  },
   "guide.tipsHeading": { en: "Tip of the Day", id: "Tips Hari Ini" },
   "guide.tipsSource": {
     en: "— A message from your companion",
@@ -1119,6 +1189,20 @@ export const I18N: Record<string, I18NEntry> = {
     en: "Write your feedback here...",
     id: "Tulis masukanmu di sini...",
   },
+  "feedback.sending": { en: "Sending…", id: "Mengirim…" },
+  "feedback.error": {
+    en: "Couldn't send your feedback. Check your connection and try again.",
+    id: "Masukan belum terkirim. Cek koneksi internetmu lalu coba lagi.",
+  },
+  "feedback.thanksTitle": {
+    en: "Thanks for reporting!",
+    id: "Terima kasih sudah melapor!",
+  },
+  "feedback.thanksBody": {
+    en: "Your feedback has been sent to the Tenka team. We read every message.",
+    id: "Masukanmu sudah terkirim ke tim Tenka. Setiap pesan pasti kami baca.",
+  },
+  "feedback.thanksClose": { en: "Got it", id: "Oke" },
 
   "speedrun.countdownGo": { en: "GO!", id: "MULAI!" },
   "matchMode.cardTitle": { en: "Match Mode", id: "Mode Match" },
@@ -1129,6 +1213,66 @@ export const I18N: Record<string, I18NEntry> = {
   "matchMode.instruction": {
     en: "Tap a character, then its matching romaji",
     id: "Ketuk sebuah huruf, lalu romaji yang cocok",
+  },
+  "matchMode.cardDescKotoba": {
+    en: "Match 5 words with their meanings, round by round.",
+    id: "Cocokkan 5 kata dengan artinya, ronde demi ronde.",
+  },
+  "matchMode.instructionKotoba": {
+    en: "Tap a word, then its matching meaning",
+    id: "Ketuk sebuah kata, lalu pasangan yang cocok",
+  },
+  "matchMode.cardDescKanji": {
+    en: "Match 5 kanji with their meanings or readings, round by round.",
+    id: "Cocokkan 5 kanji dengan arti atau bacaannya, ronde demi ronde.",
+  },
+  "matchMode.cardDescBunpo": {
+    en: "Match 4 grammar patterns with their functions, round by round.",
+    id: "Cocokkan 4 pola tata bahasa dengan fungsinya, ronde demi ronde.",
+  },
+  "matchMode.instructionKanji": {
+    en: "Tap a kanji, then its matching meaning or reading",
+    id: "Ketuk sebuah kanji, lalu arti atau bacaan yang cocok",
+  },
+  "matchMode.instructionBunpo": {
+    en: "Tap a pattern, then its matching function",
+    id: "Ketuk sebuah pola, lalu fungsi yang cocok",
+  },
+  "matchMode.instructionBunpoKalimat": {
+    en: "Tap a sentence, then the pattern that fills the blank",
+    id: "Ketuk sebuah kalimat, lalu pola yang cocok untuk bagian kosong",
+  },
+  "acct.switch.title": { en: "Switch account", id: "Ganti akun" },
+  "acct.switch.desc": {
+    en: "Hop to another saved account without signing in again.",
+    id: "Pindah ke akun lain yang tersimpan tanpa login ulang.",
+  },
+  "acct.switch.count": {
+    en: "{count} saved accounts",
+    id: "{count} akun tersimpan",
+  },
+  "acct.switch.active": { en: "Active", id: "Aktif" },
+  "acct.switch.add": { en: "Add another account", id: "Tambah akun lain" },
+  "acct.switch.addHint": {
+    en: "You'll pick another Google account. This account stays in the list.",
+    id: "Kamu akan memilih akun Google lain. Akun ini tetap ada di daftar.",
+  },
+  "acct.switch.remove": {
+    en: "Remove {name} from list",
+    id: "Hapus {name} dari daftar",
+  },
+  "acct.switch.removeHint": {
+    en: "Remove from list (does not delete the account)",
+    id: "Hapus dari daftar (tidak menghapus akunnya)",
+  },
+  "acct.switch.expired": {
+    en: "The session for {name} has expired. Sign in again to use this account.",
+    id: "Sesi {name} sudah kedaluwarsa. Login lagi untuk memakai akun ini.",
+  },
+  "acct.switch.saved": { en: "Saved accounts", id: "Akun tersimpan" },
+  "acct.switch.continueAs": {
+    en: "Continue as {name}",
+    id: "Lanjut sebagai {name}",
   },
   "matchMode.roundProgress": {
     en: "Round {current}/{total}",
@@ -1204,8 +1348,8 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Semua kartu di {label} sudah pernah dijawab dan lagi menunggu jadwal muncul lagi. Kembali lagi nanti, atau tekan Ulangi untuk latihan semua kartu.",
   },
   "flash.studyAheadNote": {
-    en: "Reviewing all cards, even ones not due yet. The numbers below are grouped by your last answer, not by schedule.",
-    id: "Mode ulang semua kartu, termasuk yang belum jatuh tempo. Angka di bawah dikelompokkan dari jawaban terakhirmu, bukan dari jadwal.",
+    en: "Practice mode: all cards, even ones not due yet. Your answers here don't change the schedule or the numbers on the deck list.",
+    id: "Mode latihan: semua kartu, termasuk yang belum jatuh tempo. Jawabanmu di sini tidak mengubah jadwal maupun angka di daftar deck.",
   },
   "flash.intervalNow": { en: "now", id: "sekarang" },
   "flash.waitingTitle": {
@@ -1240,6 +1384,14 @@ export const I18N: Record<string, I18NEntry> = {
   "conquest.jlptRetryCardTitleWithLabel": {
     en: "Retake the {label} Trial",
     id: "Ulangi Trial {label}",
+  },
+  "conquest.goToPracticeCardTitle": {
+    en: "Want to practice? Head to Practice",
+    id: "Mau latihan? Ke Practice yuk",
+  },
+  "conquest.goToPracticeDesc": {
+    en: "You've already conquered the {label} Trial. Want to keep sharpening your skills? Go to Practice!",
+    id: "Kamu sudah menaklukkan Trial {label}. Mau latihan lagi biar makin jago? Pergi ke Practice!",
   },
   "conquest.desc": {
     en: "Conquer all of {label} at once — {count} questions, one mistake and it's over.",
@@ -1429,6 +1581,7 @@ export const I18N: Record<string, I18NEntry> = {
     id: "⚔️ Coba Lagi dari Awal",
   },
   "results.conquerAgain": { en: "⚔️ Conquer Again", id: "⚔️ Taklukkan Lagi" },
+  "results.goToPractice": { en: "🎯 Go to Practice", id: "🎯 Ke Latihan" },
   "results.speedrunAgain": { en: "⚡ Speedrun Again", id: "⚡ Speedrun Lagi" },
 
   "results.bestStreak": {
@@ -1492,8 +1645,8 @@ export const I18N: Record<string, I18NEntry> = {
     id: " <br><br>⚔️ <b>Upacara Pengangkatan Ksatria!</b> Hiragana dan Katakana sudah kau taklukkan sepenuhnya — Kapten Ksatria meletakkan pedangnya di kedua bahumu di hadapan seluruh warga kota. Mulai hari ini kau resmi menyandang gelar <b>{emoji} {title} ({subtitle})</b>!",
   },
   "results.baronCeremony": {
-    en: " <br><br>🎗️ <b>Investiture Ceremony!</b> With Basic Kotoba fully conquered, the King's court summons you before the throne — a scroll bearing the royal seal is placed in your hands. From today you officially hold the title <b>{emoji} {title} ({subtitle})</b>!",
-    id: " <br><br>🎗️ <b>Upacara Pengangkatan Bangsawan!</b> Basic Kotoba sudah kau taklukkan sepenuhnya — istana Raja memanggilmu menghadap singgasana, sebuah gulungan bersegel kerajaan diletakkan di tanganmu. Mulai hari ini kau resmi menyandang gelar <b>{emoji} {title} ({subtitle})</b>!",
+    en: " <br><br>🎗️ <b>Investiture Ceremony!</b> With Kotoba fully conquered, the King's court summons you before the throne — a scroll bearing the royal seal is placed in your hands. From today you officially hold the title <b>{emoji} {title} ({subtitle})</b>!",
+    id: " <br><br>🎗️ <b>Upacara Pengangkatan Bangsawan!</b> Kotoba sudah kau taklukkan sepenuhnya — istana Raja memanggilmu menghadap singgasana, sebuah gulungan bersegel kerajaan diletakkan di tanganmu. Mulai hari ini kau resmi menyandang gelar <b>{emoji} {title} ({subtitle})</b>!",
   },
   "results.rankUp": {
     en: " Your rank rose to <b>{emoji} {title} ({subtitle})</b>",
@@ -1635,6 +1788,10 @@ export const I18N: Record<string, I18NEntry> = {
   "admin.nav.questions": {
     en: "Questions",
     id: "Soal",
+  },
+  "admin.nav.quotes": {
+    en: "Quotes",
+    id: "Kutipan",
   },
   "admin.nav.backToApp": {
     en: "Back to App",

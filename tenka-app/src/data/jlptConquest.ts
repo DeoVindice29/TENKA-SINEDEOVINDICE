@@ -44,6 +44,7 @@ import { BUNPO_USAGE } from "./bunpoUsage";
 import { BUNPO_ARRANGE } from "./bunpoArrange";
 import type { VerbFormKey } from "./types";
 import { shuffle } from "../utils/shuffle";
+import { pickLang } from "../lib/quizLang";
 
 /** Syarat lulus: minimal segini persen jawaban benar di SETIAP tier. */
 export const JLPT_PASS_PERCENT = 80;
@@ -159,7 +160,9 @@ type TierSpec = {
   distract?: (correct: Candidate, all: Candidate[]) => string[];
 };
 
-const en = (b: Bilingual): string => b.en;
+// Arti & terjemahan di soal Penaklukan mengikuti bahasa yang dipilih. Soal
+// dibangun tepat saat ujian dimulai (buildJlptExam), jadi selalu fresh.
+const en = (b: Bilingual): string => pickLang(b);
 const isCjk = (ch: string) => /[\u4e00-\u9fff]/.test(ch);
 
 // ---------------------------------------------------------------------------
@@ -980,8 +983,8 @@ export const JLPT_STORY: Record<
 > = {
   kotoba: {
     epilogue: {
-      en: "You passed all four tiers of the N5 vocabulary exam — the examiners stamp your scroll. Basic Kotoba is yours.",
-      id: "Kamu lulus keempat tier ujian kosakata N5 — para penguji membubuhkan cap di gulunganmu. Basic Kotoba resmi kau kuasai.",
+      en: "You passed all four tiers of the N5 vocabulary exam — the examiners stamp your scroll. Kotoba is yours.",
+      id: "Kamu lulus keempat tier ujian kosakata N5 — para penguji membubuhkan cap di gulunganmu. Kotoba resmi kau kuasai.",
     },
     phases: [
       {
@@ -1080,8 +1083,8 @@ export const JLPT_STORY: Record<
   },
   kanji: {
     epilogue: {
-      en: "You passed all four tiers of the N5 kanji exam — the examiners stamp your scroll. Kanji N5 is yours.",
-      id: "Kamu lulus keempat tier ujian kanji N5 — para penguji membubuhkan cap di gulunganmu. Kanji N5 resmi kau kuasai.",
+      en: "You passed all four tiers of the N5 kanji exam — the examiners stamp your scroll. Kanji is yours.",
+      id: "Kamu lulus keempat tier ujian kanji N5 — para penguji membubuhkan cap di gulunganmu. Kanji resmi kau kuasai.",
     },
     phases: [
       {

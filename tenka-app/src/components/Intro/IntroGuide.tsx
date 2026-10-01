@@ -3,7 +3,7 @@ import { useLang } from "@/i18n/LangContext";
 import { getChibiAvatarByName } from "@/lib/chibiAvatar";
 import { INTRO_STEPS } from "@/data/introGuide";
 import SakuraCanvas from "@/components/SakuraCanvas";
-import introBg from "@/assets/intro-bg.png";
+import introBg from "@/assets/intro-bg.webp";
 
 type Props = {
   open: boolean;
@@ -17,7 +17,7 @@ type Props = {
 // satu chat bubble yang gantian isinya + ekspresinya tiap "Lanjut" ditekan.
 // Baru setelah step terakhir, App.tsx yang buka Misi Pangkat — komponen ini
 // sendiri cuma ngurus sekuens ngobrolnya. Background sakura/pagoda-nya pakai
-// asset gambar (src/assets/intro-bg.png). Chat bubble-nya murni CSS (ukuran
+// asset gambar (src/assets/intro-bg.webp). Chat bubble-nya murni CSS (ukuran
 // ngikutin isi teks) dengan dekorasi bunga src/assets/sakura-branch.webp (kiri-atas)
 // dan kelopak src/assets/sakura-petals.webp (kanan) —
 // lihat .intro-guide-bubble di dashboard.css. SakuraCanvas tetap dipasang di

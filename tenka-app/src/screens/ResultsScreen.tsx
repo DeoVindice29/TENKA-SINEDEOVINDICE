@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLang } from "@/i18n/LangContext";
 import { useUI, type ScriptKey } from "@/state/UIContext";
 import { useAuth } from "@/state/AuthContext";
+import { logActivity } from "@/lib/activityLog";
 import { useQuiz } from "@/state/QuizContext";
 import { useConquest } from "@/state/ConquestContext";
 import { SCRIPTS } from "@/data/scripts";
@@ -39,6 +40,19 @@ export default function ResultsScreen() {
   // ada (soal ujiannya diacak ulang tiap percobaan).
   const [hideRetry, setHideRetry] = useState(false);
   const [showStudyFirst, setShowStudyFirst] = useState(false);
+
+  // catat sesi latihan ke statistik admin — sekali per tampil layar hasil
+  const loggedRef = useRef(false);
+  useEffect(() => {
+    if (loggedRef.current) return;
+    loggedRef.current = true;
+    if (!state.script) return;
+    logActivity({ kind: "practice_session", script: state.script });
+    if (state.conquest && !state.conquestFailed) {
+      logActivity({ kind: "conquest_cleared", script: state.script });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     try {
@@ -218,10 +232,14 @@ export default function ResultsScreen() {
   const retryLabel = isConquestFail
     ? t("results.tryAgainFromStart")
     : state.conquest
-      ? t("results.conquerAgain")
+      ? t("results.goToPractice")
       : state.speedrun || isSpeedrunFail
         ? t("results.speedrunAgain")
         : t("results.retrySet");
+
+  // Conquest berhasil → tombol utama mengarah ke Practice (bukan mengulang
+  // penaklukan). Conquest gagal tetap "Coba Lagi dari Awal" (restartQuiz).
+  const goesToPractice = !!state.conquest && !isConquestFail;
 
   const handleStudyFirst = () => {
     setCurrentScript(state.script as ScriptKey);
@@ -265,7 +283,11 @@ export default function ResultsScreen() {
 
       <div className="result-actions">
         {!hideRetry && (
-          <button className="primary" type="button" onClick={restartQuiz}>
+          <button
+            className="primary"
+            type="button"
+            onClick={goesToPractice ? () => setScreen("practice") : restartQuiz}
+          >
             {retryLabel}
           </button>
         )}

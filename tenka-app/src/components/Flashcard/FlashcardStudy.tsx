@@ -4,6 +4,7 @@ import { useFlash } from "@/state/FlashContext";
 import {
   classifyCard,
   isCardReady,
+  type FlashCategory,
   type FlashRating,
 } from "@/state/flashCategory";
 import { LEARN_STEP_MINUTES, nextInterval } from "@/state/flashSchedule";
@@ -236,6 +237,10 @@ export default function FlashcardStudy({
   const [studyAhead, setStudyAhead] = useState(false);
   const [waiting, setWaiting] = useState<WaitingCard[]>([]);
   const [nowTs, setNowTs] = useState(() => Date.now());
+  // Kategori (Baru/Belajar/Ulang) tiap kartu DIBEKUKAN waktu mode "Ulangi Deck"
+  // dimulai. Tanpa ini angka Belajar/Ulang ikut berubah tiap kartu dijawab
+  // (dan loncat pas klik Ulangi Deck karena semua kartu ikut dihitung ulang).
+  const [frozenCats, setFrozenCats] = useState<Record<string, FlashCategory>>({});
 
   const total = queue.length;
   const current = queue[idx];
@@ -276,8 +281,17 @@ export default function FlashcardStudy({
     let fresh = 0;
     let learning = 0;
     let review = 0;
+    // Mode Ulangi Deck: tiap kartu dihitung sekali (kartu yang dijawab Ulang
+    // Lagi masuk antrean dua kali) dan pakai kategori yang dibekukan.
+    const seen = new Set<string>();
     remaining.forEach((c) => {
-      const cat = classifyCard(getCardState(c.id));
+      if (studyAhead) {
+        if (seen.has(c.id)) return;
+        seen.add(c.id);
+      }
+      const cat = studyAhead
+        ? (frozenCats[c.id] ?? "new")
+        : classifyCard(getCardState(c.id));
       if (cat === "new") fresh++;
       else if (cat === "learn") learning++;
       else if (cat === "due") review++;
@@ -285,7 +299,7 @@ export default function FlashcardStudy({
     return { fresh, learning, review };
     // reloadFlag: kategori berubah tiap kartu dirating (state ada di localStorage)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queue, idx, waiting, getCardState, reloadFlag]);
+  }, [queue, idx, waiting, getCardState, reloadFlag, studyAhead, frozenCats]);
 
   // Reset scroll tiap ganti kartu
   useEffect(() => {
@@ -346,7 +360,9 @@ export default function FlashcardStudy({
   const handleRating = useCallback(
     (rating: FlashRating) => {
       if (!current) return;
-      rateCard(current.id, rating);
+      // Mode Ulangi Deck = latihan: jawaban TIDAK mengubah jadwal / kategori
+      // kartu, jadi angka Baru/Belajar/Ulang di daftar deck tidak ikut berubah.
+      if (!studyAhead) rateCard(current.id, rating);
       setRatedCount((n) => n + 1);
 
       let nextQueue = queue;
@@ -355,6 +371,8 @@ export default function FlashcardStudy({
         // Again: langsung masuk antrean Learn, posisi acak
         nextQueue = insertRandom(queue, current, idx + 1);
         setQueue(nextQueue);
+      } else if (studyAhead) {
+        // latihan: Hard/Good/Easy langsung lanjut, tanpa ditahan
       } else if (rating === "hard" || rating === "good") {
         // Hard 1 menit / Good 5 menit dulu, baru masuk antrean Learn
         nextWaiting = [
@@ -375,10 +393,15 @@ export default function FlashcardStudy({
         setFlipped(false);
       }
     },
-    [current, queue, waiting, idx, rateCard],
+    [current, queue, waiting, idx, rateCard, studyAhead],
   );
 
   const handleRestart = () => {
+    const frozen: Record<string, FlashCategory> = {};
+    allCards.forEach((c) => {
+      frozen[c.id] = classifyCard(getCardState(c.id));
+    });
+    setFrozenCats(frozen);
     setQueue(shuffle(allCards));
     setIdx(0);
     setFlipped(false);
@@ -422,9 +445,9 @@ export default function FlashcardStudy({
   if (done) {
     return (
       <>
-        <div className="quiz-back-row">
+        <div className="quiz-back-row flash-back-row">
           <button
-            className="quiz-back"
+            className="quiz-back flash-back-btn"
             type="button"
             data-i18n="common.back"
             onClick={onBack}
@@ -432,7 +455,7 @@ export default function FlashcardStudy({
             {t("common.back")}
           </button>
           <button
-            className="quiz-back"
+            className="quiz-back flash-back-btn"
             type="button"
             data-i18n="flash.restart"
             onClick={handleRestart}
@@ -474,11 +497,11 @@ export default function FlashcardStudy({
     const time = `${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}`;
     return (
       <>
-        <div className="quiz-back-row">
-          <button className="quiz-back" type="button" onClick={onBack}>
+        <div className="quiz-back-row flash-back-row">
+          <button className="quiz-back flash-back-btn" type="button" onClick={onBack}>
             {t("common.back")}
           </button>
-          <button className="quiz-back" type="button" onClick={handleRestart}>
+          <button className="quiz-back flash-back-btn" type="button" onClick={handleRestart}>
             {t("flash.restart")}
           </button>
         </div>
@@ -495,9 +518,9 @@ export default function FlashcardStudy({
 
   return (
     <>
-      <div className="quiz-back-row">
+      <div className="quiz-back-row flash-back-row">
         <button
-          className="quiz-back"
+          className="quiz-back flash-back-btn"
           type="button"
           data-i18n="common.back"
           onClick={onBack}
@@ -505,7 +528,7 @@ export default function FlashcardStudy({
           {t("common.back")}
         </button>
         <button
-          className="quiz-back"
+          className="quiz-back flash-back-btn"
           type="button"
           data-i18n="flash.restart"
           onClick={handleRestart}
@@ -553,11 +576,18 @@ export default function FlashcardStudy({
       )}
 
       <div className="flash-queue-counts">
-        <span className="fqc-new">{queueCounts.fresh}</span>
-        <span className="fqc-sep">+</span>
-        <span className="fqc-learn">{queueCounts.learning}</span>
-        <span className="fqc-sep">+</span>
-        <span className="fqc-review">{queueCounts.review}</span>
+        <span className="fqc-item">
+          <span className="fqc-num fqc-new">{queueCounts.fresh}</span>
+          <span className="fqc-label">{t("flash.new")}</span>
+        </span>
+        <span className="fqc-item">
+          <span className="fqc-num fqc-learn">{queueCounts.learning}</span>
+          <span className="fqc-label">{t("flash.learn")}</span>
+        </span>
+        <span className="fqc-item">
+          <span className="fqc-num fqc-review">{queueCounts.review}</span>
+          <span className="fqc-label">{t("flash.due")}</span>
+        </span>
       </div>
 
       {!flipped ? (
@@ -577,7 +607,7 @@ export default function FlashcardStudy({
           >
             <span className="fr-emoji" />
             <span>{t("flash.again")}</span>
-            <span className="fr-interval">{intervals.again}</span>
+            {!studyAhead && <span className="fr-interval">{intervals.again}</span>}
           </button>
           <button
             className="flash-rate-btn hard"
@@ -586,7 +616,7 @@ export default function FlashcardStudy({
           >
             <span className="fr-emoji" />
             <span>{t("flash.hard")}</span>
-            <span className="fr-interval">{intervals.hard}</span>
+            {!studyAhead && <span className="fr-interval">{intervals.hard}</span>}
           </button>
           <button
             className="flash-rate-btn good"
@@ -595,7 +625,7 @@ export default function FlashcardStudy({
           >
             <span className="fr-emoji" />
             <span>{t("flash.good")}</span>
-            <span className="fr-interval">{intervals.good}</span>
+            {!studyAhead && <span className="fr-interval">{intervals.good}</span>}
           </button>
           <button
             className="flash-rate-btn easy"
@@ -604,7 +634,7 @@ export default function FlashcardStudy({
           >
             <span className="fr-emoji" />
             <span>{t("flash.easy")}</span>
-            <span className="fr-interval">{intervals.easy}</span>
+            {!studyAhead && <span className="fr-interval">{intervals.easy}</span>}
           </button>
         </div>
       )}

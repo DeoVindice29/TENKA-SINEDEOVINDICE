@@ -52,7 +52,7 @@ export async function parseApkgFile(file: File): Promise<{
 
   // 3. Buka database pakai sql.js — file .wasm ada di /public/sql-wasm/
   const SQL = await initSqlJs({
-    locateFile: () => "/sql-wasm/sql-wasm.wasm",
+    locateFile: () => `${import.meta.env.BASE_URL}sql-wasm/sql-wasm.wasm`,
   });
   const db: Database = new SQL.Database(dbBuf);
 

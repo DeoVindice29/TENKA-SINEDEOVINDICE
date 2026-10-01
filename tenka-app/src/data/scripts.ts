@@ -1,11 +1,13 @@
 export type ScriptKey = "hiragana" | "katakana" | "kanji" | "kotoba" | "bunpo";
 
 import type { Bilingual } from "./types";
+import { onQuizLangChange, pickLang } from "../lib/quizLang";
 
+// Arti / terjemahan / catatan di data kuis mengikuti bahasa yang dipilih
+// (en / id). Isi data kuis disusun ulang tiap bahasa berganti — lihat
+// refreshQuizLangData() di bawah.
 function tf(entry: Bilingual | string | null | undefined): string {
-  if (entry == null) return "";
-  if (typeof entry === "string") return entry;
-  return entry.en || "";
+  return pickLang(entry);
 }
 
 function primaryReading(str: string): string {
@@ -362,7 +364,7 @@ export const SCRIPTS = {
   },
   kanji: {
     key: "kanji",
-    label: "Kanji N5",
+    label: "Kanji",
     tabGlyph: "漢",
     quizType: "meaning",
     quizLabelKey: "quiz.guessMeaning",
@@ -641,7 +643,7 @@ export const SCRIPTS = {
   },
   kotoba: {
     key: "kotoba",
-    label: "Basic Kotoba",
+    label: "Kotoba",
     tabGlyph: "語",
     quizType: "meaning",
     quizLabelKey: "quiz.guessMeaning",
@@ -778,6 +780,7 @@ export const SCRIPTS = {
 };
 
 // Build "all" pool untuk setiap script (gabungan semua tier)
+function buildAllPools(): void {
 Object.values(SCRIPTS).forEach((s) => {
   const anyS = s as unknown as {
     tierKeys?: readonly string[];
@@ -828,3 +831,58 @@ Object.values(SCRIPTS).forEach((s) => {
     anyS.dataNote.all = cat(anyS.dataNote as Record<string, unknown[]>);
   }
 });
+}
+buildAllPools();
+
+/**
+ * Susun ulang isi data kuis yang memuat teks bilingual (arti kata/kanji/pola,
+ * catatan cara pakai, terjemahan kalimat) ke bahasa yang sedang dipilih.
+ * Hanya kunci tier bawaan yang ditimpa — mode Supabase ("sb-...") yang
+ * didaftarkan quizModes.registerQuizView disusun ulang oleh quizModes sendiri.
+ */
+function refreshQuizLangData(): void {
+  type Chapters = readonly (readonly (readonly unknown[])[])[];
+  const fill = (
+    target: Record<string, unknown> | undefined,
+    keys: readonly string[],
+    chapters: Chapters,
+    map: (e: readonly unknown[]) => readonly [string, string],
+  ) => {
+    if (!target) return;
+    keys.forEach((tk, i) => {
+      target[tk] = chapters[i].map(map);
+    });
+  };
+  const m = (e: readonly unknown[]) => [e[0], tf(e[2] as Bilingual)] as [string, string];
+
+  const kanji = SCRIPTS.kanji as unknown as { data: Record<string, unknown> };
+  const kotoba = SCRIPTS.kotoba as unknown as {
+    data: Record<string, unknown>;
+    dataUsage?: Record<string, unknown>;
+  };
+  const bunpo = SCRIPTS.bunpo as unknown as {
+    data: Record<string, unknown>;
+    dataTranslation?: Record<string, unknown>;
+    dataNote?: Record<string, unknown>;
+  };
+
+  fill(kanji.data, KANJI_TIER_KEYS, KANJI_N5_CHAPTERS as unknown as Chapters, m);
+  fill(kotoba.data, KOTOBA_TIER_KEYS, KOTOBA_N5_CHAPTERS as unknown as Chapters, m);
+  fill(kotoba.dataUsage, KOTOBA_TIER_KEYS, KOTOBA_N5_CHAPTERS as unknown as Chapters, (e) => [
+    e[0] as string,
+    tf(e[8] as Bilingual),
+  ]);
+  fill(bunpo.data, BUNPO_N5_TIER_KEYS, BUNPO_N5_CHAPTERS as unknown as Chapters, m);
+  fill(bunpo.dataTranslation, BUNPO_N5_TIER_KEYS, BUNPO_N5_CHAPTERS as unknown as Chapters, (e) => [
+    e[0] as string,
+    tf(e[5] as Bilingual),
+  ]);
+  fill(bunpo.dataNote, BUNPO_N5_TIER_KEYS, BUNPO_N5_CHAPTERS as unknown as Chapters, (e) => [
+    e[0] as string,
+    tf(e[6] as Bilingual),
+  ]);
+
+  buildAllPools();
+}
+
+onQuizLangChange(refreshQuizLangData);

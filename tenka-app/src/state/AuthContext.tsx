@@ -8,8 +8,15 @@ import {
 } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase, setAuthPersistence } from "@/lib/supabaseClient";
+import { pingDailyActive } from "@/lib/activityLog";
 import { setProgressUserId } from "@/data/progressAccount";
 import { fetchAppRole, type AppRole } from "@/lib/appRole";
+import type { SavedAccount } from "@/lib/accountSwitcher";
+import {
+  loadUserAccounts,
+  removeUserAccount,
+  upsertUserAccount,
+} from "@/lib/userAccounts";
 
 export type Profile = {
   id: string;
@@ -46,9 +53,23 @@ type AuthContextValue = {
   resetPassword: (email: string) => Promise<{ error: string | null }>;
   resendConfirmation: (email: string) => Promise<{ error: string | null }>;
   signOut: () => void;
+  /** akun yang pernah login di browser ini (untuk "Ganti akun") */
+  accounts: SavedAccount[];
+  /** pindah ke akun tersimpan tanpa login ulang; sukses → halaman dimuat ulang */
+  switchAccount: (account: SavedAccount) => Promise<{ error: string | null }>;
+  /** keluar dari sesi ini saja (akun tetap di daftar) → layar login */
+  addAccount: () => Promise<void>;
+  /** hapus dari daftar tersimpan (tidak menghapus akunnya) */
+  forgetAccount: (id: string) => void;
   refreshProfile: () => Promise<void>;
   updateProfile: (patch: ProfilePatch) => Promise<{ error: string | null }>;
 };
+
+// URL app lengkap dengan base path (mis. https://user.github.io/REPO/tenka-app/).
+// Jangan pakai window.location.origin saja: di GitHub Pages itu tidak memuat path
+// repo, jadi tidak cocok dengan Redirect URLs di Supabase dan Supabase jatuh ke
+// Site URL (localhost).
+const APP_URL = window.location.origin + import.meta.env.BASE_URL;
 
 const GUEST_FLAG_KEY = "tenka_guest_mode";
 const GUEST_PROFILE_KEY = "tenka_guest_profile";
@@ -84,6 +105,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [role, setRole] = useState<AppRole | null>(null);
   const isAdmin = role !== null;
   const isDev = role === "dev";
+  const [accounts, setAccounts] = useState<SavedAccount[]>(() => loadUserAccounts());
 
   const checkAdmin = useCallback(async (userId: string | undefined) => {
     if (!userId) {
@@ -129,6 +151,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // udah baca-tulis ke localStorage key akun yang bener sejak awal.
       setProgressUserId(data.session?.user.id ?? null);
       if (data.session) {
+        pingDailyActive(data.session.user.id);
         await Promise.all([
           loadProfile(data.session.user.id),
           checkAdmin(data.session.user.id),
@@ -144,6 +167,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSession(next);
         setProgressUserId(next?.user.id ?? null);
         if (next) {
+          pingDailyActive(next.user.id);
           await Promise.all([loadProfile(next.user.id), checkAdmin(next.user.id)]);
         } else {
           setProfile(null);
@@ -159,6 +183,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, [loadProfile, checkAdmin, isGuest]);
 
+  // "Ganti akun": simpan / perbarui sesi akun yang sedang aktif tiap sesinya
+  // berubah (login, token di-refresh Supabase, profil dimuat). Nama & foto
+  // dari profil Tenka dipakai kalau sudah termuat untuk akun yang sama.
+  useEffect(() => {
+    if (isGuest || !session) return;
+    const own = profile && profile.id === session.user.id ? profile : null;
+    setAccounts(
+      upsertUserAccount(session, {
+        name: own?.username,
+        avatar: own?.avatar_url,
+      }),
+    );
+  }, [session, profile, isGuest]);
+
   const continueAsGuest = useCallback(() => {
     try {
       window.localStorage.setItem(GUEST_FLAG_KEY, "1");
@@ -173,7 +211,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAuthPersistence(true);
     supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: window.location.origin },
+      options: { redirectTo: APP_URL },
     });
   }, []);
 
@@ -194,7 +232,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         password,
         options: {
           data: { full_name: fullName },
-          emailRedirectTo: window.location.origin,
+          emailRedirectTo: APP_URL,
         },
       });
       if (error) return { error: error.message };
@@ -216,7 +254,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const resetPassword = useCallback(async (email: string) => {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin,
+      redirectTo: APP_URL,
     });
     return { error: error?.message ?? null };
   }, []);
@@ -225,7 +263,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { error } = await supabase.auth.resend({
       type: "signup",
       email,
-      options: { emailRedirectTo: window.location.origin },
+      options: { emailRedirectTo: APP_URL },
     });
     return { error: error?.message ?? null };
   }, []);
@@ -243,9 +281,67 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setProgressUserId(null);
       return;
     }
+    // keluar = akun ini juga dicabut dari daftar "Ganti akun"
+    if (session) setAccounts(removeUserAccount(session.user.id));
     setRole(null);
-    supabase.auth.signOut();
-  }, [isGuest]);
+    // scope "local": keluar di perangkat ini saja. Default-nya "global" akan
+    // mencabut SEMUA sesi akun itu (browser/alamat lain ikut ter-logout).
+    supabase.auth.signOut({ scope: "local" });
+  }, [isGuest, session]);
+
+  const switchAccount = useCallback(
+    async (account: SavedAccount) => {
+      const { data, error } = await supabase.auth.setSession({
+        access_token: account.access_token,
+        refresh_token: account.refresh_token,
+      });
+      if (error) return { error: error.message };
+      // setSession memutar (rotasi) refresh token. Simpan yang baru SEKARANG,
+      // sebelum reload, supaya token lama di daftar tidak jadi basi.
+      if (data.session) {
+        setAccounts(
+          upsertUserAccount(data.session, {
+            name: account.name,
+            avatar: account.avatar,
+          }),
+        );
+      }
+      // Muat ulang supaya seluruh state di memori (kuis, flashcard, progres,
+      // pengaturan per akun) mulai bersih dari akun yang baru — sesinya sudah
+      // tersimpan, jadi tidak perlu login lagi.
+      window.location.reload();
+      return { error: null };
+    },
+    [],
+  );
+
+  const addAccount = useCallback(async () => {
+    // simpan akun aktif dulu, lalu langsung ke pemilih akun Google — tanpa
+    // keluar dulu dan tanpa singgah di layar login. Sesi akun yang aktif
+    // sekarang tidak dicabut, jadi tetap bisa dipilih lagi dari daftar;
+    // kalau user membatalkan di tengah jalan, dia tetap masuk di akun ini.
+    if (session) {
+      setAccounts(
+        upsertUserAccount(session, {
+          name: profile?.id === session.user.id ? profile.username : null,
+          avatar: profile?.id === session.user.id ? profile.avatar_url : null,
+        }),
+      );
+    }
+    setAuthPersistence(true);
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: APP_URL,
+        // paksa pilih akun Google, jangan langsung pakai akun yang sedang aktif
+        queryParams: { prompt: "select_account" },
+      },
+    });
+  }, [session, profile]);
+
+  const forgetAccount = useCallback((id: string) => {
+    setAccounts(removeUserAccount(id));
+  }, []);
 
   const refreshProfile = useCallback(async () => {
     if (session) await loadProfile(session.user.id);
@@ -294,6 +390,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         resetPassword,
         resendConfirmation,
         signOut,
+        accounts,
+        switchAccount,
+        addAccount,
+        forgetAccount,
         refreshProfile,
         updateProfile,
       }}

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLang } from "@/i18n/LangContext";
 import { getChibiAvatarByName } from "@/lib/chibiAvatar";
 import SakuraCanvas from "@/components/SakuraCanvas";
-import introBg from "@/assets/intro-bg.png";
+import introBg from "@/assets/intro-bg.webp";
 
 export type ConquestGuideStep = {
   /** nama ekspresi chibi (cocok nama file di src/assets/chibi/) */

@@ -11,6 +11,8 @@ import {
 import { supabase } from "@/lib/supabaseClient";
 import { InlineLoading } from "@/components/ui/Loader";
 import { useAdminTr } from "@/admin/adminTr";
+import ActivityChart, { type ChartSeries } from "@/admin/ActivityChart";
+import adminBg from "@/assets/bg-admin-panel-login.webp";
 import {
   TABLE_NAME,
   tableFor,
@@ -19,6 +21,8 @@ import {
   type KotobaRow,
   type KanjiRow,
   type BunpoRow,
+  type SoalRow,
+  type TreeKind,
   type SectionTitleRow,
   type OrganizeSourceRow,
 } from "@/lib/contentTypes";
@@ -32,10 +36,18 @@ import {
 import { autoSegmentExample, cleanExample, markExample } from "@/lib/segments";
 import { CHAPTER_TITLE_SUB_TIER } from "@/lib/sectionTitles";
 import { RANK_LEVELS } from "@/data/ranks";
+import { SIDEBAR_QUOTES } from "@/data/sidebarQuotes";
+import { invalidateSidebarQuotes, type SidebarQuoteRow } from "@/lib/sidebarQuotes";
 import { ROLE_LABEL, type AppRole } from "@/lib/appRole";
 import { activityKindLabel, formatRelativeTime, type ActivityEntry } from "@/admin/adminActivity";
 import {
   IconArrowLeft,
+  IconArrowRight,
+  IconBolt,
+  IconCalendar,
+  IconChevronRight,
+  IconClock,
+  IconCode,
   IconBook,
   IconChart,
   IconChat,
@@ -43,18 +55,24 @@ import {
   IconClose,
   IconDocument,
   IconEdit,
+  IconFilter,
   IconFolder,
   IconKanjiTile,
   IconLayers,
   IconNote,
   IconPlus,
+  IconQuote,
   IconSave,
+  IconSearch,
+  IconShield,
+  IconStar,
   IconTarget,
   IconTrash,
+  IconUser,
   IconUsers,
 } from "@/admin/adminIcons";
 
-export type AdminSection = "dashboard" | ContentKind | "soal" | "statistik" | "pengguna";
+export type AdminSection = "dashboard" | ContentKind | "soal" | "kutipan" | "statistik" | "pengguna";
 
 const TIERS = ["N5", "N4", "N3", "N2", "N1"];
 
@@ -142,6 +160,7 @@ export default function AdminContentManager({
   activity,
   onLogActivity,
   onNavigateToDashboard,
+  onOpenSection,
   canDelete,
 }: {
   section: AdminSection;
@@ -151,6 +170,8 @@ export default function AdminContentManager({
   activity: ActivityEntry[];
   onLogActivity: (entry: Omit<ActivityEntry, "id" | "at">) => void;
   onNavigateToDashboard: () => void;
+  /** Pindah ke section lain (dipakai kartu statistik di Dashboard). */
+  onOpenSection: (section: AdminSection) => void;
   /** Hapus (entri, Chapter, Sub Chapter, Organize by) khusus role dev. */
   canDelete: boolean;
 }) {
@@ -158,10 +179,11 @@ export default function AdminContentManager({
   // sinyal lama yang belum ke-clear), jangan dipakai.
   const autoAddToken = quickAdd && quickAdd.kind === section ? quickAdd.token : undefined;
 
-  if (section === "dashboard") return <Dashboard onQuickAdd={onQuickAdd} activity={activity} />;
+  if (section === "dashboard") return <Dashboard onQuickAdd={onQuickAdd} onOpenSection={onOpenSection} activity={activity} />;
   if (section === "statistik") return <StatistikSection />;
   if (section === "pengguna") return <PenggunaSection />;
-  if (section === "soal") return <SoalPlaceholder />;
+  if (section === "soal") return <SoalSection canDelete={canDelete} />;
+  if (section === "kutipan") return <KutipanSection canDelete={canDelete} />;
   if (section === "kotoba")
     return (
       <KotobaSection
@@ -203,9 +225,11 @@ const ACTIVITY_KIND_ICON: Record<ContentKind, ReactNode> = {
 
 function Dashboard({
   onQuickAdd,
+  onOpenSection,
   activity,
 }: {
   onQuickAdd: (kind: ContentKind) => void;
+  onOpenSection: (section: AdminSection) => void;
   activity: ActivityEntry[];
 }) {
   const { tr, lang } = useAdminTr();
@@ -229,10 +253,13 @@ function Dashboard({
     return () => clearInterval(timer);
   }, []);
 
-  const cards: { key: ContentKind; label: string; icon: ReactNode }[] = [
-    { key: "kotoba", label: "Kotoba", icon: <IconBook /> },
-    { key: "kanji", label: "Kanji", icon: <IconKanjiTile /> },
-    { key: "bunpo", label: "Bunpō", icon: <IconDocument /> },
+  const [showAll, setShowAll] = useState(false);
+  const RECENT_LIMIT = 6;
+
+  const cards: { key: ContentKind; label: string; desc: string; icon: ReactNode }[] = [
+    { key: "kotoba", label: "Kotoba", desc: tr("Kata kosakata di database"), icon: <IconBook /> },
+    { key: "kanji", label: "Kanji", desc: tr("Karakter kanji di database"), icon: <IconKanjiTile /> },
+    { key: "bunpo", label: "Bunpō", desc: tr("Pola tata bahasa di database"), icon: <IconDocument /> },
   ];
 
   const quickActions: { key: ContentKind; label: string; desc: string; icon: ReactNode }[] = [
@@ -241,50 +268,84 @@ function Dashboard({
     { key: "bunpo", label: tr("Tambah Bunpō"), desc: tr("Pola tata bahasa baru."), icon: <IconDocument /> },
   ];
 
+  const visibleActivity = activity.slice(0, showAll ? activity.length : RECENT_LIMIT);
+
   return (
     <>
-      <PageHeader title="Dashboard" subtitle="Ringkasan konten yang ada di database Tenka." />
-      <div className="adm-stat-grid">
-        {cards.map((c) => (
-          <div className="adm-stat-card" key={c.key}>
-            <span className="adm-stat-icon">{c.icon}</span>
-            <div>
-              <div className="adm-stat-value">{counts[c.key] ?? <Skel />}</div>
-              <div className="adm-stat-label">{tr("Entri {label}", { label: c.label })}</div>
-            </div>
-          </div>
-        ))}
+      <div className="adm-dash-hero">
+        <div className="adm-dash-hero-art" aria-hidden="true" style={{ backgroundImage: `url(${adminBg})` }} />
+        <h1>Dashboard</h1>
+        <p>{tr("Ringkasan konten yang ada di database Tenka.")}</p>
       </div>
 
-      <h2 className="adm-section-title">{tr("Aksi Cepat")}</h2>
-      <div className="adm-quick-grid">
-        {quickActions.map((a) => (
+      <div className="adm-dstat-grid">
+        {cards.map((c) => (
           <button
-            key={a.key}
+            key={c.key}
             type="button"
-            className="adm-quick-card"
-            onClick={() => onQuickAdd(a.key)}
+            className={`adm-dstat-card tone-${c.key}`}
+            onClick={() => onOpenSection(c.key)}
           >
-            <span className="adm-quick-icon">{a.icon}</span>
-            <span className="adm-quick-text">
-              <span className="adm-quick-label">{a.label}</span>
-              <span className="adm-quick-desc">{a.desc}</span>
+            <span className="adm-dstat-icon">{c.icon}</span>
+            <span className="adm-dstat-body">
+              <span className="adm-dstat-value">{counts[c.key] ?? <Skel />}</span>
+              <span className="adm-dstat-label">{tr("Entri {label}", { label: c.label })}</span>
+              <span className="adm-dstat-desc">{c.desc}</span>
             </span>
-            <IconPlus className="adm-quick-plus" />
+            <IconChevronRight className="adm-dstat-go" />
           </button>
         ))}
       </div>
 
-      <h2 className="adm-section-title">{tr("Aktivitas Terbaru")}</h2>
-      {activity.length === 0 ? (
-        <div className="adm-card adm-empty-card">
-          <IconTarget className="adm-empty-icon" />
-          <p>{tr("Belum ada aktivitas. Tambah atau hapus data akan tercatat di sini.")}</p>
+      <div className="adm-dsection-head">
+        <IconBolt className="adm-dsection-icon" />
+        <div>
+          <h2>{tr("Aksi Cepat")}</h2>
+          <p>{tr("Kelola konten dengan mudah dan cepat.")}</p>
         </div>
-      ) : (
-        <div className="adm-card adm-activity-card">
+      </div>
+      <div className="adm-dquick-grid">
+        {quickActions.map((a) => (
+          <button
+            key={a.key}
+            type="button"
+            className={`adm-dquick-card tone-${a.key}`}
+            onClick={() => onQuickAdd(a.key)}
+          >
+            <span className="adm-dquick-icon">{a.icon}</span>
+            <span className="adm-dquick-text">
+              <span className="adm-dquick-label">{a.label}</span>
+              <span className="adm-dquick-desc">{a.desc}</span>
+            </span>
+            <IconArrowRight className="adm-dquick-go" />
+          </button>
+        ))}
+      </div>
+
+      <div className="adm-card adm-dact">
+        <div className="adm-dact-head">
+          <span className="adm-dact-icon">
+            <IconClock />
+          </span>
+          <div className="adm-dact-title">
+            <h2>{tr("Aktivitas Terbaru")}</h2>
+            <p>{tr("Perubahan terbaru di database.")}</p>
+          </div>
+          {activity.length > RECENT_LIMIT && (
+            <button type="button" className="adm-dact-viewall" onClick={() => setShowAll((v) => !v)}>
+              {showAll ? tr("Lebih Sedikit") : tr("Lihat Semua")}
+              <IconArrowRight />
+            </button>
+          )}
+        </div>
+        {activity.length === 0 ? (
+          <div className="adm-dact-empty">
+            <IconTarget className="adm-empty-icon" />
+            <p>{tr("Belum ada aktivitas. Tambah atau hapus data akan tercatat di sini.")}</p>
+          </div>
+        ) : (
           <ul className="adm-activity-list">
-            {activity.slice(0, 8).map((entry) => (
+            {visibleActivity.map((entry) => (
               <li className="adm-activity-item" key={entry.id}>
                 <span className={`adm-activity-icon${entry.action === "delete" ? " danger" : ""}`}>
                   {ACTIVITY_KIND_ICON[entry.kind]}
@@ -296,29 +357,17 @@ function Dashboard({
                   </span>
                   {entry.meaning && <span className="adm-activity-meaning">{entry.meaning}</span>}
                 </span>
+                {entry.by && (
+                  <span className="adm-activity-by" title={entry.by}>
+                    {tr("oleh {name}", { name: entry.by })}
+                  </span>
+                )}
                 {entry.tier && <span className="adm-tier-badge">{entry.tier}</span>}
                 <span className="adm-activity-time">{formatRelativeTime(entry.at, lang)}</span>
               </li>
             ))}
           </ul>
-        </div>
-      )}
-
-      <p className="adm-dashboard-hint">
-        {tr("Pilih menu")} <b>Lessons</b> {tr("di sisi kiri, atau pakai Aksi Cepat di atas, untuk menambah maupun menghapus kosakata, kanji, dan pola tata bahasa.")}
-      </p>
-    </>
-  );
-}
-
-function SoalPlaceholder() {
-  const { tr } = useAdminTr();
-  return (
-    <>
-      <PageHeader title="Soal" subtitle="Bank soal untuk mode Latihan." />
-      <div className="adm-card adm-empty-card">
-        <IconTarget className="adm-empty-icon" />
-        <p>{tr("Pengelolaan bank soal belum tersedia di panel ini.")}</p>
+        )}
       </div>
     </>
   );
@@ -326,8 +375,120 @@ function SoalPlaceholder() {
 
 // -------------------------------------------------------------- statistik
 
+type DailyRow = {
+  day: string;
+  active_users: number;
+  practice_sessions: number;
+  conquests_cleared: number;
+};
+
+type PracticedRow = {
+  script_key: string;
+  item_text: string;
+  hint_text: string | null;
+  n_attempts: number;
+  n_correct: number;
+  prev_attempts: number;
+  prev_correct: number;
+};
+
+type ActivityRange = 7 | 30 | 90;
+const ACTIVITY_RANGES: { days: ActivityRange; label: string; tickEvery: number }[] = [
+  { days: 7, label: "7 Hari", tickEvery: 1 },
+  { days: 30, label: "30 Hari", tickEvery: 5 },
+  { days: 90, label: "3 Bulan", tickEvery: 15 },
+];
+
+const KINDS = Object.keys(TABLE_NAME) as ContentKind[];
+const DAY_MS = 86_400_000;
+
+const SCRIPT_LABEL: Record<string, string> = {
+  kotoba: "Kotoba",
+  kanji: "Kanji",
+  bunpo: "Bunpō",
+  hiragana: "Hiragana",
+  katakana: "Katakana",
+};
+
+const PRACTICE_ICON: Record<string, ReactNode> = {
+  kotoba: <IconBook />,
+  kanji: <IconKanjiTile />,
+  bunpo: <IconDocument />,
+};
+
+const localDay = (d: Date) => d.toLocaleDateString("sv-SE"); // YYYY-MM-DD, zona waktu lokal
+
+/** `days` tanggal berurutan yang berakhir `endOffset` hari sebelum hari ini. */
+function dayWindow(days: number, endOffset: number): Date[] {
+  const out: Date[] = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() - endOffset - i);
+    out.push(d);
+  }
+  return out;
+}
+
+const sumBy = <T,>(arr: T[], pick: (x: T) => number) => arr.reduce((s, x) => s + pick(x), 0);
+
+/** Persentase naik/turun; null kalau periode sebelumnya kosong (tidak bisa dibandingkan). */
+function pctChange(cur: number, prev: number): number | null {
+  return prev > 0 ? Math.round(((cur - prev) / prev) * 100) : null;
+}
+
+function Trend({ value }: { value: number | null }) {
+  if (value === null) return <span className="adm-trend adm-trend--none">—</span>;
+  const dir = value > 0 ? "up" : value < 0 ? "down" : "flat";
+  return (
+    <span className={`adm-trend adm-trend--${dir}`}>
+      {value > 0 ? "↑ " : value < 0 ? "↓ " : ""}
+      {Math.abs(value)}%
+    </span>
+  );
+}
+
+/** Jumlah "Lesson" = Chapter unik (Organize by + nomor Chapter) per tier, dari semua jenis konten. */
+async function countChapters(): Promise<Record<string, number>> {
+  const seen: Record<string, Set<string>> = Object.fromEntries(TIERS.map((t) => [t, new Set<string>()]));
+  await Promise.all(
+    TIERS.flatMap((tier) =>
+      KINDS.map(async (kind) => {
+        // PostgREST membatasi 1000 baris per request, jadi dibaca per halaman.
+        for (let from = 0; ; from += 1000) {
+          const { data, error } = await supabase
+            .from(tableFor(kind, tier))
+            .select("source_id, chapter")
+            .order("id")
+            .range(from, from + 999);
+          if (error || !data) return;
+          for (const r of data as { source_id: number; chapter: number }[]) {
+            seen[tier].add(`${r.source_id}:${r.chapter}`);
+          }
+          if (data.length < 1000) return;
+        }
+      }),
+    ),
+  );
+  return Object.fromEntries(TIERS.map((t) => [t, seen[t].size]));
+}
+
+/** Entri baru sejak `sinceISO` untuk satu jenis konten (semua tier). */
+async function countRecent(kind: ContentKind, sinceISO: string): Promise<number> {
+  const per = await Promise.all(
+    TIERS.map(async (t) => {
+      const { count } = await supabase
+        .from(tableFor(kind, t))
+        .select("*", { count: "exact", head: true })
+        .gte("created_at", sinceISO);
+      return count ?? 0;
+    }),
+  );
+  return per.reduce((a, b) => a + b, 0);
+}
+
 function StatistikSection() {
-  const { tr } = useAdminTr();
+  const { tr, lang } = useAdminTr();
   const [counts, setCounts] = useState<Record<ContentKind, number | null>>({
     kotoba: null,
     kanji: null,
@@ -338,28 +499,148 @@ function StatistikSection() {
     kanji: {},
     bunpo: {},
   });
+  const [newEntries, setNewEntries] = useState<Record<ContentKind, number | null>>({
+    kotoba: null,
+    kanji: null,
+    bunpo: null,
+  });
   const [userCount, setUserCount] = useState<number | null>(null);
+  const [newUsers, setNewUsers] = useState<number | null>(null);
+  const [chapters, setChapters] = useState<Record<string, number> | null>(null);
   const [status, setStatus] = useState<string | null>(null);
 
+  const [activityError, setActivityError] = useState<string | null>(null);
+  const [range, setRange] = useState<ActivityRange>(7);
+  const [daily, setDaily] = useState<DailyRow[] | null>(null);
+  const [dailyLoading, setDailyLoading] = useState(true);
+  const [activeUsers, setActiveUsers] = useState<{ cur: number; prev: number } | null>(null);
+  const [practiced, setPracticed] = useState<PracticedRow[] | null>(null);
+
+  // data konten, pengguna, dan Konten Terpopuler — sekali saat halaman dibuka
   useEffect(() => {
-    (Object.keys(TABLE_NAME) as ContentKind[]).forEach(async (kind) => {
+    let cancelled = false;
+    const now = Date.now();
+    const weekAgo = new Date(now - 7 * DAY_MS).toISOString();
+
+    KINDS.forEach(async (kind) => {
       const { total, perTier, error } = await countKindRows(kind);
+      if (cancelled) return;
       if (error) {
         setStatus(error);
         return;
       }
       setCounts((prev) => ({ ...prev, [kind]: total }));
       setTierCounts((prev) => ({ ...prev, [kind]: perTier }));
+      const recent = await countRecent(kind, weekAgo);
+      if (!cancelled) setNewEntries((prev) => ({ ...prev, [kind]: recent }));
     });
 
     supabase
       .from("profiles")
       .select("*", { count: "exact", head: true })
       .then(({ count, error }) => {
+        if (cancelled) return;
         if (error) setStatus(error.message);
         else setUserCount(count ?? 0);
       });
+    supabase
+      .from("profiles")
+      .select("*", { count: "exact", head: true })
+      .gte("created_at", weekAgo)
+      .then(({ count }) => {
+        if (!cancelled) setNewUsers(count ?? 0);
+      });
+
+    countChapters().then((r) => {
+      if (!cancelled) setChapters(r);
+    });
+
+    Promise.all([
+      supabase.rpc("dev_active_users", {
+        p_since: weekAgo,
+        p_until: new Date(now).toISOString(),
+      }),
+      supabase.rpc("dev_active_users", {
+        p_since: new Date(now - 14 * DAY_MS).toISOString(),
+        p_until: weekAgo,
+      }),
+    ]).then(([cur, prev]) => {
+      if (cancelled) return;
+      const err = cur.error ?? prev.error;
+      if (err) setActivityError(err.message);
+      else setActiveUsers({ cur: Number(cur.data ?? 0), prev: Number(prev.data ?? 0) });
+    });
+
+    supabase
+      .rpc("dev_most_practiced", {
+        p_since: new Date(now - 30 * DAY_MS).toISOString(),
+        p_prev_since: new Date(now - 60 * DAY_MS).toISOString(),
+        p_limit: 5,
+      })
+      .then(({ data, error }) => {
+        if (cancelled) return;
+        if (error) {
+          setActivityError(error.message);
+          setPracticed([]);
+          return;
+        }
+        setPracticed(
+          ((data ?? []) as PracticedRow[]).map((r) => ({
+            ...r,
+            n_attempts: Number(r.n_attempts),
+            n_correct: Number(r.n_correct),
+            prev_attempts: Number(r.prev_attempts),
+            prev_correct: Number(r.prev_correct),
+          })),
+        );
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
+
+  // grafik aktivitas — diambil ulang tiap ganti rentang waktu (butuh 2× rentang buat pembanding)
+  useEffect(() => {
+    let cancelled = false;
+    setDailyLoading(true);
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+    start.setDate(start.getDate() - (2 * range - 1));
+    supabase
+      .rpc("dev_activity_daily", {
+        p_since: start.toISOString(),
+        p_tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      })
+      .then(({ data, error }) => {
+        if (cancelled) return;
+        setDailyLoading(false);
+        if (error) {
+          setActivityError(error.message);
+          setDaily([]);
+          return;
+        }
+        setDaily((data ?? []) as DailyRow[]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [range]);
+
+  const { cur, prev } = useMemo(() => {
+    const byDay = new Map((daily ?? []).map((r) => [r.day, r]));
+    const build = (endOffset: number) =>
+      dayWindow(range, endOffset).map((date) => {
+        const r = byDay.get(localDay(date));
+        return {
+          date,
+          active: Number(r?.active_users ?? 0),
+          sessions: Number(r?.practice_sessions ?? 0),
+          cleared: Number(r?.conquests_cleared ?? 0),
+        };
+      });
+    return { cur: build(0), prev: build(range) };
+  }, [daily, range]);
 
   const kindLabel: Record<ContentKind, string> = { kotoba: "Kotoba", kanji: "Kanji", bunpo: "Bunpō" };
   const kindIcon: Record<ContentKind, ReactNode> = {
@@ -367,71 +648,286 @@ function StatistikSection() {
     kanji: <IconKanjiTile />,
     bunpo: <IconDocument />,
   };
+
   // kalau ada error, jangan skeleton selamanya — tampilkan strip
   const ph = status ? "—" : <Skel />;
-  const allLoaded = counts.kotoba !== null && counts.kanji !== null && counts.bunpo !== null;
-  const totalEntries = allLoaded ? (counts.kotoba ?? 0) + (counts.kanji ?? 0) + (counts.bunpo ?? 0) : null;
+  const totalLessons = chapters ? sumBy(TIERS, (t) => chapters[t] ?? 0) : null;
+  const newThisWeek = (n: number | null) =>
+    n === null ? (
+      <Skel w={64} h={12} />
+    ) : n > 0 ? (
+      <span className="adm-trend adm-trend--up">{tr("+{n} minggu ini", { n })}</span>
+    ) : (
+      <span className="adm-trend adm-trend--none">—</span>
+    );
+
+  const dateFmt = lang === "en" ? "en-US" : "id-ID";
+  const labels = cur.map((x) => x.date.toLocaleDateString(dateFmt, { month: "short", day: "numeric" }));
+  const chartSeries: ChartSeries[] = [
+    { key: "active", name: tr("Pengguna Aktif Harian"), color: "#3b6ee6", values: cur.map((x) => x.active), area: true },
+    { key: "sessions", name: tr("Sesi Latihan"), color: "#7c5ce6", values: cur.map((x) => x.sessions) },
+    { key: "cleared", name: tr("Penaklukan Selesai"), color: "#12a08c", values: cur.map((x) => x.cleared) },
+  ];
+  const avgActive = sumBy(cur, (x) => x.active) / range;
+  const summary = [
+    {
+      key: "active",
+      label: tr("Pengguna Aktif Harian"),
+      color: chartSeries[0].color,
+      value: Number.isInteger(avgActive) ? String(avgActive) : avgActive.toFixed(1),
+      trend: pctChange(sumBy(cur, (x) => x.active), sumBy(prev, (x) => x.active)),
+    },
+    {
+      key: "sessions",
+      label: tr("Sesi Latihan"),
+      color: chartSeries[1].color,
+      value: sumBy(cur, (x) => x.sessions).toLocaleString(dateFmt),
+      trend: pctChange(sumBy(cur, (x) => x.sessions), sumBy(prev, (x) => x.sessions)),
+    },
+    {
+      key: "cleared",
+      label: tr("Penaklukan Selesai"),
+      color: chartSeries[2].color,
+      value: sumBy(cur, (x) => x.cleared).toLocaleString(dateFmt),
+      trend: pctChange(sumBy(cur, (x) => x.cleared), sumBy(prev, (x) => x.cleared)),
+    },
+  ];
+  const tickEvery = ACTIVITY_RANGES.find((r) => r.days === range)?.tickEvery ?? 1;
 
   return (
     <>
-      <PageHeader title="Statistik" subtitle="Ringkasan jumlah pengguna dan konten Tenka." />
+      <PageHeader title="Statistik" subtitle="Ringkasan pengguna, aktivitas belajar, dan konten Tenka." />
       <StatusLine status={status} />
-      <div className="adm-stat-grid">
-        <div className="adm-stat-card">
-          <span className="adm-stat-icon">
+      {activityError && (
+        <p className="adm-status">
+          {tr("Data aktivitas belum tersedia. Jalankan migrasi 2026_add_activity_events.sql di Supabase SQL Editor.")}{" "}
+          <span className="adm-muted">({activityError})</span>
+        </p>
+      )}
+
+      <div className="adm-sstat-grid">
+        <div className="adm-sstat tone-users">
+          <span className="adm-sstat-icon">
             <IconUsers />
           </span>
-          <div>
-            <div className="adm-stat-value">{userCount ?? ph}</div>
-            <div className="adm-stat-label">{tr("Total Pengguna")}</div>
-          </div>
+          <span className="adm-sstat-body">
+            <span className="adm-sstat-value">{userCount ?? ph}</span>
+            <span className="adm-sstat-label">{tr("Total Pengguna")}</span>
+            <span className="adm-sstat-sub">{newThisWeek(newUsers)}</span>
+          </span>
         </div>
-        <div className="adm-stat-card">
-          <span className="adm-stat-icon">
+
+        <div className="adm-sstat tone-active">
+          <span className="adm-sstat-icon">
+            <IconUsers />
+          </span>
+          <span className="adm-sstat-body">
+            <span className="adm-sstat-value">{activeUsers ? activeUsers.cur : activityError ? "—" : <Skel />}</span>
+            <span className="adm-sstat-label">{tr("Pengguna Aktif")}</span>
+            <span className="adm-sstat-sub">
+              <span>{tr("dalam 7 hari terakhir")}</span>
+              {activeUsers && <Trend value={pctChange(activeUsers.cur, activeUsers.prev)} />}
+            </span>
+          </span>
+        </div>
+
+        <div className="adm-sstat tone-lessons">
+          <span className="adm-sstat-icon">
             <IconLayers />
           </span>
-          <div>
-            <div className="adm-stat-value">{totalEntries ?? ph}</div>
-            <div className="adm-stat-label">{tr("Total Entri Lessons")}</div>
-          </div>
+          <span className="adm-sstat-body">
+            <span className="adm-sstat-value">{totalLessons ?? ph}</span>
+            <span className="adm-sstat-label">{tr("Total Lessons")}</span>
+            <span className="adm-sstat-sub">
+              <span>{tr("(Chapter)")}</span>
+            </span>
+          </span>
         </div>
-        {(Object.keys(TABLE_NAME) as ContentKind[]).map((kind) => (
-          <div className="adm-stat-card" key={kind}>
-            <span className="adm-stat-icon">{kindIcon[kind]}</span>
-            <div>
-              <div className="adm-stat-value">{counts[kind] ?? ph}</div>
-              <div className="adm-stat-label">{tr("Entri {label}", { label: kindLabel[kind] })}</div>
-            </div>
+
+        {KINDS.map((kind) => (
+          <div className={`adm-sstat tone-${kind}`} key={kind}>
+            <span className="adm-sstat-icon">{kindIcon[kind]}</span>
+            <span className="adm-sstat-body">
+              <span className="adm-sstat-value">{counts[kind] ?? ph}</span>
+              <span className="adm-sstat-label">{tr("Total {label}", { label: kindLabel[kind] })}</span>
+              <span className="adm-sstat-sub">{newThisWeek(newEntries[kind])}</span>
+            </span>
           </div>
         ))}
       </div>
 
-      <h2 className="adm-section-title">{tr("Rincian Konten per Tier")}</h2>
-      <div className="adm-card adm-table-card">
-        <table className="adm-table">
-          <thead>
-            <tr>
-              <th>Tier</th>
-              {(Object.keys(TABLE_NAME) as ContentKind[]).map((kind) => (
-                <th key={kind}>{kindLabel[kind]}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {TIERS.map((t) => (
-              <tr key={t}>
-                <td>
-                  <span className="adm-tier-badge">{t}</span>
-                </td>
-                {(Object.keys(TABLE_NAME) as ContentKind[]).map((kind) => (
-                  <td key={kind} className="adm-muted">
-                    {tierCounts[kind][t] ?? (status ? "—" : <Skel w={28} h={14} />)}
-                  </td>
-                ))}
-              </tr>
+      <div className="adm-card adm-dact">
+        <div className="adm-dact-head">
+          <span className="adm-dact-icon">
+            <IconUsers />
+          </span>
+          <div className="adm-dact-title">
+            <h2>{tr("Aktivitas Pengguna")}</h2>
+            <p>{tr("Aktivitas harian pengguna di Tenka.")}</p>
+          </div>
+          <div className="adm-seg" role="tablist" aria-label={tr("Rentang waktu")}>
+            {ACTIVITY_RANGES.map((r) => (
+              <button
+                key={r.days}
+                type="button"
+                role="tab"
+                aria-selected={range === r.days}
+                className={range === r.days ? "active" : ""}
+                onClick={() => setRange(r.days)}
+              >
+                {tr(r.label)}
+              </button>
             ))}
-          </tbody>
-        </table>
+          </div>
+        </div>
+        <div className="adm-sact-body">
+          <ActivityChart
+            labels={labels}
+            series={chartSeries}
+            tickEvery={tickEvery}
+            loading={dailyLoading}
+            emptyText={tr("Belum ada aktivitas di periode ini.")}
+          />
+          <div className="adm-sact-side">
+            {summary.map((m) => (
+              <div className="adm-sact-metric" key={m.key}>
+                <span className="adm-sact-metric-label">
+                  <i style={{ background: m.color }} />
+                  {m.label}
+                </span>
+                <span className="adm-sact-metric-row">
+                  <span className="adm-sact-metric-value">{dailyLoading ? <Skel w={40} h={22} /> : m.value}</span>
+                  {!dailyLoading && <Trend value={m.trend} />}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="adm-sbottom">
+        <div className="adm-card adm-dact">
+          <div className="adm-dact-head">
+            <span className="adm-dact-icon">
+              <IconLayers />
+            </span>
+            <div className="adm-dact-title">
+              <h2>{tr("Rincian Konten per Tier")}</h2>
+              <p>{tr("Total konten yang tersedia di tiap level JLPT.")}</p>
+            </div>
+          </div>
+          <div className="adm-sbox">
+            <table className="adm-table adm-stable">
+              <thead>
+                <tr>
+                  <th className="adm-stable-first">Tier</th>
+                  <th>
+                    Lessons
+                    <small>{tr("(Chapter)")}</small>
+                  </th>
+                  {KINDS.map((kind) => (
+                    <th key={kind}>{kindLabel[kind]}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {TIERS.map((t) => (
+                  <tr key={t}>
+                    <td className="adm-stable-first">
+                      <span className="adm-tier-badge">{t}</span>
+                    </td>
+                    <td className="adm-muted">{chapters?.[t] ?? (status ? "—" : <Skel w={24} h={14} />)}</td>
+                    {KINDS.map((kind) => (
+                      <td key={kind} className="adm-muted">
+                        {tierCounts[kind][t] ?? (status ? "—" : <Skel w={24} h={14} />)}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="adm-card adm-dact">
+          <div className="adm-dact-head">
+            <span className="adm-dact-icon">
+              <IconStar />
+            </span>
+            <div className="adm-dact-title">
+              <h2>{tr("Konten Terpopuler")}</h2>
+              <p>{tr("Konten yang paling sering dilatih pengguna dalam 30 hari terakhir.")}</p>
+            </div>
+          </div>
+          <div className="adm-sbox">
+            <table className="adm-table adm-stable adm-stable--practiced">
+              <thead>
+                <tr>
+                  <th className="adm-stable-first">{tr("Konten")}</th>
+                  <th>{tr("Tipe")}</th>
+                  <th>{tr("Percobaan")}</th>
+                  <th>{tr("Akurasi")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {practiced === null ? (
+                  [0, 1, 2].map((i) => (
+                    <tr key={i}>
+                      <td className="adm-stable-first">
+                        <Skel w="70%" h={14} />
+                      </td>
+                      <td>
+                        <Skel w={54} h={14} />
+                      </td>
+                      <td>
+                        <Skel w={28} h={14} />
+                      </td>
+                      <td>
+                        <Skel w={36} h={14} />
+                      </td>
+                    </tr>
+                  ))
+                ) : practiced.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="adm-empty-row adm-muted">
+                      {tr("Belum ada data latihan. Jawaban soal pengguna akan tercatat di sini.")}
+                    </td>
+                  </tr>
+                ) : (
+                  practiced.map((r) => {
+                    const acc = Math.round((r.n_correct / r.n_attempts) * 100);
+                    const prevAcc =
+                      r.prev_attempts > 0 ? Math.round((r.prev_correct / r.prev_attempts) * 100) : null;
+                    const tone = r.script_key in PRACTICE_ICON ? `tone-${r.script_key}` : "tone-lessons";
+                    return (
+                      <tr key={`${r.script_key}-${r.item_text}`} className={tone}>
+                        <td className="adm-stable-first">
+                          <span className="adm-scontent">
+                            <span className="adm-scontent-icon">{PRACTICE_ICON[r.script_key] ?? <IconNote />}</span>
+                            <span className="adm-scontent-text">
+                              <span className="adm-scontent-main">{r.item_text}</span>
+                              {r.hint_text && <span className="adm-scontent-hint">{r.hint_text}</span>}
+                            </span>
+                          </span>
+                        </td>
+                        <td>
+                          <span className="adm-stype">{SCRIPT_LABEL[r.script_key] ?? r.script_key}</span>
+                        </td>
+                        <td className="adm-muted">{r.n_attempts}</td>
+                        <td>
+                          <span className="adm-sacc">
+                            <b>{acc}%</b>
+                            {prevAcc !== null && <Trend value={acc - prevAcc} />}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </>
   );
@@ -450,15 +946,69 @@ type ProfileRow = {
 type RoleInfo = { role: AppRole; locked: boolean };
 type RoleChoice = AppRole | "user";
 
+type UserSort = "role" | "az" | "time";
+type SortDir = "asc" | "desc";
+const ROLE_SORT_RANK: Record<RoleChoice, number> = { dev: 0, admin: 1, user: 2 };
+const ROLE_ICON: Record<RoleChoice, ReactNode> = {
+  user: <IconUser />,
+  dev: <IconCode />,
+  admin: <IconShield />,
+};
+
+// Dropdown berbentuk pill (seperti di mockup). Isinya <select> native yang
+// transparan di atas pill, jadi tetap bisa dipakai keyboard/screen reader.
+function PillSelect<T extends string>({
+  label,
+  ariaLabel,
+  value,
+  options,
+  onChange,
+  showValue = false,
+  active = false,
+}: {
+  label: string;
+  ariaLabel: string;
+  value: T;
+  options: [T, string][];
+  onChange: (v: T) => void;
+  showValue?: boolean;
+  active?: boolean;
+}) {
+  const selected = options.find(([k]) => k === value)?.[1] ?? "";
+  return (
+    <label className={`adm-pill${active ? " active" : ""}`}>
+      <span className="adm-pill-text">
+        {showValue ? selected : label}
+      </span>
+      <IconChevronDown className="adm-pill-caret" />
+      <select
+        className="adm-pill-select"
+        aria-label={ariaLabel}
+        value={value}
+        onChange={(e) => onChange(e.target.value as T)}
+      >
+        {options.map(([k, text]) => (
+          <option key={k} value={k}>
+            {text}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
 function PenggunaSection() {
-  const { tr } = useAdminTr();
+  const { tr, lang } = useAdminTr();
+  const [sortBy, setSortBy] = useState<UserSort>("time");
+  const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [rows, setRows] = useState<ProfileRow[]>([]);
+  const [emails, setEmails] = useState<Record<string, string>>({});
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   // role tiap akun (dari fungsi SQL admin_list_roles); akun yang gak ada di
   // map ini = pengguna biasa. rolesReady=false → gagal dimuat (mis. migrasi
-  // role belum dijalankan), dropdown dikunci supaya tidak menyesatkan.
+  // role belum dijalankan), menu ubah role dikunci supaya tidak menyesatkan.
   const [roles, setRoles] = useState<Record<string, RoleInfo>>({});
   const [rolesReady, setRolesReady] = useState(false);
   const [myId, setMyId] = useState<string | null>(null);
@@ -492,6 +1042,17 @@ function PenggunaSection() {
       setRoles(map);
       setRolesReady(true);
     }
+
+    // email (opsional): kalau migrasi 2026_add_admin_list_emails.sql belum
+    // dijalankan, baris email cukup tidak ditampilkan.
+    const emailRes = await supabase.rpc("admin_list_emails");
+    if (!emailRes.error) {
+      const map: Record<string, string> = {};
+      for (const r of (emailRes.data ?? []) as { user_id: string; email: string | null }[]) {
+        if (r.email) map[r.user_id] = r.email;
+      }
+      setEmails(map);
+    }
     setLoading(false);
   };
 
@@ -500,11 +1061,36 @@ function PenggunaSection() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const roleOf = (id: string): RoleChoice => roles[id]?.role ?? "user";
+
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return rows;
-    return rows.filter((r) => (r.username ?? "").toLowerCase().includes(q));
-  }, [rows, search]);
+    let list = q ? rows.filter((r) => (r.username ?? "").toLowerCase().includes(q)) : [...rows];
+    const byName = (a: ProfileRow, b: ProfileRow) =>
+      (a.username ?? "").localeCompare(b.username ?? "", undefined, { sensitivity: "base" });
+    const byTime = (a: ProfileRow, b: ProfileRow) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    const byRole = (a: ProfileRow, b: ProfileRow) =>
+      ROLE_SORT_RANK[roles[a.id]?.role ?? "user"] - ROLE_SORT_RANK[roles[b.id]?.role ?? "user"] || byName(a, b);
+    // asc = urutan "utama" tiap jenis: A–Z, terbaru dulu, Dev dulu
+    const cmp = sortBy === "az" ? byName : sortBy === "time" ? byTime : byRole;
+    list.sort(sortDir === "asc" ? cmp : (a, b) => cmp(b, a));
+    return list;
+  }, [rows, search, sortBy, sortDir, roles]);
+
+  const isDefaultView = sortBy === "time" && sortDir === "asc" && !search;
+  const resetView = () => {
+    setSortBy("time");
+    setSortDir("asc");
+    setSearch("");
+  };
+
+  const dirOptions: [SortDir, string][] =
+    sortBy === "az"
+      ? [["asc", "A–Z"], ["desc", "Z–A"]]
+      : sortBy === "time"
+        ? [["asc", tr("Terbaru")], ["desc", tr("Terlama")]]
+        : [["asc", tr("Dev dulu")], ["desc", tr("User dulu")]];
 
   const handleChangeRole = async (row: ProfileRow, next: RoleChoice) => {
     const current: RoleChoice = roles[row.id]?.role ?? "user";
@@ -547,132 +1133,221 @@ function PenggunaSection() {
     setRows((prev) => prev.filter((r) => r.id !== row.id));
   };
 
+  const dateLocale = lang === "en" ? "en-US" : "id-ID";
+
   return (
-    <>
-      <PageHeader title="Pengguna" subtitle="Daftar pengguna yang terdaftar di Tenka." />
-      <div className="adm-toolbar">
-        <input
-          type="text"
-          className="adm-search-input"
-          placeholder={tr("Cari username…")}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        {loading ? <InlineLoading label={tr("Memuat…")} /> : <span className="adm-muted">{tr("{count} pengguna", { count: filtered.length })}</span>}
-      </div>
+    <div className="adm-users-page">
+      <div className="adm-users-art" aria-hidden="true" style={{ backgroundImage: `url(${adminBg})` }} />
+      <PageHeader
+        title="Pengguna"
+        subtitle="Daftar pengguna yang terdaftar di Tenka."
+      />
       <StatusLine status={status} />
-      <div className="adm-card adm-table-card">
-        <table className="adm-table adm-table--users">
-          <colgroup>
-            <col className="adm-col-name" />
-            <col className="adm-col-role" />
-            <col className="adm-col-rank" />
-            <col className="adm-col-joined" />
-            <col className="adm-col-action" />
-          </colgroup>
-          <thead>
-            <tr>
-              <th>{tr("Nama")}</th>
-              <th>Role</th>
-              <th>Rank</th>
-              <th>{tr("Bergabung")}</th>
-              <th aria-hidden="true" />
-            </tr>
-          </thead>
-          <tbody>
-            {loading &&
-              rows.length === 0 &&
-              Array.from({ length: 5 }, (_, i) => (
-                <tr key={`skel-${i}`} aria-hidden="true">
-                  <td>
-                    <span className="adm-user-cell">
-                      <Skel w={32} h={32} circle />
-                      <Skel w={90 + ((i * 23) % 60)} h={14} />
-                    </span>
-                  </td>
-                  <td><Skel w={64} h={22} /></td>
-                  <td><Skel w={48} h={14} /></td>
-                  <td><Skel w={90} h={14} /></td>
-                  <td />
-                </tr>
-              ))}
-            {filtered.map((row) => (
-              <tr key={row.id}>
-                <td>
-                  <span className="adm-user-cell">
-                    {row.avatar_url ? (
-                      <img className="adm-user-avatar" src={row.avatar_url} alt="" />
-                    ) : (
-                      <span className="adm-user-avatar adm-user-avatar-fallback">
-                        <IconUsers />
-                      </span>
-                    )}
-                    <span>{row.username || <span className="adm-muted">{tr("(belum diatur)")}</span>}</span>
-                  </span>
-                </td>
-                <td>
-                  {(() => {
-                    const info = roles[row.id];
-                    const current: RoleChoice = info?.role ?? "user";
-                    // dikunci: akun sendiri, dev bawaan (admin_emails), atau role gagal dimuat
-                    const locked = row.id === myId || !!info?.locked || !rolesReady;
-                    if (locked) {
-                      return (
-                        <span
-                          className={`adm-role-badge ${current}`}
-                          title={
-                            row.id === myId
-                              ? tr("Role akun sendiri tidak bisa diubah")
-                              : info?.locked
-                                ? tr("Dev bawaan — role dikunci")
-                                : undefined
-                          }
-                        >
-                          {rolesReady ? ROLE_LABEL[current] : "…"}
-                          {(row.id === myId || info?.locked) && " 🔒"}
-                        </span>
-                      );
-                    }
-                    return (
-                      <select
-                        className={`adm-role-select ${current}`}
-                        value={current}
-                        disabled={savingRoleId === row.id}
-                        onChange={(e) => handleChangeRole(row, e.target.value as RoleChoice)}
-                        aria-label={tr("Role {name}", { name: row.username || tr("pengguna") })}
-                      >
-                        <option value="user">User</option>
-                        <option value="admin">Admin</option>
-                        <option value="dev">Dev</option>
-                      </select>
-                    );
-                  })()}
-                </td>
-                <td className="adm-muted">{RANK_LEVELS[row.rank_index ?? 0]?.title ?? "—"}</td>
-                <td className="adm-muted">{formatRelativeTime(new Date(row.created_at).getTime())}</td>
-                <td className="adm-td-action">
-                  <button
-                    type="button"
-                    className="adm-icon-btn danger"
-                    onClick={() => handleDeleteAccount(row)}
-                    aria-label={tr("Hapus Akun")}
-                  >
-                    <IconTrash />
-                  </button>
-                </td>
-              </tr>
-            ))}
-            {!loading && filtered.length === 0 && (
-              <tr>
-                <td colSpan={5} className="adm-muted adm-empty-row">
-                  {rows.length === 0 ? tr("Belum ada pengguna terdaftar.") : tr("Tidak ada pengguna yang cocok dengan pencarian.")}
-                </td>
-              </tr>
+      <div className="adm-card adm-users-card">
+        <div className="adm-users-toolbar">
+          <label className="adm-users-search">
+            <IconSearch />
+            <input
+              type="text"
+              placeholder={tr("Cari username…")}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              aria-label={tr("Cari username…")}
+            />
+          </label>
+          <div className="adm-users-filters">
+            {loading ? (
+              <InlineLoading label={tr("Memuat…")} />
+            ) : (
+              <span className="adm-users-count">{tr("{count} pengguna", { count: filtered.length })}</span>
             )}
-          </tbody>
-        </table>
+            <PillSelect<UserSort>
+              label={tr("Urutkan berdasarkan")}
+              ariaLabel={tr("Urutkan berdasarkan")}
+              value={sortBy}
+              options={[
+                ["time", tr("Waktu")],
+                ["role", "Role"],
+                ["az", "A–Z"],
+              ]}
+              onChange={(v) => {
+                setSortBy(v);
+                setSortDir("asc");
+              }}
+              showValue={sortBy !== "time"}
+              active={sortBy !== "time"}
+            />
+            <PillSelect<SortDir>
+              label={dirOptions[0][1]}
+              ariaLabel={tr("Arah urutan")}
+              value={sortDir}
+              options={dirOptions}
+              onChange={setSortDir}
+              showValue
+              active={sortDir !== "asc"}
+            />
+            <button
+              type="button"
+              className={`adm-pill adm-pill-icon${isDefaultView ? "" : " active"}`}
+              onClick={resetView}
+              disabled={isDefaultView}
+              aria-label={tr("Reset filter")}
+              title={tr("Reset filter")}
+            >
+              <IconFilter />
+            </button>
+          </div>
+        </div>
+
+        <div className="adm-users-table-wrap">
+          <table className="adm-table adm-table--users">
+            <colgroup>
+              <col className="adm-col-name" />
+              <col className="adm-col-role" />
+              <col className="adm-col-rank" />
+              <col className="adm-col-joined" />
+              <col className="adm-col-action" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>{tr("Akun")}</th>
+                <th>Role</th>
+                <th>Rank</th>
+                <th>{tr("Bergabung")}</th>
+                <th aria-hidden="true" />
+              </tr>
+            </thead>
+            <tbody>
+              {loading &&
+                rows.length === 0 &&
+                Array.from({ length: 4 }, (_, i) => (
+                  <tr key={`skel-${i}`} aria-hidden="true">
+                    <td>
+                      <span className="adm-user-cell">
+                        <Skel w={44} h={44} circle />
+                        <Skel w={110 + ((i * 23) % 60)} h={14} />
+                      </span>
+                    </td>
+                    <td><Skel w={72} h={26} /></td>
+                    <td><Skel w={90} h={14} /></td>
+                    <td><Skel w={90} h={14} /></td>
+                    <td />
+                  </tr>
+                ))}
+              {filtered.map((row) => {
+                const current = roleOf(row.id);
+                const created = new Date(row.created_at);
+                const email = emails[row.id];
+                return (
+                  <tr key={row.id}>
+                    <td>
+                      <span className="adm-user-cell">
+                        {row.avatar_url ? (
+                          <img className="adm-user-avatar" src={row.avatar_url} alt="" />
+                        ) : (
+                          <span className="adm-user-avatar adm-user-avatar-fallback">
+                            <IconUsers />
+                          </span>
+                        )}
+                        <span className="adm-user-text">
+                          <span className="adm-user-name">
+                            {row.username || <span className="adm-muted">{tr("(belum diatur)")}</span>}
+                          </span>
+                          {email && <span className="adm-user-email">{email}</span>}
+                        </span>
+                      </span>
+                    </td>
+                    <td>
+                      {(() => {
+                        const info = roles[row.id];
+                        // dikunci: akun sendiri, dev bawaan (admin_emails), atau role gagal dimuat
+                        const locked = row.id === myId || !!info?.locked || !rolesReady;
+                        if (locked) {
+                          return (
+                            <span
+                              className={`adm-rbadge ${current}`}
+                              title={
+                                row.id === myId
+                                  ? tr("Role akun sendiri tidak bisa diubah")
+                                  : info?.locked
+                                    ? tr("Dev bawaan — role dikunci")
+                                    : undefined
+                              }
+                            >
+                              {ROLE_ICON[current]}
+                              {rolesReady ? ROLE_LABEL[current] : "…"}
+                              {(row.id === myId || info?.locked) && " 🔒"}
+                            </span>
+                          );
+                        }
+                        return (
+                          <label className={`adm-rbadge adm-rbadge-select ${current}${savingRoleId === row.id ? " saving" : ""}`}>
+                            {ROLE_ICON[current]}
+                            {ROLE_LABEL[current]}
+                            <IconChevronDown className="adm-rbadge-caret" />
+                            <select
+                              value={current}
+                              disabled={savingRoleId === row.id}
+                              onChange={(e) => handleChangeRole(row, e.target.value as RoleChoice)}
+                              aria-label={tr("Role {name}", { name: row.username || tr("pengguna") })}
+                            >
+                              <option value="user">User</option>
+                              <option value="admin">Admin</option>
+                              <option value="dev">Dev</option>
+                            </select>
+                          </label>
+                        );
+                      })()}
+                    </td>
+                    <td>
+                      <span className="adm-rank-cell">
+                        {RANK_LEVELS[row.rank_index ?? 0]?.logo && (
+                          <img className="adm-rank-logo" src={RANK_LEVELS[row.rank_index ?? 0].logo} alt="" />
+                        )}
+                        <span>{RANK_LEVELS[row.rank_index ?? 0]?.title ?? "—"}</span>
+                      </span>
+                    </td>
+                    <td>
+                      <span className="adm-joined-cell">
+                        <span className="adm-joined-icon">
+                          <IconCalendar />
+                        </span>
+                        <span className="adm-joined-text">
+                          <span>{formatRelativeTime(created.getTime(), lang)}</span>
+                          <span className="adm-user-email">
+                            {created.toLocaleDateString(dateLocale, { day: "numeric", month: "short", year: "numeric" })}
+                          </span>
+                        </span>
+                      </span>
+                    </td>
+                    <td className="adm-td-action">
+                      <button
+                        type="button"
+                        className="adm-icon-btn danger"
+                        onClick={() => handleDeleteAccount(row)}
+                        disabled={row.id === myId}
+                        aria-label={tr("Hapus Akun")}
+                        title={tr("Hapus Akun")}
+                      >
+                        <IconTrash />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+              {!loading && filtered.length === 0 && (
+                <tr>
+                  <td colSpan={5} className="adm-muted adm-empty-row">
+                    {rows.length === 0 ? tr("Belum ada pengguna terdaftar.") : tr("Tidak ada pengguna yang cocok dengan pencarian.")}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </>
+
+    </div>
   );
 }
 
@@ -799,7 +1474,7 @@ function FormFooter({ editing }: { editing?: boolean }) {
 const TIER_MARKER_CHAPTER = 0;
 const TIER_MARKER_SUB_TIER = 0;
 
-async function fetchAllSectionTitles(kind: ContentKind): Promise<SectionTitleRow[]> {
+async function fetchAllSectionTitles(kind: TreeKind): Promise<SectionTitleRow[]> {
   const { data, error } = await supabase
     .from(sectionTitlesTable(kind))
     .select("*")
@@ -814,14 +1489,14 @@ async function fetchAllSectionTitles(kind: ContentKind): Promise<SectionTitleRow
 // nulis walau title_id/title_en kosong — dipakai pas bikin folder Tier /
 // Chapter / Sub Chapter kosong (belum ada kotoba di dalamnya), jadi foldernya
 // tetap "ada" & muncul di tree biar bisa diisi belakangan.
-async function ensureSectionTitleRow(kind: ContentKind, row: SectionTitleRow): Promise<string | null> {
+async function ensureSectionTitleRow(kind: TreeKind, row: SectionTitleRow): Promise<string | null> {
   const { error } = await supabase.from(sectionTitlesTable(kind)).upsert(row, {
     onConflict: "source_id,chapter,sub_tier",
   });
   return error ? error.message : null;
 }
 
-type TreeRow = { id: number; tier: string; source_id: number; chapter: number; sub_tier: number };
+type TreeRow = { id: number; tier: string; source_id: number; chapter: number; sub_tier: number; sort_order?: number };
 type SubTierNode<T extends TreeRow> = { subTier: number; title: SectionTitleRow | null; entries: T[] };
 type ChapterNode<T extends TreeRow> = { chapter: number; title: SectionTitleRow | null; subTiers: Map<number, SubTierNode<T>> };
 // Organize by = lapisan di antara Tier dan Chapter (mis. "Minna no Nihongo").
@@ -916,7 +1591,7 @@ type NodeDialog =
 // (section_titles_<jenis>), jadi menghapus di Kotoba tidak menyentuh Kanji
 // maupun Bunpō, dan sebaliknya.
 async function deleteTreeNode(
-  kind: ContentKind,
+  kind: TreeKind,
   tier: string,
   sourceId: number,
   chapter: number,
@@ -936,7 +1611,7 @@ async function deleteTreeNode(
 // State + handler pohon Tier -> Organize by -> Chapter -> Sub Chapter yang
 // dipakai bareng oleh Kotoba, Kanji, dan Bunpō. Tiap section cuma nambahin
 // form entri dan kolom tabelnya sendiri.
-function useContentTree<T extends TreeRow>(kind: ContentKind, noun: string, canDelete: boolean) {
+function useContentTree<T extends TreeRow>(kind: TreeKind, noun: string, canDelete: boolean) {
   const { tr } = useAdminTr();
   const [entries, setEntries] = useState<T[]>([]);
   const [titles, setTitles] = useState<SectionTitleRow[]>([]);
@@ -965,9 +1640,12 @@ function useContentTree<T extends TreeRow>(kind: ContentKind, noun: string, canD
     try {
       const [tierResults, titlesRes, sourcesRes] = await Promise.all([
         Promise.all(
-          TIERS.map((t) =>
-            supabase.from(tableFor(kind, t)).select("*").order("chapter").order("sub_tier").order("id"),
-          ),
+          TIERS.map(async (t) => {
+            const q = () => supabase.from(tableFor(kind, t)).select("*").order("chapter").order("sub_tier");
+            const withOrder = await q().order("sort_order").order("id");
+            // kolom sort_order belum ada (migrasi belum dijalankan) → urut seperti dulu
+            return withOrder.error ? await q().order("id") : withOrder;
+          }),
         ),
         fetchAllSectionTitles(kind),
         fetchOrganizeSources(kind),
@@ -1273,8 +1951,31 @@ function useContentTree<T extends TreeRow>(kind: ContentKind, noun: string, canD
     load();
   };
 
+  /** Geser satu entri naik/turun di dalam Sub Chapter-nya, lalu nomori ulang 1..n. */
+  const moveEntry = async (row: T, dir: -1 | 1) => {
+    const group = entries.filter(
+      (e) => e.tier === row.tier && e.source_id === row.source_id && e.chapter === row.chapter && e.sub_tier === row.sub_tier,
+    );
+    const i = group.findIndex((e) => e.id === row.id);
+    const j = i + dir;
+    if (i < 0 || j < 0 || j >= group.length) return;
+    const next = [...group];
+    [next[i], next[j]] = [next[j], next[i]];
+    const changed = next.map((e, idx) => ({ e, order: idx + 1 })).filter(({ e, order }) => e.sort_order !== order);
+    const results = await Promise.all(
+      changed.map(({ e, order }) => supabase.from(tableFor(kind, row.tier)).update({ sort_order: order }).eq("id", e.id)),
+    );
+    const err = results.find((r) => r.error)?.error;
+    if (err) {
+      setStatus(tr("Gagal simpan:") + " " + err.message);
+      return;
+    }
+    await load();
+  };
+
   return {
     entries,
+    moveEntry,
     loading,
     status,
     setStatus,
@@ -1353,6 +2054,7 @@ function ContentTreeView<T extends TreeRow>({
     dialogStatus,
     sourceLabel,
     canDelete,
+    moveEntry,
     closeDialog,
     handleToggleTier,
     handleToggleSource,
@@ -1687,7 +2389,7 @@ function ContentTreeView<T extends TreeRow>({
                       {config.headers.map((h) => (
                         <th key={h}>{tr(h)}</th>
                       ))}
-                      <th>{tr("Bab")}</th>
+                      <th className="adm-col-bab">{tr("Bab")}</th>
                       <th aria-hidden="true" />
                     </tr>
                   </thead>
@@ -1696,10 +2398,20 @@ function ContentTreeView<T extends TreeRow>({
                       <tr key={row.id}>
                         <td className="adm-td-no">{idx + 1}</td>
                         {config.renderCells(row)}
-                        <td className="adm-muted">
+                        <td className="adm-muted adm-col-bab">
                           {row.chapter}.{row.sub_tier}
                         </td>
                         <td className="adm-td-action">
+                          {row.sort_order !== undefined && (
+                            <>
+                              <button type="button" className="adm-icon-btn" disabled={idx === 0} onClick={() => moveEntry(row, -1)} aria-label={tr("Naik")}>
+                                <IconChevronDown style={{ transform: "rotate(180deg)" }} />
+                              </button>
+                              <button type="button" className="adm-icon-btn" disabled={idx === detailRows.length - 1} onClick={() => moveEntry(row, 1)} aria-label={tr("Turun")}>
+                                <IconChevronDown />
+                              </button>
+                            </>
+                          )}
                           <button type="button" className="adm-icon-btn" onClick={() => onEditEntry(row)} aria-label="Edit">
                             <IconEdit />
                           </button>
@@ -1734,11 +2446,10 @@ function ContentTreeView<T extends TreeRow>({
 const KOTOBA_TREE_CONFIG: TreeViewConfig<KotobaRow> = {
   noun: "kotoba",
   addLabel: "Tambah Kotoba",
-  headers: ["Kana", "Romaji", "Arti"],
+  headers: ["Kana", "Arti"],
   renderCells: (row) => (
     <>
       <td className="adm-td-jp">{row.kana}</td>
-      <td className="adm-muted">{row.romaji}</td>
       <td>
         {row.meaning_id}
         {row.meaning_en ? <span className="adm-muted"> / {row.meaning_en}</span> : null}
@@ -1909,17 +2620,17 @@ function KotobaSection({
           onSubmit={(e) => handleSubmit(e, (e.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null)}
         >
           <SectionCard icon={<IconLayers />} title="Informasi Utama">
-            <div className="adm-grid-2">
+            <div className="adm-grid-3">
               <Field label="Kana" required>
                 <input name="kana" placeholder={tr("Contoh: わたし")} defaultValue={r?.kana} required />
               </Field>
               <Field label="Romaji" required>
                 <input name="romaji" placeholder={tr("Contoh: watashi")} defaultValue={r?.romaji} required />
               </Field>
+              <Field label="Kanji (opsional)" hint="Kosongkan kalau kata ini tidak punya kanji.">
+                <input name="kanji_word" placeholder={tr("Contoh: 私")} defaultValue={r?.kanji_word} />
+              </Field>
             </div>
-            <Field label="Kanji" required>
-              <input name="kanji_word" placeholder={tr("Contoh: 私")} defaultValue={r?.kanji_word} required />
-            </Field>
             <div className="adm-grid-2">
               <Field label="Arti Indonesia" required>
                 <input name="meaning_id" placeholder={tr("Contoh: saya")} defaultValue={r?.meaning_id} required />
@@ -1939,30 +2650,32 @@ function KotobaSection({
               >
                 <CountedTextarea name="example" placeholder={tr("Contoh: わたし/は/がくせい/です。")} maxLength={260} required defaultValue={r ? markExample(r.example, r.segments) : undefined} />
               </Field>
-              <Field label="Kalimat Jepang (Kanji)" required>
-                <CountedTextarea name="kanji_example" placeholder={tr("Contoh: 私は学生です。")} maxLength={200} required defaultValue={r?.kanji_example} />
+              <Field label="Kalimat Jepang (Kanji) (opsional)" hint="Kosongkan kalau kalimatnya tidak memakai kanji.">
+                <CountedTextarea name="kanji_example" placeholder={tr("Contoh: 私は学生です。")} maxLength={200} defaultValue={r?.kanji_example} />
               </Field>
             </div>
-            <Field label="Terjemahan Indonesia" required>
-              <CountedTextarea
-                name="example_translation_id"
-                placeholder={tr("Contoh: Saya adalah seorang siswa.")}
-                maxLength={200}
-                required
-                defaultValue={r?.example_translation_id}
-              />
-            </Field>
-            <Field label="Terjemahan English" required>
-              <CountedTextarea
-                name="example_translation_en"
-                placeholder={tr("Example: I am a student.")}
-                maxLength={200}
-                required
-                defaultValue={r?.example_translation_en}
-              />
-            </Field>
+            <div className="adm-grid-2">
+              <Field label="Terjemahan Indonesia" required>
+                <CountedTextarea
+                  name="example_translation_id"
+                  placeholder={tr("Contoh: Saya adalah seorang siswa.")}
+                  maxLength={200}
+                  required
+                  defaultValue={r?.example_translation_id}
+                />
+              </Field>
+              <Field label="Terjemahan English" required>
+                <CountedTextarea
+                  name="example_translation_en"
+                  placeholder={tr("Example: I am a student.")}
+                  maxLength={200}
+                  required
+                  defaultValue={r?.example_translation_en}
+                />
+              </Field>
+            </div>
             <Field label="Catatan" required icon={<IconNote />}>
-              <div className="adm-grid-2">
+              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 <textarea name="usage_id" rows={2} placeholder={tr("Catatan (ID)…")} defaultValue={r?.usage_id ?? undefined} required />
                 <textarea name="usage_en" rows={2} placeholder={tr("Catatan (EN)…")} defaultValue={r?.usage_en ?? undefined} required />
               </div>
@@ -2591,6 +3304,301 @@ function BunpoSection({
 
 // ------------------------------------------------------------ layout bits
 
+// ------------------------------------------------------------------ Soal
+//
+// Bank soal mode Latihan (pilihan ganda). Sistemnya sama persis dengan materi:
+// Level -> Organize by -> Chapter -> Sub Chapter -> soal, memakai pohon
+// (useContentTree / ContentTreeView) yang sama dengan Kotoba, Kanji, dan Bunpō.
+// Soal disimpan di soal_entries_<level>; Organize by & nama Chapter / Sub
+// Chapter-nya punya daftar sendiri (kind "soal").
+
+const SOAL_MIN_OPTIONS = 2;
+const SOAL_MAX_OPTIONS = 6;
+const SOAL_DEFAULT_OPTIONS = 4;
+
+const SOAL_TREE_CONFIG: TreeViewConfig<SoalRow> = {
+  noun: "soal",
+  addLabel: "Tambah Soal",
+  headers: ["Soal", "Jawaban"],
+  renderCells: (row) => (
+    <>
+      <td className="adm-td-jp adm-td-question">{row.question}</td>
+      <td>
+        <span className="adm-answer-chip">{String.fromCharCode(65 + row.answer_index)}</span>{" "}
+        {row.options[row.answer_index]}
+        <span className="adm-muted"> · {row.options.length} pilihan</span>
+      </td>
+    </>
+  ),
+  leafPrimary: (row) => row.question,
+  leafSecondary: (row) => row.options[row.answer_index] ?? "",
+};
+
+// Editor pilihan jawaban: 2–6 baris, bulatan di kiri menandai jawaban yang
+// benar. Nilainya dibaca lewat FormData (name="option" berulang + name="answer").
+function OptionsEditor({ defaultOptions, defaultAnswer }: { defaultOptions?: string[]; defaultAnswer?: number }) {
+  const { tr } = useAdminTr();
+  const [options, setOptions] = useState<string[]>(() =>
+    defaultOptions && defaultOptions.length >= SOAL_MIN_OPTIONS
+      ? defaultOptions
+      : Array.from({ length: SOAL_DEFAULT_OPTIONS }, () => ""),
+  );
+  const [answer, setAnswer] = useState(defaultAnswer ?? 0);
+
+  const setOption = (i: number, value: string) => setOptions((prev) => prev.map((o, idx) => (idx === i ? value : o)));
+  const addOption = () => setOptions((prev) => (prev.length >= SOAL_MAX_OPTIONS ? prev : [...prev, ""]));
+  const removeOption = (i: number) => {
+    if (options.length <= SOAL_MIN_OPTIONS) return;
+    setOptions((prev) => prev.filter((_, idx) => idx !== i));
+    // jawaban benar ikut bergeser kalau pilihan di atasnya dihapus
+    setAnswer((a) => (a === i ? 0 : a > i ? a - 1 : a));
+  };
+
+  return (
+    <div className="adm-opt-list">
+      {options.map((value, i) => (
+        <div className={`adm-opt-row${answer === i ? " correct" : ""}`} key={i}>
+          <input
+            type="radio"
+            name="answer"
+            value={i}
+            checked={answer === i}
+            onChange={() => setAnswer(i)}
+            aria-label={tr("Tandai pilihan {n} sebagai jawaban benar", { n: String.fromCharCode(65 + i) })}
+          />
+          <span className="adm-opt-letter">{String.fromCharCode(65 + i)}</span>
+          <input
+            type="text"
+            name="option"
+            className="adm-opt-input"
+            value={value}
+            maxLength={120}
+            required
+            placeholder={tr("Pilihan {n}", { n: String.fromCharCode(65 + i) })}
+            onChange={(e) => setOption(i, e.currentTarget.value)}
+          />
+          <button
+            type="button"
+            className="adm-icon-btn danger"
+            disabled={options.length <= SOAL_MIN_OPTIONS}
+            onClick={() => removeOption(i)}
+            aria-label={tr("Hapus pilihan")}
+          >
+            <IconClose />
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        className="adm-btn adm-btn-outline adm-opt-add"
+        disabled={options.length >= SOAL_MAX_OPTIONS}
+        onClick={addOption}
+      >
+        <IconPlus /> {tr("Tambah Pilihan")}
+      </button>
+    </div>
+  );
+}
+
+function SoalSection({ canDelete }: { canDelete: boolean }) {
+  const { tr } = useAdminTr();
+  const t = useContentTree<SoalRow>("soal", "soal", canDelete);
+  const { status, setStatus, selected, load } = t;
+  const [view, setView] = useState<"browse" | "add" | "edit">("browse");
+  const [formKey, setFormKey] = useState(0);
+  const [editingRow, setEditingRow] = useState<SoalRow | null>(null);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>, submitter: HTMLButtonElement | null) => {
+    e.preventDefault();
+    const formEl = e.currentTarget; // simpan sebelum `await` (lihat KotobaSection)
+    const form = new FormData(formEl);
+    const loc: SelectedSubTier | null =
+      view === "edit" && editingRow
+        ? { tier: editingRow.tier, sourceId: editingRow.source_id, chapter: editingRow.chapter, subTier: editingRow.sub_tier }
+        : selected;
+    if (!loc) {
+      setStatus(tr("Pilih Sub Chapter dulu di daftar sebelum menambah entri."));
+      return;
+    }
+    const options = form.getAll("option").map((o) => String(o).trim());
+    const answerIndex = Number(form.get("answer"));
+    if (options.length < SOAL_MIN_OPTIONS || options.some((o) => !o)) {
+      setStatus(tr("Isi semua pilihan jawaban (minimal {n}).", { n: SOAL_MIN_OPTIONS }));
+      return;
+    }
+    if (new Set(options).size !== options.length) {
+      setStatus(tr("Pilihan jawaban tidak boleh ada yang sama."));
+      return;
+    }
+    if (!Number.isInteger(answerIndex) || answerIndex < 0 || answerIndex >= options.length) {
+      setStatus(tr("Tandai satu pilihan sebagai jawaban yang benar."));
+      return;
+    }
+    const opt = (name: string) => String(form.get(name) ?? "").trim() || null;
+    const payload = {
+      tier: loc.tier,
+      source_id: loc.sourceId,
+      chapter: loc.chapter,
+      sub_tier: loc.subTier,
+      question: String(form.get("question") ?? "").trim(),
+      question_translation_id: opt("question_translation_id"),
+      question_translation_en: opt("question_translation_en"),
+      options,
+      answer_index: answerIndex,
+      explanation_id: opt("explanation_id"),
+      explanation_en: opt("explanation_en"),
+    };
+    const landOn = () => t.landOn(payload.tier, payload.source_id, payload.chapter, payload.sub_tier);
+    setStatus(tr("Menyimpan…"));
+
+    if (view === "edit" && editingRow) {
+      const { error } = await supabase.from(tableFor("soal", editingRow.tier)).update(payload).eq("id", editingRow.id);
+      if (error) {
+        setStatus(tr("Gagal:") + " " + error.message);
+        return;
+      }
+      setStatus(tr("Perubahan tersimpan."));
+      setEditingRow(null);
+      landOn();
+      setView("browse");
+      load();
+      return;
+    }
+
+    const { error } = await supabase.from(tableFor("soal", payload.tier)).insert(payload);
+    if (error) {
+      setStatus(tr("Gagal:") + " " + error.message);
+      return;
+    }
+    setStatus(tr("Tersimpan."));
+    load();
+    if (submitter?.value === "done") {
+      landOn();
+      setView("browse");
+    } else {
+      formEl.reset();
+      setFormKey((k) => k + 1);
+      scrollFormToTop();
+      setStatus(tr("Tersimpan. Silakan tambah entri berikutnya."));
+    }
+  };
+
+  const handleDelete = async (row: SoalRow) => {
+    if (!canDelete) return; // hapus khusus dev
+    if (!confirm(tr("Hapus entry ini?"))) return;
+    const { error } = await supabase.from(tableFor("soal", row.tier)).delete().eq("id", row.id);
+    if (error) {
+      setStatus(tr("Gagal hapus:") + " " + error.message);
+      return;
+    }
+    load();
+  };
+
+  const handleEditClick = (row: SoalRow) => {
+    setEditingRow(row);
+    setStatus(null);
+    setView("edit");
+  };
+
+  const handleAddClick = () => {
+    if (!selected) return;
+    setEditingRow(null);
+    setStatus(null);
+    setView("add");
+  };
+
+  const handleBack = () => {
+    setEditingRow(null);
+    setView("browse");
+  };
+
+  if (view === "add" || view === "edit") {
+    const editing = view === "edit";
+    const r = editingRow;
+    const loc = r ? { tier: r.tier, sourceId: r.source_id, chapter: r.chapter, subTier: r.sub_tier } : selected;
+    return (
+      <>
+        <PageHeader
+          title={editing ? "Edit Soal" : "Tambah Soal"}
+          subtitle={loc ? locationText(loc.tier, t.sourceLabel(loc.sourceId), loc.chapter, loc.subTier) : ""}
+          onBack={handleBack}
+        />
+        <form
+          key={editing ? `edit-${r?.id}` : formKey}
+          className="adm-form"
+          onSubmit={(e) => handleSubmit(e, (e.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null)}
+        >
+          <SectionCard icon={<IconDocument />} title="Soal" desc="Pertanyaan yang akan muncul di mode Latihan.">
+            <Field label="Teks Soal" required>
+              <CountedTextarea
+                name="question"
+                placeholder={tr("Contoh: わたし___がくせいです。")}
+                maxLength={300}
+                required
+                defaultValue={r?.question}
+              />
+            </Field>
+            <div className="adm-grid-2">
+              <Field label="Terjemahan Indonesia" optional>
+                <CountedTextarea
+                  name="question_translation_id"
+                  placeholder={tr("Contoh: Saya adalah seorang siswa.")}
+                  maxLength={200}
+                  defaultValue={r?.question_translation_id ?? undefined}
+                />
+              </Field>
+              <Field label="Terjemahan English" optional>
+                <CountedTextarea
+                  name="question_translation_en"
+                  placeholder={tr("Example: I am a student.")}
+                  maxLength={200}
+                  defaultValue={r?.question_translation_en ?? undefined}
+                />
+              </Field>
+            </div>
+          </SectionCard>
+
+          <SectionCard
+            icon={<IconTarget />}
+            title="Pilihan Jawaban"
+            desc="Isi 2–6 pilihan, lalu klik bulatan di kiri untuk menandai jawaban yang benar."
+          >
+            <OptionsEditor defaultOptions={r?.options} defaultAnswer={r?.answer_index} />
+          </SectionCard>
+
+          <SectionCard icon={<IconNote />} title="Pembahasan" desc="Penjelasan yang tampil setelah soal dijawab.">
+            <div className="adm-grid-2">
+              <Field label="Pembahasan Indonesia" optional>
+                <CountedTextarea name="explanation_id" placeholder={tr("Pembahasan (ID)…")} maxLength={400} defaultValue={r?.explanation_id ?? undefined} />
+              </Field>
+              <Field label="Pembahasan English" optional>
+                <CountedTextarea name="explanation_en" placeholder={tr("Explanation (EN)…")} maxLength={400} defaultValue={r?.explanation_en ?? undefined} />
+              </Field>
+            </div>
+          </SectionCard>
+
+          <StatusLine status={status} />
+          <FormFooter editing={editing} />
+        </form>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <PageHeader sticky title="Soal" subtitle="Bank soal untuk mode Latihan." />
+      <StatusLine status={view === "browse" && !selected ? status : null} />
+      <ContentTreeView
+        t={t}
+        config={SOAL_TREE_CONFIG}
+        onAddEntry={handleAddClick}
+        onEditEntry={handleEditClick}
+        onDeleteEntry={handleDelete}
+      />
+    </>
+  );
+}
+
 function SectionCard({
   icon,
   title,
@@ -2650,3 +3658,242 @@ function Field({
 // (dulu ada re-export segmentsToInput di sini buat nampilin ulang segments
 // tersimpan; dihapus karena Segments di form Kotoba sekarang dibuat
 // otomatis, jadi gak dipakai lagi.)
+
+// ---------------------------------------------------------------- Kutipan
+//
+// Kelola kutipan/tips yang diketik bergantian di kartu sidebar (app utama +
+// Admin Panel). Disimpan di tabel sidebar_quotes; kalau tabel kosong, app
+// pakai daftar bawaan (src/data/sidebarQuotes.ts) — tombol "Impor Bawaan"
+// menyalin daftar itu ke database supaya bisa diedit.
+
+const QUOTE_MAX = 120;
+
+function KutipanSection({ canDelete }: { canDelete: boolean }) {
+  const { tr } = useAdminTr();
+  const [rows, setRows] = useState<SidebarQuoteRow[] | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
+  const [view, setView] = useState<"list" | "form">("list");
+  const [editing, setEditing] = useState<SidebarQuoteRow | null>(null);
+  const [formKey, setFormKey] = useState(0);
+  const [busy, setBusy] = useState(false);
+
+  const load = async () => {
+    const { data, error } = await supabase
+      .from("sidebar_quotes")
+      .select("id, text_id, text_en, sort_order, is_active, created_at")
+      .order("sort_order", { ascending: true })
+      .order("id", { ascending: true });
+    if (error) {
+      setStatus(tr("Gagal memuat:") + " " + error.message);
+      setRows([]);
+      return;
+    }
+    setRows((data ?? []) as SidebarQuoteRow[]);
+  };
+
+  useEffect(() => {
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const done = async (msg: string | null) => {
+    setStatus(msg);
+    invalidateSidebarQuotes();
+    await load();
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>, submitter: HTMLButtonElement | null) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    const text_id = String(fd.get("text_id") ?? "").trim();
+    const text_en = String(fd.get("text_en") ?? "").trim();
+    const author = String(fd.get("author") ?? "").trim() || null;
+    if (!text_id && !text_en) {
+      setStatus(tr("Isi minimal satu bahasa."));
+      return;
+    }
+    setBusy(true);
+    setStatus(null);
+    const res = editing
+      ? await supabase.from("sidebar_quotes").update({ text_id, text_en, author }).eq("id", editing.id)
+      : await supabase.from("sidebar_quotes").insert({
+          text_id,
+          text_en,
+          author,
+          sort_order: (rows ?? []).reduce((m, r) => Math.max(m, r.sort_order), 0) + 1,
+        });
+    setBusy(false);
+    if (res.error) {
+      setStatus(tr("Gagal simpan:") + " " + res.error.message);
+      return;
+    }
+    await done(editing ? tr("Kutipan diperbarui.") : tr("Kutipan ditambahkan."));
+    if (!editing && submitter?.value === "again") {
+      form.reset();
+      setFormKey((k) => k + 1);
+      return;
+    }
+    setEditing(null);
+    setView("list");
+  };
+
+  const toggleActive = async (row: SidebarQuoteRow) => {
+    const { error } = await supabase.from("sidebar_quotes").update({ is_active: !row.is_active }).eq("id", row.id);
+    if (error) return setStatus(tr("Gagal simpan:") + " " + error.message);
+    await done(null);
+  };
+
+  const move = async (row: SidebarQuoteRow, dir: -1 | 1) => {
+    if (!rows) return;
+    const i = rows.findIndex((r) => r.id === row.id);
+    const j = i + dir;
+    if (i < 0 || j < 0 || j >= rows.length) return;
+    // urutan baru, lalu nomori ulang 1..n (hanya yang berubah yang ditulis)
+    const next = [...rows];
+    [next[i], next[j]] = [next[j], next[i]];
+    const changed = next.map((r, idx) => ({ r, order: idx + 1 })).filter(({ r, order }) => r.sort_order !== order);
+    const results = await Promise.all(
+      changed.map(({ r, order }) => supabase.from("sidebar_quotes").update({ sort_order: order }).eq("id", r.id)),
+    );
+    const err = results.find((x) => x.error)?.error;
+    if (err) return setStatus(tr("Gagal simpan:") + " " + err.message);
+    await done(null);
+  };
+
+  const remove = async (row: SidebarQuoteRow) => {
+    const preview = (row.text_id || row.text_en).replace(/\n/g, " ");
+    if (!window.confirm(tr("Hapus kutipan ini?") + "\n\n" + preview)) return;
+    const { error } = await supabase.from("sidebar_quotes").delete().eq("id", row.id);
+    if (error) return setStatus(tr("Gagal hapus:") + " " + error.message);
+    await done(null);
+  };
+
+  const importDefaults = async () => {
+    setBusy(true);
+    const payload = SIDEBAR_QUOTES.map((q, i) => ({
+      text_id: q.lines.id.join("\n"),
+      text_en: q.lines.en.join("\n"),
+      sort_order: i + 1,
+    }));
+    const { error } = await supabase.from("sidebar_quotes").insert(payload);
+    setBusy(false);
+    if (error) return setStatus(tr("Gagal simpan:") + " " + error.message);
+    await done(tr("Kutipan bawaan diimpor."));
+  };
+
+  if (view === "form") {
+    const r = editing;
+    return (
+      <>
+        <PageHeader
+          title={r ? "Edit Kutipan" : "Tambah Kutipan"}
+          subtitle="Teks yang diketik di kartu sidebar. Tekan Enter untuk pindah baris."
+          onBack={() => {
+            setEditing(null);
+            setView("list");
+          }}
+        />
+        <form
+          key={r ? `edit-${r.id}` : formKey}
+          className="adm-form"
+          onSubmit={(e) => handleSubmit(e, (e.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null)}
+        >
+          <SectionCard icon={<IconQuote />} title="Isi Kutipan" desc="Isi salah satu bahasa, yang kosong ikut bahasa lainnya.">
+            <Field label="Kutipan (Indonesia)">
+              <CountedTextarea name="text_id" placeholder="Contoh: Langkah kecil setiap hari" maxLength={QUOTE_MAX} rows={3} defaultValue={r?.text_id} />
+            </Field>
+            <Field label="Kutipan (English)">
+              <CountedTextarea name="text_en" placeholder="Contoh: Small steps every day" maxLength={QUOTE_MAX} rows={3} defaultValue={r?.text_en} />
+            </Field>
+            <Field label="Penulis (opsional)">
+              <input name="author" placeholder={tr("Contoh: Miyamoto Musashi")} maxLength={40} defaultValue={r?.author ?? ""} />
+            </Field>
+          </SectionCard>
+          <StatusLine status={status} />
+          <FormFooter editing={!!r} />
+        </form>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <PageHeader sticky title="Kutipan" subtitle="Kelola kata-kata yang tampil di kartu sidebar." />
+      <StatusLine status={status} />
+      <div className="adm-card adm-quotes-card">
+        <div className="adm-quotes-toolbar">
+          <span className="adm-muted">{rows === null ? tr("Memuat…") : tr("{n} kutipan", { n: rows.length })}</span>
+          <button
+            type="button"
+            className="adm-btn adm-btn-primary"
+            onClick={() => {
+              setEditing(null);
+              setStatus(null);
+              setView("form");
+            }}
+          >
+            <IconPlus /> {tr("Tambah Kutipan")}
+          </button>
+        </div>
+
+        {rows === null && <InlineLoading label={tr("Memuat…")} />}
+
+        {rows && rows.length === 0 && (
+          <div className="adm-empty-card">
+            <IconQuote className="adm-empty-icon" />
+            <p>{tr("Belum ada kutipan di database. Sidebar sedang memakai daftar bawaan.")}</p>
+            <button type="button" className="adm-btn adm-btn-outline" disabled={busy} onClick={importDefaults}>
+              {tr("Impor Bawaan")}
+            </button>
+          </div>
+        )}
+
+        {rows && rows.length > 0 && (
+          <ul className="adm-quotes-list">
+            {rows.map((row, i) => (
+              <li key={row.id} className={`adm-quotes-row${row.is_active ? "" : " off"}`}>
+                <div className="adm-quotes-text">
+                  <p lang="id">{row.text_id || <em className="adm-muted">—</em>}</p>
+                  <p lang="en" className="adm-muted">
+                    {row.text_en || <em>—</em>}
+                  </p>
+                  {row.author && <p className="adm-muted">— {row.author}</p>}
+                </div>
+                <div className="adm-quotes-actions">
+                  <label className="adm-quotes-switch" title={tr("Tampilkan di sidebar")}>
+                    <input type="checkbox" checked={row.is_active} onChange={() => toggleActive(row)} />
+                    <span>{row.is_active ? tr("Aktif") : tr("Mati")}</span>
+                  </label>
+                  <button type="button" className="adm-icon-btn" disabled={i === 0} onClick={() => move(row, -1)} aria-label={tr("Naik")}>
+                    <IconChevronDown style={{ transform: "rotate(180deg)" }} />
+                  </button>
+                  <button type="button" className="adm-icon-btn" disabled={i === rows.length - 1} onClick={() => move(row, 1)} aria-label={tr("Turun")}>
+                    <IconChevronDown />
+                  </button>
+                  <button
+                    type="button"
+                    className="adm-icon-btn"
+                    onClick={() => {
+                      setEditing(row);
+                      setStatus(null);
+                      setView("form");
+                    }}
+                    aria-label={tr("Edit")}
+                  >
+                    <IconEdit />
+                  </button>
+                  {canDelete && (
+                    <button type="button" className="adm-icon-btn danger" onClick={() => remove(row)} aria-label={tr("Hapus")}>
+                      <IconTrash />
+                    </button>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </>
+  );
+}

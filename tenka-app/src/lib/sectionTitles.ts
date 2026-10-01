@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
-import { sectionTitlesTable, type ContentKind, type SectionTitleRow } from "@/lib/contentTypes";
+import { sectionTitlesTable, type TreeKind, type SectionTitleRow } from "@/lib/contentTypes";
 
 /**
  * sub_tier "0" dipakai sebagai penanda "ini nama Chapter-nya sendiri", bukan
@@ -29,7 +29,7 @@ export function subChapterLabel(chapter: number, subTier: number, name: string |
  * chapter/sub_tier-nya udah punya nama.
  */
 export async function fetchSectionTitle(
-  kind: ContentKind,
+  kind: TreeKind,
   tier: string,
   chapter: number,
   subTier: number
@@ -47,7 +47,7 @@ export async function fetchSectionTitle(
 
 /** Ambil semua nama section buat satu tier, dipakai buat nge-grup tampilan (N4Screen dll). */
 export async function fetchSectionTitles(
-  kind: ContentKind,
+  kind: TreeKind,
   tier: string,
   sourceId?: number,
 ): Promise<SectionTitleRow[]> {
@@ -65,7 +65,7 @@ export async function fetchSectionTitles(
  * Kalau title_en & title_id kosong, gak usah nulis apa-apa (biar entry
  * lain di chapter yang sama gak ketimpa nama kosong).
  */
-export async function upsertSectionTitle(kind: ContentKind, row: SectionTitleRow): Promise<string | null> {
+export async function upsertSectionTitle(kind: TreeKind, row: SectionTitleRow): Promise<string | null> {
   if (!row.title_en.trim() && !row.title_id.trim()) return null;
   const { error } = await supabase.from(sectionTitlesTable(kind)).upsert(row, {
     onConflict: "source_id,chapter,sub_tier",
@@ -75,7 +75,7 @@ export async function upsertSectionTitle(kind: ContentKind, row: SectionTitleRow
 
 /** Ambil nama Chapter (kalau ada) buat satu (tier, chapter) — dipakai buat ngisi ulang field "Nama Chapter" pas edit. */
 export async function fetchChapterTitle(
-  kind: ContentKind,
+  kind: TreeKind,
   tier: string,
   chapter: number
 ): Promise<SectionTitleRow | null> {
@@ -89,7 +89,7 @@ export function chapterTitlesOf(titles: SectionTitleRow[]): SectionTitleRow[] {
 
 /** Simpan/update nama Chapter (baris sub_tier = 0), sama aturannya kayak upsertSectionTitle. */
 export async function upsertChapterTitle(
-  kind: ContentKind,
+  kind: TreeKind,
   row: Omit<SectionTitleRow, "sub_tier">
 ): Promise<string | null> {
   return upsertSectionTitle(kind, { ...row, sub_tier: CHAPTER_TITLE_SUB_TIER });

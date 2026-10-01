@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from "react";
 import { I18N, LANG_KEY, type Lang, type I18NEntry } from "./I18N";
+import { setQuizLang } from "@/lib/quizLang";
 
 type LangContextValue = {
   lang: Lang;
@@ -28,6 +29,9 @@ export function LangProvider({ children }: { children: ReactNode }) {
   const setLang = useCallback((l: string) => {
     const next: Lang = l === "id" ? "id" : "en";
     localStorage.setItem(LANG_KEY, next);
+    // Susun ulang isi soal kuis (arti, terjemahan, catatan) ke bahasa baru
+    // SEBELUM render ulang, supaya soal tidak tertinggal di bahasa lama.
+    setQuizLang(next);
     setLangState(next);
   }, []);
 

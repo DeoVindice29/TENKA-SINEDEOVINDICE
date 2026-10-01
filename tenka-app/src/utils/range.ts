@@ -1,4 +1,5 @@
 import { SCRIPTS } from "@/data/scripts";
+import { pickLang } from "../lib/quizLang";
 import { GOJUON_HIRAGANA } from "@/data/hiragana";
 import { GOJUON_KATAKANA } from "@/data/katakana";
 import { shuffle } from "@/utils/shuffle";
@@ -23,7 +24,7 @@ function str(v: unknown): string {
   if (v == null) return "";
   if (typeof v === "string") return v;
   if (typeof v === "object" && "en" in (v as Record<string, unknown>)) {
-    return String((v as { en: unknown }).en ?? "");
+    return pickLang(v as { en: string; id: string });
   }
   return String(v);
 }

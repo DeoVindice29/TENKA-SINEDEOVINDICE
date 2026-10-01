@@ -11,6 +11,7 @@ import SpeedrunRecords from "@/components/Settings/SpeedrunRecords";
 import AdminConquestReset from "@/components/Admin/AdminConquestReset";
 import FeedbackBox from "@/components/Settings/FeedbackBox";
 import SignOutModal from "@/components/Settings/SignOutModal";
+import AccountSwitch from "@/components/Settings/AccountSwitch";
 import {
   UserIcon,
   PaletteIcon,
@@ -109,10 +110,14 @@ export default function SettingsPanel({
   // background-nya gak ikut geser waktu orang scroll isi panel.
   useEffect(() => {
     if (!open) return;
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    // Kunci di <html>, bukan <body>: overflow di body bikin body jadi scroll
+    // container sendiri dan merusak `position: sticky` sidebar (sidebar ikut
+    // ke-scroll keluar layar).
+    const root = document.documentElement;
+    const prevOverflow = root.style.overflow;
+    root.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = prevOverflow;
+      root.style.overflow = prevOverflow;
     };
   }, [open]);
 
@@ -306,7 +311,7 @@ export default function SettingsPanel({
             {t("settings.menu.about.heading")}
           </span>
           <div className="settings-about-card">
-            <img src="/favicon.svg" alt="" className="settings-about-icon" />
+            <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" className="settings-about-icon" />
             <div className="settings-about-text">
               <span className="settings-about-name">{t("settings.about.appName")}</span>
               <span className="settings-about-tagline">
@@ -315,6 +320,8 @@ export default function SettingsPanel({
               <span className="settings-about-version">{APP_VERSION}</span>
             </div>
           </div>
+
+          <AccountSwitch />
 
           <button
             type="button"

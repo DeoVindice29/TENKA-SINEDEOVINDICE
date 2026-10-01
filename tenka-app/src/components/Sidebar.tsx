@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/state/AuthContext";
 import { useRankIndex } from "@/hooks/useRankIndex";
 import { RANK_LEVELS } from "@/data/ranks";
-import { SIDEBAR_QUOTES } from "@/data/sidebarQuotes";
+import { useSidebarQuotes } from "@/lib/sidebarQuotes";
 import navArt from "@/assets/hero-sidebar.webp";
 
 type IconProps = { className?: string };
@@ -142,6 +142,7 @@ export default function Sidebar({ open, onClose, onOpenSettings, onOpenAdmin }: 
   // huruf per huruf (total ±2.5 detik), ditahan penuh ±5 detik, lalu dihapus
   // huruf per huruf juga (total ±2.5 detik) sebelum lanjut ke kutipan
   // berikutnya.
+  const quotes = useSidebarQuotes();
   const [quoteIndex, setQuoteIndex] = useState(0);
   const [typedLength, setTypedLength] = useState(0);
 
@@ -150,7 +151,7 @@ export default function Sidebar({ open, onClose, onOpenSettings, onOpenAdmin }: 
     const HOLD_MS = 5000;
     const DELETE_MS = 2500;
 
-    const q = SIDEBAR_QUOTES[quoteIndex] ?? SIDEBAR_QUOTES[0];
+    const q = quotes[quoteIndex % quotes.length] ?? quotes[0];
     const fullText = q.lines[lang].join("\n");
 
     setTypedLength(0);
@@ -175,8 +176,8 @@ export default function Sidebar({ open, onClose, onOpenSettings, onOpenAdmin }: 
       if (i < 0) {
         setTypedLength(0);
         after(300, () => {
-          if (SIDEBAR_QUOTES.length > 1) {
-            setQuoteIndex((prev) => (prev + 1) % SIDEBAR_QUOTES.length);
+          if (quotes.length > 1) {
+            setQuoteIndex((prev) => (prev + 1) % quotes.length);
           } else {
             typeStep(1);
           }
@@ -190,11 +191,21 @@ export default function Sidebar({ open, onClose, onOpenSettings, onOpenAdmin }: 
     after(charDelay, () => typeStep(1));
 
     return () => timers.forEach((id) => window.clearTimeout(id));
-  }, [quoteIndex, lang]);
+  }, [quoteIndex, lang, quotes]);
 
-  const quote = SIDEBAR_QUOTES[quoteIndex] ?? SIDEBAR_QUOTES[0];
+  const quote = quotes[quoteIndex % quotes.length] ?? quotes[0];
   const fullQuoteText = quote.lines[lang].join("\n");
   const typedLines = fullQuoteText.slice(0, typedLength).split("\n");
+
+  // Nama penulis ikut "diketik" & "dihapus" bersamaan dengan kutipannya:
+  // panjang yang tampil mengikuti progres kutipan (0% → 100% → 0%), jadi
+  // selesai tepat saat kutipan selesai diketik dan habis tepat saat kutipan
+  // habis dihapus. Sisa hurufnya tetap menempati ruang (disembunyikan) supaya
+  // posisi rata-kanan nama tidak bergeser saat huruf bertambah.
+  const author = quote.author ?? "";
+  const authorProgress =
+    fullQuoteText.length > 0 ? Math.min(typedLength / fullQuoteText.length, 1) : 1;
+  const authorShown = Math.ceil(author.length * authorProgress);
 
   const rank = RANK_LEVELS[rankIndex] ?? RANK_LEVELS[0];
   const displayName = profile?.username?.trim() || "Traveler";
@@ -313,6 +324,14 @@ export default function Sidebar({ open, onClose, onOpenSettings, onOpenAdmin }: 
               </p>
             </div>
             <img className="sidebar-promo-art" src={navArt} alt="" aria-hidden="true" />
+            {author && (
+              <span className="sidebar-promo-author" aria-label={author}>
+                <span aria-hidden="true">{author.slice(0, authorShown)}</span>
+                <span aria-hidden="true" className="sidebar-promo-author-rest">
+                  {author.slice(authorShown)}
+                </span>
+              </span>
+            )}
           </div>
         </div>
       </aside>

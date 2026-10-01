@@ -64,7 +64,41 @@ export type BunpoRow = {
   created_at: string;
 };
 
+/**
+ * Satu baris di tabel soal_entries_<level> — bank soal mode Latihan (pilihan
+ * ganda). Disusun persis seperti materi: Level -> Organize by -> Chapter ->
+ * Sub Chapter -> soal.
+ */
+export type SoalRow = {
+  id: number;
+  tier: string;
+  /** Organize by (organize_sources.id) tempat soal ini berada. */
+  source_id: number;
+  chapter: number;
+  sub_tier: number;
+  sort_order?: number;
+  /** Teks soal (biasanya kalimat Jepang). */
+  question: string;
+  question_translation_id: string | null;
+  question_translation_en: string | null;
+  /** Pilihan jawaban, 2–6 item. */
+  options: string[];
+  /** Indeks (mulai 0) pilihan yang benar di `options`. */
+  answer_index: number;
+  explanation_id: string | null;
+  explanation_en: string | null;
+  created_at: string;
+};
+
 export type ContentKind = "kotoba" | "kanji" | "bunpo";
+
+/**
+ * Jenis konten yang tersusun dalam pohon Level -> Organize by -> Chapter ->
+ * Sub Chapter. Tiga materi + bank soal Latihan. ContentKind sengaja tidak
+ * dilebarkan karena dipakai di Dashboard/Statistik/Aktivitas yang hanya
+ * mengenal materi.
+ */
+export type TreeKind = ContentKind | "soal";
 
 // Nama dasar tabel per jenis konten. Datanya sudah dipisah per level JLPT,
 // jadi jangan dipakai langsung di supabase.from(...) — pakai tableFor().
@@ -74,11 +108,16 @@ export const TABLE_NAME: Record<ContentKind, string> = {
   bunpo: "bunpo_entries",
 };
 
+const TREE_TABLE_NAME: Record<TreeKind, string> = {
+  ...TABLE_NAME,
+  soal: "soal_entries",
+};
+
 export const TIER_LEVELS = ["N5", "N4", "N3", "N2", "N1"] as const;
 
 /** Tabel Supabase untuk satu jenis konten di satu level, mis. kotoba_entries_n5. */
-export function tableFor(kind: ContentKind, tier: string): string {
-  return `${TABLE_NAME[kind]}_${tier.toLowerCase()}`;
+export function tableFor(kind: TreeKind, tier: string): string {
+  return `${TREE_TABLE_NAME[kind]}_${tier.toLowerCase()}`;
 }
 
 /**
@@ -100,7 +139,7 @@ export type SectionTitleRow = {
  * dan Bunpō masing-masing punya daftar chapter sendiri:
  * section_titles_kotoba, section_titles_kanji, section_titles_bunpo.
  */
-export function sectionTitlesTable(kind: ContentKind): string {
+export function sectionTitlesTable(kind: TreeKind): string {
   return `section_titles_${kind}`;
 }
 
@@ -113,7 +152,7 @@ export function sectionTitlesTable(kind: ContentKind): string {
  */
 export type OrganizeSourceRow = {
   id: number;
-  kind: ContentKind;
+  kind: TreeKind;
   tier: string;
   name_id: string;
   name_en: string;

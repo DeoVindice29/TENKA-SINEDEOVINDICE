@@ -12,8 +12,7 @@ import {
   getConquery,
   type MissionScriptKey,
 } from "@/data/ranks";
-import { pickGuideMood } from "@/data/chibiGuide";
-import { CHIBI_QUOTES, pickQuoteIndex } from "@/data/chibiQuotes";
+import { getProgressContext, pickChibiLine } from "@/data/chibiGuide";
 
 type Props = {
   open: boolean;
@@ -50,14 +49,21 @@ export default function RankMissionsModal({ open, onClose }: Props) {
     setPendingConquestOpen,
   } = useUI();
 
-  // Kutipan chibi: dipilih ulang (acak, beda dari sebelumnya) TIAP popup
-  // dibuka. Di-set saat render begitu `open` berubah jadi true, jadi kutipan
-  // baru langsung tampil tanpa sempat berkedip kutipan lama.
+  // Ucapan chibi: dipilih ulang (acak, beda dari sebelumnya) TIAP popup
+  // dibuka, tapi hanya dari ucapan yang cocok dengan progres user saat ini
+  // (lihat pickChibiLine). Di-set saat render begitu `open` berubah jadi
+  // true, jadi ucapan baru langsung tampil tanpa sempat berkedip.
   const [wasOpen, setWasOpen] = useState(open);
-  const [quoteIdx, setQuoteIdx] = useState<number>(() => pickQuoteIndex(null));
+  const [quote, setQuote] = useState(() =>
+    pickChibiLine(getProgressContext(getConquery()), null),
+  );
   if (open !== wasOpen) {
     setWasOpen(open);
-    if (open) setQuoteIdx(pickQuoteIndex(quoteIdx));
+    if (open) {
+      setQuote(
+        pickChibiLine(getProgressContext(getConquery()), quote.messageKey),
+      );
+    }
   }
 
   const conquered = open ? getConquery() : {};
@@ -89,16 +95,17 @@ export default function RankMissionsModal({ open, onClose }: Props) {
   const steps = stepGroups.flatMap((g) => g.items);
   const stepsDone = steps.filter((i) => i.done).length;
 
-  // Pose si peri pemandu ngikutin progress grup misi yang sedang aktif
-  // (bukan progress total), biar reaksinya relevan sama yang lagi dikerjain.
+  // Grup misi yang sedang aktif (buat variabel di kalimat chibi).
   const activeGroup = groups[currentGroup];
-  const activeDone = activeGroup ? activeGroup.items.filter((i) => i.done).length : 0;
-  const activeTotal = activeGroup ? activeGroup.items.length : 0;
-  const mood = pickGuideMood(activeDone, activeTotal, allDone);
-
-  // index terakhir = kutipan kontekstual sesuai progres misi
-  const quote =
-    quoteIdx < CHIBI_QUOTES.length ? CHIBI_QUOTES[quoteIdx] : mood;
+  // Isi variabel di kalimat: trial yang harus dikerjakan berikutnya + pangkat
+  // tujuannya + hitungan progres.
+  const nextItem = activeGroup?.items.find((i) => !i.done);
+  const quoteVars = {
+    script: nextItem ? SCRIPTS[nextItem.key].label : "",
+    rank: activeGroup?.rank.title ?? "",
+    done,
+    total: MISSION_TOTAL,
+  };
 
   const go = (key: ScriptKey) => {
     setCurrentScript(key);
@@ -137,9 +144,9 @@ export default function RankMissionsModal({ open, onClose }: Props) {
 
         <div className="rm-hero-top">
           <ChibiGuide expression={quote.expression} />
-          <div className="rm-bubble" key={`${quoteIdx}:${quote.messageKey}`}>
+          <div className="rm-bubble" key={quote.messageKey}>
             <span className="rm-bubble-petals" aria-hidden="true" />
-            <p className="rm-bubble-text">{t(quote.messageKey)}</p>
+            <p className="rm-bubble-text">{t(quote.messageKey, quoteVars)}</p>
           </div>
         </div>
       </header>

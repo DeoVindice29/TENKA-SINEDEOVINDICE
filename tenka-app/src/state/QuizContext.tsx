@@ -1,7 +1,10 @@
 import {
   createContext,
+  useCallback,
   useContext,
+  useEffect,
   useReducer,
+  useRef,
   type ReactNode,
   type Dispatch,
 } from "react";
@@ -16,7 +19,10 @@ import {
   isJlptScript,
   isPracticeType,
   jlptMaxWrong,
+  stripMarks,
 } from "@/data/jlptConquest";
+import { logActivity } from "@/lib/activityLog";
+import { appendStudyLog } from "./flashStats";
 
 /**
  * [soal, jawaban, tipe, info tambahan?, key label info tambahan?, pilihan jawaban?]
@@ -68,7 +74,8 @@ export type QuizState = {
 
 type QuizAction =
   | { type: "START_QUIZ"; payload: Partial<QuizState> }
-  | { type: "ANSWER"; chosen: string }
+  /** silent = jawaban otomatis dari alat admin, tidak dicatat ke statistik */
+  | { type: "ANSWER"; chosen: string; silent?: boolean }
   | { type: "NEXT_QUESTION" }
   | { type: "FAIL_QUIZ" }
   | { type: "ADMIN_SKIP_ALL" }
@@ -352,7 +359,44 @@ type QuizContextValue = {
 const QuizContext = createContext<QuizContextValue | null>(null);
 
 export function QuizProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(quizReducer, initialState);
+  const [state, rawDispatch] = useReducer(quizReducer, initialState);
+
+  // state terbaru buat pencatat statistik (dispatch dibungkus useCallback)
+  const stateRef = useRef(state);
+  useEffect(() => {
+    stateRef.current = state;
+  });
+
+  // Sama seperti dispatch biasa, tapi tiap jawaban soal ikut dicatat ke
+  // statistik admin (percobaan & akurasi per materi).
+  const dispatch = useCallback<Dispatch<QuizAction>>((action) => {
+    if (action.type === "ANSWER" && !action.silent) {
+      const s = stateRef.current;
+      const current = s.queue[s.index];
+      if (current && !s.answered && s.script) {
+        const okAns =
+          String(action.chosen).trim().toLowerCase() ===
+          String(current[1]).trim().toLowerCase();
+        appendStudyLog(
+          "quiz",
+          `quiz:${s.script}:${stripMarks(current[0])}`,
+          okAns ? "good" : "again",
+          Date.now(),
+          stripMarks(current[0]),
+        );
+        logActivity({
+          kind: "answer",
+          script: s.script,
+          item: stripMarks(current[0]),
+          hint: current[1],
+          correct:
+            String(action.chosen).trim().toLowerCase() ===
+            String(current[1]).trim().toLowerCase(),
+        });
+      }
+    }
+    rawDispatch(action);
+  }, []);
 
   const buildQueue = (
     scriptKey: ScriptKey,

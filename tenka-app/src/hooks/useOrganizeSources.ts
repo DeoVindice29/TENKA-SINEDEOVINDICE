@@ -5,22 +5,23 @@ import { fetchOrganizeSources } from "@/lib/organizeSources";
 /**
  * Daftar "Organize by" (Minna no Nihongo, Genki, dst) untuk satu jenis konten,
  * semua level sekaligus — satu request kecil. `ready` false selama masih dimuat.
+ * Hasil disimpan bersama `kind`-nya, jadi saat `kind` berganti (mis. pindah tab
+ * Kotoba -> Bunpō) daftar milik kind sebelumnya tidak dianggap siap.
  */
 export function useOrganizeSources(kind: ContentKind): { sources: OrganizeSourceRow[]; ready: boolean } {
-  const [sources, setSources] = useState<OrganizeSourceRow[]>([]);
-  const [ready, setReady] = useState(false);
+  const [state, setState] = useState<{ kind: ContentKind; sources: OrganizeSourceRow[] } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
     fetchOrganizeSources(kind).then((rows) => {
       if (cancelled) return;
-      setSources(rows);
-      setReady(true);
+      setState({ kind, sources: rows });
     });
     return () => {
       cancelled = true;
     };
   }, [kind]);
 
-  return { sources, ready };
+  if (!state || state.kind !== kind) return { sources: [], ready: false };
+  return { sources: state.sources, ready: true };
 }

@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabaseClient";
+import { selectOrderedEntries } from "@/lib/orderedEntries";
 import {
   tableFor,
   TIER_LEVELS,
@@ -8,6 +8,7 @@ import {
 import { fetchSectionTitles, subChapterLabel } from "@/lib/sectionTitles";
 import type { Bilingual, KotobaEntry } from "@/data/types";
 import { entryText, kotobaSectionId } from "@/data/kotobaSearch";
+import { registerQuizView } from "@/lib/quizModes";
 
 /**
  * Kotoba dari Supabase per level JLPT (kotoba_entries_n5 ... _n1) untuk layar
@@ -43,7 +44,12 @@ export type KotobaChapterView = {
 };
 
 export type KotobaLevelView = {
+  kind: "kotoba";
   level: KotobaLevel;
+  /** Organize by (organize_sources.id) asal data ini */
+  sourceId: number;
+  /** mode kuis "All Mixed" untuk view ini (terdaftar di SCRIPTS lewat lib/quizModes.ts) */
+  allKey: string;
   chapters: KotobaChapterView[];
   total: number;
   /** key sub chapter -> id grup accordion yang memuatnya (buat jumpToSection) */
@@ -97,6 +103,7 @@ function plural(n: number, word: string): string {
 
 export function buildKotobaView(
   level: KotobaLevel,
+  sourceId: number,
   rows: KotobaRow[],
   titles: SectionTitleRow[],
 ): KotobaLevelView {
@@ -121,7 +128,9 @@ export function buildKotobaView(
 
       const subGroups: KotobaSubGroupView[] = subEntries.map(
         ([subTier, subRows]) => {
-          const key = `sb-${level}-${chapter}-${subTier}`;
+          // sourceId ikut di key: dipakai juga sebagai id mode kuis di SCRIPTS,
+          // jadi dua Organize by di level yang sama tidak boleh bentrok.
+          const key = `sb-kotoba-${level}-${sourceId}-${chapter}-${subTier}`;
           groupOfKey[key] = groupId;
           const n = subRows.length;
           return {
@@ -161,7 +170,10 @@ export function buildKotobaView(
     });
 
   return {
+    kind: "kotoba",
     level,
+    sourceId,
+    allKey: `sb-kotoba-${level}-${sourceId}-all`,
     chapters,
     total: rows.length,
     groupOfKey,
@@ -183,14 +195,10 @@ async function fetchAllRows(
   const rows: KotobaRow[] = [];
   let from = 0;
   for (;;) {
-    const { data, error } = await supabase
-      .from(table)
-      .select("*")
-      .eq("source_id", sourceId)
-      .order("chapter")
-      .order("sub_tier")
-      .order("id")
-      .range(from, from + PAGE_SIZE - 1);
+    const { data, error } = await selectOrderedEntries(table, sourceId, {
+      from,
+      to: from + PAGE_SIZE - 1,
+    });
     if (error) return { rows: [], error: error.message };
     if (!data || data.length === 0) break;
     rows.push(...(data as KotobaRow[]));
@@ -233,7 +241,9 @@ export function loadKotobaView(
         fetchSectionTitles("kotoba", level, sourceId),
       ]);
       if (rowsRes.error) return { view: null, error: rowsRes.error };
-      const view = buildKotobaView(level, rowsRes.rows, titles);
+      const view = buildKotobaView(level, sourceId, rowsRes.rows, titles);
+      // daftarkan ke SCRIPTS supaya Home bisa memakainya untuk kuis
+      registerQuizView(view);
       viewCache.set(key, view);
       return { view, error: null };
     } catch (e) {

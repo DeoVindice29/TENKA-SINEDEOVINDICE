@@ -3,8 +3,8 @@ import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabaseClient";
 import { fetchAppRole, type AppRole } from "@/lib/appRole";
 import AdminContentManager, { type AdminSection, type QuickAddSignal } from "@/admin/AdminContentManager";
-import adminBg from "@/assets/bg-admin-panel-login.png";
-import adminDoorlock from "@/assets/doorlock-admin-panel-login.png";
+import adminBg from "@/assets/bg-admin-panel-login.webp";
+import adminDoorlock from "@/assets/doorlock-admin-panel-login.webp";
 import AccountSwitcher from "@/admin/AccountSwitcher";
 import {
   accountFromSession,
@@ -26,11 +26,13 @@ import {
   IconBook,
   IconChart,
   IconChevronDown,
+  IconClose,
   IconDocument,
   IconHome,
   IconKanjiTile,
   IconLayers,
   IconMoon,
+  IconQuote,
   IconSakura,
   IconSignOut,
   IconSun,
@@ -196,6 +198,7 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
       <AdminShell
         key={session?.user.id ?? "shell"}
         role={role}
+        actorName={session ? accountFromSession(session, role).name : ""}
         onSignOut={signOut}
         onGoBack={goBack}
         switcher={
@@ -306,11 +309,14 @@ const DEV_ONLY_SECTIONS: AdminSection[] = ["dashboard", "statistik", "pengguna"]
 
 function AdminShell({
   role,
+  actorName,
   onSignOut,
   onGoBack,
   switcher,
 }: {
   role: AppRole;
+  /** nama akun yang lagi login — dicatat di Aktivitas Terbaru */
+  actorName: string;
   onSignOut: () => void;
   onGoBack: () => void;
   switcher: ReactNode;
@@ -325,6 +331,20 @@ function AdminShell({
   const [materiOpen, setMateriOpen] = useState(true);
   const [latihanOpen, setLatihanOpen] = useState(true);
   const [quickAdd, setQuickAdd] = useState<QuickAddSignal | null>(null);
+  // Mode HP: sidebar jadi drawer yang dibuka lewat tombol hamburger.
+  const [navOpen, setNavOpen] = useState(false);
+  const goSection = (next: AdminSection) => {
+    setSection(next);
+    setNavOpen(false);
+  };
+  useEffect(() => {
+    if (!navOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setNavOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [navOpen]);
   const [activity, setActivity] = useLocalStorage<ActivityEntry[]>(ACTIVITY_STORAGE_KEY, []);
   const { theme, toggleTheme } = useTheme();
 
@@ -342,22 +362,40 @@ function AdminShell({
   // dipanggil dari KotobaSection/KanjiSection/BunpoSection tiap kali insert
   // atau delete berhasil, buat kartu "Aktivitas Terbaru" di Dashboard.
   const logActivity = (entry: Omit<ActivityEntry, "id" | "at">) => {
-    setActivity((prev) => appendActivity(prev, entry));
+    setActivity((prev) => appendActivity(prev, actorName ? { ...entry, by: actorName } : entry));
   };
 
   return (
     <div className="adm-shell">
       <div className="adm-body">
-        <aside className="adm-sidebar">
+        <div className="adm-mobilebar">
+          <button
+            type="button"
+            className="adm-mobilebar-btn"
+            onClick={() => setNavOpen(true)}
+            aria-label="Menu"
+            aria-expanded={navOpen}
+          >
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
+              <path d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+          </button>
+          <span className="adm-mobilebar-brand">
+            <IconSakura />
+            <span className="adm-mobilebar-name">Tenka</span>
+          </span>
+        </div>
+        <div className={`adm-backdrop${navOpen ? " open" : ""}`} onClick={() => setNavOpen(false)} aria-hidden="true" />
+        <aside className={`adm-sidebar${navOpen ? " open" : ""}`}>
+          <button type="button" className="adm-drawer-close" onClick={() => setNavOpen(false)} aria-label="Close">
+            <IconClose />
+          </button>
           <div className="adm-brand">
             <span className="adm-brand-icon">
               <IconSakura />
             </span>
             <div className="adm-brand-text">
-              <span className="adm-brand-row">
-                <span className="adm-brand-name">Tenka</span>
-                <span className="adm-brand-kanji">天華</span>
-              </span>
+              <span className="adm-brand-name">Tenka</span>
               <span className="adm-brand-caption">{isDev ? "Dev Panel" : "Admin Panel"}</span>
             </div>
           </div>
@@ -368,7 +406,7 @@ function AdminShell({
                 <button
                   type="button"
                   className={`adm-nav-item${section === "dashboard" ? " active" : ""}`}
-                  onClick={() => setSection("dashboard")}
+                  onClick={() => goSection("dashboard")}
                 >
                   <IconHome className="adm-nav-icon" /> {t("admin.nav.dashboard")}
                 </button>
@@ -376,7 +414,7 @@ function AdminShell({
                 <button
                   type="button"
                   className={`adm-nav-item${section === "statistik" ? " active" : ""}`}
-                  onClick={() => setSection("statistik")}
+                  onClick={() => goSection("statistik")}
                 >
                   <IconChart className="adm-nav-icon" /> {t("admin.nav.stats")}
                 </button>
@@ -384,7 +422,7 @@ function AdminShell({
                 <button
                   type="button"
                   className={`adm-nav-item${section === "pengguna" ? " active" : ""}`}
-                  onClick={() => setSection("pengguna")}
+                  onClick={() => goSection("pengguna")}
                 >
                   <IconUsers className="adm-nav-icon" /> {t("admin.nav.users")}
                 </button>
@@ -408,7 +446,7 @@ function AdminShell({
                     key={key}
                     type="button"
                     className={`adm-nav-item${section === key ? " active" : ""}`}
-                    onClick={() => setSection(key)}
+                    onClick={() => goSection(key)}
                   >
                     <Icon className="adm-nav-icon" /> {label}
                   </button>
@@ -431,12 +469,21 @@ function AdminShell({
                 <button
                   type="button"
                   className={`adm-nav-item${section === "soal" ? " active" : ""}`}
-                  onClick={() => setSection("soal")}
+                  onClick={() => goSection("soal")}
                 >
                   <IconDocument className="adm-nav-icon" /> {t("admin.nav.questions")}
                 </button>
               </div>
             )}
+
+            <button
+              type="button"
+              className={`adm-nav-item adm-nav-item--single${section === "kutipan" ? " active" : ""}`}
+              onClick={() => goSection("kutipan")}
+            >
+              <IconQuote className="adm-nav-icon" /> {t("admin.nav.quotes")}
+            </button>
+
           </nav>
 
           <div className="adm-sidebar-footer">
@@ -471,6 +518,7 @@ function AdminShell({
               activity={activity}
               onLogActivity={logActivity}
               onNavigateToDashboard={() => setSection("dashboard")}
+              onOpenSection={setSection}
               canDelete={isDev}
             />
           </main>

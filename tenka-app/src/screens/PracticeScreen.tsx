@@ -6,6 +6,7 @@ import { SCRIPTS } from "@/data/scripts";
 import TimerPicker from "@/components/Pickers/TimerPicker";
 import ScrollTopButton from "@/components/ScrollTopButton";
 import {
+  isJlptScript,
   JLPT_SCRIPTS,
   practiceCount,
   practiceTypesFor,
@@ -39,10 +40,14 @@ function countSteps(total: number): number[] {
 
 export default function PracticeScreen() {
   const { t } = useLang();
-  const { setScreen, selectedTimerSeconds } = useUI();
+  const { setScreen, selectedTimerSeconds, currentScript } = useUI();
   const { startPractice } = useQuiz();
 
-  const [script, setScript] = useState<JlptScriptKey>("kotoba");
+  // Buka Practice dengan script yang sedang aktif di Home (kalau termasuk
+  // JLPT), mis. dari kartu "Go to Practice" milik Basic Bunpō.
+  const [script, setScript] = useState<JlptScriptKey>(
+    isJlptScript(currentScript) ? currentScript : "kotoba",
+  );
   const [pickedType, setPickedType] = useState<PracticeTypeKey | null>(null);
   const [count, setCount] = useState(10);
   // Teks mentah yang lagi diketik di kotak "ketik sendiri" — null kalau kotak
@@ -173,7 +178,7 @@ export default function PracticeScreen() {
         </div>
       </div>
 
-      <TimerPicker />
+      <TimerPicker variant="practice" />
 
       <button
         className="primary"

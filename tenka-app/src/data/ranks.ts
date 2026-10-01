@@ -51,7 +51,7 @@ export const RANK_LEVELS = [
     subtitle: "男爵",
     emoji: "🎗️",
     logo: baronLogo,
-    req: "Conquer all N5 Basic Kotoba.",
+    req: "Conquer all N5 Kotoba.",
   },
   {
     title: "Viscount",
@@ -65,7 +65,7 @@ export const RANK_LEVELS = [
     subtitle: "伯爵",
     emoji: "🏛️",
     logo: countLogo,
-    req: "Conquer all N5 material — Hiragana, Katakana, Basic Kotoba, Bunpō, and Kanji.",
+    req: "Conquer all N5 material — Hiragana, Katakana, Kotoba, Bunpō, and Kanji.",
   },
   {
     title: "Marquis",
@@ -120,10 +120,10 @@ export const RANK_REQ_ID = {
   "The starting point of your journey.": "Titik awal perjalananmu.",
   "Conquer all of Hiragana & Katakana.":
     "Taklukkan seluruh Hiragana & Katakana.",
-  "Conquer all N5 Basic Kotoba.": "Taklukkan seluruh Basic Kotoba N5.",
+  "Conquer all N5 Kotoba.": "Taklukkan seluruh Kotoba N5.",
   "Understand all N5 Bunpō.": "Pahami seluruh Bunpō N5.",
-  "Conquer all N5 material — Hiragana, Katakana, Basic Kotoba, Bunpō, and Kanji.":
-    "Taklukkan seluruh lessons N5 — Hiragana, Katakana, Basic Kotoba, Bunpō, dan Kanji.",
+  "Conquer all N5 material — Hiragana, Katakana, Kotoba, Bunpō, and Kanji.":
+    "Taklukkan seluruh lessons N5 — Hiragana, Katakana, Kotoba, Bunpō, dan Kanji.",
   "Conquer all N4 material.": "Taklukkan seluruh lessons N4.",
   "Conquer all N3 material.": "Taklukkan seluruh lessons N3.",
   "Conquer all N2 material.": "Taklukkan seluruh lessons N2.",

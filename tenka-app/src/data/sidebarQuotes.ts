@@ -6,6 +6,8 @@
 // kosong/offline), tanpa perlu ubah logic rotasi di Sidebar.tsx.
 export type SidebarQuote = {
   id: string;
+  /** Penulis kutipan (opsional), tampil kecil di kanan bawah kartu. */
+  author?: string;
   /** Tiap item = satu baris (di-render dengan <br /> di antaranya), per bahasa. */
   lines: {
     en: string[];

@@ -64,8 +64,10 @@ import ContentSourceSwitch, {
   type OrganizeBy,
 } from "@/components/ContentSourceSwitch";
 import { useOrganizeSources } from "@/hooks/useOrganizeSources";
+import type { ContentKind } from "@/lib/contentTypes";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useKotobaLevel } from "@/hooks/useKotobaLevel";
+import { useContentView } from "@/hooks/useContentView";
 import { LessonsLoading } from "@/components/ui/Loader";
 import { useLevelUnlock } from "@/hooks/useLevelUnlock";
 import {
@@ -73,6 +75,12 @@ import {
   type KotobaLevel,
   type KotobaLevelView,
 } from "@/lib/kotobaSupabase";
+import {
+  searchContentView,
+  type BunpoLevelView,
+  type KanjiLevelView,
+  type ContentLevelView,
+} from "@/lib/contentViewSupabase";
 
 const TABS: { key: ScriptKey; glyph: string; label: string }[] = [
   { key: "hiragana", glyph: "あ", label: "Hiragana" },
@@ -100,6 +108,9 @@ type LearnTablesProps = {
   onMountedIdsChange: (ids: string[]) => void;
   /** kalau ada: Kotoba dirender dari data Supabase (N5-N1), bukan data bawaan */
   sbView?: KotobaLevelView | null;
+  /** kalau ada: Bunpō / Kanji dirender dari data Supabase, bukan data bawaan */
+  bunpoView?: BunpoLevelView | null;
+  kanjiView?: KanjiLevelView | null;
 };
 
 // Isi tabel/kartu Learn. Di-memo supaya mengetik di kotak pencarian (yang
@@ -110,6 +121,8 @@ const LearnTables = memo(function LearnTables({
   syncOpenIds,
   onMountedIdsChange,
   sbView,
+  bunpoView,
+  kanjiView,
 }: LearnTablesProps) {
   const { t } = useLang();
 
@@ -178,6 +191,68 @@ const LearnTables = memo(function LearnTables({
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [t, sbView],
+  );
+
+  // Bunpō dari Supabase: satu grup accordion per Chapter, isinya Sub Chapter
+  const bunpoGroups = useMemo(
+    () =>
+      bunpoView
+        ? bunpoView.chapters.map((ch) => ({
+            id: ch.id,
+            chapterNum: ch.chapter,
+            sample: ch.sample,
+            title: ch.title,
+            desc: ch.desc,
+            render: () => (
+              <>
+                {ch.subGroups.map((sg) => (
+                  <LearnSection
+                    key={sg.key}
+                    id={sg.sectionId}
+                    title={sg.title}
+                    count={sg.items.length}
+                    countLabel={t("learn.patterns")}
+                    desc={sg.desc}
+                  >
+                    <GrammarCard items={sg.items as any} />
+                  </LearnSection>
+                ))}
+              </>
+            ),
+          }))
+        : [],
+    [t, bunpoView],
+  );
+
+  // Kanji dari Supabase: sama, tapi kartunya KanjiGrid
+  const kanjiGroups = useMemo(
+    () =>
+      kanjiView
+        ? kanjiView.chapters.map((ch) => ({
+            id: ch.id,
+            chapterNum: ch.chapter,
+            sample: ch.sample,
+            title: ch.title,
+            desc: ch.desc,
+            render: () => (
+              <>
+                {ch.subGroups.map((sg) => (
+                  <LearnSection
+                    key={sg.key}
+                    id={sg.sectionId}
+                    title={sg.title}
+                    count={sg.items.length}
+                    countLabel={t("learn.characters")}
+                    desc={sg.desc}
+                  >
+                    <KanjiGrid items={sg.items as any} />
+                  </LearnSection>
+                ))}
+              </>
+            ),
+          }))
+        : [],
+    [t, kanjiView],
   );
 
   return (
@@ -430,7 +505,15 @@ const LearnTables = memo(function LearnTables({
           </>
         )}
 
-        {tab === "kanji" && (
+        {tab === "kanji" && kanjiView && (
+          <LearnAccordion
+            syncOpenIds={syncOpenIds}
+            groups={kanjiGroups}
+            onMountedIdsChange={onMountedIdsChange}
+          />
+        )}
+
+        {tab === "kanji" && !kanjiView && (
           <>
             <LearnSection
               title={{
@@ -577,7 +660,15 @@ const LearnTables = memo(function LearnTables({
           />
         )}
 
-        {tab === "bunpo" && (
+        {tab === "bunpo" && bunpoView && (
+          <LearnAccordion
+            syncOpenIds={syncOpenIds}
+            groups={bunpoGroups}
+            onMountedIdsChange={onMountedIdsChange}
+          />
+        )}
+
+        {tab === "bunpo" && !bunpoView && (
           <>
             {BUNPO_N5_TIER_KEYS.map((tk, idx) => {
               const items = BUNPO_N5_CHAPTERS[idx];
@@ -611,8 +702,8 @@ export default function LearnScreen() {
   const { currentScript } = useUI();
   const [tab, setTab] = useState<ScriptKey>(currentScript);
 
-  // Kotoba di Lessons punya dua pilihan yang berdiri sendiri, keduanya
-  // diingat lewat refresh:
+  // Kotoba, Bunpō, dan Kanji di Lessons punya dua pilihan yang berdiri
+  // sendiri PER TAB, semuanya diingat lewat refresh:
   //  - level JLPT (N5..N1)
   //  - "Organize by": Topic (data bawaan app, tidak ada yang dihapus) atau
   //    salah satu Organize by dari Supabase (Minna no Nihongo, dst — admin
@@ -622,21 +713,87 @@ export default function LearnScreen() {
     "tenka:lvl:learn:kotoba",
     "N5",
   );
+  const [bunpoLevel, setBunpoLevel] = useLocalStorage<KotobaLevel>(
+    "tenka:lvl:learn:bunpo",
+    "N5",
+  );
+  const [kanjiLevel, setKanjiLevel] = useLocalStorage<KotobaLevel>(
+    "tenka:lvl:learn:kanji",
+    "N5",
+  );
   const [organizeBy, setOrganizeBy] = useLocalStorage<OrganizeBy>(
     "tenka:org:learn:kotoba",
     "topic",
   );
+  const [bunpoOrganizeBy, setBunpoOrganizeBy] = useLocalStorage<OrganizeBy>(
+    "tenka:org:learn:bunpo",
+    "topic",
+  );
+  const [kanjiOrganizeBy, setKanjiOrganizeBy] = useLocalStorage<OrganizeBy>(
+    "tenka:org:learn:kanji",
+    "topic",
+  );
+  // tab yang punya pilihan level + Organize by (Hiragana/Katakana tidak)
+  const contentKind: ContentKind | null =
+    tab === "kotoba" || tab === "bunpo" || tab === "kanji" ? tab : null;
+  const storedLevel =
+    tab === "bunpo" ? bunpoLevel : tab === "kanji" ? kanjiLevel : kotobaLevel;
+  const storedOrganize =
+    tab === "bunpo"
+      ? bunpoOrganizeBy
+      : tab === "kanji"
+        ? kanjiOrganizeBy
+        : organizeBy;
+  const setLevelForTab =
+    tab === "bunpo"
+      ? setBunpoLevel
+      : tab === "kanji"
+        ? setKanjiLevel
+        : setKotobaLevel;
+  const setOrganizeForTab =
+    tab === "bunpo"
+      ? setBunpoOrganizeBy
+      : tab === "kanji"
+        ? setKanjiOrganizeBy
+        : setOrganizeBy;
   // level yang masih terkunci (belum menaklukkan N5 di akun ini) jatuh ke N5.
   // Cuma diturunkan saat render — pilihan tersimpannya tidak ditimpa, jadi kalau
   // progres akun baru selesai tersinkron dari Supabase, pilihan lama balik lagi.
   const { resolveLevel } = useLevelUnlock();
-  const activeLevel = resolveLevel(kotobaLevel);
-  const { sources: organizeSources, ready: organizeReady } = useOrganizeSources("kotoba");
-  const organize = resolveOrganize(activeLevel, organizeBy, organizeSources, organizeReady);
+  const activeLevel = resolveLevel(storedLevel);
+  const { sources: organizeSources, ready: organizeReady } =
+    useOrganizeSources(contentKind ?? "kotoba");
+  const organize = resolveOrganize(
+    activeLevel,
+    storedOrganize,
+    organizeSources,
+    organizeReady,
+  );
   const showBuiltIn = organize.value === "topic";
-  const sbLevel = tab === "kotoba" && !showBuiltIn ? activeLevel : null;
-  const sb = useKotobaLevel(sbLevel, organize.sourceId);
+  const sbLevel = contentKind && !showBuiltIn ? activeLevel : null;
+  const sb = useKotobaLevel(tab === "kotoba" ? sbLevel : null, organize.sourceId);
+  const sbBunpo = useContentView(
+    "bunpo",
+    tab === "bunpo" ? sbLevel : null,
+    organize.sourceId,
+  );
+  const sbKanji = useContentView(
+    "kanji",
+    tab === "kanji" ? sbLevel : null,
+    organize.sourceId,
+  );
+  // status pemuatan untuk tab yang aktif
+  const sbState = tab === "bunpo" ? sbBunpo : tab === "kanji" ? sbKanji : sb;
+  const sbStatus = sbState.status;
+  const sbError = sbState.status === "error" ? sbState.error : "";
+  const sbTotal = sbState.status === "ready" ? sbState.view.total : 0;
   const sbView = sb.status === "ready" ? sb.view : null;
+  const bunpoView =
+    sbBunpo.status === "ready" ? (sbBunpo.view as BunpoLevelView) : null;
+  const kanjiView =
+    sbKanji.status === "ready" ? (sbKanji.view as KanjiLevelView) : null;
+  const contentView: ContentLevelView<any> | null =
+    tab === "bunpo" ? bunpoView : tab === "kanji" ? kanjiView : null;
 
   // pencarian: dikosongkan tiap masuk/keluar layar Learn (komponen ini
   // di-mount ulang), tapi tetap dipakai saat pindah tab script.
@@ -659,8 +816,36 @@ export default function LearnScreen() {
     [],
   );
 
-  // Kotoba dihitung dari data, bukan DOM (panelnya di-mount malas)
-  const kotobaOverride = useMemo<LearnFilterOverride | null>(() => {
+  // Kotoba (dan Bunpō/Kanji dari Supabase) dihitung dari data, bukan DOM
+  // (panelnya di-mount malas)
+  const lessonOverride = useMemo<LearnFilterOverride | null>(() => {
+    // Bunpō / Kanji dari Supabase: hitung dari data hasil fetch. Sumber
+    // bawaan (Topic) tetap pakai filter DOM seperti sebelumnya.
+    if (tab === "bunpo" || tab === "kanji") {
+      if (!sbLevel) return null;
+      if (!contentView) {
+        return { chips: [], noMatchIds: [], total: 0, matchingGroupIds: [] };
+      }
+      const found = searchContentView(contentView, deferredQuery, lang);
+      const chips: { id: string; label: string }[] = [];
+      const noMatch: string[] = [];
+      contentView.chapters.forEach((ch) =>
+        ch.subGroups.forEach((sg) => {
+          chips.push({
+            id: sg.sectionId,
+            label: sg.title[lang] || sg.title.en,
+          });
+          if ((found.perKey[sg.key] ?? 0) === 0) noMatch.push(sg.sectionId);
+        }),
+      );
+      return {
+        chips,
+        noMatchIds: deferredQuery.trim() ? noMatch : [],
+        total: found.total,
+        matchingGroupIds: found.groupIds,
+      };
+    }
+
     if (tab !== "kotoba") return null;
 
     // sumber Supabase: hitung dari data hasil fetch (kosong selama loading)
@@ -705,14 +890,14 @@ export default function LearnScreen() {
       total: res.total,
       matchingGroupIds: res.groupIds,
     };
-  }, [tab, deferredQuery, lang, sbLevel, sbView]);
+  }, [tab, deferredQuery, lang, sbLevel, sbView, contentView]);
 
   const { chips, noMatchIds, total, matchingGroupIds } = useLearnFilter(
     tablesRef,
     tab,
     lang,
     deferredQuery,
-    kotobaOverride,
+    lessonOverride,
     mountedGroupIds.join("|"),
   );
 
@@ -748,8 +933,11 @@ export default function LearnScreen() {
     } else {
       // Kotoba: section-nya ada di Chapter yang panelnya belum di-mount.
       // Buka Chapter-nya dulu (sama seperti klik manual), baru scroll.
-      const tierKey = id.replace("learn-sec-kotoba-", "");
-      const groupId = KOTOBA_GROUP_OF_TIER[tierKey] ?? sbView?.groupOfKey[tierKey];
+      const tierKey = id.replace(/^learn-sec-(?:kotoba|bunpo|kanji)-/, "");
+      const groupId =
+        KOTOBA_GROUP_OF_TIER[tierKey] ??
+        sbView?.groupOfKey[tierKey] ??
+        contentView?.groupOfKey[tierKey];
       if (!groupId) return;
       const header = tablesRef.current?.querySelector<HTMLButtonElement>(
         `.tier-group[data-group-id="${groupId}"] .tier-group-header`,
@@ -769,6 +957,19 @@ export default function LearnScreen() {
       scrollTo(sectionEl);
     }
   };
+
+  const loadingKey =
+    tab === "bunpo"
+      ? "source.loadingBunpo"
+      : tab === "kanji"
+        ? "source.loadingKanji"
+        : "source.loading";
+  const emptyKey =
+    tab === "bunpo"
+      ? "source.emptyBunpo"
+      : tab === "kanji"
+        ? "source.emptyKanji"
+        : "source.emptyKotoba";
 
   return (
     <section id="screen-learn">
@@ -798,13 +999,13 @@ export default function LearnScreen() {
         ))}
       </div>
 
-      {tab === "kotoba" && (
+      {contentKind && (
         <ContentSourceSwitch
           level={activeLevel}
           organize={organize}
           sources={organizeSources}
-          onLevelChange={setKotobaLevel}
-          onOrganizeChange={setOrganizeBy}
+          onLevelChange={setLevelForTab}
+          onOrganizeChange={setOrganizeForTab}
         />
       )}
 
@@ -876,35 +1077,33 @@ export default function LearnScreen() {
         ref={tablesRef}
         key={`${tab}:${sbLevel ?? "local"}:${organize.sourceId ?? ""}`}
       >
-        {sbLevel && (sb.status === "loading" || organize.pending) && (
-          <LessonsLoading label={t("source.loading", { level: sbLevel })} />
+        {sbLevel && (sbStatus === "loading" || organize.pending) && (
+          <LessonsLoading label={t(loadingKey, { level: sbLevel })} />
         )}
-        {sbLevel && sb.status === "error" && (
+        {sbLevel && sbStatus === "error" && (
           <div className="learn-no-results">
             <p style={{ color: "#c0392b" }}>
-              {t("source.loadError")}: {sb.error}
+              {t("source.loadError")}: {sbError}
             </p>
-            <button type="button" className="source-retry" onClick={sb.retry}>
+            <button type="button" className="source-retry" onClick={sbState.retry}>
               {t("source.retry")}
             </button>
           </div>
         )}
         {sbLevel && !organize.pending && organize.sourceId === null && (
-          <p className="learn-no-results">
-            {t("source.emptyKotoba", { level: sbLevel })}
-          </p>
+          <p className="learn-no-results">{t(emptyKey, { level: sbLevel })}</p>
         )}
-        {sbLevel && sbView && sbView.total === 0 && (
-          <p className="learn-no-results">
-            {t("source.emptyKotoba", { level: sbLevel })}
-          </p>
+        {sbLevel && sbStatus === "ready" && sbTotal === 0 && (
+          <p className="learn-no-results">{t(emptyKey, { level: sbLevel })}</p>
         )}
-        {(!sbLevel || (sbView && sbView.total > 0)) && (
+        {(!sbLevel || (sbStatus === "ready" && sbTotal > 0)) && (
           <LearnTables
             tab={tab}
             syncOpenIds={matchingGroupIds}
             onMountedIdsChange={handleMountedIdsChange}
             sbView={sbView}
+            bunpoView={bunpoView}
+            kanjiView={kanjiView}
           />
         )}
       </div>

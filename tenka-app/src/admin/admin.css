@@ -224,7 +224,9 @@ body:has(.adm-shell) {
     display: flex;
     flex-direction: column;
     padding: 0 12px 16px;
-    overflow-y: auto;
+    /* Sidebar tidak boleh punya scroll: kalau kepenuhan, ukuran teks & ikon
+       dikecilkan bertahap lewat blok "Sidebar tanpa scroll" di akhir file. */
+    overflow: hidden;
 }
 
 .adm-content-col {
@@ -468,20 +470,42 @@ body:has(.adm-shell) {
     box-sizing: border-box;
     min-height: 76px;
     margin-bottom: 8px;
-    padding: 12px 0 10px;
+    /* Full-bleed: melebar sampai tepi area scroll (menutup gutter kiri-kanan
+       .adm-main) supaya konten yang digulir tidak mengintip di samping header. */
+    margin-left: -28px;
+    margin-right: -28px;
+    padding: 12px 28px 10px;
     background: var(--a-bg);
 }
 
-.adm-page-header h1 {
+/* Pinggiran bawah header memudar halus, bukan terpotong tajam. */
+.adm-page-header--sticky::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 14px;
+    background: linear-gradient(180deg, var(--a-bg) 0%, transparent 100%);
+    pointer-events: none;
+}
+
+/* Judul semua halaman admin memakai gaya yang sama dengan hero Dashboard. */
+.adm-page-header h1,
+.adm-dash-hero h1 {
     margin: 0;
-    font-size: 22px;
-    font-weight: 800;
+    font-family: "Shippori Mincho", serif;
+    font-size: 40px;
+    line-height: 1.1;
+    font-weight: 700;
+    letter-spacing: -0.01em;
     color: var(--a-indigo-deep);
 }
 
-.adm-page-header p {
-    margin: 3px 0 0;
-    font-size: 13.5px;
+.adm-page-header p,
+.adm-dash-hero p {
+    margin: 6px 0 0;
+    font-size: 15px;
     color: var(--a-ink-soft);
 }
 
@@ -1241,21 +1265,6 @@ body:has(.adm-shell) {
     text-overflow: ellipsis;
 }
 
-/* badge & dropdown role dibuat sama tinggi biar baris tabel rapi */
-.adm-table--users .adm-role-badge,
-.adm-table--users .adm-role-select {
-    display: inline-flex;
-    align-items: center;
-    height: 28px;
-    box-sizing: border-box;
-    min-width: 84px;
-}
-
-.adm-table--users .adm-role-badge {
-    justify-content: center;
-    gap: 4px;
-}
-
 /* ---------- Kotoba: tree explorer (folder tree + detail panel) ---------- */
 
 .adm-page-header--with-actions {
@@ -1902,4 +1911,2025 @@ body:has(.adm-shell) {
 .adm-lang-toggle button.active {
     background: var(--a-indigo);
     color: #fff;
+}
+
+/* ================= Dashboard (desain baru) ================= */
+
+.adm-dash-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    margin: -64px -28px 18px;
+    padding: 64px 28px 26px;
+    min-height: 200px;
+}
+
+.adm-dash-hero-art {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background-size: cover;
+    background-position: center 14%;
+    transform: scaleX(-1); /* Fuji + sakura pindah ke sisi kanan */
+}
+
+.adm-dash-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+        linear-gradient(90deg, var(--a-bg) 0%, color-mix(in srgb, var(--a-bg) 72%, transparent) 30%, transparent 62%),
+        linear-gradient(180deg, transparent 50%, var(--a-bg) 100%);
+}
+
+:root[data-theme="dark"] .adm-dash-hero-art {
+    opacity: 0.3;
+}
+
+/* nada per jenis konten */
+.tone-kotoba { --tone-fg: #3b6ee6; --tone-bg: rgba(59, 110, 230, 0.16); }
+.tone-kanji  { --tone-fg: #7c5ce6; --tone-bg: rgba(124, 92, 230, 0.16); }
+.tone-bunpo  { --tone-fg: #12a08c; --tone-bg: rgba(18, 160, 140, 0.16); }
+
+.adm-dstat-grid,
+.adm-dquick-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.adm-dstat-grid {
+    margin-bottom: 26px;
+}
+
+.adm-dquick-grid {
+    margin-bottom: 22px;
+}
+
+.adm-dstat-card,
+.adm-dquick-card {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+    cursor: pointer;
+    background: var(--a-card);
+    border: 1px solid var(--a-line);
+    border-radius: 20px;
+    box-shadow: 0 6px 20px rgba(47, 95, 222, 0.07);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.adm-dstat-card {
+    padding: 22px 24px;
+}
+
+.adm-dquick-card {
+    padding: 18px 22px;
+}
+
+.adm-dstat-card:hover,
+.adm-dquick-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--tone-fg);
+    box-shadow: 0 10px 26px rgba(47, 95, 222, 0.13);
+}
+
+/* hiasan gelombang seigaiha tipis di pojok kanan bawah */
+.adm-dstat-card::after,
+.adm-dquick-card::after {
+    content: "";
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    width: 46%;
+    height: 60%;
+    pointer-events: none;
+    opacity: 0.55;
+    background: repeating-radial-gradient(circle at 50% 100%, transparent 0 9px, var(--tone-bg) 9px 11px);
+    -webkit-mask-image: linear-gradient(135deg, transparent 30%, #000 100%);
+    mask-image: linear-gradient(135deg, transparent 30%, #000 100%);
+}
+
+.adm-dstat-icon,
+.adm-dquick-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--tone-bg);
+    color: var(--tone-fg);
+    position: relative;
+    z-index: 1;
+}
+
+.adm-dstat-icon {
+    width: 68px;
+    height: 68px;
+}
+
+.adm-dstat-icon svg {
+    width: 32px;
+    height: 32px;
+}
+
+.adm-dquick-icon {
+    width: 54px;
+    height: 54px;
+}
+
+.adm-dquick-icon svg {
+    width: 26px;
+    height: 26px;
+}
+
+.adm-dstat-body,
+.adm-dquick-text {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.adm-dstat-value {
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1.05;
+    color: var(--a-ink);
+}
+
+.adm-dstat-label {
+    margin-top: 2px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--a-indigo-deep);
+}
+
+.adm-dstat-desc {
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--a-ink-soft);
+}
+
+.adm-dquick-label {
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--a-ink);
+}
+
+.adm-dquick-desc {
+    margin-top: 3px;
+    font-size: 12.5px;
+    color: var(--a-ink-soft);
+}
+
+.adm-dstat-go,
+.adm-dquick-go {
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    color: var(--a-indigo);
+    align-self: flex-start;
+}
+
+.adm-dquick-go {
+    align-self: center;
+}
+
+.adm-dsection-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 4px 0 14px;
+}
+
+.adm-dsection-icon {
+    width: 24px;
+    height: 24px;
+    margin-top: 2px;
+    color: var(--a-indigo);
+}
+
+.adm-dsection-head h2,
+.adm-dact-title h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--a-indigo-deep);
+}
+
+.adm-dsection-head p,
+.adm-dact-title p {
+    margin: 2px 0 0;
+    font-size: 12.5px;
+    color: var(--a-ink-soft);
+}
+
+.adm-dact {
+    border-radius: 20px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(47, 95, 222, 0.07);
+}
+
+.adm-dact-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--a-line);
+}
+
+.adm-dact-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--a-indigo-tint);
+    color: var(--a-indigo);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.adm-dact-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.adm-dact-title {
+    flex: 1;
+    min-width: 0;
+}
+
+.adm-dact-viewall {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 34px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--a-indigo-tint);
+    color: var(--a-indigo);
+    font: inherit;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.adm-dact-viewall:hover {
+    background: var(--a-indigo-tint-hover);
+}
+
+.adm-dact-viewall svg {
+    width: 14px;
+    height: 14px;
+}
+
+.adm-dact-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--a-ink-soft);
+}
+
+.adm-dact .adm-activity-list {
+    padding: 4px 0;
+}
+
+.adm-dact .adm-activity-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+}
+
+@media (max-width: 980px) {
+    .adm-dstat-grid,
+    .adm-dquick-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .adm-dash-hero h1 {
+        font-size: 32px;
+    }
+}
+
+/* ================= Sidebar / navigasi (desain baru: navy gelap) ================= */
+
+.adm-sidebar {
+    width: 246px;
+    padding: 0 14px 16px;
+    border-right: none;
+    color: #dbe6ff;
+    background-color: #17244f;
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 232 200' fill='none'%3E%3Cg stroke='%23a9c0ff' stroke-opacity='.16' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M-6 172c10-22 40-24 50-4 12-18 44-14 48 8 14-12 40-6 44 12 16-14 46-8 50 12'/%3E%3Cpath d='M-6 196c12-20 38-20 48-2 12-16 40-12 46 6 14-10 38-4 42 12 18-12 46-6 52 10'/%3E%3Cpath d='M22 186c6-10 22-10 28-1M104 190c6-10 22-10 28-1M170 184c6-10 22-10 28-1'/%3E%3C/g%3E%3Cg fill='%23a9c0ff' fill-opacity='.2'%3E%3Cg transform='translate(196 132) scale(.9)'%3E%3Ccircle r='7'/%3E%3Ccircle cx='11' cy='-4' r='7'/%3E%3Ccircle cx='7' cy='9' r='7'/%3E%3Ccircle cx='-7' cy='9' r='7'/%3E%3Ccircle cx='-11' cy='-4' r='7'/%3E%3C/g%3E%3Cg transform='translate(170 96) scale(.55)'%3E%3Ccircle r='7'/%3E%3Ccircle cx='11' cy='-4' r='7'/%3E%3Ccircle cx='7' cy='9' r='7'/%3E%3Ccircle cx='-7' cy='9' r='7'/%3E%3Ccircle cx='-11' cy='-4' r='7'/%3E%3C/g%3E%3Cg transform='translate(214 76) scale(.4)'%3E%3Ccircle r='7'/%3E%3Ccircle cx='11' cy='-4' r='7'/%3E%3Ccircle cx='7' cy='9' r='7'/%3E%3Ccircle cx='-7' cy='9' r='7'/%3E%3Ccircle cx='-11' cy='-4' r='7'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+        linear-gradient(180deg, #1f3170 0%, #182757 46%, #121d44 100%);
+    background-repeat: no-repeat, no-repeat;
+    background-position: center calc(100% - 158px), 0 0;
+    background-size: 100% auto, 100% 100%;
+}
+
+.adm-sidebar .adm-brand {
+    gap: 12px;
+    padding: 22px 8px 18px;
+    margin-bottom: 8px;
+    border-bottom: none;
+}
+
+.adm-sidebar .adm-brand-icon {
+    width: 44px;
+    height: 44px;
+    color: #fff;
+}
+
+.adm-sidebar .adm-brand-icon svg {
+    width: 40px;
+    height: 40px;
+    filter: drop-shadow(0 2px 8px rgba(120, 160, 255, 0.45));
+}
+
+.adm-sidebar .adm-brand-name {
+    font-family: "Shippori Mincho", serif;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0;
+    color: #fff;
+}
+
+.adm-sidebar .adm-brand-caption {
+    margin-top: 3px;
+    font-size: 13px;
+    color: #8fb0ff;
+}
+
+.adm-sidebar .adm-nav {
+    gap: 4px;
+    padding-top: 6px;
+}
+
+.adm-sidebar .adm-nav-item,
+.adm-sidebar .adm-nav-group {
+    padding: 11px 14px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #dbe6ff;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.adm-sidebar .adm-nav-item:hover,
+.adm-sidebar .adm-nav-group:hover {
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
+}
+
+.adm-sidebar .adm-nav-icon {
+    width: 22px;
+    height: 22px;
+    color: #9db8f5;
+}
+
+/* menu aktif = pil biru */
+.adm-sidebar .adm-nav-item.active {
+    background: linear-gradient(90deg, #3d69e6 0%, #2f55cc 100%);
+    color: #fff;
+    font-weight: 700;
+    box-shadow: 0 6px 16px rgba(47, 85, 204, 0.45);
+}
+
+.adm-sidebar .adm-nav-item.active .adm-nav-icon {
+    color: #fff;
+}
+
+.adm-sidebar .adm-nav-group.active-parent {
+    color: #fff;
+    font-weight: 700;
+}
+
+.adm-sidebar .adm-nav-group.active-parent .adm-nav-icon {
+    color: #fff;
+}
+
+.adm-sidebar .adm-nav-caret {
+    color: #9db8f5;
+}
+
+/* sub menu: garis vertikal tipis, item aktif ditandai titik + garis terang */
+.adm-sidebar .adm-nav-sub {
+    gap: 2px;
+    margin: 0 0 8px 26px;
+    padding-left: 0;
+    border-left: 1.5px solid rgba(157, 184, 245, 0.22);
+}
+
+.adm-sidebar .adm-nav-sub .adm-nav-item {
+    position: relative;
+    padding: 9px 12px 9px 24px;
+    border-radius: 0 12px 12px 0;
+    font-size: 14.5px;
+}
+
+.adm-sidebar .adm-nav-sub .adm-nav-item .adm-nav-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.adm-sidebar .adm-nav-sub .adm-nav-item.active {
+    background: linear-gradient(90deg, rgba(90, 130, 245, 0.22), rgba(90, 130, 245, 0));
+    box-shadow: none;
+    color: #fff;
+}
+
+.adm-sidebar .adm-nav-sub .adm-nav-item.active::before {
+    content: "";
+    position: absolute;
+    left: -1.5px;
+    top: 4px;
+    bottom: 4px;
+    width: 3px;
+    border-radius: 3px;
+    background: #6f9bff;
+}
+
+.adm-sidebar .adm-nav-sub .adm-nav-item.active::after {
+    content: "";
+    position: absolute;
+    left: 11px;
+    top: 50%;
+    width: 5px;
+    height: 5px;
+    margin-top: -2.5px;
+    border-radius: 50%;
+    background: #8fb0ff;
+}
+
+.adm-sidebar .adm-nav-sub .adm-nav-item.active .adm-nav-icon {
+    color: #9dbbff;
+}
+
+/* footer: kartu akun, Back to App, Sign out */
+.adm-sidebar .adm-sidebar-footer {
+    gap: 8px;
+    padding-top: 14px;
+    border-top: none;
+}
+
+.adm-sidebar .adm-switch-trigger {
+    padding: 10px 12px;
+    margin-bottom: 2px;
+    border: 1px solid rgba(157, 184, 245, 0.45);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    color: #fff;
+}
+
+.adm-sidebar .adm-switch-trigger:hover {
+    background: rgba(255, 255, 255, 0.09);
+}
+
+.adm-sidebar .adm-switch-trigger .adm-switch-avatar {
+    width: 38px;
+    height: 38px;
+    border: 2px solid rgba(157, 184, 245, 0.55);
+}
+
+.adm-sidebar .adm-switch-trigger .adm-switch-name {
+    font-size: 13.5px;
+    color: #fff;
+}
+
+.adm-sidebar .adm-switch-trigger .adm-switch-sub {
+    color: #b7c9f5;
+}
+
+.adm-sidebar .adm-sidebar-footer > .adm-nav-item:not(.adm-switch-trigger):not(.signout) {
+    background: rgba(8, 16, 46, 0.45);
+    border: 1px solid rgba(157, 184, 245, 0.14);
+    font-size: 14.5px;
+}
+
+.adm-sidebar .adm-sidebar-footer > .adm-nav-item:not(.adm-switch-trigger):not(.signout):hover {
+    background: rgba(8, 16, 46, 0.7);
+}
+
+.adm-sidebar .adm-nav-item.signout,
+.adm-sidebar .adm-nav-item.signout .adm-nav-icon {
+    color: #ff6b81;
+}
+
+.adm-sidebar .adm-nav-item.signout:hover {
+    background: rgba(255, 107, 129, 0.12);
+}
+
+/* bar atas kanan: pil EN | ID + tombol tema dibuat lebih besar & lembut */
+.adm-lang-toggle,
+.adm-theme-toggle {
+    top: 22px;
+    height: 44px;
+    box-shadow: 0 6px 18px rgba(47, 95, 222, 0.14);
+}
+
+.adm-theme-toggle {
+    width: 44px;
+    right: 24px;
+}
+
+.adm-lang-toggle {
+    right: 80px;
+}
+
+.adm-lang-toggle button {
+    height: 36px;
+    padding: 0 14px;
+}
+
+@media (max-width: 680px) {
+    .adm-sidebar {
+        width: 100%;
+        background-image: linear-gradient(90deg, #1f3170, #121d44);
+        background-size: 100% 100%;
+        background-position: 0 0;
+    }
+
+    .adm-sidebar .adm-nav-sub {
+        margin: 0;
+        border-left: none;
+    }
+
+    .adm-sidebar .adm-nav-sub .adm-nav-item {
+        padding: 8px 12px;
+        border-radius: 12px;
+    }
+
+    .adm-sidebar .adm-nav-sub .adm-nav-item.active::before,
+    .adm-sidebar .adm-nav-sub .adm-nav-item.active::after {
+        display: none;
+    }
+
+    .adm-sidebar .adm-sidebar-footer {
+        flex-direction: row;
+    }
+}
+
+/* nama admin yang menambah/menghapus data (Aktivitas Terbaru) */
+.adm-activity-by {
+    flex-shrink: 0;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--a-surface-tint);
+    color: var(--a-ink-soft);
+    font-size: 11.5px;
+    font-weight: 600;
+}
+
+@media (max-width: 680px) {
+    .adm-activity-by {
+        margin-left: 46px;
+    }
+}
+
+/* ================= Statistik (mockup) ================= */
+
+.tone-users   { --tone-fg: #3b6ee6; --tone-bg: rgba(59, 110, 230, 0.16); }
+.tone-active  { --tone-fg: #12a08c; --tone-bg: rgba(18, 160, 140, 0.18); }
+.tone-lessons { --tone-fg: #5b5bd6; --tone-bg: rgba(91, 91, 214, 0.16); }
+
+.adm-sstat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 176px), 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.adm-sstat {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px 18px 16px;
+    background: var(--a-card);
+    border: 1px solid var(--a-line);
+    border-radius: 18px;
+    box-shadow: 0 6px 20px rgba(47, 95, 222, 0.07);
+}
+
+.adm-sstat-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--tone-bg);
+    color: var(--tone-fg);
+}
+
+.adm-sstat-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.adm-sstat-body {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.adm-sstat-value {
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--a-ink);
+}
+
+.adm-sstat-label {
+    margin-top: 4px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--a-ink-soft);
+}
+
+.adm-sstat-sub {
+    margin-top: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 11.5px;
+    color: var(--a-ink-soft);
+}
+
+.adm-trend {
+    font-size: 11.5px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.adm-trend--up { color: #12a08c; }
+.adm-trend--down { color: #d64545; }
+.adm-trend--flat,
+.adm-trend--none { color: var(--a-ink-soft); font-weight: 600; }
+
+/* pilihan rentang waktu */
+.adm-seg {
+    flex-shrink: 0;
+    display: inline-flex;
+    padding: 3px;
+    border-radius: 999px;
+    background: var(--a-surface-tint);
+    border: 1px solid var(--a-line);
+}
+
+.adm-seg button {
+    height: 30px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 999px;
+    background: none;
+    color: var(--a-ink-soft);
+    font: inherit;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.adm-seg button:hover {
+    color: var(--a-indigo);
+}
+
+.adm-seg button.active {
+    background: var(--a-indigo);
+    color: #fff;
+}
+
+.adm-seg button:focus-visible {
+    outline: 2px solid var(--a-indigo);
+    outline-offset: 2px;
+}
+
+/* kartu Aktivitas Pengguna */
+.adm-sact-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 22px;
+    padding: 18px 22px 22px;
+}
+
+.adm-sact-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6px 20px;
+    border-radius: 16px;
+    background: var(--a-input-bg);
+}
+
+.adm-sact-metric {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--a-line);
+}
+
+.adm-sact-metric:last-child {
+    border-bottom: 0;
+}
+
+.adm-sact-metric-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--a-ink);
+}
+
+.adm-sact-metric-label i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.adm-sact-metric-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 6px;
+    padding-left: 20px;
+}
+
+.adm-sact-metric-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--a-ink);
+}
+
+/* grafik */
+.adm-chart {
+    position: relative;
+    min-width: 0;
+    transition: opacity 0.2s ease;
+}
+
+.adm-chart.is-loading {
+    opacity: 0.45;
+}
+
+.adm-chart svg {
+    display: block;
+    overflow: visible;
+}
+
+.adm-chart-grid {
+    stroke: var(--a-line);
+    stroke-width: 1;
+}
+
+.adm-chart-grid--v {
+    opacity: 0.6;
+}
+
+.adm-chart-tick {
+    fill: var(--a-ink-soft);
+    font-size: 11.5px;
+}
+
+.adm-chart-dot {
+    stroke: var(--a-card);
+    stroke-width: 2;
+    transition: r 0.1s ease;
+}
+
+.adm-chart-guide {
+    stroke: var(--a-indigo);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+    opacity: 0.6;
+}
+
+.adm-chart-empty {
+    fill: var(--a-ink-soft);
+    font-size: 13px;
+}
+
+.adm-chart-tip {
+    position: absolute;
+    top: 6px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 9px 12px;
+    border-radius: 12px;
+    background: var(--a-card);
+    border: 1px solid var(--a-card-line);
+    box-shadow: 0 8px 22px rgba(20, 33, 66, 0.16);
+    font-size: 12px;
+    color: var(--a-ink-soft);
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.adm-chart-tip strong {
+    color: var(--a-ink);
+    font-size: 12.5px;
+}
+
+.adm-chart-tip span {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.adm-chart-tip i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.adm-chart-tip b {
+    color: var(--a-ink);
+}
+
+/* baris bawah: dua tabel */
+.adm-sbottom {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: 18px;
+    margin-top: 18px;
+    align-items: start;
+}
+
+.adm-sbox {
+    margin: 4px 22px 22px;
+    border: 1px solid var(--a-line);
+    border-radius: 14px;
+    overflow-x: auto;
+}
+
+.adm-stable th,
+.adm-stable td {
+    text-align: center;
+    padding: 13px 14px;
+}
+
+.adm-stable th {
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 12.5px;
+    color: var(--a-ink);
+}
+
+.adm-stable th small {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--a-ink-soft);
+}
+
+.adm-stable .adm-stable-first {
+    text-align: left;
+}
+
+.adm-stable--practiced {
+    min-width: 460px;
+}
+
+.adm-scontent {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.adm-scontent-icon {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: var(--tone-bg);
+    color: var(--tone-fg);
+}
+
+.adm-scontent-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.adm-scontent-text {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.adm-scontent-main {
+    max-width: 240px;
+    font-weight: 700;
+    color: var(--a-ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.adm-scontent-hint {
+    max-width: 240px;
+    font-size: 11.5px;
+    color: var(--a-ink-soft);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.adm-stype {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 999px;
+    background: var(--tone-bg);
+    color: var(--tone-fg);
+    font-size: 11.5px;
+    font-weight: 700;
+}
+
+.adm-sacc {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+}
+
+.adm-sacc b {
+    color: var(--a-ink);
+}
+
+@media (max-width: 1100px) {
+    .adm-sact-body,
+    .adm-sbottom {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .adm-dact-head {
+        flex-wrap: wrap;
+    }
+
+    .adm-sbox {
+        margin: 4px 14px 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .adm-chart,
+    .adm-chart-dot {
+        transition: none;
+    }
+}
+
+/* ================= Halaman Users (Dev Panel) ================= */
+
+.adm-users-page {
+    position: relative;
+    isolation: isolate;
+}
+
+/* hiasan sakura samar di pojok kanan atas, seperti di mockup */
+.adm-users-art {
+    position: absolute;
+    z-index: -1;
+    top: -64px;
+    right: -28px;
+    width: min(620px, 70%);
+    height: 300px;
+    background-size: cover;
+    background-position: center 14%;
+    transform: scaleX(-1);
+    opacity: 0.55;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(to bottom, #000 30%, transparent 100%),
+        linear-gradient(to left, #000 35%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(to bottom, #000 30%, transparent 100%),
+        linear-gradient(to left, #000 35%, transparent 100%);
+    mask-composite: intersect;
+}
+
+:root[data-theme="dark"] .adm-users-art {
+    opacity: 0.22;
+}
+
+.adm-users-card {
+    padding: 16px;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px color-mix(in srgb, var(--a-indigo) 8%, transparent);
+}
+
+.adm-users-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 16px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+.adm-users-search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1 1 260px;
+    max-width: 380px;
+    height: 44px;
+    padding: 0 16px;
+    border-radius: 999px;
+    border: 1px solid var(--a-line);
+    background: var(--a-card);
+    color: var(--a-ink-soft);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.adm-users-search:focus-within {
+    border-color: var(--a-indigo);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--a-indigo) 16%, transparent);
+}
+
+.adm-users-search svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.adm-users-search input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--a-ink);
+    font: inherit;
+    font-size: 14px;
+}
+
+.adm-users-filters {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.adm-users-count {
+    margin-right: 6px;
+    font-size: 14px;
+    color: var(--a-ink-soft);
+}
+
+.adm-pill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 16px;
+    border-radius: 999px;
+    border: 1px solid var(--a-line);
+    background: var(--a-card);
+    color: var(--a-ink);
+    font: inherit;
+    font-size: 14.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.adm-pill:hover {
+    background: var(--a-surface-tint);
+}
+
+.adm-pill.active {
+    color: var(--a-indigo);
+    border-color: color-mix(in srgb, var(--a-indigo) 40%, transparent);
+    background: var(--a-indigo-tint);
+}
+
+.adm-pill:focus-within {
+    border-color: var(--a-indigo);
+}
+
+.adm-pill-caret {
+    width: 14px;
+    height: 14px;
+    color: var(--a-ink-soft);
+}
+
+.adm-pill-select {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    font: inherit;
+}
+
+.adm-pill-icon {
+    width: 44px;
+    padding: 0;
+    justify-content: center;
+    color: var(--a-indigo);
+}
+
+.adm-pill-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.adm-pill-icon:disabled {
+    cursor: default;
+    opacity: 0.6;
+}
+
+.adm-pill-icon:disabled:hover {
+    background: var(--a-card);
+}
+
+.adm-users-table-wrap {
+    border: 1px solid var(--a-line);
+    border-radius: 18px;
+    overflow-x: auto;
+    background: var(--a-card);
+}
+
+.adm-table--users {
+    table-layout: fixed;
+    min-width: 680px;
+}
+
+.adm-table--users .adm-col-name { width: 34%; }
+.adm-table--users .adm-col-role { width: 18%; }
+.adm-table--users .adm-col-rank { width: 22%; }
+.adm-table--users .adm-col-joined { width: 20%; }
+.adm-table--users .adm-col-action { width: 6%; }
+
+.adm-table--users th {
+    padding: 15px 20px;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    background: color-mix(in srgb, var(--a-indigo) 7%, var(--a-card));
+}
+
+.adm-table--users td {
+    padding: 14px 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.adm-table--users .adm-user-cell {
+    gap: 14px;
+    min-width: 0;
+}
+
+.adm-table--users .adm-user-avatar {
+    width: 44px;
+    height: 44px;
+    border: 2px solid var(--a-card);
+    box-shadow: 0 0 0 1px var(--a-line);
+}
+
+.adm-table--users .adm-user-avatar-fallback svg {
+    width: 20px;
+    height: 20px;
+}
+
+.adm-user-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.adm-user-name {
+    font-size: 15.5px;
+    font-weight: 600;
+    color: var(--a-ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.adm-user-email {
+    font-size: 13px;
+    color: var(--a-ink-soft);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* badge role: User (biru) / Dev (ungu) / Admin (kuning) */
+.adm-rbadge {
+    --rb: #2f8fe6;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--rb) 28%, transparent);
+    background: color-mix(in srgb, var(--rb) 12%, var(--a-card));
+    color: var(--rb);
+    font-size: 13.5px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.adm-rbadge svg {
+    width: 15px;
+    height: 15px;
+}
+
+.adm-rbadge-select {
+    position: relative;
+    cursor: pointer;
+    padding-right: 10px;
+}
+
+.adm-rbadge-select:hover {
+    background: color-mix(in srgb, var(--rb) 20%, var(--a-card));
+}
+
+.adm-rbadge-select.saving {
+    opacity: 0.6;
+    cursor: progress;
+}
+
+.adm-rbadge-select select {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: inherit;
+    font: inherit;
+}
+
+.adm-rbadge .adm-rbadge-caret {
+    width: 13px;
+    height: 13px;
+}
+
+.adm-rbadge.dev { --rb: #8b5cf6; }
+.adm-rbadge.admin { --rb: #d98e04; }
+
+.adm-rank-cell,
+.adm-joined-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    font-size: 14.5px;
+    color: var(--a-ink-soft);
+}
+
+.adm-rank-logo {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    object-fit: contain;
+}
+
+.adm-joined-icon {
+    display: flex;
+    flex-shrink: 0;
+    color: var(--a-ink-soft);
+}
+
+.adm-joined-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.adm-joined-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    color: var(--a-ink);
+    font-size: 14.5px;
+}
+
+.adm-table--users .adm-td-action {
+    width: auto;
+    padding-right: 16px;
+}
+
+.adm-table--users .adm-icon-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.adm-table--users .adm-icon-btn:disabled:hover {
+    background: none;
+    color: var(--a-ink-soft);
+}
+
+@media (max-width: 720px) {
+    .adm-page-header h1 {
+        font-size: 32px;
+    }
+
+    .adm-users-search {
+        max-width: none;
+    }
+
+    .adm-users-art {
+        opacity: 0.35;
+    }
+}
+
+/* ================= Sidebar tanpa scroll =================
+   Semua ukuran menu dikendalikan lewat variabel --sb-*. Nilai awal = desain
+   penuh; makin pendek layar, teks / ikon / jarak dikecilkan sedikit demi
+   sedikit (bukan scroll). Mode HP (<= 680px, sidebar jadi bar horizontal) tidak
+   ikut aturan ini. */
+
+@media (min-width: 681px) {
+    .adm-sidebar {
+        --sb-brand-top: 22px;
+        --sb-brand-bottom: 18px;
+        --sb-brand-icon: 44px;
+        --sb-brand-svg: 40px;
+        --sb-brand-name: 30px;
+        --sb-brand-caption: 13px;
+        --sb-gap: 4px;
+        --sb-item-py: 11px;
+        --sb-item-font: 15px;
+        --sb-icon: 22px;
+        --sb-sub-py: 9px;
+        --sb-sub-font: 14.5px;
+        --sb-sub-icon: 20px;
+        --sb-foot-gap: 8px;
+        --sb-avatar: 38px;
+        --sb-pad-bottom: 16px;
+    }
+
+    .adm-sidebar {
+        padding-bottom: var(--sb-pad-bottom);
+        min-height: 0;
+    }
+
+    .adm-sidebar .adm-brand {
+        padding: var(--sb-brand-top) 8px var(--sb-brand-bottom);
+        flex-shrink: 0;
+    }
+
+    .adm-sidebar .adm-brand-icon {
+        width: var(--sb-brand-icon);
+        height: var(--sb-brand-icon);
+    }
+
+    .adm-sidebar .adm-brand-icon svg {
+        width: var(--sb-brand-svg);
+        height: var(--sb-brand-svg);
+    }
+
+    .adm-sidebar .adm-brand-name {
+        font-size: var(--sb-brand-name);
+    }
+
+    .adm-sidebar .adm-brand-caption {
+        font-size: var(--sb-brand-caption);
+    }
+
+    .adm-sidebar .adm-nav {
+        gap: var(--sb-gap);
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .adm-sidebar .adm-nav > * {
+        flex-shrink: 0;
+    }
+
+    .adm-sidebar .adm-nav-item,
+    .adm-sidebar .adm-nav-group {
+        padding-top: var(--sb-item-py);
+        padding-bottom: var(--sb-item-py);
+        font-size: var(--sb-item-font);
+    }
+
+    .adm-sidebar .adm-nav-icon {
+        width: var(--sb-icon);
+        height: var(--sb-icon);
+    }
+
+    .adm-sidebar .adm-nav-sub {
+        gap: calc(var(--sb-gap) / 2);
+        margin-bottom: var(--sb-gap);
+    }
+
+    .adm-sidebar .adm-nav-sub .adm-nav-item {
+        padding-top: var(--sb-sub-py);
+        padding-bottom: var(--sb-sub-py);
+        font-size: var(--sb-sub-font);
+    }
+
+    .adm-sidebar .adm-nav-sub .adm-nav-item .adm-nav-icon {
+        width: var(--sb-sub-icon);
+        height: var(--sb-sub-icon);
+    }
+
+    .adm-sidebar .adm-sidebar-footer {
+        gap: var(--sb-foot-gap);
+        flex-shrink: 0;
+    }
+
+    .adm-sidebar .adm-switch-trigger .adm-switch-avatar {
+        width: var(--sb-avatar);
+        height: var(--sb-avatar);
+    }
+}
+
+/* langkah 1 — layar <= 960px: rapatkan sedikit */
+@media (min-width: 681px) and (max-height: 960px) {
+    .adm-sidebar {
+        --sb-brand-top: 16px;
+        --sb-brand-bottom: 12px;
+        --sb-brand-icon: 40px;
+        --sb-brand-svg: 36px;
+        --sb-brand-name: 27px;
+        --sb-brand-caption: 12.5px;
+        --sb-gap: 3px;
+        --sb-item-py: 9px;
+        --sb-item-font: 14.5px;
+        --sb-icon: 20px;
+        --sb-sub-py: 7px;
+        --sb-sub-font: 14px;
+        --sb-sub-icon: 18px;
+        --sb-foot-gap: 6px;
+        --sb-avatar: 34px;
+        --sb-pad-bottom: 12px;
+    }
+
+    .adm-sidebar .adm-switch-trigger {
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+}
+
+/* langkah 2 — layar <= 820px */
+@media (min-width: 681px) and (max-height: 820px) {
+    .adm-sidebar {
+        --sb-brand-top: 12px;
+        --sb-brand-bottom: 8px;
+        --sb-brand-icon: 34px;
+        --sb-brand-svg: 30px;
+        --sb-brand-name: 24px;
+        --sb-brand-caption: 12px;
+        --sb-gap: 2px;
+        --sb-item-py: 7px;
+        --sb-item-font: 14px;
+        --sb-icon: 19px;
+        --sb-sub-py: 5px;
+        --sb-sub-font: 13.5px;
+        --sb-sub-icon: 17px;
+        --sb-foot-gap: 5px;
+        --sb-avatar: 30px;
+        --sb-pad-bottom: 10px;
+    }
+
+    .adm-sidebar .adm-switch-trigger {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    .adm-sidebar .adm-switch-trigger .adm-switch-name {
+        font-size: 13px;
+    }
+
+    .adm-sidebar .adm-switch-trigger .adm-switch-sub {
+        font-size: 11px;
+    }
+}
+
+/* langkah 3 — layar <= 730px */
+@media (min-width: 681px) and (max-height: 730px) {
+    .adm-sidebar {
+        --sb-brand-top: 8px;
+        --sb-brand-bottom: 4px;
+        --sb-brand-icon: 30px;
+        --sb-brand-svg: 27px;
+        --sb-brand-name: 21px;
+        --sb-brand-caption: 11.5px;
+        --sb-item-py: 5.5px;
+        --sb-item-font: 13.5px;
+        --sb-icon: 18px;
+        --sb-sub-py: 4px;
+        --sb-sub-font: 13px;
+        --sb-sub-icon: 16px;
+        --sb-foot-gap: 4px;
+        --sb-avatar: 27px;
+        --sb-pad-bottom: 8px;
+    }
+
+    .adm-sidebar .adm-nav-caret {
+        width: 13px;
+        height: 13px;
+    }
+}
+
+/* langkah 4 — layar <= 660px */
+@media (min-width: 681px) and (max-height: 660px) {
+
+    .adm-sidebar {
+        --sb-item-py: 4.5px;
+        --sb-item-font: 13px;
+        --sb-icon: 17px;
+        --sb-sub-py: 3.5px;
+        --sb-sub-font: 12.5px;
+        --sb-sub-icon: 15px;
+    }
+}
+
+/* langkah 5 — layar <= 560px: paling rapat */
+@media (min-width: 681px) and (max-height: 560px) {
+    .adm-sidebar .adm-brand-caption,
+    .adm-sidebar .adm-switch-trigger .adm-switch-sub {
+        display: none;
+    }
+
+    .adm-sidebar {
+        --sb-brand-top: 6px;
+        --sb-brand-bottom: 2px;
+        --sb-item-py: 3.5px;
+        --sb-sub-py: 2.5px;
+        --sb-avatar: 24px;
+    }
+}
+
+/* ---------- halaman Kutipan (Admin Panel) ---------- */
+.adm-quotes-card {
+    max-width: 900px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.adm-quotes-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--a-line);
+    font-size: 13px;
+}
+
+.adm-quotes-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.adm-quotes-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--a-line);
+}
+
+.adm-quotes-row:last-child {
+    border-bottom: none;
+}
+
+.adm-quotes-row.off .adm-quotes-text {
+    opacity: 0.45;
+}
+
+.adm-quotes-text {
+    min-width: 0;
+    flex: 1;
+}
+
+.adm-quotes-text p {
+    margin: 0;
+    white-space: pre-line;
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+.adm-quotes-text p + p {
+    margin-top: 6px;
+    font-size: 12.5px;
+}
+
+.adm-quotes-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+.adm-quotes-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-right: 8px;
+    font-size: 12.5px;
+    color: var(--a-ink-soft);
+    cursor: pointer;
+}
+
+.adm-icon-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.adm-icon-btn:disabled:hover {
+    background: none;
+    color: var(--a-ink-soft);
+}
+
+@media (max-width: 680px) {
+    .adm-quotes-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .adm-quotes-actions {
+        justify-content: flex-end;
+    }
+}
+
+.adm-quote-author {
+    display: block;
+    margin-top: 6px;
+    text-align: right;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: "Dancing Script", "Segoe Script", "Brush Script MT", cursive;
+
+    color: #fff;
+    text-shadow:
+        -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000,
+        0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000, 1px 0 0 #000,
+        0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+/* ================= Navigasi mode HP: drawer ================= */
+/* Di HP (<= 680px) sidebar bukan lagi bar horizontal yang isinya kepotong /
+   harus digeser, tapi drawer dari kiri yang dibuka lewat tombol hamburger.
+   Pakai `left` (bukan transform) supaya popover ganti akun (position: fixed)
+   tetap dihitung relatif ke layar. */
+
+.adm-mobilebar,
+.adm-backdrop,
+.adm-drawer-close {
+    display: none;
+}
+
+@media (max-width: 680px) {
+    .adm-mobilebar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+        height: 56px;
+        padding: 0 12px;
+        color: #fff;
+        background: linear-gradient(90deg, #1f3170, #121d44);
+        position: sticky;
+        top: 0;
+        z-index: 40;
+    }
+
+    .adm-mobilebar-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border: 1px solid rgba(157, 184, 245, 0.35);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.06);
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .adm-mobilebar-btn:active {
+        background: rgba(255, 255, 255, 0.14);
+    }
+
+    .adm-mobilebar-brand {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .adm-mobilebar-brand svg {
+        width: 26px;
+        height: 26px;
+    }
+
+    .adm-mobilebar-name {
+        font-family: "Shippori Mincho", serif;
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .adm-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        background: rgba(8, 16, 46, 0.55);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+    }
+
+    .adm-backdrop.open {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* sidebar -> drawer kiri */
+    .adm-sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: calc(-1 * min(86vw, 310px) - 24px);
+        z-index: 55;
+        width: min(86vw, 310px);
+        height: 100dvh;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 0 14px 16px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        border: none;
+        background-image:
+            linear-gradient(180deg, #1f3170 0%, #182757 46%, #121d44 100%);
+        background-size: 100% 100%;
+        background-position: 0 0;
+        transition: left 0.22s ease, box-shadow 0.22s ease;
+        visibility: hidden;
+    }
+
+    .adm-sidebar.open {
+        left: 0;
+        visibility: visible;
+        box-shadow: 0 0 40px rgba(8, 16, 46, 0.5);
+    }
+
+    .adm-drawer-close {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 14px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        border: none;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #dbe6ff;
+        cursor: pointer;
+    }
+
+    .adm-drawer-close svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .adm-sidebar .adm-brand {
+        border-right: none;
+        margin-bottom: 8px;
+        padding: 22px 8px 18px;
+        flex-shrink: 0;
+    }
+
+    .adm-sidebar .adm-brand-caption {
+        display: block;
+    }
+
+    /* menu kembali vertikal, submenu menjorok seperti di desktop */
+    .adm-sidebar .adm-nav {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        flex: 1 0 auto;
+        gap: 4px;
+        padding-top: 6px;
+    }
+
+    .adm-sidebar .adm-nav-item,
+    .adm-sidebar .adm-nav-group {
+        width: 100%;
+        padding: 12px 14px;
+        font-size: 15px;
+        white-space: normal;
+    }
+
+    .adm-sidebar .adm-nav-sub {
+        flex-direction: column;
+        gap: 2px;
+        margin: 0 0 8px 26px;
+        border-left: 1.5px solid rgba(157, 184, 245, 0.22);
+    }
+
+    .adm-sidebar .adm-nav-sub .adm-nav-item {
+        padding: 10px 12px 10px 24px;
+        border-radius: 0 12px 12px 0;
+        font-size: 14.5px;
+    }
+
+    .adm-sidebar .adm-nav-sub .adm-nav-item.active::before,
+    .adm-sidebar .adm-nav-sub .adm-nav-item.active::after {
+        display: block;
+    }
+
+    /* footer (akun, kembali ke app, keluar) di bawah, kolom penuh */
+    .adm-sidebar .adm-sidebar-footer {
+        flex-direction: column;
+        flex-shrink: 0;
+        gap: 8px;
+        margin: 12px 0 0;
+        padding: 14px 0 0;
+        border-left: none;
+        border-top: 1px solid rgba(157, 184, 245, 0.18);
+    }
+
+    .adm-sidebar .adm-switch-trigger {
+        width: 100%;
+        max-width: none;
+    }
+
+    .adm-sidebar .adm-switch-trigger .adm-switch-sub {
+        display: block;
+    }
+}
+
+/* ================= Admin panel mode HP: header sticky & tabel ================= */
+@media (max-width: 680px) {
+    .adm-page-header--sticky {
+        min-height: 0;
+        margin-left: -14px;
+        margin-right: -14px;
+        padding: 10px 14px 8px;
+    }
+
+    .adm-page-header--sticky h1 {
+        font-size: 28px;
+    }
+
+    .adm-page-header--sticky p {
+        margin-top: 2px;
+        font-size: 13px;
+        line-height: 1.35;
+    }
+
+    /* Kolom Bab/Chapter disembunyikan di HP supaya tombol edit/hapus kelihatan. */
+    .adm-col-bab {
+        display: none;
+    }
+
+    .adm-table-card {
+        overflow-x: auto;
+    }
+
+    .adm-table th,
+    .adm-table td {
+        padding: 10px 8px;
+    }
+
+    .adm-th-no,
+    .adm-td-no {
+        width: 28px;
+        padding-left: 10px;
+        padding-right: 4px;
+    }
+
+    .adm-td-action .adm-icon-btn {
+        width: 28px;
+        height: 28px;
+    }
+
+    .adm-td-action .adm-icon-btn + .adm-icon-btn {
+        margin-left: 0;
+    }
+}
+
+/* ---------- Soal (bank soal Latihan) ---------- */
+
+.adm-td-question {
+    max-width: 360px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.adm-answer-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--a-indigo);
+}
+
+.adm-opt-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.adm-opt-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 8px 6px 12px;
+    border: 1px solid var(--a-field-line);
+    border-radius: 12px;
+    background: var(--a-input-bg);
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.adm-opt-row.correct {
+    border-color: var(--a-indigo);
+    box-shadow: 0 0 0 3px rgba(47, 95, 222, 0.12);
+}
+
+.adm-opt-row input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    flex-shrink: 0;
+    accent-color: var(--a-indigo);
+    cursor: pointer;
+}
+
+.adm-opt-letter {
+    width: 22px;
+    flex-shrink: 0;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--a-ink-soft);
+    text-align: center;
+}
+
+.adm-opt-row.correct .adm-opt-letter {
+    color: var(--a-indigo);
+}
+
+.adm-opt-input {
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    padding: 8px 4px;
+    border: 0;
+    background: transparent;
+    font-family: inherit;
+    color: var(--a-ink);
+}
+
+.adm-opt-input:focus {
+    outline: none;
+}
+
+.adm-opt-add {
+    align-self: flex-start;
+}
+
+.adm-opt-add:disabled,
+.adm-opt-row .adm-icon-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
 }

@@ -1139,6 +1139,40 @@ body {
     width: 100%;
 }
 
+.feedback-send-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.feedback-textarea:disabled {
+    opacity: 0.7;
+}
+
+.feedback-error {
+    margin: 0;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--quiz-wrong);
+}
+
+/* popup "terima kasih sudah melapor" */
+.feedback-thanks {
+    text-align: center;
+}
+
+.feedback-thanks-icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--quiz-correct);
+    background: color-mix(in srgb, var(--quiz-correct) 16%, transparent);
+    border: 2px solid color-mix(in srgb, var(--quiz-correct) 45%, transparent);
+}
+
 .washi-noise {
     position: fixed;
     inset: 0;
@@ -2205,6 +2239,37 @@ button.secondary:focus-visible {
     color: var(--indigo);
     background: var(--paper);
     box-shadow: 0 0 0 1px var(--indigo) inset;
+}
+
+.timer-custom {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.timer-custom-input {
+    width: 84px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--ink);
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 10px 8px;
+}
+
+.timer-custom-input:focus-visible {
+    outline: 2px solid var(--vermillion);
+    outline-offset: 2px;
+}
+
+.timer-custom-unit {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
 }
 
 .timer-btn:focus-visible {
@@ -5689,12 +5754,33 @@ button.ghost {
    yang lama biar nggak keliatan "nambah" pas ada kartu yang di-requeue. */
 .flash-queue-counts {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    gap: 6px;
-    font-size: 13px;
+    gap: 22px;
+    margin: 0 0 12px;
+}
+
+.flash-queue-counts .fqc-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    min-width: 44px;
+}
+
+.flash-queue-counts .fqc-num {
+    font-size: 19px;
+    font-weight: 800;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+
+.flash-queue-counts .fqc-label {
+    font-size: 10.5px;
     font-weight: 700;
-    margin: 0 0 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
 }
 
 .flash-queue-counts .fqc-new {

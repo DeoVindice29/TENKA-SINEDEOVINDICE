@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
-import type { ContentKind, OrganizeSourceRow } from "@/lib/contentTypes";
+import type { TreeKind, OrganizeSourceRow } from "@/lib/contentTypes";
 
 /** Nama tampilan sumber sesuai bahasa; jatuh ke bahasa lain kalau kosong. */
 export function sourceName(row: Pick<OrganizeSourceRow, "name_id" | "name_en">, lang: "en" | "id"): string {
@@ -9,7 +9,7 @@ export function sourceName(row: Pick<OrganizeSourceRow, "name_id" | "name_en">, 
 }
 
 /** Semua sumber "Organize by" untuk satu jenis konten (semua level), urut tampil. */
-export async function fetchOrganizeSources(kind: ContentKind, tier?: string): Promise<OrganizeSourceRow[]> {
+export async function fetchOrganizeSources(kind: TreeKind, tier?: string): Promise<OrganizeSourceRow[]> {
   let q = supabase.from("organize_sources").select("*").eq("kind", kind);
   if (tier) q = q.eq("tier", tier);
   const { data, error } = await q.order("tier").order("sort_order").order("id");
@@ -18,7 +18,7 @@ export async function fetchOrganizeSources(kind: ContentKind, tier?: string): Pr
 }
 
 export async function createOrganizeSource(
-  kind: ContentKind,
+  kind: TreeKind,
   tier: string,
   nameId: string,
   nameEn: string,
