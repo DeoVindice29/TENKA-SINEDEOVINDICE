@@ -45,6 +45,8 @@ jobs:
         run: |
           mkdir -p deploy/tenka-app
           cp -r tenka-app/dist/. deploy/tenka-app/
+          # 404.html harus di root situs Pages supaya jadi fallback SPA
+          cp tenka-app/dist/404.html deploy/404.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
