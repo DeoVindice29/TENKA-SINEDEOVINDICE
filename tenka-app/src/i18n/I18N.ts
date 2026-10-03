@@ -492,7 +492,7 @@ export const I18N: Record<string, I18NEntry> = {
     id: "🔥 Hard cuma tersedia untuk Hiragana & Katakana.",
   },
   "quiz.timerLabel": { en: "Timer", id: "Timer" },
-  "quiz.timerOff": { en: "No Timer", id: "Tanpa Waktu" },
+  "quiz.timerOff": { en: "No Time", id: "No Time" },
   "quiz.timerCustom": { en: "Custom", id: "Kustom" },
   "quiz.timerCustomAria": {
     en: "Custom timer in seconds (1-600)",
@@ -1313,6 +1313,16 @@ export const I18N: Record<string, I18NEntry> = {
   "matchMode.restart": { en: "Restart", id: "Ulangi" },
   "matchMode.playAgain": { en: "Play Again", id: "Main Lagi" },
   "matchMode.doneTitle": { en: "All matched!", id: "Semua cocok!" },
+  "matchMode.statPairs": { en: "Pairs", id: "Pasangan" },
+  "matchMode.statMistakes": { en: "Mistakes", id: "Salah" },
+  "matchMode.cheerPerfect": {
+    en: "Flawless, {name}! Every pair matched with zero mistakes!",
+    id: "Sempurna, {name}! Semua pasangan cocok tanpa satu pun salah!",
+  },
+  "matchMode.cheerGood": {
+    en: "Nicely done, {name}! Play again to get a perfect run.",
+    id: "Kerja bagus, {name}! Main lagi untuk dapat nol salah.",
+  },
   "matchMode.doneSub": {
     en: "{pairs} pairs · {mistakes} mistakes · {time}",
     id: "{pairs} pasangan · {mistakes} kali salah · {time}",
@@ -1358,6 +1368,89 @@ export const I18N: Record<string, I18NEntry> = {
   "flash.good": { en: "Good", id: "Bagus" },
   "flash.easy": { en: "Easy", id: "Mudah" },
   "flash.showAnswer": { en: "Show Answer", id: "Tampilkan Jawaban" },
+  "flash.autoplay": { en: "Auto-play audio", id: "Putar audio otomatis" },
+  "flash.autoplayDesc": {
+    en: "Automatically play the pronunciation when a flashcard is flipped.",
+    id: "Otomatis memutar pelafalan saat kartu flashcard dibalik.",
+  },
+  "flash.autoplayOn": { en: "Audio: On", id: "Audio: Nyala" },
+  "flash.autoplayOff": { en: "Audio: Off", id: "Audio: Mati" },
+  "audioHelp.title": {
+    en: "Audio not playing?",
+    id: "Audio tidak keluar?",
+  },
+  "audioHelp.intro": {
+    en: "Japanese pronunciation is read aloud by your phone's own Text-to-speech engine, not by the app. If your phone has no Japanese voice data installed, you'll hear nothing (or the wrong voice). Installing it takes about a minute.",
+    id: "Pelafalan Jepang dibacakan oleh mesin Text-to-speech milik HP-mu, bukan oleh aplikasi. Kalau HP belum punya data suara Jepang, audio akan diam (atau suaranya salah). Memasangnya cuma sekitar satu menit.",
+  },
+  "audioHelp.androidHeading": {
+    en: "Android",
+    id: "Android",
+  },
+  "audioHelp.a1": {
+    en: "Make sure \"Speech Services by Google\" is installed and updated in the Play Store.",
+    id: "Pastikan aplikasi \"Speech Services by Google\" sudah terpasang dan diperbarui di Play Store.",
+  },
+  "audioHelp.a2": {
+    en: "Open Settings → General management (or System) → Language → Text-to-speech output. On some phones it's under Accessibility.",
+    id: "Buka Pengaturan → Manajemen umum (atau Sistem) → Bahasa → Text-to-speech output. Di sebagian HP menunya ada di Aksesibilitas.",
+  },
+  "audioHelp.a3": {
+    en: "Set the preferred engine to Google (some Samsung phones default to the Samsung engine, which has no Japanese voice).",
+    id: "Pilih mesin utama: Google (sebagian HP Samsung memakai mesin Samsung yang tidak punya suara Jepang).",
+  },
+  "audioHelp.a4": {
+    en: "Tap the gear icon next to Google → Install voice data → choose Japanese (日本語).",
+    id: "Ketuk ikon roda gigi di samping Google → Instal data suara → pilih Jepang (日本語).",
+  },
+  "audioHelp.a5": {
+    en: "Fully close Chrome, reopen Tenka, then tap a 🔊 icon to test.",
+    id: "Tutup Chrome sepenuhnya, buka lagi Tenka, lalu ketuk ikon 🔊 untuk mencoba.",
+  },
+  "audioHelp.iosHeading": {
+    en: "iPhone / iPad",
+    id: "iPhone / iPad",
+  },
+  "audioHelp.ios": {
+    en: "Go to Settings → Accessibility → Spoken Content → Voices → Japanese, and download a voice. Also turn off the silent switch.",
+    id: "Buka Pengaturan → Aksesibilitas → Konten Lisan → Suara → Jepang, lalu unduh satu suara. Pastikan juga tombol senyap (silent) dimatikan.",
+  },
+  "audioHelp.stillHeading": {
+    en: "Still silent?",
+    id: "Masih tidak bunyi?",
+  },
+  "audioHelp.s1": {
+    en: "Raise the media volume (not the ringer volume).",
+    id: "Naikkan volume media (bukan volume dering).",
+  },
+  "audioHelp.s2": {
+    en: "Tap a 🔊 icon once — phones block sound until you touch the screen.",
+    id: "Ketuk satu kali ikon 🔊 — HP memblokir suara sampai layar disentuh.",
+  },
+  "audioHelp.s3": {
+    en: "Try another browser (Chrome works best).",
+    id: "Coba browser lain (Chrome paling stabil).",
+  },
+  "audioHelp.close": {
+    en: "Got it",
+    id: "Mengerti",
+  },
+  "audioHelp.notice": {
+    en: "No Japanese voice found on this phone, so audio may not play.",
+    id: "Suara Jepang tidak ditemukan di HP ini, jadi audio mungkin tidak bunyi.",
+  },
+  "audioHelp.seeHow": {
+    en: "See how",
+    id: "Lihat caranya",
+  },
+  "audioHelp.dismiss": {
+    en: "Dismiss",
+    id: "Tutup",
+  },
+  "audioHelp.settingsLink": {
+    en: "Audio not playing? See how to fix it",
+    id: "Audio tidak keluar? Lihat cara memperbaikinya",
+  },
   "flash.restart": { en: "Restart Deck", id: "Ulangi Deck" },
   "flash.doneTitle": {
     en: "Deck complete for now!",

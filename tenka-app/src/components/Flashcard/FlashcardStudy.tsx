@@ -9,6 +9,8 @@ import {
 } from "@/state/flashCategory";
 import { LEARN_STEP_MINUTES, nextInterval } from "@/state/flashSchedule";
 import { useSpeech } from "@/hooks/useSpeech";
+import { useFlashAutoplay } from "@/hooks/useFlashAutoplay";
+import AudioHelpNotice from "@/components/Audio/AudioHelpNotice";
 import {
   buildDeckCardDescriptors,
   type FlashCardDescriptor,
@@ -189,17 +191,30 @@ function getCustomCard(deckId: string, idx: number): CardContent {
 
 function playAudioQueue(
   queue: string[],
-  speakFn: (text: string) => void,
+  speakFn: (
+    text: string,
+    btnEl?: HTMLElement | null,
+    onEnd?: () => void,
+  ) => void,
 ): () => void {
   if (!queue.length) return () => {};
   let cancelled = false;
   let timer: number | null = null;
 
+  // Lanjut ke item berikutnya begitu suara selesai (onEnd). Timer perkiraan
+  // jadi cadangan kalau browser tidak memanggil onend (sering di mobile).
   const playNext = (i: number) => {
     if (cancelled || i >= queue.length) return;
-    speakFn(queue[i]);
-    const estimatedMs = Math.max(2000, queue[i].length * 320 + 1500);
-    timer = window.setTimeout(() => playNext(i + 1), estimatedMs);
+    let advanced = false;
+    const next = () => {
+      if (advanced || cancelled) return;
+      advanced = true;
+      if (timer) window.clearTimeout(timer);
+      timer = window.setTimeout(() => playNext(i + 1), 250);
+    };
+    speakFn(queue[i], null, next);
+    const estimatedMs = Math.max(2500, queue[i].length * 400 + 2000);
+    timer = window.setTimeout(next, estimatedMs);
   };
 
   playNext(0);
@@ -217,7 +232,12 @@ export default function FlashcardStudy({
 }: FlashcardStudyProps) {
   const { t, lang } = useLang();
   const { rateCard, getCardState, reloadFlag } = useFlash();
-  const { speak } = useSpeech();
+  const {
+    speak,
+    supported: speechSupported,
+    voiceStatus,
+  } = useSpeech();
+  const [autoplay, setAutoplay] = useFlashAutoplay();
 
   const allCards = useMemo(() => {
     return buildDeckCardDescriptors(deckRef);
@@ -260,6 +280,14 @@ export default function FlashcardStudy({
   }, [current, lang]);
 
   const srs = current ? getCardState(current.id) : null;
+
+  // Kategori kartu yang sedang tampil (Baru / Belajar / Ulang) — dipakai untuk
+  // menandai kartu di layar + menyorot hitungan yang sesuai.
+  const currentCat: FlashCategory = !current
+    ? "none"
+    : studyAhead
+      ? (frozenCats[current.id] ?? "new")
+      : classifyCard(srs);
 
   const intervals = useMemo(() => {
     const fmt = (d: number) => (d === 0 ? t("flash.intervalNow") : formatInterval(d));
@@ -310,6 +338,7 @@ export default function FlashcardStudy({
   // Auto-speak queue waktu kartu di-flip ke BACK
   useEffect(() => {
     if (!flipped) return;
+    if (!autoplay) return;
     if (!content.audioQueue.length) return;
 
     let cleanup: (() => void) | null = null;
@@ -322,7 +351,7 @@ export default function FlashcardStudy({
       if (cleanup) cleanup();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [flipped, current?.id]);
+  }, [flipped, current?.id, autoplay]);
 
   // Lepas kartu yang udah selesai ditahan: masuk ke posisi ACAK di sisa antrean.
   useEffect(() => {
@@ -535,7 +564,21 @@ export default function FlashcardStudy({
         >
           {t("flash.restart")}
         </button>
+        {speechSupported && (
+          <button
+            className={`quiz-back flash-back-btn flash-autoplay-btn ${autoplay ? "on" : "off"}`}
+            type="button"
+            aria-pressed={autoplay}
+            title={t("flash.autoplay")}
+            onClick={() => setAutoplay(!autoplay)}
+          >
+            <span aria-hidden="true">{autoplay ? "🔊" : "🔇"}</span>
+            <span>{t(autoplay ? "flash.autoplayOn" : "flash.autoplayOff")}</span>
+          </button>
+        )}
       </div>
+
+      <AudioHelpNotice show={speechSupported && voiceStatus === "missing"} />
 
       <div className="quiz-top">
         <div className="flash-progress">
@@ -568,6 +611,17 @@ export default function FlashcardStudy({
               dangerouslySetInnerHTML={{ __html: content.back }}
             />
           </div>
+          {currentCat !== "none" && (
+            <span className={`flash-cat-chip flash-cat-${currentCat}`}>
+              {t(
+                currentCat === "new"
+                  ? "flash.new"
+                  : currentCat === "learn"
+                    ? "flash.learn"
+                    : "flash.due",
+              )}
+            </span>
+          )}
         </div>
       </div>
 
@@ -576,15 +630,15 @@ export default function FlashcardStudy({
       )}
 
       <div className="flash-queue-counts">
-        <span className="fqc-item">
+        <span className={`fqc-item ${currentCat === "new" ? "active" : ""}`}>
           <span className="fqc-num fqc-new">{queueCounts.fresh}</span>
           <span className="fqc-label">{t("flash.new")}</span>
         </span>
-        <span className="fqc-item">
+        <span className={`fqc-item ${currentCat === "learn" ? "active" : ""}`}>
           <span className="fqc-num fqc-learn">{queueCounts.learning}</span>
           <span className="fqc-label">{t("flash.learn")}</span>
         </span>
-        <span className="fqc-item">
+        <span className={`fqc-item ${currentCat === "due" ? "active" : ""}`}>
           <span className="fqc-num fqc-review">{queueCounts.review}</span>
           <span className="fqc-label">{t("flash.due")}</span>
         </span>

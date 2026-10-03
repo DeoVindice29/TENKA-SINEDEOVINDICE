@@ -5791,3 +5791,557 @@ button,
         line-height: 1.5;
     }
 }
+
+
+/* ==========================================================================
+   Perbaikan mobile: timer, statistik, flashcard
+   ========================================================================== */
+
+/* Timer: "No Time" tidak boleh keluar dari tombolnya */
+.timer-options {
+    flex-wrap: wrap;
+}
+
+.timer-btn {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 9px 14px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+    .timer-options {
+        gap: 6px;
+    }
+
+    .timer-btn {
+        padding: 9px 10px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 360px) {
+    .timer-btn {
+        padding: 9px 7px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 640px) {
+    /* ---------- Statistik ---------- */
+    .st-title {
+        font-size: 26px;
+    }
+
+    .st-sub {
+        font-size: 13.5px;
+        margin-bottom: 14px;
+    }
+
+    .st-tabs {
+        display: flex;
+        width: 100%;
+        margin-left: 0;
+        margin-bottom: 12px;
+        box-sizing: border-box;
+    }
+
+    .st-tabs button {
+        flex: 1 1 0;
+        min-width: 0;
+        padding: 8px 4px;
+        font-size: 13px;
+    }
+
+    .st-card {
+        padding: 16px;
+        border-radius: 18px;
+    }
+
+    /* judul kartu + keterangan kecil: turun ke baris sendiri, tidak saling tabrak */
+    .st-card h2 {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+        margin-bottom: 14px;
+        font-size: 15px;
+    }
+
+    .st-card h2 span {
+        font-size: 12px;
+    }
+
+    .st-kpis {
+        gap: 10px;
+    }
+
+    .st-kpi small {
+        font-size: 11px;
+    }
+
+    .st-kpi .n {
+        font-size: 24px;
+    }
+
+    .st-kpi .d {
+        font-size: 12px;
+    }
+
+    .st-grid,
+    .st-two {
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .st-bars {
+        gap: 6px;
+        height: 150px;
+    }
+
+    .st-ring > div {
+        width: 130px;
+        height: 130px;
+    }
+
+    .st-ring span {
+        width: 94px;
+        height: 94px;
+        font-size: 26px;
+    }
+
+    .st-row .h {
+        gap: 10px;
+        font-size: 13.5px;
+    }
+
+    .st-row .h span {
+        flex-shrink: 0;
+    }
+
+    .st-heat {
+        gap: 3px;
+    }
+
+    /* ---------- Flashcard: daftar deck ---------- */
+    .flash-deck-grid {
+        gap: 10px;
+    }
+
+    .flash-deck-card,
+    .flash-deck-main {
+        gap: 10px;
+        padding: 12px;
+        align-items: center;
+    }
+
+    .flash-deck-glyph {
+        width: 38px;
+        height: 38px;
+        font-size: 19px;
+        flex-shrink: 0;
+    }
+
+    .flash-deck-info {
+        min-width: 0;
+        gap: 6px;
+    }
+
+    .flash-deck-name {
+        font-size: 14px;
+        line-height: 1.3;
+    }
+
+    /* Baru / Belajar / Ulang selalu 1 baris */
+    .flash-deck-stats {
+        flex-wrap: nowrap;
+        gap: 4px;
+    }
+
+    .fds-item {
+        gap: 4px;
+        padding: 2px 3px 2px 7px;
+        font-size: 10.5px;
+        white-space: nowrap;
+    }
+
+    .fds-num {
+        min-width: 18px;
+        padding: 1px 5px;
+        font-size: 10.5px;
+    }
+
+    .flash-deck-caughtup {
+        font-size: 11px;
+        line-height: 1.35;
+        border-radius: 12px;
+    }
+
+    .flash-deck-arrow {
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+    }
+
+    /* ---------- Flashcard: layar belajar ---------- */
+    .app-shell:has(#screen-flashcard) .stage {
+        padding-top: 0;
+        padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    }
+
+    #screen-flashcard .flash-back-row {
+        gap: 8px;
+        margin-bottom: 8px;
+    }
+
+    #screen-flashcard .flash-back-btn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    /* judul deck: 1 baris, dipotong "…" kalau kepanjangan */
+    #screen-flashcard .quiz-top:has(> .flash-progress) {
+        margin-bottom: 8px;
+    }
+
+    #screen-flashcard .flash-progress {
+        max-width: 100%;
+        min-width: 0;
+        padding: 7px 12px;
+        font-size: 12.5px;
+        line-height: 1.3;
+    }
+
+    #screen-flashcard .flashcard-stage {
+        margin: 2px 0 10px;
+    }
+
+    #screen-flashcard .flashcard-face {
+        padding: 22px 14px 20px;
+        border-radius: 20px;
+    }
+
+    #screen-flashcard .flash-queue-counts {
+        margin-bottom: 8px;
+        padding: 4px;
+        gap: 4px;
+    }
+
+    #screen-flashcard .flash-queue-counts .fqc-item {
+        min-width: 58px;
+        padding: 5px 8px 4px;
+    }
+
+    #screen-flashcard .flash-queue-counts .fqc-num {
+        font-size: 17px;
+    }
+
+    #screen-flashcard .flash-show-answer-btn {
+        padding: 14px;
+        font-size: 15px;
+    }
+
+    #screen-flashcard .flash-rate-row {
+        gap: 6px;
+    }
+
+    #screen-flashcard .flash-rate-btn {
+        font-size: 12px;
+        padding: 10px 2px 8px;
+    }
+}
+
+
+/* ---------- penanda kategori kartu aktif (Baru / Belajar / Ulang) ---------- */
+.flashcard {
+    position: relative;
+}
+
+.flash-cat-chip {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 3;
+    padding: 4px 11px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #fff;
+    pointer-events: none;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+}
+
+.flash-cat-new { background: var(--indigo); }
+.flash-cat-learn { background: var(--quiz-wrong); }
+.flash-cat-due { background: var(--moss); }
+
+/* hitungan kategori yang sedang aktif disorot */
+.flash-queue-counts .fqc-item {
+    border: 1.5px solid transparent;
+    transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+
+.flash-queue-counts .fqc-item.active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.14);
+}
+
+.flash-queue-counts .fqc-item.active:nth-child(1) { border-color: var(--indigo); }
+.flash-queue-counts .fqc-item.active:nth-child(2) { border-color: var(--quiz-wrong); }
+.flash-queue-counts .fqc-item.active:nth-child(3) { border-color: var(--moss); }
+
+.flash-queue-counts .fqc-item.active .fqc-label {
+    font-weight: 800;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+    .flash-cat-chip {
+        top: 10px;
+        left: 10px;
+        padding: 3px 9px;
+        font-size: 10.5px;
+    }
+}
+
+
+/* ---------- pengaturan auto-play audio Flashcard ---------- */
+.settings-hint {
+    margin: 8px 2px 0;
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--ink-soft);
+}
+
+.flash-autoplay-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+.flash-autoplay-btn.off {
+    opacity: 0.7;
+}
+
+.flash-autoplay-btn.on {
+    border-color: color-mix(in srgb, var(--indigo) 55%, var(--line));
+    color: var(--indigo);
+}
+
+@media (max-width: 640px) {
+    #screen-flashcard .flash-autoplay-btn {
+        padding: 8px 10px;
+        font-size: 12.5px;
+    }
+}
+
+
+/* ---------- panduan audio tidak keluar ---------- */
+.audio-help-panel {
+    max-width: 440px;
+}
+
+.modal-overlay:has(.audio-help-panel) {
+    z-index: 80;
+}
+
+.audio-help-panel .modal-text {
+    font-size: 14px;
+    line-height: 1.55;
+    margin: 0 0 6px;
+}
+
+.audio-help-sub {
+    margin: 16px 0 6px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--indigo);
+}
+
+.audio-help-steps {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink);
+}
+
+.audio-help-steps li {
+    margin-bottom: 6px;
+}
+
+.audio-help-panel .modal-actions {
+    margin-top: 18px;
+}
+
+.audio-help-notice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 10px;
+    padding: 9px 10px 9px 12px;
+    border-radius: 14px;
+    border: 1px solid color-mix(in srgb, var(--gold) 45%, var(--line));
+    background: color-mix(in srgb, var(--gold) 12%, var(--card));
+    font-size: 12.5px;
+    line-height: 1.35;
+    color: var(--ink);
+}
+
+.audio-help-notice-text {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.audio-help-notice-btn {
+    flex: 0 0 auto;
+    border: 0;
+    border-radius: 999px;
+    padding: 6px 11px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+    background: var(--indigo);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.audio-help-notice-x {
+    flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--ink-soft);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.audio-help-link {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px dashed color-mix(in srgb, var(--indigo) 45%, var(--line));
+    background: transparent;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--indigo);
+    text-align: left;
+    cursor: pointer;
+}
+
+
+/* ---------- panduan audio tidak keluar ---------- */
+.audio-help-panel {
+    max-width: 440px;
+}
+
+.modal-overlay:has(.audio-help-panel) {
+    z-index: 80;
+}
+
+.audio-help-panel .modal-text {
+    font-size: 14px;
+    line-height: 1.55;
+    margin: 0 0 6px;
+}
+
+.audio-help-sub {
+    margin: 16px 0 6px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--indigo);
+}
+
+.audio-help-steps {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink);
+}
+
+.audio-help-steps li {
+    margin-bottom: 6px;
+}
+
+.audio-help-panel .modal-actions {
+    margin-top: 18px;
+}
+
+.audio-help-notice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 10px;
+    padding: 9px 10px 9px 12px;
+    border-radius: 14px;
+    border: 1px solid color-mix(in srgb, var(--gold) 45%, var(--line));
+    background: color-mix(in srgb, var(--gold) 12%, var(--card));
+    font-size: 12.5px;
+    line-height: 1.35;
+    color: var(--ink);
+}
+
+.audio-help-notice-text {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.audio-help-notice-btn {
+    flex: 0 0 auto;
+    border: 0;
+    border-radius: 999px;
+    padding: 6px 11px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+    background: var(--indigo);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.audio-help-notice-x {
+    flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--ink-soft);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.audio-help-link {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px dashed color-mix(in srgb, var(--indigo) 45%, var(--line));
+    background: transparent;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--indigo);
+    text-align: left;
+    cursor: pointer;
+}

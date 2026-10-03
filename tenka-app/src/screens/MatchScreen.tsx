@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import AdminSkipTools from "@/components/Admin/AdminSkipTools";
 import { useLang } from "@/i18n/LangContext";
 import { useUI } from "@/state/UIContext";
+import { useAuth } from "@/state/AuthContext";
+import { getChibiAvatarByName } from "@/lib/chibiAvatar";
 import { SCRIPTS } from "@/data/scripts";
 import { appendStudyLog } from "@/state/flashStats";
 import { computeRangeIndices } from "@/utils/range";
@@ -61,6 +63,7 @@ function fmtTime(ms: number): string {
 
 export default function MatchScreen() {
   const { t } = useLang();
+  const { profile } = useAuth();
   const {
     setScreen,
     matchScript,
@@ -302,51 +305,88 @@ export default function MatchScreen() {
   }
 
   if (done) {
+    const name = profile?.username?.trim() || t("results.defaultName");
+    const perfect = mistakes === 0;
+    const expression = perfect ? "celebrate" : "proud";
+    const chibiSrc =
+      getChibiAvatarByName(expression) ??
+      getChibiAvatarByName("happy") ??
+      getChibiAvatarByName("cute");
+    const cheer = t(perfect ? "matchMode.cheerPerfect" : "matchMode.cheerGood", {
+      name,
+    });
+    const acc = Math.round(
+      (totalPairs / Math.max(1, totalPairs + mistakes)) * 100,
+    );
+    const stats = [
+      { label: t("results.statAccuracy"), value: `${acc}%` },
+      { label: t("matchMode.statPairs"), value: String(totalPairs) },
+      { label: t("matchMode.statMistakes"), value: String(mistakes) },
+      { label: t("results.statTime"), value: fmtTime(elapsed) },
+    ];
     return (
-      <section id="screen-match">
-        <div className="quiz-topbar">
+      <section
+        id="screen-results"
+        className={`results res-card ${perfect ? "win" : ""}`}
+      >
+        <div className="res-chibi-row">
+          <div className="res-chibi" aria-hidden="true">
+            {perfect && (
+              <>
+                <span className="res-spark res-spark--a" />
+                <span className="res-spark res-spark--b" />
+                <span className="res-spark res-spark--c" />
+              </>
+            )}
+            {chibiSrc && (
+              <img
+                key={expression}
+                src={chibiSrc}
+                alt=""
+                className="res-chibi-img"
+              />
+            )}
+          </div>
+          <div className="res-bubble" role="status">
+            <p className="res-bubble-text">{cheer}</p>
+          </div>
+        </div>
+
+        <div className="res-score">
+          <span className="res-badge">{t("matchMode.doneTitle")}</span>
+        </div>
+
+        <dl className="res-stats">
+          {stats.map((st) => (
+            <div key={st.label} className="res-stat">
+              <dt>{st.label}</dt>
+              <dd>{st.value}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <div className="result-actions">
           <button
-            className="quiz-pill-btn quiz-back"
+            className="primary"
             type="button"
-            data-i18n="common.back"
+            onClick={() => {
+              setRounds(buildRounds(pairs, roundSize));
+              setRoundIndex(0);
+              setMistakes(0);
+              setMatchedCount(0);
+              setDone(false);
+              setStartTime(Date.now());
+            }}
+          >
+            {t("matchMode.playAgain")}
+          </button>
+          <button
+            className="ghost"
+            type="button"
             onClick={() => setScreen("start")}
           >
-            <span>{t("common.back")}</span>
+            {t("common.back")}
           </button>
-        </div>
-        <div className="quiz-card">
-          <div className="match-done">
-            <p className="match-done-title">{t("matchMode.doneTitle")}</p>
-            <p className="match-done-sub">
-              {t("matchMode.doneSub", {
-                pairs: totalPairs,
-                mistakes: String(mistakes),
-                time: fmtTime(elapsed),
-              })}
-            </p>
-            <button
-              className="primary"
-              type="button"
-              onClick={() => {
-                setRounds(buildRounds(pairs, roundSize));
-                setRoundIndex(0);
-                setMistakes(0);
-                setMatchedCount(0);
-                setDone(false);
-                setStartTime(Date.now());
-              }}
-            >
-              {t("matchMode.playAgain")}
-            </button>
-            <button
-              className="ghost"
-              type="button"
-              data-i18n="common.back"
-              onClick={() => setScreen("start")}
-            >
-              {t("common.back")}
-            </button>
-          </div>
         </div>
       </section>
     );

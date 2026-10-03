@@ -92,7 +92,7 @@ export function ConquestProvider({ children }: { children: ReactNode }) {
     (scriptKey: string): ConquestStory | null =>
       isJlptScript(scriptKey)
         ? getJlptStory(scriptKey, lang)
-        : getLocalizedConquestStory(scriptKey),
+        : getLocalizedConquestStory(scriptKey, lang),
     [lang],
   );
 

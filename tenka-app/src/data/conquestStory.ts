@@ -70,7 +70,7 @@ export const CONQUEST_STORY_ID: Record<string, ConquestStoryID> = {
   },
   katakana: {
     epilogue:
-      'Kapten Ksatria menyarungkan pedangnya dan meletakkannya di kedua bahumu. "Bangkitlah, Ksatria." Malam itu juga, di hadapan obor dan derap ombak pelabuhan, kau resmi diangkat menmenjadi Ksatria Kekaisaran — dua ujian, Hiragana dan Katakana, telah kau taklukkan sepenuhnya.',
+      'Kapten Ksatria menyarungkan pedangnya dan meletakkannya di kedua bahumu. "Bangkitlah, Ksatria." Malam itu juga, di hadapan obor dan derap ombak pelabuhan, kau resmi diangkat menjadi Ksatria Kekaisaran — dua ujian, Hiragana dan Katakana, telah kau taklukkan sepenuhnya.',
     phases: [
       "⚔️ Berbekal surat rekomendasi dari Bupati, kau tiba di kota pelabuhan yang ramai oleh kapal asing dan papan nama beraksara Katakana. Petugas gerbang, seorang ksatria magang, menantangmu membaca 46 aksara dasar katakana satu per satu — tanpa pilihan, langsung tulis jawabanmu sendiri.",
       '🎉 Gerbang terbuka! Namun di dermaga, seorang saudagar asing menyerahkan daftar muatan kapal penuh nama barang bertitik dakuten & handakuten yang bercampur logat asing. "Kalau kau mau menjadi ksatria," katanya, "kau harus bisa baca ini tanpa salah eja." Tuliskan sendiri setiap jawabanmu.',
@@ -86,8 +86,21 @@ export const CONQUEST_STORY_ID: Record<string, ConquestStoryID> = {
 
 export function getLocalizedConquestStory(
   scriptKey: string,
+  lang: "id" | "en" = "en",
 ): { epilogue: string; phases: { label: string; text: string }[] } | null {
   const story = CONQUEST_STORY[scriptKey];
   if (!story) return null;
+  if (lang === "id") {
+    const id = CONQUEST_STORY_ID[scriptKey];
+    if (id) {
+      return {
+        epilogue: id.epilogue,
+        phases: story.phases.map((p, i) => ({
+          label: id.phaseLabels[i] ?? p.label,
+          text: id.phases[i] ?? p.text,
+        })),
+      };
+    }
+  }
   return story;
 }

@@ -5,6 +5,8 @@ import { useAuth } from "@/state/AuthContext";
 import ProfileCard from "@/components/Settings/ProfileCard";
 import profileHeroBg from "@/assets/profile-hero-bg.webp";
 import FontSelector from "@/components/Settings/FontSelector";
+import { useFlashAutoplay } from "@/hooks/useFlashAutoplay";
+import AudioHelpModal from "@/components/Audio/AudioHelpModal";
 import RankLadder from "@/components/Settings/RankLadder";
 import TitleCollection from "@/components/Settings/TitleCollection";
 import SpeedrunRecords from "@/components/Settings/SpeedrunRecords";
@@ -52,6 +54,8 @@ export default function SettingsPanel({
   const { lang, setLang, t } = useLang();
   const { signOut } = useAuth();
   const [signOutConfirmOpen, setSignOutConfirmOpen] = useState(false);
+  const [flashAutoplay, setFlashAutoplay] = useFlashAutoplay();
+  const [audioHelpOpen, setAudioHelpOpen] = useState(false);
   const ownThemeApi = useTheme();
   const {
     theme,
@@ -410,6 +414,35 @@ export default function SettingsPanel({
 
             <section className="settings-card">
               <FontSelector />
+            </section>
+
+            <section className="settings-card">
+              <span className="settings-card-title">{t("flash.title")}</span>
+              <div className="theme-row">
+                <span id="flash-autoplay-label">{t("flash.autoplay")}</span>
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={flashAutoplay}
+                    onChange={(e) => setFlashAutoplay(e.target.checked)}
+                    aria-labelledby="flash-autoplay-label"
+                  />
+                  <span className="track" />
+                  <span className="thumb" />
+                </label>
+              </div>
+              <p className="settings-hint">{t("flash.autoplayDesc")}</p>
+              <button
+                type="button"
+                className="audio-help-link"
+                onClick={() => setAudioHelpOpen(true)}
+              >
+                🔊 {t("audioHelp.settingsLink")}
+              </button>
+              <AudioHelpModal
+                open={audioHelpOpen}
+                onClose={() => setAudioHelpOpen(false)}
+              />
             </section>
 
             <section className="settings-card">
