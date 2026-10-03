@@ -1,6 +1,6 @@
 # 天下 Tenka
 
-**Aplikasi belajar bahasa Jepang berbasis web** — dari Hiragana & Katakana sampai Kotoba, Bunpō, dan Kanji level N5. Dibungkus tema "ujian ksatria": kamu mulai sebagai rakyat biasa, menaklukkan ujian demi ujian, lalu naik pangkat.
+**Aplikasi belajar bahasa Jepang berbasis web** — dari Hiragana & Katakana sampai Kotoba, Bunpō, dan Kanji level N5. Dibungkus tema "From Commoner to Emperor": kamu mulai sebagai Commoner / rakyat biasa, menaklukkan ujian demi ujian, lalu naik pangkat sampai menjadi Emperor / Kaisar.
 
 🌐 **Demo:** [tenka-app.vercel.app](https://tenka-app.vercel.app)
 
