@@ -6,7 +6,13 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
-import { I18N, LANG_KEY, type Lang, type I18NEntry } from "./I18N";
+import {
+  I18N,
+  LANG_KEY,
+  detectDefaultLang,
+  type Lang,
+  type I18NEntry,
+} from "./I18N";
 import { setQuizLang } from "@/lib/quizLang";
 
 type LangContextValue = {
@@ -20,7 +26,7 @@ const LangContext = createContext<LangContextValue | null>(null);
 
 function getStoredLang(): Lang {
   const stored = localStorage.getItem(LANG_KEY);
-  return stored === "id" || stored === "en" ? stored : "en";
+  return stored === "id" || stored === "en" ? stored : detectDefaultLang();
 }
 
 export function LangProvider({ children }: { children: ReactNode }) {

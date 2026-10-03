@@ -1,4 +1,4 @@
-import { LANG_KEY, type Lang } from "@/i18n/I18N";
+import { LANG_KEY, detectDefaultLang, type Lang } from "@/i18n/I18N";
 import type { Bilingual } from "@/data/types";
 
 /**
@@ -14,9 +14,9 @@ import type { Bilingual } from "@/data/types";
 function readStored(): Lang {
   try {
     const stored = localStorage.getItem(LANG_KEY);
-    return stored === "id" || stored === "en" ? stored : "en";
+    return stored === "id" || stored === "en" ? stored : detectDefaultLang();
   } catch {
-    return "en";
+    return detectDefaultLang();
   }
 }
 

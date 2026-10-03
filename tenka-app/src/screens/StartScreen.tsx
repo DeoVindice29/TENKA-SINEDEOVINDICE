@@ -156,7 +156,10 @@ export default function StartScreen() {
           </div>
           <div className="hero-text">
             <div className="eyebrow">Learning Japanese — From Zero to Hero</div>
-            <h1>From Commoner 『平民』 To Emperor 『天皇』</h1>
+            <h1>
+              From Commoner 『平民』{" "}
+              <span className="hero-h1-line2">To Emperor 『天皇』</span>
+            </h1>
             <p className="sub">
               "You are an ordinary person with a dream. Train hard, conquer
               every conquest in your way, and claim your throne as{" "}

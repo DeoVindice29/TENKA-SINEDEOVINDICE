@@ -24,7 +24,12 @@ export type SavedAccount = {
   refresh_token: string;
 };
 
-const LIST_KEY = "tenka:adminAccounts";
+// Satu daftar untuk SEMUA tempat ganti akun (Pengaturan, layar Login, Admin Panel).
+// Dulu Admin punya daftar sendiri ("tenka:adminAccounts") sehingga akun yang
+// sudah login di Pengaturan tidak muncul di Admin, dan token refresh (yang
+// diputar tiap setSession) di salah satu daftar jadi basi.
+const LIST_KEY = "tenka:userAccounts";
+const LEGACY_ADMIN_KEY = "tenka:adminAccounts";
 const ADDING_KEY = "tenka:adminAddingAccount";
 
 function store(): Storage {
@@ -39,7 +44,30 @@ function store(): Storage {
   return localStorage;
 }
 
-export function loadAccounts(): SavedAccount[] {
+/** Pindahkan daftar Admin lama (kalau ada) ke daftar bersama, sekali saja. */
+function migrateLegacy() {
+  for (const s of [localStorage, sessionStorage]) {
+    try {
+      const raw = s.getItem(LEGACY_ADMIN_KEY);
+      if (!raw) continue;
+      s.removeItem(LEGACY_ADMIN_KEY);
+      const legacy = JSON.parse(raw) as SavedAccount[];
+      if (!Array.isArray(legacy)) continue;
+      const list = readList();
+      for (const a of legacy) {
+        if (!a || !a.id || !a.refresh_token) continue;
+        const i = list.findIndex((x) => x.id === a.id);
+        if (i < 0) list.push(a);
+        else if (!list[i].role && a.role) list[i] = { ...list[i], role: a.role };
+      }
+      saveAccounts(list);
+    } catch {
+      /* rusak → abaikan */
+    }
+  }
+}
+
+function readList(): SavedAccount[] {
   for (const s of [localStorage, sessionStorage]) {
     try {
       const raw = s.getItem(LIST_KEY);
@@ -51,6 +79,11 @@ export function loadAccounts(): SavedAccount[] {
     }
   }
   return [];
+}
+
+export function loadAccounts(): SavedAccount[] {
+  migrateLegacy();
+  return readList();
 }
 
 function saveAccounts(list: SavedAccount[]) {
@@ -87,12 +120,27 @@ export function accountFromSession(session: Session, role: AppRole | null): Save
   };
 }
 
-/** Tambah / perbarui satu akun di daftar (urutan tetap; akun baru di akhir). */
-export function upsertAccount(account: SavedAccount): SavedAccount[] {
+/**
+ * Tambah / perbarui satu akun di daftar (urutan tetap; akun baru di akhir).
+ * Token selalu diperbarui; role, nama & foto yang sudah tersimpan dipertahankan
+ * kalau pemanggil tidak punya yang baru (Pengaturan tidak tahu role, Admin
+ * tidak tahu nama profil Tenka). `override` (nama/foto profil Tenka) menang.
+ */
+export function upsertAccount(
+  account: SavedAccount,
+  override?: { name?: string | null; avatar?: string | null },
+): SavedAccount[] {
   const list = loadAccounts();
   const i = list.findIndex((a) => a.id === account.id);
-  if (i >= 0) list[i] = account;
-  else list.push(account);
+  const prev = i >= 0 ? list[i] : null;
+  const merged: SavedAccount = {
+    ...account,
+    role: account.role ?? prev?.role ?? null,
+    name: override?.name?.trim() || prev?.name || account.name,
+    avatar: override?.avatar || prev?.avatar || account.avatar,
+  };
+  if (i >= 0) list[i] = merged;
+  else list.push(merged);
   saveAccounts(list);
   return list;
 }
@@ -107,6 +155,8 @@ export function clearAccounts() {
   try {
     localStorage.removeItem(LIST_KEY);
     sessionStorage.removeItem(LIST_KEY);
+    localStorage.removeItem(LEGACY_ADMIN_KEY);
+    sessionStorage.removeItem(LEGACY_ADMIN_KEY);
     sessionStorage.removeItem(ADDING_KEY);
   } catch {
     /* abaikan */

@@ -8,7 +8,6 @@ import adminDoorlock from "@/assets/doorlock-admin-panel-login.webp";
 import AccountSwitcher from "@/admin/AccountSwitcher";
 import {
   accountFromSession,
-  clearAccounts,
   consumeAddingAccount,
   loadAccounts,
   markAddingAccount,
@@ -154,12 +153,12 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
     });
   };
 
-  // sign out = daftar akun tersimpan ikut dibersihkan, supaya tidak ada token
-  // yang tertinggal di browser setelah dev keluar.
+  // sign out = akun ini dicabut dari daftar tersimpan (token-nya tidak tertinggal).
   const signOut = () => {
-    clearAccounts();
-    setAccounts([]);
-    return supabase.auth.signOut();
+    // daftar akun sekarang dipakai bersama Pengaturan: cukup cabut akun yang
+    // keluar, jangan hapus akun lain yang masih login di sana.
+    if (session) setAccounts(removeAccount(session.user.id));
+    return supabase.auth.signOut({ scope: "local" });
   };
 
   const switchAccount = async (account: SavedAccount): Promise<string | null> => {

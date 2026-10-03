@@ -1,5 +1,29 @@
 export const LANG_KEY = "tebakAksara_lang_v1";
 
+/**
+ * Bahasa default saat user belum pernah memilih: ikuti bahasa browser/perangkat.
+ * Bahasa Indonesia -> "id", sisanya -> "en". Pilihan manual user (localStorage)
+ * selalu menang atas deteksi ini.
+ */
+export function detectDefaultLang(): "id" | "en" {
+  try {
+    const prefs =
+      typeof navigator !== "undefined"
+        ? navigator.languages?.length
+          ? navigator.languages
+          : [navigator.language]
+        : [];
+    for (const raw of prefs) {
+      const code = (raw || "").toLowerCase();
+      if (code.startsWith("id") || code.startsWith("in")) return "id";
+      if (code.startsWith("en")) return "en";
+    }
+  } catch {
+    /* abaikan, pakai fallback */
+  }
+  return "en";
+}
+
 export type Lang = "en" | "id";
 
 export type I18NEntry = {
@@ -1197,6 +1221,10 @@ export const I18N: Record<string, I18NEntry> = {
   "feedback.error": {
     en: "Couldn't send your feedback. Check your connection and try again.",
     id: "Masukan belum terkirim. Cek koneksi internetmu lalu coba lagi.",
+  },
+  "feedback.errorServer": {
+    en: "The feedback service isn't responding right now. Please try again a bit later.",
+    id: "Layanan masukan sedang tidak merespons. Coba lagi beberapa saat lagi.",
   },
   "feedback.thanksTitle": {
     en: "Thanks for reporting!",

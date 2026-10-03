@@ -13,12 +13,16 @@ const MAX_LENGTH = 2000;
 const APP_VERSION = "v1.0.0";
 
 type Status = "idle" | "sending" | "error";
+// "network" = request tidak sampai (offline / diblokir / timeout);
+// "server" = FormSubmit menjawab tapi menolak (mis. email penerima belum diaktivasi).
+type ErrorKind = "network" | "server";
 
 export default function FeedbackBox() {
   const { t, lang } = useLang();
   const { profile, isGuest } = useAuth();
   const [msg, setMsg] = useState("");
   const [status, setStatus] = useState<Status>("idle");
+  const [errorKind, setErrorKind] = useState<ErrorKind>("network");
   const [thanksOpen, setThanksOpen] = useState(false);
   const thanksBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -52,15 +56,31 @@ export default function FeedbackBox() {
         }),
         signal: controller.signal,
       });
-      const data = (await res.json().catch(() => null)) as { success?: string | boolean } | null;
+      const data = (await res.json().catch(() => null)) as {
+        success?: string | boolean;
+        message?: string;
+      } | null;
       const ok = res.ok && data?.success !== false && data?.success !== "false";
-      if (!ok) throw new Error("feedback send failed");
+      if (!ok) {
+        // Server menjawab tapi menolak. Paling sering: alamat penerima belum
+        // diaktivasi (FormSubmit mengirim email aktivasi ke FEEDBACK_EMAIL —
+        // cek juga folder spam). Detailnya dicatat ke console untuk developer.
+        console.error("[feedback] ditolak FormSubmit", {
+          status: res.status,
+          message: data?.message,
+        });
+        setErrorKind("server");
+        setStatus("error");
+        return;
+      }
 
       setMsg("");
       setStatus("idle");
       setThanksOpen(true);
-    } catch {
+    } catch (err) {
       // teks tetap dipertahankan supaya user tinggal coba kirim lagi
+      console.error("[feedback] request gagal", err);
+      setErrorKind("network");
       setStatus("error");
     } finally {
       window.clearTimeout(timer);
@@ -83,7 +103,7 @@ export default function FeedbackBox() {
       />
       {status === "error" && (
         <p className="feedback-error" role="alert">
-          {t("feedback.error")}
+          {t(errorKind === "server" ? "feedback.errorServer" : "feedback.error")}
         </p>
       )}
       <button

@@ -14,7 +14,6 @@ import {
 } from "@/data/ranks";
 import { formatSpeedrunTime } from "@/utils/formatTime";
 import { getChibiAvatarByName } from "@/lib/chibiAvatar";
-import { supportsSpeedrun } from "@/utils/speedrun";
 import {
   isJlptScript,
   JLPT_PASS_PERCENT,
@@ -136,7 +135,8 @@ export default function ResultsScreen() {
           }
           setPromoMsg(msg);
           setPromoClass("conquest-success");
-          setHideRetry(supportsSpeedrun(state.script!));
+          // tombol utama (Go to Practice) tidak ditampilkan setelah Conquest berhasil
+          setHideRetry(true);
         }
       } else if (state.speedrun) {
         if (state.speedrunFailed) {
@@ -282,15 +282,9 @@ export default function ResultsScreen() {
 
   const retryLabel = isConquestFail
     ? t("results.tryAgainFromStart")
-    : state.conquest
-      ? t("results.goToPractice")
-      : state.speedrun || isSpeedrunFail
-        ? t("results.speedrunAgain")
-        : t("results.retrySet");
-
-  // Conquest berhasil → tombol utama mengarah ke Practice (bukan mengulang
-  // penaklukan). Conquest gagal tetap "Coba Lagi dari Awal" (restartQuiz).
-  const goesToPractice = isConquestWin;
+    : state.speedrun || isSpeedrunFail
+      ? t("results.speedrunAgain")
+      : t("results.retrySet");
 
   const handleStudyFirst = () => {
     setCurrentScript(state.script as ScriptKey);
@@ -373,7 +367,7 @@ export default function ResultsScreen() {
           <button
             className="primary"
             type="button"
-            onClick={goesToPractice ? () => setScreen("practice") : restartQuiz}
+            onClick={restartQuiz}
           >
             {retryLabel}
           </button>

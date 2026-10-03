@@ -4595,6 +4595,74 @@ body:has(#screen-flashcard) {
     #screen-results .res-bubble { padding: 13px 15px; }
     #screen-results .res-bubble-text { font-size: 14px; }
     #screen-results .res-stats { grid-template-columns: repeat(2, 1fr); }
+
+    /* jumlah kartu statistik ganjil -> kartu terakhir melebar, tidak menggantung */
+    #screen-results .res-stats .res-stat:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+    }
+
+    #screen-results.res-card {
+        box-sizing: border-box;
+        width: 100%;
+        margin-top: 0;
+    }
+
+    /* pengumuman Penaklukan / pangkat panjang: rapatkan & cegah teks keluar kartu */
+    #screen-results.res-card .promo-banner {
+        padding: 12px 14px;
+        font-size: 13px;
+        line-height: 1.55;
+        overflow-wrap: anywhere;
+        margin-bottom: 16px;
+    }
+
+    #screen-results .res-missed { margin-bottom: 16px; }
+
+    /* tombol: area sentuh nyaman + aman dari gesture bar / notch */
+    #screen-results .result-actions {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    #screen-results .result-actions button {
+        min-height: 48px;
+        justify-content: center;
+    }
+}
+
+/* layar sempit: chibi di atas, bubble di bawahnya (bubble terlalu sempit kalau disandingkan) */
+@media (max-width: 420px) {
+    #screen-results .res-chibi-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 14px;
+    }
+
+    #screen-results .res-chibi {
+        width: 92px;
+        border-radius: 22px;
+    }
+
+    #screen-results .res-bubble {
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+        transform-origin: center top;
+    }
+
+    /* ekor bubble menunjuk ke atas (ke chibi), bukan ke kiri */
+    #screen-results .res-bubble::before {
+        left: 50%;
+        top: -11px;
+        margin: 0 0 0 -9px;
+        border: 0;
+        border-top: 2.5px solid var(--res-bubble-line);
+        border-left: 2.5px solid var(--res-bubble-line);
+        border-radius: 5px 0 0 0;
+    }
+
+    #screen-results .res-ring { width: 132px; }
+    #screen-results .res-ring-label .num { font-size: 32px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -5363,4 +5431,363 @@ body:has(#screen-flashcard) {
 
 :root:not([data-theme="dark"]) .script-tab.active .tab-conquered-badge {
     filter: drop-shadow(0 0 1px rgba(20, 30, 90, 0.6)) drop-shadow(0 1px 1px rgba(20, 30, 90, 0.35));
+}
+
+
+/* ==========================================================================
+   14. mobile polish (semua layar)
+   --------------------------------------------------------------------------
+   - input/select/textarea < 16px bikin iOS Safari auto-zoom saat fokus, lalu
+     halaman "nyangkut" ter-zoom; di mobile dipaksa 16px.
+   - modal pakai 100vh -> ketutup address bar browser mobile; pakai dvh.
+   - touch-action: manipulation menghilangkan jeda 300ms & zoom dobel-tap di
+     tombol/kartu yang sering diketuk (jawaban kuis, flashcard, tab).
+   - media/svg tidak boleh lebih lebar dari kontainernya.
+   Ditaruh di akhir file supaya menang atas aturan sebelumnya.
+   ========================================================================== */
+@media (max-width: 768px) {
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+    select,
+    textarea,
+    .settings-select,
+    .custom-color-group-select,
+    .feedback-textarea,
+    .timer-custom-input,
+    .learn-search-input,
+    .login-input,
+    .range-count-input,
+    .hard-input,
+    .profile-nickname-input {
+        font-size: 16px;
+    }
+
+    img,
+    svg,
+    video,
+    canvas {
+        max-width: 100%;
+    }
+
+    .modal-panel,
+    .modal-panel.missions-panel {
+        max-height: calc(100vh - 24px);
+        max-height: calc(100dvh - 24px);
+    }
+
+    /* heatmap Statistik 15 kolom: rapatkan jarak supaya kotak tidak terlalu mungil */
+    .st-heat {
+        gap: 3px;
+    }
+
+    .st-heat i {
+        border-radius: 4px;
+    }
+
+    .st-card {
+        min-width: 0;
+    }
+}
+
+button,
+[role="button"],
+.choice,
+.level-card,
+.script-tab,
+.match-tile {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* layar sangat sempit (iPhone SE / HP kecil) */
+@media (max-width: 360px) {
+    .st-kpis {
+        grid-template-columns: 1fr;
+    }
+
+    .flash-rate-row {
+        gap: 6px;
+    }
+
+    .flash-rate-btn {
+        padding: 10px 4px;
+        font-size: 11px;
+    }
+}
+
+
+/* ==========================================================================
+   15. nav bawah mobile (#script-tabs) — gaya tab bar aplikasi
+   --------------------------------------------------------------------------
+   Sebelumnya: 5 pil sejajar, label dipotong "Hi···", "Ka···", glyph kecil
+   dan bar menyatu dengan latar sehingga susah dibaca. Sekarang tiap tab
+   vertikal (glyph besar di atas, nama LENGKAP di bawah), bar solid dengan
+   garis pemisah, dan tab aktif ditandai pil berwarna di belakang glyph.
+   Hanya untuk nav beranda; #learn-script-tabs tidak berubah.
+   ========================================================================== */
+@media (max-width: 768px) {
+    #screen-start {
+        padding-bottom: calc(96px + env(safe-area-inset-bottom));
+    }
+
+    #script-tabs {
+        align-items: stretch;
+        gap: 2px;
+        padding: 6px calc(8px + env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) calc(8px + env(safe-area-inset-left));
+        background: color-mix(in srgb, var(--card) 96%, transparent);
+        -webkit-backdrop-filter: blur(14px);
+        backdrop-filter: blur(14px);
+        border-top: 1px solid color-mix(in srgb, var(--ink-soft) 28%, transparent);
+        box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.22);
+    }
+
+    #script-tabs .script-tab {
+        flex: 1 1 0;
+        min-width: 0;
+        min-height: 58px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 3px;
+        padding: 6px 2px 5px;
+        border: 0;
+        border-radius: 16px;
+        background: transparent;
+        box-shadow: none;
+        color: var(--ink-soft);
+        transform: none;
+    }
+
+    #script-tabs .script-tab:active {
+        background: color-mix(in srgb, var(--indigo) 12%, transparent);
+    }
+
+    /* glyph besar; overflow visible supaya mahkota "conquered" tidak terpotong */
+    #script-tabs .script-tab .script-tab-icon {
+        width: 44px;
+        height: 28px;
+        border-radius: 999px;
+        background: transparent;
+        font-size: 19px;
+        overflow: visible;
+        text-overflow: clip;
+    }
+
+    #script-tabs .script-tab .script-tab-label {
+        max-width: 100%;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0;
+        line-height: 1.1;
+        overflow: visible;
+        text-overflow: clip;
+        white-space: nowrap;
+    }
+
+    #script-tabs .script-tab .tab-conquered-badge {
+        top: -9px;
+    }
+
+    /* tab aktif: pil berwarna di belakang glyph + label berwarna aksen */
+    #script-tabs .script-tab.active,
+    [data-theme="dark"] #script-tabs .script-tab.active {
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+    }
+
+    #script-tabs .script-tab.active .script-tab-icon {
+        background: var(--indigo);
+        color: var(--on-accent);
+    }
+
+    #script-tabs .script-tab.active .script-tab-label {
+        color: var(--indigo);
+    }
+
+    [data-theme="dark"] #script-tabs .script-tab.active .script-tab-icon {
+        background: linear-gradient(135deg, #52ccff 0%, #34a9ee 100%);
+        color: #071a2e;
+        box-shadow: 0 4px 12px rgba(52, 169, 238, 0.35);
+    }
+
+    [data-theme="dark"] #script-tabs .script-tab.active .script-tab-label,
+    [data-theme="dark"] #script-tabs .script-tab.conquered.active .script-tab-label {
+        color: #52ccff;
+    }
+
+    /* tab tidak aktif: glyph & label cukup terang di mode gelap */
+    [data-theme="dark"] #script-tabs .script-tab:not(.active):not(.conquered) {
+        color: #aeb8cc;
+    }
+
+    [data-theme="dark"] #script-tabs .script-tab:not(.active):not(.conquered) .script-tab-icon {
+        color: #c9d3e8;
+    }
+
+    [data-theme="dark"] #script-tabs .script-tab:not(.active):not(.conquered) .script-tab-label {
+        color: #aeb8cc;
+    }
+}
+
+@media (max-width: 340px) {
+    #script-tabs .script-tab .script-tab-icon { width: 38px; font-size: 17px; }
+    #script-tabs .script-tab .script-tab-label { font-size: 10px; }
+}
+
+
+/* ==========================================================================
+   16. hero beranda versi mobile (dark) + mahkota nav
+   --------------------------------------------------------------------------
+   Layout kolom: ikon 天 -> pill eyebrow -> judul 2 baris -> kutipan italic,
+   di atas ilustrasi malam (assets/hero-start-mobile.webp, hasil crop dari
+   gambar mentah: Fuji + bulan + sakura di kanan, langit gelap di kiri untuk
+   teks). <img.hero-art> disembunyikan karena ilustrasinya jadi background.
+   Light mode tidak diubah.
+   ========================================================================== */
+@media (max-width: 640px) {
+    [data-theme="dark"] #screen-start .hero-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 18px 18px 20px;
+        border-radius: 22px;
+        border: 1px solid rgba(80, 140, 255, 0.55);
+        background-color: #0a1236;
+        background-image: url("../assets/hero-start-mobile.webp");
+        background-size: cover;
+        background-position: 92% center;
+        background-repeat: no-repeat;
+        box-shadow: 0 10px 28px rgba(8, 20, 80, 0.5), inset 0 0 0 1px rgba(120, 170, 255, 0.12);
+    }
+
+    /* gradasi gelap di kiri supaya teks terbaca di atas gunung/awan */
+    [data-theme="dark"] #screen-start .hero-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background: linear-gradient(90deg, rgba(6, 12, 44, 0.78) 0%, rgba(6, 12, 44, 0.5) 48%, rgba(6, 12, 44, 0) 78%);
+    }
+
+    [data-theme="dark"] #screen-start .hero-card .hero-art {
+        display: none;
+    }
+
+    [data-theme="dark"] #screen-start .hero-icon {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 56px;
+        height: 56px;
+        margin: 0;
+        border-radius: 16px;
+        background: linear-gradient(145deg, #3fdcff 0%, #17b3f2 100%);
+        color: #0a1a30;
+        font-family: "Shippori Mincho", "Noto Serif JP", serif;
+        font-size: 34px;
+        font-weight: 800;
+        line-height: 1;
+        box-shadow: 0 8px 20px rgba(30, 190, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    [data-theme="dark"] #screen-start .hero-text {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: none;
+    }
+
+    [data-theme="dark"] #screen-start .hero-card .eyebrow {
+        margin-bottom: 10px;
+        padding: 5px 12px;
+        font-size: 10.5px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        color: #52d6ff;
+        background: rgba(8, 40, 78, 0.72);
+        border: 1px solid rgba(70, 200, 255, 0.5);
+        white-space: normal;
+    }
+
+    [data-theme="dark"] #screen-start .hero-card h1 {
+        white-space: normal;
+        font-size: clamp(22px, 6.6vw, 28px);
+        line-height: 1.22;
+        color: #fff;
+        text-shadow: 0 2px 10px rgba(0, 0, 30, 0.6);
+    }
+
+    #screen-start .hero-h1-line2 {
+        display: block;
+    }
+
+    [data-theme="dark"] #screen-start .hero-card .sub {
+        max-width: 64%;
+        margin-top: 10px;
+        font-size: 14px;
+        font-style: italic;
+        line-height: 1.55;
+        color: rgba(255, 255, 255, 0.88);
+        text-shadow: 0 1px 8px rgba(0, 0, 30, 0.75);
+    }
+
+    /* ---- nav bawah: sudut atas membulat + mahkota lebih besar & emas ---- */
+    #script-tabs {
+        border-radius: 22px 22px 0 0;
+        border: 1px solid color-mix(in srgb, var(--indigo) 35%, transparent);
+        border-bottom: 0;
+    }
+
+    #script-tabs .script-tab .tab-conquered-badge {
+        top: -13px;
+        width: 20px;
+        height: 20px;
+        filter: drop-shadow(0 1px 3px rgba(255, 190, 40, 0.45));
+    }
+}
+
+@media (max-width: 340px) {
+    [data-theme="dark"] #screen-start .hero-card .sub { max-width: 72%; font-size: 13px; }
+}
+
+
+/* ---- 16b. hero mobile: ukuran teks disesuaikan dengan mockup ----
+   Ukuran memakai cqw (container .hero-card) supaya proporsinya sama di semua
+   lebar HP; clamp menjaga teks tetap terbaca di layar sangat kecil. */
+@media (max-width: 640px) {
+    [data-theme="dark"] #screen-start .hero-card {
+        gap: 8px;
+        padding: 14px 16px 16px;
+    }
+
+    [data-theme="dark"] #screen-start .hero-icon {
+        width: clamp(40px, 15cqw, 52px);
+        height: clamp(40px, 15cqw, 52px);
+        border-radius: 13px;
+        font-size: clamp(24px, 8.8cqw, 31px);
+    }
+
+    [data-theme="dark"] #screen-start .hero-card .eyebrow {
+        margin-bottom: 7px;
+        padding: 4px 10px;
+        font-size: clamp(8px, 3cqw, 10px);
+        letter-spacing: 0.03em;
+        white-space: nowrap;
+        max-width: 100%;
+    }
+
+    [data-theme="dark"] #screen-start .hero-card h1 {
+        font-size: clamp(15px, 5.5cqw, 23px);
+        line-height: 1.2;
+    }
+
+    [data-theme="dark"] #screen-start .hero-card .sub {
+        max-width: 60%;
+        margin-top: 7px;
+        font-size: clamp(10.5px, 3.5cqw, 13px);
+        line-height: 1.5;
+    }
 }
