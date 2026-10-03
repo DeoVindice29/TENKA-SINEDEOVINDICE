@@ -27,6 +27,7 @@ import {
   IconChart,
   IconChevronDown,
   IconClose,
+  IconCode,
   IconDocument,
   IconHome,
   IconKanjiTile,
@@ -36,7 +37,6 @@ import {
   IconSakura,
   IconSignOut,
   IconSun,
-  IconTarget,
   IconUsers,
 } from "@/admin/adminIcons";
 import "@/admin/admin.css";
@@ -297,6 +297,13 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
 
 type MateriKind = "kotoba" | "kanji" | "bunpo";
 
+// Sub-menu Script Practice (satu halaman per aksara: tipe soal + tabel soal).
+const PRACTICE_ITEMS: { key: MateriKind; label: string; icon: typeof IconBook }[] = [
+  { key: "kotoba", label: "Kotoba", icon: IconBook },
+  { key: "bunpo", label: "Bunpō", icon: IconDocument },
+  { key: "kanji", label: "Kanji", icon: IconKanjiTile },
+];
+
 const MATERI_ITEMS: { key: MateriKind; label: string; icon: typeof IconBook }[] = [
   { key: "kotoba", label: "Kotoba", icon: IconBook },
   { key: "kanji", label: "Kanji", icon: IconKanjiTile },
@@ -326,8 +333,10 @@ function AdminShell({
   const isDev = role === "dev";
   // section terakhir yang tersimpan bisa jadi menu dev-only (mis. akun ini
   // baru diturunkan jadi admin) — paksa balik ke Kotoba.
+  // nilai lama "soal" (sebelum ada Script Practice) → halaman Kotoba-nya.
+  const legacy = (storedSection as string) === "soal" ? "practice-kotoba" : storedSection;
   const section: AdminSection =
-    !isDev && DEV_ONLY_SECTIONS.includes(storedSection) ? "kotoba" : storedSection;
+    !isDev && DEV_ONLY_SECTIONS.includes(legacy) ? "kotoba" : legacy;
   const [materiOpen, setMateriOpen] = useState(true);
   const [latihanOpen, setLatihanOpen] = useState(true);
   const [quickAdd, setQuickAdd] = useState<QuickAddSignal | null>(null);
@@ -348,6 +357,7 @@ function AdminShell({
   const [activity, setActivity] = useLocalStorage<ActivityEntry[]>(ACTIVITY_STORAGE_KEY, []);
   const { theme, toggleTheme } = useTheme();
 
+  const isPractice = section.startsWith("practice-");
   const isMateri = section === "kotoba" || section === "kanji" || section === "bunpo";
   const isDark = theme === "dark";
 
@@ -456,23 +466,26 @@ function AdminShell({
 
             <button
               type="button"
-              className={`adm-nav-group${section === "soal" ? " active-parent" : ""}`}
+              className={`adm-nav-group${isPractice ? " active-parent" : ""}`}
               onClick={() => setLatihanOpen((v) => !v)}
               aria-expanded={latihanOpen}
             >
-              <IconTarget className="adm-nav-icon" />
+              <IconCode className="adm-nav-icon" />
               <span className="adm-nav-label">{t("admin.nav.practice")}</span>
               <IconChevronDown className={`adm-nav-caret${latihanOpen ? " open" : ""}`} />
             </button>
             {latihanOpen && (
               <div className="adm-nav-sub">
-                <button
-                  type="button"
-                  className={`adm-nav-item${section === "soal" ? " active" : ""}`}
-                  onClick={() => goSection("soal")}
-                >
-                  <IconDocument className="adm-nav-icon" /> {t("admin.nav.questions")}
-                </button>
+                {PRACTICE_ITEMS.map(({ key, label, icon: Icon }) => (
+                  <button
+                    key={key}
+                    type="button"
+                    className={`adm-nav-item${section === `practice-${key}` ? " active" : ""}`}
+                    onClick={() => goSection(`practice-${key}`)}
+                  >
+                    <Icon className="adm-nav-icon" /> {label}
+                  </button>
+                ))}
               </div>
             )}
 

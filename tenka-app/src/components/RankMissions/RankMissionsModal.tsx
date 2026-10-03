@@ -97,7 +97,7 @@ export default function RankMissionsModal({ open, onClose }: Props) {
 
   // Grup misi yang sedang aktif (buat variabel di kalimat chibi).
   const activeGroup = groups[currentGroup];
-  // Isi variabel di kalimat: trial yang harus dikerjakan berikutnya + pangkat
+  // Isi variabel di kalimat: conquest yang harus dikerjakan berikutnya + pangkat
   // tujuannya + hitungan progres.
   const nextItem = activeGroup?.items.find((i) => !i.done);
   const quoteVars = {

@@ -134,8 +134,8 @@ export default function StartScreen() {
   // takluk kartunya tetap Penaklukan ala JLPT (bisa diulang), cuma dikasih ✓.
   const speedrunMode = conquered && supportsSpeedrun(currentScript);
   const isJlpt = isJlptScript(currentScript);
-  // Trial JLPT yang sudah ditaklukkan: kartunya jadi pintasan ke Practice
-  // (bukan mengulang Trial).
+  // Conquest JLPT yang sudah ditaklukkan: kartunya jadi pintasan ke Practice
+  // (bukan mengulang Conquest).
   const goesToPractice = isJlpt && conquered && !speedrunMode;
   const lockKey = isLocked(currentScript);
 
@@ -156,10 +156,10 @@ export default function StartScreen() {
           </div>
           <div className="hero-text">
             <div className="eyebrow">Learning Japanese — From Zero to Hero</div>
-            <h1>Commoner 「平民」 To Emperor 「天皇」</h1>
+            <h1>From Commoner 『平民』 To Emperor 『天皇』</h1>
             <p className="sub">
               "You are an ordinary person with a dream. Train hard, conquer
-              every trial in your way, and claim your throne as{" "}
+              every conquest in your way, and claim your throne as{" "}
               <b>Emperor</b>."
             </p>
           </div>

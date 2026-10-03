@@ -91,12 +91,20 @@ export default function RangePicker() {
     };
   }, [open]);
 
-  // dropdown dibuka → item aktif digulir ke area yang terlihat
+  // dropdown dibuka → item aktif ditaruh di tengah daftar, lalu daftar
+  // digulir ke area layar yang terlihat (biar gak nutupi/kepotong footer).
   useEffect(() => {
     if (!open) return;
-    rootRef.current
-      ?.querySelector(`#range-${open}-list .range-option.active`)
-      ?.scrollIntoView({ block: "nearest" });
+    const list = rootRef.current?.querySelector<HTMLElement>(
+      `#range-${open}-list`,
+    );
+    if (!list) return;
+    const active = list.querySelector<HTMLElement>(".range-option.active");
+    if (active) {
+      list.scrollTop =
+        active.offsetTop - list.clientHeight / 2 + active.offsetHeight / 2;
+    }
+    list.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }, [open]);
 
   if (!selectedMode || total === 0) return null;
@@ -158,7 +166,20 @@ export default function RangePicker() {
           >
             <span className="range-dd-kana">{item.kana}</span>
             <span className="range-dd-sub">{item.romaji || item.arti}</span>
-            <span className="range-dd-caret">▾</span>
+            <svg
+              className="range-dd-caret"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
           </button>
           <ul
             className={`range-dd-list ${isOpen ? "" : "hidden"}`}
@@ -182,6 +203,22 @@ export default function RangePicker() {
                   <span className="range-opt-romaji">{opt.romaji}</span>
                 )}
                 {opt.arti && <span className="range-opt-arti">{opt.arti}</span>}
+                {i === index && (
+                  <svg
+                    className="range-opt-check"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                )}
               </li>
             ))}
           </ul>

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useLang } from "@/i18n/LangContext";
-import { useTheme } from "@/hooks/useTheme";
+import { CUSTOM_THEME_ENABLED, useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/state/AuthContext";
 import ProfileCard from "@/components/Settings/ProfileCard";
 import profileHeroBg from "@/assets/profile-hero-bg.webp";
@@ -435,6 +435,7 @@ export default function SettingsPanel({
                   <span>{t("borderStyle.default")}</span>
                 </button>
 
+                {CUSTOM_THEME_ENABLED && (
                 <button
                   type="button"
                   className={`border-style-btn ${
@@ -452,8 +453,11 @@ export default function SettingsPanel({
                   />
                   <span>{t("borderStyle.custom")}</span>
                 </button>
+                )}
               </div>
 
+              {CUSTOM_THEME_ENABLED && (
+                <>
               {/* Warna kustom: collapsed/secondary by default, biar gak
                   langsung nge-dump belasan color picker di layar. */}
               <details
@@ -735,6 +739,8 @@ export default function SettingsPanel({
                   </button>
                 </div>
               </details>
+                </>
+              )}
             </section>
           </div>
         )}

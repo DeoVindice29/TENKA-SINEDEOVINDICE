@@ -72,11 +72,15 @@ export type BunpoRow = {
 export type SoalRow = {
   id: number;
   tier: string;
-  /** Organize by (organize_sources.id) tempat soal ini berada. */
-  source_id: number;
+  /** Organize by (organize_sources.id) — kosong untuk soal Script Practice (daftar datar). */
+  source_id: number | null;
   chapter: number;
   sub_tier: number;
   sort_order?: number;
+  /** Aksara pemilik soal: "kotoba" | "bunpo" | "kanji" (halaman Script Practice). */
+  script: string;
+  /** Kunci tipe soal (write, reading, fill, usage, meaning, particle, ...). Kosong = soal lama. */
+  question_type: string | null;
   /** Teks soal (biasanya kalimat Jepang). */
   question: string;
   question_translation_id: string | null;

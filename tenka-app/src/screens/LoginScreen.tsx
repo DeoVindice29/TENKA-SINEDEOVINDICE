@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useAuth } from "@/state/AuthContext";
 import { SavedAccountsList } from "@/components/Settings/AccountSwitch";
 import { useLang } from "@/i18n/LangContext";
@@ -118,6 +118,20 @@ function IconArrowRight() {
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path
         d="M4 12h15M13 6l6 6-6 6"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IconArrowLeft() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M20 12H5M11 6l-6 6 6 6"
         stroke="currentColor"
         strokeWidth="1.8"
         strokeLinecap="round"
@@ -252,6 +266,44 @@ export default function LoginScreen() {
   const [signupConfirmTouched, setSignupConfirmTouched] = useState(false);
 
   const [googleLoading, setGoogleLoading] = useState(false);
+
+  // Kartu login tidak boleh perlu di-scroll: kalau lebih tinggi dari layar
+  // (mis. form Daftar di HP pendek), seluruh kartu diperkecil (zoom) sampai
+  // muat. Diukur ulang tiap ukuran kartu / layar berubah. Batas bawah 0.7
+  // supaya tulisan tetap terbaca; selama keyboard HP terbuka, ukuran dibiarkan.
+  const shellRef = useRef<HTMLDivElement | null>(null);
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  useLayoutEffect(() => {
+    const shell = shellRef.current;
+    const card = cardRef.current;
+    if (!shell || !card) return;
+    let applied = 1;
+    const fit = () => {
+      const active = document.activeElement;
+      if (active && active !== document.body && card.contains(active) && active.tagName === "INPUT") return;
+      const cs = getComputedStyle(shell);
+      const avail = shell.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      card.style.zoom = "1";
+      const natural = card.offsetHeight; // tinggi layout (tidak terpengaruh animasi masuk)
+      const next = natural > avail && natural > 0 ? Math.max(0.7, avail / natural) : 1;
+      card.style.zoom = String(applied);
+      if (Math.abs(next - applied) > 0.005) {
+        applied = next;
+        card.style.zoom = String(next);
+      }
+    };
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(card);
+    ro.observe(shell);
+    window.addEventListener("resize", fit);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", fit);
+    };
+  }, []);
+  // form email/password disembunyikan di balik tombol "Login with email"
+  const [emailOpen, setEmailOpen] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -498,7 +550,7 @@ export default function LoginScreen() {
     signupEmailValid && signupPasswordValid && signupConfirmValid;
 
   return (
-    <div className="login-shell">
+    <div className="login-shell" ref={shellRef}>
       <SakuraCanvas />
 
       <div className="login-orb login-orb--primary" aria-hidden="true" />
@@ -512,7 +564,7 @@ export default function LoginScreen() {
         世界を掴む
       </span>
 
-      <div className="login-card">
+      <div className="login-card" ref={cardRef}>
         <span className="login-badge">{t("auth.welcomeBadge")}</span>
 
         <div className="login-brand">
@@ -533,7 +585,10 @@ export default function LoginScreen() {
               <button
                 type="button"
                 className="login-mode-switch-link"
-                onClick={() => setMode("signup")}
+                onClick={() => {
+                  setMode("signup");
+                  setEmailOpen(true);
+                }}
               >
                 {t("auth.tabSignup")}
               </button>
@@ -556,36 +611,63 @@ export default function LoginScreen() {
 
         <SavedAccountsList />
 
-        <div className="login-quick-row">
-          <button
-            type="button"
-            className="login-google-btn"
-            onClick={handleGoogle}
-            disabled={googleLoading}
-          >
-            <span className="login-google-icon" aria-hidden="true">
-              <GoogleLogo />
-            </span>
-            {t("auth.loginWithGoogle")}
-          </button>
+        {!emailOpen && (
+          <>
+          <div className="login-quick-row">
+            <button
+              type="button"
+              className="login-google-btn"
+              onClick={handleGoogle}
+              disabled={googleLoading}
+            >
+              <span className="login-google-icon" aria-hidden="true">
+                <GoogleLogo />
+              </span>
+              {t("auth.loginWithGoogle")}
+            </button>
 
-          <button
-            type="button"
-            className="login-guest-btn"
-            onClick={continueAsGuest}
-          >
-            <span className="login-guest-icon" aria-hidden="true">
-              <IconGuest />
-            </span>
-            {t("auth.continueAsGuest")}
-          </button>
-        </div>
+            <button
+              type="button"
+              className="login-guest-btn"
+              onClick={continueAsGuest}
+            >
+              <span className="login-guest-icon" aria-hidden="true">
+                <IconGuest />
+              </span>
+              {t("auth.continueAsGuest")}
+            </button>
+          </div>
 
-        <div className="login-divider">
-          <span>{t("auth.orContinueWith")}</span>
-        </div>
+          <div className="login-divider">
+            <span>{t("auth.or")}</span>
+          </div>
 
-        <div className="login-form-area">
+          <div className="login-quick-row">
+            <button
+              type="button"
+              className="login-google-btn login-email-btn"
+              onClick={() => setEmailOpen(true)}
+            >
+              <span className="login-guest-icon" aria-hidden="true">
+                <IconMail />
+              </span>
+              {mode === "login" ? t("auth.loginWithEmail") : t("auth.signupWithEmail")}
+            </button>
+          </div>
+          </>
+        )}
+
+        {emailOpen && (
+        <>
+        <button
+          type="button"
+          className="login-back-btn"
+          onClick={() => setEmailOpen(false)}
+        >
+          <IconArrowLeft />
+          {t("auth.backToOptions")}
+        </button>
+        <div className="login-form-area" id="login-email-area">
           {mode === "login" && (
           <form
             className="login-form"
@@ -856,6 +938,8 @@ export default function LoginScreen() {
             </button>
           )}
         </div>
+        </>
+        )}
 
         <p className="login-legal">
           {t("auth.legalPrefix")} <a href="#terms">{t("auth.termsOfService")}</a> &{" "}

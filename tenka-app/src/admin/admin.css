@@ -3585,7 +3585,7 @@ body:has(.adm-shell) {
     display: block;
     margin-top: 6px;
     text-align: right;
-    font-size: 15px;
+    font-size: 11px;
     font-weight: 600;
     font-family: "Dancing Script", "Segoe Script", "Brush Script MT", cursive;
 
@@ -3932,4 +3932,489 @@ body:has(.adm-shell) {
 .adm-opt-row .adm-icon-btn:disabled {
     opacity: 0.45;
     cursor: not-allowed;
+}
+
+
+/* ================= Script Practice (Kotoba / Bunpō / Kanji) =================
+   Breadcrumb, header berikon, kartu tipe soal, dan tabel soal berhalaman —
+   mengikuti mockup mockup_pratice_.png. Semua warna lewat variabel --a-* jadi
+   ikut tema gelap. */
+
+.adm-practice {
+    --tone-blue: #2f5fde;
+    --tone-green: #16a34a;
+    --tone-purple: #7c3aed;
+    --tone-orange: #f97316;
+    max-width: 1180px;
+}
+
+.adm-crumbs {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+    font-size: 13px;
+    color: var(--a-indigo);
+}
+
+.adm-crumbs svg {
+    width: 16px;
+    height: 16px;
+}
+
+.adm-crumbs-sep {
+    color: var(--a-ink-soft);
+}
+
+.adm-crumbs-current {
+    color: var(--a-ink-soft);
+}
+
+.adm-practice-header {
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.adm-practice-header h1 {
+    font-size: 34px;
+}
+
+.adm-practice-header p {
+    margin-top: 4px;
+    font-size: 14px;
+}
+
+.adm-practice-script-icon {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--a-indigo);
+    color: #fff;
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--a-indigo) 30%, transparent);
+}
+
+.adm-practice-script-icon svg {
+    width: 26px;
+    height: 26px;
+}
+
+/* ---- kartu tipe soal ---- */
+
+.adm-ptype-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.adm-ptype {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    text-align: left;
+    font: inherit;
+    color: var(--a-ink);
+    background: var(--a-card);
+    border: 1px solid var(--a-line);
+    border-radius: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--a-indigo) 6%, transparent);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.adm-ptype:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--a-indigo) 12%, transparent);
+}
+
+.adm-ptype-icon {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+}
+
+.adm-ptype-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.adm-ptype-glyph {
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.adm-ptype-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.adm-ptype-name {
+    font-size: 14.5px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.adm-ptype-count {
+    font-size: 12.5px;
+    color: var(--a-ink-soft);
+}
+
+.adm-ptype-caret {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: var(--a-ink-soft);
+}
+
+.tone-blue { --tone: var(--tone-blue); }
+.tone-green { --tone: var(--tone-green); }
+.tone-purple { --tone: var(--tone-purple); }
+.tone-orange { --tone: var(--tone-orange); }
+
+.adm-ptype-icon,
+.adm-practice-head-icon {
+    background: color-mix(in srgb, var(--tone) 14%, var(--a-card));
+    color: var(--tone);
+}
+
+.adm-ptype.active {
+    border-color: color-mix(in srgb, var(--a-indigo) 55%, transparent);
+    background: var(--a-indigo);
+    color: #fff;
+    box-shadow: 0 10px 24px color-mix(in srgb, var(--a-indigo) 32%, transparent);
+}
+
+.adm-ptype.active .adm-ptype-icon {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.adm-ptype.active .adm-ptype-count,
+.adm-ptype.active .adm-ptype-caret {
+    color: rgba(255, 255, 255, 0.82);
+}
+
+/* ---- kartu tabel ---- */
+
+.adm-practice-card {
+    padding: 18px;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px color-mix(in srgb, var(--a-indigo) 8%, transparent);
+}
+
+.adm-practice-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.adm-practice-head-icon {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.adm-practice-head-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.adm-practice-head-text {
+    flex: 1 1 240px;
+    min-width: 0;
+}
+
+.adm-practice-head-text h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.adm-practice-head-text p {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: var(--a-ink-soft);
+}
+
+.adm-practice-count {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--a-indigo-deep);
+    background: var(--a-indigo-tint);
+}
+
+.adm-bulkbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    font-weight: 600;
+    background: var(--a-indigo-tint);
+    color: var(--a-indigo-deep);
+}
+
+.adm-bulkbar > span {
+    margin-right: auto;
+}
+
+.adm-practice-tablewrap {
+    overflow-x: auto;
+    border: 1px solid var(--a-line);
+    border-radius: 16px;
+}
+
+.adm-table--practice {
+    min-width: 860px;
+}
+
+.adm-table--practice th {
+    padding: 14px 14px;
+    font-size: 12.5px;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.adm-table--practice td {
+    padding: 10px 14px;
+}
+
+.adm-table--practice tr.picked td {
+    background: color-mix(in srgb, var(--a-indigo) 6%, var(--a-card));
+}
+
+.adm-col-check {
+    width: 44px;
+}
+
+.adm-col-no {
+    width: 48px;
+    color: var(--a-ink-soft);
+}
+
+.adm-check {
+    width: 17px;
+    height: 17px;
+    border-radius: 5px;
+    accent-color: var(--a-indigo);
+    cursor: pointer;
+}
+
+.adm-check:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.adm-pq {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 150px;
+}
+
+.adm-pq-main {
+    font-weight: 700;
+    font-size: 14.5px;
+}
+
+.adm-pq-sub {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    color: var(--a-ink-soft);
+}
+
+.adm-pq-sub .adm-tier-badge {
+    padding: 1px 7px;
+    font-size: 10.5px;
+}
+
+.adm-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.adm-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    padding: 5px 11px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    background: var(--a-surface-tint);
+    color: var(--a-ink);
+}
+
+.adm-chip-correct {
+    background: color-mix(in srgb, #16a34a 16%, var(--a-card));
+    color: #15803d;
+}
+
+:root[data-theme="dark"] .adm-chip-correct {
+    color: #4ade80;
+}
+
+.adm-pdate {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 12.5px;
+    white-space: nowrap;
+}
+
+.adm-practice-actions {
+    display: inline-flex;
+    gap: 8px;
+}
+
+.adm-practice-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border: 0;
+    border-radius: 10px;
+    font: inherit;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.adm-practice-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+.adm-practice-btn.edit {
+    background: var(--a-indigo-tint);
+    color: var(--a-indigo-deep);
+}
+
+.adm-practice-btn.edit:hover {
+    background: var(--a-indigo-tint-hover);
+}
+
+.adm-practice-btn.danger {
+    background: var(--a-danger-tint);
+    color: #e0433f;
+}
+
+.adm-practice-btn.danger:hover {
+    background: color-mix(in srgb, #c0392b 24%, var(--a-card));
+}
+
+.adm-practice-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ---- footer + pager ---- */
+
+.adm-practice-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 14px;
+    font-size: 13px;
+}
+
+.adm-pager {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.adm-pager-btn {
+    min-width: 34px;
+    height: 34px;
+    padding: 0 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--a-line);
+    border-radius: 10px;
+    background: var(--a-card);
+    color: var(--a-ink);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.adm-pager-btn svg {
+    width: 15px;
+    height: 15px;
+}
+
+.adm-pager-btn:hover:not(:disabled) {
+    background: var(--a-indigo-tint);
+    color: var(--a-indigo-deep);
+}
+
+.adm-pager-btn.active {
+    background: var(--a-indigo);
+    border-color: var(--a-indigo);
+    color: #fff;
+}
+
+.adm-pager-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.adm-pager-prev {
+    transform: rotate(180deg);
+}
+
+.adm-pager-gap {
+    padding: 0 4px;
+    color: var(--a-ink-soft);
+}
+
+@media (max-width: 680px) {
+    .adm-practice-header h1 {
+        font-size: 28px;
+    }
+    .adm-practice-head .adm-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    .adm-practice-foot {
+        justify-content: center;
+    }
 }

@@ -17,7 +17,7 @@ export type ConquestStoryID = {
 export const CONQUEST_STORY: Record<string, ConquestScriptStory> = {
   hiragana: {
     epilogue:
-      "The magistrate stamps his official seal on your letter of recommendation. The First Trial of Knighthood is complete — you're officially recognized as ready to move on to the Second Trial in the port city, where Katakana awaits.",
+      "The magistrate stamps his official seal on your letter of recommendation. The First Conquest of Knighthood is complete — you're officially recognized as ready to move on to the Second Conquest in the port city, where Katakana awaits.",
     phases: [
       {
         label: "Tier 1 — The Village Hall Gate",
@@ -29,13 +29,13 @@ export const CONQUEST_STORY: Record<string, ConquestScriptStory> = {
       },
       {
         label: "Tier 3 — The Magistrate's Decree",
-        text: "✨ You've cracked the cipher. Before long, the local magistrate arrives bearing an official decree full of combined yōon characters — きゃ, しゅ, ちょ — to test you directly. This is the final trial before you may set off for the port city for the Second Trial of Knighthood.",
+        text: "✨ You've cracked the cipher. Before long, the local magistrate arrives bearing an official decree full of combined yōon characters — きゃ, しゅ, ちょ — to test you directly. This is the final conquest before you may set off for the port city for the Second Conquest of Knighthood.",
       },
     ],
   },
   katakana: {
     epilogue:
-      'The Knight Captain sheathes his sword and lays it on both your shoulders. "Rise, Knight." That very night, before torchlight and the crash of harbor waves, you\'re officially made an Imperial Knight — two trials, Hiragana and Katakana, fully conquered.',
+      'The Knight Captain sheathes his sword and lays it on both your shoulders. "Rise, Knight." That very night, before torchlight and the crash of harbor waves, you\'re officially made an Imperial Knight — two conquests, Hiragana and Katakana, fully conquered.',
     phases: [
       {
         label: "Tier 1 — The Harbor Gate",
@@ -47,7 +47,7 @@ export const CONQUEST_STORY: Record<string, ConquestScriptStory> = {
       },
       {
         label: "Tier 3 — The Knight Captain's Decree",
-        text: "✨ You've successfully read the entire cargo manifest. At the harbor watchtower, the Knight Captain himself steps in to test you with foreign combined yōon characters — kya, shu, cho — as the final trial. If you pass, the title of Knight will be officially bestowed this very night.",
+        text: "✨ You've successfully read the entire cargo manifest. At the harbor watchtower, the Knight Captain himself steps in to test you with foreign combined yōon characters — kya, shu, cho — as the final conquest. If you pass, the title of Knight will be officially bestowed this very night.",
       },
     ],
   },

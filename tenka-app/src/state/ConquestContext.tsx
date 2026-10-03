@@ -81,7 +81,7 @@ export function ConquestProvider({ children }: { children: ReactNode }) {
     [],
   );
 
-  // akun dev lolos semua gate progression (chapter trials, dll) —
+  // akun dev lolos semua gate progression (chapter conquests, dll) —
   // gak perlu urut menaklukkan yang sebelumnya dulu.
   const isLocked = useCallback(
     (scriptKey: string) => (isDev ? null : checkLockReason(scriptKey)),

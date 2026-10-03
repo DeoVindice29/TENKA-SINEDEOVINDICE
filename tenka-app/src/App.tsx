@@ -23,6 +23,7 @@ import { SyncBar } from "@/components/ui/Loader";
 import { INTRO_SEEN_KEY } from "@/data/introGuide";
 import AdminPanel from "@/admin/AdminPanel";
 import quizSceneBg from "@/assets/bg-quiz.webp";
+import quizSceneBgNight from "@/assets/bg-quiz-night.webp";
 
 // Layar-layar yang sengaja fokus penuh (sesi kuis/Match/Penaklukan/kartu
 // flash aktif) — sidebar & topbar disembunyikan biar gak keganggu, sama
@@ -65,7 +66,7 @@ export default function App() {
   const finishIntro = () => {
     setIntroSeen(true);
     setIntroOpen(false);
-    // Setelah intro selesai jangan auto-buka Trial — langsung ke Home.
+    // Setelah intro selesai jangan auto-buka Conquest — langsung ke Home.
     setScreen("start");
   };
 
@@ -94,7 +95,11 @@ export default function App() {
         }`}
         style={
           screen === "quiz" || screen === "match"
-            ? { backgroundImage: `url(${quizSceneBg})` }
+            ? {
+                backgroundImage: `url(${
+                  themeApi.theme === "dark" ? quizSceneBgNight : quizSceneBg
+                })`,
+              }
             : undefined
         }
       >

@@ -195,6 +195,10 @@ export const I18N: Record<string, I18NEntry> = {
     en: "or continue with",
     id: "atau lanjutkan dengan",
   },
+  "auth.backToOptions": { en: "Back to other options", id: "Kembali ke pilihan lain" },
+  "auth.or": { en: "or", id: "atau" },
+  "auth.loginWithEmail": { en: "Login with email", id: "Masuk dengan email" },
+  "auth.signupWithEmail": { en: "Sign up with email", id: "Daftar dengan email" },
   "auth.continueAsGuest": {
     en: "Continue as Guest",
     id: "Lanjutkan sebagai Tamu",
@@ -544,12 +548,12 @@ export const I18N: Record<string, I18NEntry> = {
   "learn.eyebrow": { en: "study mode", id: "mode belajar" },
   "learn.title": { en: "Character Tables", id: "Tabel Aksara" },
   "learn.sub": {
-    en: "Memorize the shape and reading of each character before starting a Trial. Choose a script below.",
-    id: "Hafalkan dulu bentuk dan cara baca tiap karakter sebelum mulai Trial. Pilih aksaranya di bawah.",
+    en: "Memorize the shape and reading of each character before starting a Conquest. Choose a script below.",
+    id: "Hafalkan dulu bentuk dan cara baca tiap karakter sebelum mulai Conquest. Pilih aksaranya di bawah.",
   },
   "learn.readyStart": {
-    en: "Ready — Start Trial",
-    id: "Sudah Siap — Mulai Trial",
+    en: "Ready — Start Conquest",
+    id: "Sudah Siap — Mulai Conquest",
   },
   "learn.characters": { en: "characters", id: "karakter" },
   "learn.words": { en: "words", id: "kata" },
@@ -926,23 +930,23 @@ export const I18N: Record<string, I18NEntry> = {
   "about.heading": { en: "About", id: "Tentang" },
   "about.summary": { en: "Noble Ranks", id: "Tingkatan Kebangsawanan" },
   "about.intro": {
-    en: "Conquer every Tier Trial to climb from commoner to emperor.",
-    id: "Taklukkan tiap Tier Trial untuk naik dari rakyat jelata sampai kaisar.",
+    en: "Conquer every Tier Conquest to climb from commoner to emperor.",
+    id: "Taklukkan tiap Tier Conquest untuk naik dari rakyat jelata sampai kaisar.",
   },
   "rank.comingSoon": { en: "Coming soon", id: "Segera hadir" },
 
-  "missions.open": { en: "Rank trials", id: "Trial kenaikan pangkat" },
-  "missions.button": { en: "Trials", id: "Trial" },
-  "missions.title": { en: "Rank Trials", id: "Trial Pangkat" },
+  "missions.open": { en: "Rank conquests", id: "Conquest kenaikan pangkat" },
+  "missions.button": { en: "Conquests", id: "Conquest" },
+  "missions.title": { en: "Rank Conquests", id: "Conquest Pangkat" },
   "missions.sub": {
-    en: "Finish these trials to climb the noble ranks.",
-    id: "Selesaikan trial ini untuk naik pangkat bangsawan.",
+    en: "Finish these conquests to climb the noble ranks.",
+    id: "Selesaikan conquest ini untuk naik pangkat bangsawan.",
   },
   "missions.current": { en: "Current", id: "Sekarang" },
   "missions.next": { en: "Next", id: "Berikutnya" },
   "missions.progress": {
-    en: "{done} of {total} trials done",
-    id: "{done} dari {total} trial selesai",
+    en: "{done} of {total} conquests done",
+    id: "{done} dari {total} conquest selesai",
   },
   "missions.conquer": {
     en: "Conquer all of {label}",
@@ -955,19 +959,19 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Mulai",
   },
   "missions.allN5": {
-    en: "All N5 trials conquered!",
-    id: "Semua trial N5 ditaklukkan!",
+    en: "All N5 conquests complete!",
+    id: "Semua conquest N5 ditaklukkan!",
   },
   "missions.later": {
-    en: "N4 – N1 trials await in the lands ahead.",
-    id: "Trial N4 – N1 menanti di negeri seberang.",
+    en: "N4 – N1 conquests await in the lands ahead.",
+    id: "Conquest N4 – N1 menanti di negeri seberang.",
   },
   "missions.close": { en: "Close", id: "Tutup" },
   "missions.badge": { en: "LEARN", id: "BELAJAR" },
   "missions.steps": { en: "Path to {rank}", id: "Jalan Menuju {rank}" },
   "missions.stepsSub": {
-    en: "Complete these trials to earn your next rank.",
-    id: "Selesaikan trial ini untuk meraih pangkat berikutnya.",
+    en: "Complete these conquests to earn your next rank.",
+    id: "Selesaikan conquest ini untuk meraih pangkat berikutnya.",
   },
   "missions.desc": {
     en: "Conquer all {count} {label} tiers.",
@@ -978,25 +982,25 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Ditaklukkan",
   },
   "missions.footer": {
-    en: "Every trial brings you closer to the throne.",
-    id: "Setiap trial membawamu lebih dekat ke tahta.",
+    en: "Every conquest brings you closer to the throne.",
+    id: "Setiap conquest membawamu lebih dekat ke tahta.",
   },
 
   "guide.msg.start": {
-    en: "Let's start today's trial together — you've got this!",
-    id: "Ayo kita mulai trial hari ini bareng-bareng — kamu pasti bisa!",
+    en: "Let's start today's conquest together — you've got this!",
+    id: "Ayo kita mulai conquest hari ini bareng-bareng — kamu pasti bisa!",
   },
   "guide.msg.progress": {
     en: "You're on the right path, keep up the spirit!",
     id: "Kamu sudah berada di jalan yang tepat, terus semangat!",
   },
   "guide.msg.almost": {
-    en: "Almost there — just one more step to finish this trial!",
-    id: "Sedikit lagi — satu langkah lagi buat menyelesaikan trial ini!",
+    en: "Almost there — just one more step to finish this conquest!",
+    id: "Sedikit lagi — satu langkah lagi buat menyelesaikan conquest ini!",
   },
   "guide.msg.done": {
-    en: "Amazing, trial complete! Ready for the next one?",
-    id: "Keren, trial selesai! Siap lanjut ke trial berikutnya?",
+    en: "Amazing, conquest complete! Ready for the next one?",
+    id: "Keren, conquest selesai! Siap lanjut ke conquest berikutnya?",
   },
   "guide.msg.sub": {
     en: "Every letter you learn is a step toward your goal.",
@@ -1027,8 +1031,8 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Setiap aksara yang kamu taklukkan bakal naikkin pangkatmu — dari Rakyat Jelata sampai Kaisar.",
   },
   "guide.intro.6": {
-    en: "Alright, your first trial is waiting — let's get started!",
-    id: "Nah, trial pertamamu sudah menunggu — yuk kita mulai!",
+    en: "Alright, your first conquest is waiting — let's get started!",
+    id: "Nah, conquest pertamamu sudah menunggu — yuk kita mulai!",
   },
   "guide.intro.next": { en: "Next", id: "Lanjut" },
   "guide.intro.start": { en: "Let's start!", id: "Ayo mulai!" },
@@ -1062,8 +1066,8 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Siap naik pangkat? Ayo berangkat!",
   },
   "guide.quote.6": {
-    en: "Sip some water, then back to the trial!",
-    id: "Minum dulu, terus lanjut trialnya!",
+    en: "Sip some water, then back to the conquest!",
+    id: "Minum dulu, terus lanjut conquestnya!",
   },
   "guide.quote.7": {
     en: "Consistency beats cramming. Little by little!",
@@ -1082,8 +1086,8 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Wow, kamu makin cepat tiap hari!",
   },
   "guide.quote.11": {
-    en: "Your next trial is right there — go for it!",
-    id: "Trial berikutnya sudah di depan mata — gas!",
+    en: "Your next conquest is right there — go for it!",
+    id: "Conquest berikutnya sudah di depan mata — gas!",
   },
   "guide.quote.12": {
     en: "Tired? Rest a little, then come back stronger.",
@@ -1094,48 +1098,48 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Belajar bahasa Jepang itu perjalanan. Aku menyemangatimu!",
   },
   "guide.quote.14": {
-    en: "Every trial you finish deserves a celebration!",
-    id: "Setiap trial yang kamu selesaikan pantas dirayakan!",
+    en: "Every conquest you finish deserves a celebration!",
+    id: "Setiap conquest yang kamu selesaikan pantas dirayakan!",
   },
   "guide.progress.start.0": {
     en: "Your journey starts with {script}. Take the first step — I'm right here with you!",
     id: "Perjalananmu dimulai dari {script}. Ayo ambil langkah pertama — aku temani!",
   },
   "guide.progress.start.1": {
-    en: "No trials conquered yet, and that's okay. {script} is a great place to begin!",
-    id: "Belum ada trial yang ditaklukkan, nggak apa-apa. {script} tempat yang pas buat mulai!",
+    en: "No conquests completed yet, and that's okay. {script} is a great place to begin!",
+    id: "Belum ada conquest yang ditaklukkan, nggak apa-apa. {script} tempat yang pas buat mulai!",
   },
   "guide.progress.start.2": {
     en: "Ready? Conquer {script} first and you're on your way to {rank}!",
     id: "Siap? Taklukkan {script} dulu, dan kamu mulai melangkah menuju {rank}!",
   },
   "guide.progress.mid.0": {
-    en: "{done} of {total} trials done — nice pace! Next up: {script}.",
-    id: "{done} dari {total} trial sudah beres — lumayan banget! Berikutnya: {script}.",
+    en: "{done} of {total} conquests done — nice pace! Next up: {script}.",
+    id: "{done} dari {total} conquest sudah beres — lumayan banget! Berikutnya: {script}.",
   },
   "guide.progress.mid.1": {
     en: "You're on the right path to {rank}. Keep the momentum with {script}!",
     id: "Kamu sudah di jalur yang tepat menuju {rank}. Jaga semangatnya di {script}!",
   },
   "guide.progress.mid.2": {
-    en: "Look at you go — {done} trials down! {script} is waiting for you.",
-    id: "Lihat kamu sekarang — {done} trial sudah ditaklukkan! {script} sudah menunggu.",
+    en: "Look at you go — {done} conquests down! {script} is waiting for you.",
+    id: "Lihat kamu sekarang — {done} conquest sudah ditaklukkan! {script} sudah menunggu.",
   },
   "guide.progress.last.0": {
     en: "So close! Only {script} stands between you and {rank}!",
     id: "Tinggal sedikit lagi! Cuma {script} yang tersisa sebelum kamu jadi {rank}!",
   },
   "guide.progress.last.1": {
-    en: "One more trial and you'll be a {rank}. You've got this — go for {script}!",
-    id: "Satu trial lagi dan kamu jadi {rank}. Kamu pasti bisa — gas {script}!",
+    en: "One more conquest and you'll be a {rank}. You've got this — go for {script}!",
+    id: "Satu conquest lagi dan kamu jadi {rank}. Kamu pasti bisa — gas {script}!",
   },
   "guide.progress.last.2": {
     en: "{done} of {total} done. Finish {script} and the {rank} rank is yours!",
     id: "{done} dari {total} beres. Selesaikan {script} dan pangkat {rank} jadi milikmu!",
   },
   "guide.progress.done.0": {
-    en: "All {total} N5 trials conquered! I'm so proud of you!",
-    id: "Semua {total} trial N5 sudah kamu taklukkan! Aku bangga banget sama kamu!",
+    en: "All {total} N5 conquests complete! I'm so proud of you!",
+    id: "Semua {total} conquest N5 sudah kamu taklukkan! Aku bangga banget sama kamu!",
   },
   "guide.progress.done.1": {
     en: "You did it — the whole N5 is yours! N4 is waiting in the lands ahead.",
@@ -1382,16 +1386,16 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Taklukkan {label}",
   },
   "conquest.jlptRetryCardTitleWithLabel": {
-    en: "Retake the {label} Trial",
-    id: "Ulangi Trial {label}",
+    en: "Retake the {label} Conquest",
+    id: "Ulangi Conquest {label}",
   },
   "conquest.goToPracticeCardTitle": {
     en: "Want to practice? Head to Practice",
     id: "Mau latihan? Ke Practice yuk",
   },
   "conquest.goToPracticeDesc": {
-    en: "You've already conquered the {label} Trial. Want to keep sharpening your skills? Go to Practice!",
-    id: "Kamu sudah menaklukkan Trial {label}. Mau latihan lagi biar makin jago? Pergi ke Practice!",
+    en: "You've already conquered the {label} Conquest. Want to keep sharpening your skills? Go to Practice!",
+    id: "Kamu sudah menaklukkan Conquest {label}. Mau latihan lagi biar makin jago? Pergi ke Practice!",
   },
   "conquest.desc": {
     en: "Conquer all of {label} at once — {count} questions, one mistake and it's over.",
@@ -1414,12 +1418,12 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Mulai Penaklukkan",
   },
   "conquestGuide.ready": {
-    en: "Ready? Take a deep breath — the trial begins the moment you press start! ⚔️",
+    en: "Ready? Take a deep breath — the conquest begins the moment you press start! ⚔️",
     id: "Siap? Tarik napas dalam-dalam — ujiannya dimulai begitu kamu menekan mulai! ⚔️",
   },
   "conquestModal.threePhaseIntro": {
-    en: "This isn't an ordinary trial — this is the Knight's Trial. Conquering {label} is split into 3 story Tiers (basic → dotted → combined), {count} questions in total.",
-    id: "Ini bukan trial biasa — ini Ujian Ksatria. Penaklukkan {label} terbagi menjadi 3 Tier cerita (dasar → bertitik → gabungan), total {count} soal.",
+    en: "This isn't an ordinary conquest — this is the Knight's Conquest. Conquering {label} is split into 3 story Tiers (basic → dotted → combined), {count} questions in total.",
+    id: "Ini bukan conquest biasa — ini Ujian Ksatria. Penaklukkan {label} terbagi menjadi 3 Tier cerita (dasar → bertitik → gabungan), total {count} soal.",
   },
   "conquestModal.singleIntro": {
     en: "You'll face all {count} {label} questions at once, shuffled.",
@@ -1478,11 +1482,11 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Taklukkan Hiragana &amp; Katakana keduanya untuk resmi <b>diangkat menjadi Knight (騎士)</b>.",
   },
   "conquestModal.rule.becomeKnightSolo": {
-    en: "Conquer this fully and you'll officially be <b>knighted (騎士)</b> — both the Hiragana &amp; Katakana trials complete!",
+    en: "Conquer this fully and you'll officially be <b>knighted (騎士)</b> — both the Hiragana &amp; Katakana conquests complete!",
     id: "Taklukkan ini sampai tuntas dan kamu akan resmi <b>diangkat menjadi Knight (騎士)</b> — ujian Hiragana &amp; Katakana lunas keduanya!",
   },
   "conquestStory.eyebrowStart": {
-    en: "⚔️ The Knight's Trial begins",
+    en: "⚔️ The Knight's Conquest begins",
     id: "⚔️ Ujian Ksatria dimulai",
   },
   "conquestStory.eyebrowFinal": {
@@ -1673,6 +1677,70 @@ export const I18N: Record<string, I18NEntry> = {
     en: "💀 <b>Speedrun Failed</b> — too many mistakes (question {current} of {total}). Try again!",
     id: "💀 <b>Speedrun Gagal</b> — kebanyakan salah (soal ke-{current} dari {total}). Coba lagi!",
   },
+  "results.defaultName": {
+    en: "you",
+    id: "kamu",
+  },
+  "results.chibiPerfect": {
+    en: "Perfect, {name}! Not a single mistake!",
+    id: "Sempurna, {name}! Nggak ada yang salah sama sekali!",
+  },
+  "results.chibiSpeedrunRecord": {
+    en: "New record, {name}! {time} — your fingers are on fire!",
+    id: "Rekor baru, {name}! {time} — jarimu ngebut banget!",
+  },
+  "results.chibiSpeedrunFirst": {
+    en: "Your first record is on the board, {name}! Now try to beat it.",
+    id: "Rekor pertamamu tercatat, {name}! Sekarang coba kalahkan sendiri ya.",
+  },
+  "results.chibiSpeedrunSlower": {
+    en: "Flawless, {name}! Only {gap} off your best — one more run?",
+    id: "Tanpa salah, {name}! Cuma {gap} dari rekormu — sekali lagi?",
+  },
+  "results.chibiSpeedrunFail": {
+    en: "Oops, you slipped, {name}. Take a breath, then go again!",
+    id: "Yah, kepeleset, {name}. Tarik napas, lalu gas lagi!",
+  },
+  "results.chibiConquestSuccess": {
+    en: "You did it, {name}! {label} is yours — congratulations!",
+    id: "Kamu berhasil, {name}! {label} resmi jadi milikmu — selamat!",
+  },
+  "results.chibiConquestFail": {
+    en: "Don't give up, {name}! Review a little, then try again.",
+    id: "Jangan menyerah, {name}! Ulas sebentar, lalu coba lagi.",
+  },
+  "results.statAccuracy": {
+    en: "Accuracy",
+    id: "Akurasi",
+  },
+  "results.statStreak": {
+    en: "Best streak",
+    id: "Beruntun terbaik",
+  },
+  "results.statTime": {
+    en: "Your time",
+    id: "Waktumu",
+  },
+  "results.statBest": {
+    en: "Best record",
+    id: "Rekor terbaik",
+  },
+  "results.badgeNewRecord": {
+    en: "New record",
+    id: "Rekor baru",
+  },
+  "results.badgeFirstRecord": {
+    en: "First record",
+    id: "Rekor pertama",
+  },
+  "results.badgeSpeedrunDone": {
+    en: "Speedrun finished",
+    id: "Speedrun selesai",
+  },
+  "results.badgeConquest": {
+    en: "Conquest successful",
+    id: "Penaklukan berhasil",
+  },
   "quiz.chapterLabel": {
     en: "⚔️ {phaseLabel} · Question {current}/{total}",
     id: "⚔️ {phaseLabel} · Soal {current}/{total}",
@@ -1782,8 +1850,8 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Lessons",
   },
   "admin.nav.practice": {
-    en: "Practice",
-    id: "Latihan",
+    en: "Script Practice",
+    id: "Script Practice",
   },
   "admin.nav.questions": {
     en: "Questions",

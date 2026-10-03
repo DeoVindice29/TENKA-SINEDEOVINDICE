@@ -87,7 +87,7 @@ export default function ConquestGuide({
 
         <div className="intro-guide-hero">
           <img src={introBg} alt="" className="intro-guide-bg" />
-          <SakuraCanvas className="intro-guide-sakura" density={14} speed={0.5} />
+          <SakuraCanvas className="intro-guide-sakura" density={14} speed={0.5} nightBlue />
 
           {chibiSrc && (
             <img

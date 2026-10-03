@@ -35,6 +35,10 @@ const DEFAULT_CUSTOM_MOSS = "#2F9E52";
 const DEFAULT_CUSTOM_CHOICE_BG = "#2F5FDE";
 const DEFAULT_CUSTOM_CHOICE_SELECTED = "#2F5FDE";
 
+// Mode warna "custom" di Pengaturan > Theme color disembunyikan. Ganti ke true
+// kalau mau dimunculkan lagi (semua kode pengaturan warnanya masih utuh).
+export const CUSTOM_THEME_ENABLED = false;
+
 export const VALID_BORDER_STYLES = ["default", "custom"] as const;
 
 export type BorderStyle = (typeof VALID_BORDER_STYLES)[number];
@@ -244,6 +248,8 @@ export function useTheme() {
   });
 
   const [borderStyle, setBorderStyleState] = useState<BorderStyle>(() => {
+    // kalau mode custom disembunyikan, orang yang dulu pakai custom balik ke default
+    if (!CUSTOM_THEME_ENABLED) return "default";
     const stored = localStorage.getItem(BORDER_STYLE_KEY);
     return VALID_BORDER_STYLES.includes(stored as BorderStyle)
       ? (stored as BorderStyle)

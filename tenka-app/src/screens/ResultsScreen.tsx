@@ -13,6 +13,7 @@ import {
   rankLogoHtml,
 } from "@/data/ranks";
 import { formatSpeedrunTime } from "@/utils/formatTime";
+import { getChibiAvatarByName } from "@/lib/chibiAvatar";
 import { supportsSpeedrun } from "@/utils/speedrun";
 import {
   isJlptScript,
@@ -40,6 +41,13 @@ export default function ResultsScreen() {
   // ada (soal ujiannya diacak ulang tiap percobaan).
   const [hideRetry, setHideRetry] = useState(false);
   const [showStudyFirst, setShowStudyFirst] = useState(false);
+  // hasil speedrun berhasil disimpan terstruktur (bukan HTML banner) supaya
+  // waktu, rekor & selisihnya bisa tampil sebagai kartu statistik + ucapan chibi.
+  const [speedrunInfo, setSpeedrunInfo] = useState<{
+    elapsed: number;
+    prevBest: number | null;
+    isNewRecord: boolean;
+  } | null>(null);
 
   // catat sesi latihan ke statistik admin — sekali per tampil layar hasil
   const loggedRef = useRef(false);
@@ -141,32 +149,11 @@ export default function ResultsScreen() {
           setPromoClass("conquest-fail");
         } else {
           const elapsed = Date.now() - (state.speedrunStart ?? Date.now());
-          const timeText = formatSpeedrunTime(elapsed);
           const { isNewRecord, prevBest } = submitSpeedrunTime(
             state.script!,
             elapsed,
           );
-          let msg: string;
-          if (isNewRecord && prevBest === null) {
-            msg = t("results.speedrunFirstRecord", {
-              label: script?.label ?? "",
-              time: timeText,
-            });
-            setPromoClass("conquest-success");
-          } else if (isNewRecord) {
-            msg = t("results.speedrunNewRecord", {
-              label: script?.label ?? "",
-              time: timeText,
-            });
-            setPromoClass("conquest-success");
-          } else {
-            msg = t("results.speedrunNoRecord", {
-              label: script?.label ?? "",
-              time: timeText,
-              best: formatSpeedrunTime(prevBest!),
-            });
-          }
-          setPromoMsg(msg);
+          setSpeedrunInfo({ elapsed, prevBest, isNewRecord });
         }
       } else if (state.mode !== "practice") {
         // set biasa (bukan conquest/speedrun/latihan tipe soal): mode-nya bukan "all", jadi ini
@@ -193,41 +180,105 @@ export default function ResultsScreen() {
   const totalQuestions = state.queue.length;
   const acc =
     totalQuestions > 0 ? Math.round((state.score / totalQuestions) * 100) : 0;
-  const streakNote =
-    state.maxStreak >= 3 ? t("results.bestStreak", { n: state.maxStreak }) : "";
 
-  const isConquestFail = state.conquest && state.conquestFailed;
-  const isSpeedrunFail = state.speedrun && state.speedrunFailed;
+  const isConquestFail = !!state.conquest && !!state.conquestFailed;
+  const isSpeedrunFail = !!state.speedrun && !!state.speedrunFailed;
+  const isConquestWin = !!state.conquest && !state.conquestFailed;
+  const scriptLabel = SCRIPTS[state.script as keyof typeof SCRIPTS]?.label ?? "";
 
-  // sapaan pakai nickname: Conquest selalu dianggap 100% (satu salah = gagal),
-  // jadi dipuji dua-duanya; di luar itu dinilai dari akurasi.
-  let greet = "";
-  if (nickname) {
-    if (state.conquest) {
-      greet = state.conquestFailed
-        ? t("results.greetConquestFail", { name: nickname })
-        : acc === 100
-          ? t("results.greetConquestSuccess", { name: nickname })
-          : t("results.greetConquestPassed", { name: nickname });
-    } else if (acc === 100) {
-      greet = t("results.greetPerfect", { name: nickname });
-    } else if (acc >= 80) {
-      greet = t("results.greetAlmost", { name: nickname });
-    } else if (acc >= 50) {
-      greet = t("results.greetDecent", { name: nickname });
-    } else {
-      greet = t("results.greetKeepGoing", { name: nickname });
-    }
+  const name = nickname || t("results.defaultName");
+  const sr = speedrunInfo;
+  const gapText =
+    sr && sr.prevBest !== null && !sr.isNewRecord
+      ? `+${((sr.elapsed - sr.prevBest) / 1000).toFixed(2)}s`
+      : "";
+
+  // ---- chibi: pilih ekspresi + ucapan sesuai hasil ----
+  let expression = "happy";
+  let cheer = "";
+  if (isConquestFail) {
+    expression = "sad";
+    cheer = t("results.chibiConquestFail", { name });
+  } else if (isSpeedrunFail) {
+    expression = "disappointed";
+    cheer = t("results.chibiSpeedrunFail", { name });
+  } else if (isConquestWin) {
+    expression = "celebrate";
+    cheer = t("results.chibiConquestSuccess", { name, label: scriptLabel });
+  } else if (sr?.isNewRecord) {
+    expression = "celebrate";
+    cheer =
+      sr.prevBest === null
+        ? t("results.chibiSpeedrunFirst", { name })
+        : t("results.chibiSpeedrunRecord", {
+            name,
+            time: formatSpeedrunTime(sr.elapsed),
+          });
+  } else if (sr) {
+    expression = "proud";
+    cheer = t("results.chibiSpeedrunSlower", { name, gap: gapText });
+  } else if (acc === 100) {
+    expression = "proud";
+    cheer = t("results.chibiPerfect", { name });
+  } else if (acc >= 80) {
+    expression = "impressed";
+    cheer = t("results.greetAlmost", { name });
+  } else if (acc >= 50) {
+    expression = "happy";
+    cheer = t("results.greetDecent", { name });
+  } else {
+    expression = "sad";
+    cheer = t("results.greetKeepGoing", { name });
+  }
+  const chibiSrc =
+    getChibiAvatarByName(expression) ??
+    getChibiAvatarByName("happy") ??
+    getChibiAvatarByName("cute");
+  const festive = isConquestWin || !!sr?.isNewRecord;
+  const mood = isConquestFail || isSpeedrunFail ? "down" : festive ? "win" : "";
+
+  // lencana kecil di atas cincin skor
+  let badge = "";
+  if (isConquestWin) badge = t("results.badgeConquest");
+  else if (sr?.isNewRecord)
+    badge = t(
+      sr.prevBest === null
+        ? "results.badgeFirstRecord"
+        : "results.badgeNewRecord",
+    );
+  else if (sr) badge = t("results.badgeSpeedrunDone");
+
+  const stats: { label: string; value: string }[] = [
+    { label: t("results.statAccuracy"), value: `${acc}%` },
+  ];
+  if (sr) {
+    stats.push({
+      label: t("results.statTime"),
+      value: formatSpeedrunTime(sr.elapsed),
+    });
+    stats.push({
+      label: t("results.statBest"),
+      value: formatSpeedrunTime(
+        sr.isNewRecord ? sr.elapsed : (sr.prevBest ?? sr.elapsed),
+      ),
+    });
+  }
+  if (state.maxStreak >= 3) {
+    stats.push({
+      label: t("results.statStreak"),
+      value: String(state.maxStreak),
+    });
   }
 
   const scoreText = `${state.score}/${totalQuestions || "?"}`;
   const scoreLenClass =
     scoreText.length >= 5 ? ` len-${Math.min(scoreText.length, 8)}` : "";
+  const RING_R = 54;
+  const RING_C = 2 * Math.PI * RING_R;
 
-  const missedTitle =
-    state.conquest && state.conquestFailed
-      ? t("results.failureReason")
-      : t("results.needsPractice");
+  const missedTitle = isConquestFail
+    ? t("results.failureReason")
+    : t("results.needsPractice");
 
   const retryLabel = isConquestFail
     ? t("results.tryAgainFromStart")
@@ -239,7 +290,7 @@ export default function ResultsScreen() {
 
   // Conquest berhasil → tombol utama mengarah ke Practice (bukan mengulang
   // penaklukan). Conquest gagal tetap "Coba Lagi dari Awal" (restartQuiz).
-  const goesToPractice = !!state.conquest && !isConquestFail;
+  const goesToPractice = isConquestWin;
 
   const handleStudyFirst = () => {
     setCurrentScript(state.script as ScriptKey);
@@ -247,7 +298,55 @@ export default function ResultsScreen() {
   };
 
   return (
-    <section id="screen-results" className="results">
+    <section id="screen-results" className={`results res-card ${mood}`}>
+      <div className="res-chibi-row">
+        <div className="res-chibi" aria-hidden="true">
+          {festive && (
+            <>
+              <span className="res-spark res-spark--a" />
+              <span className="res-spark res-spark--b" />
+              <span className="res-spark res-spark--c" />
+            </>
+          )}
+          {chibiSrc && (
+            <img key={expression} src={chibiSrc} alt="" className="res-chibi-img" />
+          )}
+        </div>
+        <div className="res-bubble" role="status">
+          <p className="res-bubble-text">{cheer}</p>
+        </div>
+      </div>
+
+      <div className="res-score">
+        {badge && <span className="res-badge">{badge}</span>}
+        <div className="res-ring">
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <circle className="res-ring-track" cx="60" cy="60" r={RING_R} />
+            <circle
+              className="res-ring-fill"
+              cx="60"
+              cy="60"
+              r={RING_R}
+              strokeDasharray={RING_C}
+              strokeDashoffset={RING_C * (1 - acc / 100)}
+            />
+          </svg>
+          <div className="res-ring-label">
+            <div className={`num${scoreLenClass}`}>{scoreText}</div>
+            <div className="of">{t("results.correct")}</div>
+          </div>
+        </div>
+      </div>
+
+      <dl className="res-stats">
+        {stats.map((s) => (
+          <div key={s.label} className="res-stat">
+            <dt>{s.label}</dt>
+            <dd>{s.value}</dd>
+          </div>
+        ))}
+      </dl>
+
       {promoMsg && (
         <div
           className={`promo-banner ${promoClass}`}
@@ -255,20 +354,8 @@ export default function ResultsScreen() {
         />
       )}
 
-      {greet && <p className="res-greet">{greet}</p>}
-
-      <div className="score-stamp">
-        <div className={`num${scoreLenClass}`}>{scoreText}</div>
-        <div className="of">{t("results.correct")}</div>
-      </div>
-
-      <p className="acc">
-        {t("results.accuracy", { acc })}
-        {streakNote}
-      </p>
-
       {state.missed.length > 0 && (
-        <>
+        <div className="res-missed">
           <p className="missed-title">{missedTitle}</p>
           <div className="chips">
             {state.missed.map((m, i) => (
@@ -278,7 +365,7 @@ export default function ResultsScreen() {
               </span>
             ))}
           </div>
-        </>
+        </div>
       )}
 
       <div className="result-actions">
@@ -299,7 +386,6 @@ export default function ResultsScreen() {
         <button
           className="ghost"
           type="button"
-          data-i18n="common.back"
           onClick={() =>
             setScreen(state.mode === "practice" ? "practice" : "start")
           }

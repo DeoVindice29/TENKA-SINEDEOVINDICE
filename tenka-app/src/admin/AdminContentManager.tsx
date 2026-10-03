@@ -11,6 +11,8 @@ import {
 import { supabase } from "@/lib/supabaseClient";
 import { InlineLoading } from "@/components/ui/Loader";
 import { useAdminTr } from "@/admin/adminTr";
+import { useLang } from "@/i18n/LangContext";
+import { isJlptScript, practiceTypesFor, type JlptScriptKey, type PracticeTypeKey } from "@/data/jlptConquest";
 import ActivityChart, { type ChartSeries } from "@/admin/ActivityChart";
 import adminBg from "@/assets/bg-admin-panel-login.webp";
 import {
@@ -62,17 +64,19 @@ import {
   IconNote,
   IconPlus,
   IconQuote,
+  IconSakura,
   IconSave,
   IconSearch,
   IconShield,
   IconStar,
+  IconSwap,
   IconTarget,
   IconTrash,
   IconUser,
   IconUsers,
 } from "@/admin/adminIcons";
 
-export type AdminSection = "dashboard" | ContentKind | "soal" | "kutipan" | "statistik" | "pengguna";
+export type AdminSection = "dashboard" | ContentKind | PracticeSectionKey | "kutipan" | "statistik" | "pengguna";
 
 const TIERS = ["N5", "N4", "N3", "N2", "N1"];
 
@@ -182,7 +186,8 @@ export default function AdminContentManager({
   if (section === "dashboard") return <Dashboard onQuickAdd={onQuickAdd} onOpenSection={onOpenSection} activity={activity} />;
   if (section === "statistik") return <StatistikSection />;
   if (section === "pengguna") return <PenggunaSection />;
-  if (section === "soal") return <SoalSection canDelete={canDelete} />;
+  const practiceScript = practiceScriptOf(section);
+  if (practiceScript) return <PracticeSection key={practiceScript} script={practiceScript} canDelete={canDelete} />;
   if (section === "kutipan") return <KutipanSection canDelete={canDelete} />;
   if (section === "kotoba")
     return (
@@ -3304,35 +3309,64 @@ function BunpoSection({
 
 // ------------------------------------------------------------ layout bits
 
-// ------------------------------------------------------------------ Soal
+// ------------------------------------------------------------ Script Practice
 //
-// Bank soal mode Latihan (pilihan ganda). Sistemnya sama persis dengan materi:
-// Level -> Organize by -> Chapter -> Sub Chapter -> soal, memakai pohon
-// (useContentTree / ContentTreeView) yang sama dengan Kotoba, Kanji, dan Bunpō.
-// Soal disimpan di soal_entries_<level>; Organize by & nama Chapter / Sub
-// Chapter-nya punya daftar sendiri (kind "soal").
+// Bank soal mode Latihan (pilihan ganda), ditampilkan per aksara (Kotoba /
+// Bunpō / Kanji) lalu per tipe soal — kartu tipe di atas, tabel soal di
+// bawahnya. Soal disimpan di soal_entries_<level> dengan kolom `script` &
+// `question_type` (lihat migrasi 2026_add_soal_script_and_type.sql). Daftarnya
+// datar: semua level N5–N1 digabung, tanpa Organize by / Chapter / Sub Chapter.
 
 const SOAL_MIN_OPTIONS = 2;
 const SOAL_MAX_OPTIONS = 6;
 const SOAL_DEFAULT_OPTIONS = 4;
+const PRACTICE_PAGE_SIZE = 10;
 
-const SOAL_TREE_CONFIG: TreeViewConfig<SoalRow> = {
-  noun: "soal",
-  addLabel: "Tambah Soal",
-  headers: ["Soal", "Jawaban"],
-  renderCells: (row) => (
-    <>
-      <td className="adm-td-jp adm-td-question">{row.question}</td>
-      <td>
-        <span className="adm-answer-chip">{String.fromCharCode(65 + row.answer_index)}</span>{" "}
-        {row.options[row.answer_index]}
-        <span className="adm-muted"> · {row.options.length} pilihan</span>
-      </td>
-    </>
-  ),
-  leafPrimary: (row) => row.question,
-  leafSecondary: (row) => row.options[row.answer_index] ?? "",
+export type PracticeSectionKey = `practice-${JlptScriptKey}`;
+
+export function practiceScriptOf(section: AdminSection): JlptScriptKey | null {
+  if (!section.startsWith("practice-")) return null;
+  const script = section.slice("practice-".length);
+  return isJlptScript(script) ? script : null;
+}
+
+const PRACTICE_SCRIPT_META: Record<JlptScriptKey, { label: string; desc: string; icon: ReactNode }> = {
+  kotoba: { label: "Kotoba", desc: "Latihan kosakata dengan berbagai tipe soal.", icon: <IconBook /> },
+  bunpo: { label: "Bunpō", desc: "Latihan tata bahasa dengan berbagai tipe soal.", icon: <IconDocument /> },
+  kanji: { label: "Kanji", desc: "Latihan kanji dengan berbagai tipe soal.", icon: <IconKanjiTile /> },
 };
+
+const PRACTICE_TYPE_ICON: Record<PracticeTypeKey, ReactNode> = {
+  meaning: <IconBook />,
+  reading: <IconDocument />,
+  write: <IconEdit />,
+  fill: <span className="adm-ptype-glyph">Aa</span>,
+  usage: <IconSakura />,
+  particle: <IconTarget />,
+  conjugation: <IconSwap />,
+  arrange: <IconLayers />,
+};
+
+// Warna tile tiap kartu tipe (biru, hijau, ungu, oranye, lalu berulang).
+const PRACTICE_TONES = ["blue", "green", "purple", "orange"] as const;
+
+type PracticeSelection = `${string}:${number}`;
+const selKey = (row: SoalRow): PracticeSelection => `${row.tier}:${row.id}`;
+
+// Daftar nomor halaman: 1 2 3 4 5 … 20 (jendela bergeser mengikuti halaman aktif).
+function pageList(current: number, total: number): (number | "…")[] {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  const pages = new Set<number>([1, 2, total, current - 1, current, current + 1]);
+  if (current <= 4) [3, 4, 5].forEach((n) => pages.add(n));
+  if (current >= total - 3) [total - 1, total - 2, total - 3, total - 4].forEach((n) => pages.add(n));
+  const sorted = [...pages].filter((n) => n >= 1 && n <= total).sort((a, b) => a - b);
+  const out: (number | "…")[] = [];
+  sorted.forEach((n, i) => {
+    if (i > 0 && n - sorted[i - 1] > 1) out.push("…");
+    out.push(n);
+  });
+  return out;
+}
 
 // Editor pilihan jawaban: 2–6 baris, bulatan di kiri menandai jawaban yang
 // benar. Nilainya dibaca lewat FormData (name="option" berulang + name="answer").
@@ -3400,26 +3434,133 @@ function OptionsEditor({ defaultOptions, defaultAnswer }: { defaultOptions?: str
   );
 }
 
-function SoalSection({ canDelete }: { canDelete: boolean }) {
-  const { tr } = useAdminTr();
-  const t = useContentTree<SoalRow>("soal", "soal", canDelete);
-  const { status, setStatus, selected, load } = t;
+function PracticeSection({ script, canDelete }: { script: JlptScriptKey; canDelete: boolean }) {
+  const { tr, lang } = useAdminTr();
+  const { t } = useLang();
+  const meta = PRACTICE_SCRIPT_META[script];
+  const types = useMemo(() => practiceTypesFor(script), [script]);
+
+  const [rows, setRows] = useState<SoalRow[] | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
+  const [type, setType] = useState<PracticeTypeKey>(types[0]);
+  const [page, setPage] = useState(1);
+  const [picked, setPicked] = useState<Set<PracticeSelection>>(new Set());
   const [view, setView] = useState<"browse" | "add" | "edit">("browse");
   const [formKey, setFormKey] = useState(0);
   const [editingRow, setEditingRow] = useState<SoalRow | null>(null);
+  const [busy, setBusy] = useState(false);
+  const dateLocale = lang === "en" ? "en-US" : "id-ID";
+
+  const load = async () => {
+    const results = await Promise.all(
+      TIERS.map(async (tier) => {
+        const { data, error } = await supabase
+          .from(tableFor("soal", tier))
+          .select("*")
+          .eq("script", script)
+          .not("question_type", "is", null)
+          .order("created_at", { ascending: false });
+        return { data: (data ?? []) as SoalRow[], error };
+      }),
+    );
+    const failed = results.find((r) => r.error);
+    if (failed?.error && results.every((r) => r.error)) {
+      setStatus(tr("Gagal memuat:") + " " + failed.error.message);
+    }
+    const merged = results.flatMap((r) => r.data);
+    merged.sort((a, b) => b.created_at.localeCompare(a.created_at) || b.id - a.id);
+    setRows(merged);
+  };
+
+  useEffect(() => {
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [script]);
+
+  const counts = useMemo(() => {
+    const map: Record<string, number> = {};
+    (rows ?? []).forEach((r) => {
+      if (r.question_type) map[r.question_type] = (map[r.question_type] ?? 0) + 1;
+    });
+    return map;
+  }, [rows]);
+
+  const typeRows = useMemo(() => (rows ?? []).filter((r) => r.question_type === type), [rows, type]);
+  const totalPages = Math.max(1, Math.ceil(typeRows.length / PRACTICE_PAGE_SIZE));
+  const safePage = Math.min(page, totalPages);
+  const start = (safePage - 1) * PRACTICE_PAGE_SIZE;
+  const pageRows = typeRows.slice(start, start + PRACTICE_PAGE_SIZE);
+  const typeName = t(`practice.${script}.${type}`);
+  const typeIndex = types.indexOf(type);
+  const typeTone = PRACTICE_TONES[typeIndex % PRACTICE_TONES.length];
+
+  const pickType = (k: PracticeTypeKey) => {
+    setType(k);
+    setPage(1);
+    setPicked(new Set());
+    setStatus(null);
+  };
+
+  const allOnPagePicked = pageRows.length > 0 && pageRows.every((r) => picked.has(selKey(r)));
+  const togglePage = () =>
+    setPicked((prev) => {
+      const next = new Set(prev);
+      pageRows.forEach((r) => (allOnPagePicked ? next.delete(selKey(r)) : next.add(selKey(r))));
+      return next;
+    });
+  const toggleOne = (row: SoalRow) =>
+    setPicked((prev) => {
+      const next = new Set(prev);
+      const k = selKey(row);
+      if (next.has(k)) next.delete(k);
+      else next.add(k);
+      return next;
+    });
+
+  const handleDelete = async (row: SoalRow) => {
+    if (!canDelete) return; // hapus khusus dev
+    if (!confirm(tr("Hapus entry ini?"))) return;
+    const { error } = await supabase.from(tableFor("soal", row.tier)).delete().eq("id", row.id);
+    if (error) {
+      setStatus(tr("Gagal hapus:") + " " + error.message);
+      return;
+    }
+    setPicked((prev) => {
+      const next = new Set(prev);
+      next.delete(selKey(row));
+      return next;
+    });
+    load();
+  };
+
+  const handleBulkDelete = async () => {
+    if (!canDelete || picked.size === 0) return;
+    if (!confirm(tr("Hapus {n} soal terpilih?", { n: picked.size }))) return;
+    setBusy(true);
+    const byTier = new Map<string, number[]>();
+    picked.forEach((k) => {
+      const [tier, id] = k.split(":");
+      byTier.set(tier, [...(byTier.get(tier) ?? []), Number(id)]);
+    });
+    for (const [tier, ids] of byTier) {
+      const { error } = await supabase.from(tableFor("soal", tier)).delete().in("id", ids);
+      if (error) {
+        setStatus(tr("Gagal hapus:") + " " + error.message);
+        setBusy(false);
+        load();
+        return;
+      }
+    }
+    setPicked(new Set());
+    setBusy(false);
+    setStatus(null);
+    load();
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>, submitter: HTMLButtonElement | null) => {
     e.preventDefault();
     const formEl = e.currentTarget; // simpan sebelum `await` (lihat KotobaSection)
     const form = new FormData(formEl);
-    const loc: SelectedSubTier | null =
-      view === "edit" && editingRow
-        ? { tier: editingRow.tier, sourceId: editingRow.source_id, chapter: editingRow.chapter, subTier: editingRow.sub_tier }
-        : selected;
-    if (!loc) {
-      setStatus(tr("Pilih Sub Chapter dulu di daftar sebelum menambah entri."));
-      return;
-    }
     const options = form.getAll("option").map((o) => String(o).trim());
     const answerIndex = Number(form.get("answer"));
     if (options.length < SOAL_MIN_OPTIONS || options.some((o) => !o)) {
@@ -3435,11 +3576,7 @@ function SoalSection({ canDelete }: { canDelete: boolean }) {
       return;
     }
     const opt = (name: string) => String(form.get(name) ?? "").trim() || null;
-    const payload = {
-      tier: loc.tier,
-      source_id: loc.sourceId,
-      chapter: loc.chapter,
-      sub_tier: loc.subTier,
+    const content = {
       question: String(form.get("question") ?? "").trim(),
       question_translation_id: opt("question_translation_id"),
       question_translation_en: opt("question_translation_en"),
@@ -3448,24 +3585,31 @@ function SoalSection({ canDelete }: { canDelete: boolean }) {
       explanation_id: opt("explanation_id"),
       explanation_en: opt("explanation_en"),
     };
-    const landOn = () => t.landOn(payload.tier, payload.source_id, payload.chapter, payload.sub_tier);
     setStatus(tr("Menyimpan…"));
 
     if (view === "edit" && editingRow) {
-      const { error } = await supabase.from(tableFor("soal", editingRow.tier)).update(payload).eq("id", editingRow.id);
+      const { error } = await supabase.from(tableFor("soal", editingRow.tier)).update(content).eq("id", editingRow.id);
       if (error) {
         setStatus(tr("Gagal:") + " " + error.message);
         return;
       }
       setStatus(tr("Perubahan tersimpan."));
       setEditingRow(null);
-      landOn();
       setView("browse");
       load();
       return;
     }
 
-    const { error } = await supabase.from(tableFor("soal", payload.tier)).insert(payload);
+    const tier = String(form.get("tier") ?? "N5");
+    const { error } = await supabase.from(tableFor("soal", tier)).insert({
+      ...content,
+      tier,
+      script,
+      question_type: type,
+      source_id: null,
+      chapter: 1,
+      sub_tier: 1,
+    });
     if (error) {
       setStatus(tr("Gagal:") + " " + error.message);
       return;
@@ -3473,7 +3617,7 @@ function SoalSection({ canDelete }: { canDelete: boolean }) {
     setStatus(tr("Tersimpan."));
     load();
     if (submitter?.value === "done") {
-      landOn();
+      setPage(1);
       setView("browse");
     } else {
       formEl.reset();
@@ -3483,45 +3627,19 @@ function SoalSection({ canDelete }: { canDelete: boolean }) {
     }
   };
 
-  const handleDelete = async (row: SoalRow) => {
-    if (!canDelete) return; // hapus khusus dev
-    if (!confirm(tr("Hapus entry ini?"))) return;
-    const { error } = await supabase.from(tableFor("soal", row.tier)).delete().eq("id", row.id);
-    if (error) {
-      setStatus(tr("Gagal hapus:") + " " + error.message);
-      return;
-    }
-    load();
-  };
-
-  const handleEditClick = (row: SoalRow) => {
-    setEditingRow(row);
-    setStatus(null);
-    setView("edit");
-  };
-
-  const handleAddClick = () => {
-    if (!selected) return;
-    setEditingRow(null);
-    setStatus(null);
-    setView("add");
-  };
-
-  const handleBack = () => {
-    setEditingRow(null);
-    setView("browse");
-  };
-
   if (view === "add" || view === "edit") {
     const editing = view === "edit";
     const r = editingRow;
-    const loc = r ? { tier: r.tier, sourceId: r.source_id, chapter: r.chapter, subTier: r.sub_tier } : selected;
     return (
       <>
         <PageHeader
           title={editing ? "Edit Soal" : "Tambah Soal"}
-          subtitle={loc ? locationText(loc.tier, t.sourceLabel(loc.sourceId), loc.chapter, loc.subTier) : ""}
-          onBack={handleBack}
+          subtitle={`${meta.label} · ${typeName}`}
+          onBack={() => {
+            setEditingRow(null);
+            setStatus(null);
+            setView("browse");
+          }}
         />
         <form
           key={editing ? `edit-${r?.id}` : formKey}
@@ -3529,6 +3647,15 @@ function SoalSection({ canDelete }: { canDelete: boolean }) {
           onSubmit={(e) => handleSubmit(e, (e.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null)}
         >
           <SectionCard icon={<IconDocument />} title="Soal" desc="Pertanyaan yang akan muncul di mode Latihan.">
+            <Field label="Level" required>
+              <select name="tier" defaultValue={r?.tier ?? "N5"} disabled={editing}>
+                {TIERS.map((tier) => (
+                  <option key={tier} value={tier}>
+                    {tier}
+                  </option>
+                ))}
+              </select>
+            </Field>
             <Field label="Teks Soal" required>
               <CountedTextarea
                 name="question"
@@ -3585,17 +3712,247 @@ function SoalSection({ canDelete }: { canDelete: boolean }) {
   }
 
   return (
-    <>
-      <PageHeader sticky title="Soal" subtitle="Bank soal untuk mode Latihan." />
-      <StatusLine status={view === "browse" && !selected ? status : null} />
-      <ContentTreeView
-        t={t}
-        config={SOAL_TREE_CONFIG}
-        onAddEntry={handleAddClick}
-        onEditEntry={handleEditClick}
-        onDeleteEntry={handleDelete}
-      />
-    </>
+    <div className="adm-practice">
+      <nav className="adm-crumbs" aria-label="Breadcrumb">
+        <IconCode />
+        <span>{tr("Script Practice")}</span>
+        <span className="adm-crumbs-sep">/</span>
+        <span>{meta.label}</span>
+        <span className="adm-crumbs-sep">/</span>
+        <span className="adm-crumbs-current">{typeName}</span>
+      </nav>
+
+      <div className="adm-page-header adm-practice-header">
+        <span className="adm-practice-script-icon">{meta.icon}</span>
+        <div>
+          <h1>{meta.label}</h1>
+          <p>{tr(meta.desc)}</p>
+        </div>
+      </div>
+
+      <div className="adm-ptype-grid" role="tablist" aria-label={tr("Tipe Soal")}>
+        {types.map((k, i) => (
+          <button
+            key={k}
+            type="button"
+            role="tab"
+            aria-selected={type === k}
+            className={`adm-ptype tone-${PRACTICE_TONES[i % PRACTICE_TONES.length]}${type === k ? " active" : ""}`}
+            onClick={() => pickType(k)}
+          >
+            <span className="adm-ptype-icon">{PRACTICE_TYPE_ICON[k]}</span>
+            <span className="adm-ptype-text">
+              <span className="adm-ptype-name">{t(`practice.${script}.${k}`)}</span>
+              <span className="adm-ptype-count">
+                {rows === null ? "…" : counts[k] ?? 0} {tr("soal")}
+              </span>
+            </span>
+            <IconChevronRight className="adm-ptype-caret" />
+          </button>
+        ))}
+      </div>
+
+      <StatusLine status={status} />
+
+      <div className="adm-card adm-practice-card">
+        <div className="adm-practice-head">
+          <span className={`adm-practice-head-icon tone-${typeTone}`}>{PRACTICE_TYPE_ICON[type]}</span>
+          <div className="adm-practice-head-text">
+            <h2>{typeName}</h2>
+            <p>{t(`practice.${script}.${type}Desc`)}</p>
+          </div>
+          <span className="adm-practice-count">
+            {typeRows.length} {tr("soal")}
+          </span>
+          <button
+            type="button"
+            className="adm-btn adm-btn-primary"
+            onClick={() => {
+              setEditingRow(null);
+              setStatus(null);
+              setView("add");
+            }}
+          >
+            <IconPlus /> {tr("Tambah Soal")}
+          </button>
+        </div>
+
+        {canDelete && picked.size > 0 && (
+          <div className="adm-bulkbar" role="status">
+            <span>{tr("{n} soal dipilih", { n: picked.size })}</span>
+            <button type="button" className="adm-btn adm-btn-ghost" onClick={() => setPicked(new Set())} disabled={busy}>
+              {tr("Batal")}
+            </button>
+            <button type="button" className="adm-practice-btn danger" onClick={handleBulkDelete} disabled={busy}>
+              <IconTrash /> {tr("Hapus Terpilih")}
+            </button>
+          </div>
+        )}
+
+        <div className="adm-practice-tablewrap">
+          <table className="adm-table adm-table--practice">
+            <thead>
+              <tr>
+                <th className="adm-col-check">
+                  <input
+                    type="checkbox"
+                    className="adm-check"
+                    checked={allOnPagePicked}
+                    disabled={!canDelete || pageRows.length === 0}
+                    onChange={togglePage}
+                    aria-label={tr("Pilih semua di halaman ini")}
+                  />
+                </th>
+                <th className="adm-col-no">{tr("No")}</th>
+                <th>{tr("Pertanyaan")}</th>
+                <th>{tr("Pilihan Jawaban")}</th>
+                <th>{tr("Jawaban Benar")}</th>
+                <th>{tr("Dibuat Pada")}</th>
+                <th>{tr("Aksi")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pageRows.map((row, i) => {
+                const created = new Date(row.created_at);
+                const translation =
+                  (lang === "en"
+                    ? row.question_translation_en ?? row.question_translation_id
+                    : row.question_translation_id ?? row.question_translation_en) ?? "";
+                return (
+                  <tr key={selKey(row)} className={picked.has(selKey(row)) ? "picked" : undefined}>
+                    <td className="adm-col-check">
+                      <input
+                        type="checkbox"
+                        className="adm-check"
+                        checked={picked.has(selKey(row))}
+                        disabled={!canDelete}
+                        onChange={() => toggleOne(row)}
+                        aria-label={tr("Pilih soal {n}", { n: start + i + 1 })}
+                      />
+                    </td>
+                    <td className="adm-col-no">{start + i + 1}</td>
+                    <td>
+                      <span className="adm-pq">
+                        <span className="adm-pq-main">{row.question}</span>
+                        <span className="adm-pq-sub">
+                          <span className="adm-tier-badge">{row.tier}</span>
+                          {translation && <span>{translation}</span>}
+                        </span>
+                      </span>
+                    </td>
+                    <td>
+                      <span className="adm-chips">
+                        {row.options.map((o, idx) => (
+                          <span className="adm-chip" key={idx}>
+                            {o}
+                          </span>
+                        ))}
+                      </span>
+                    </td>
+                    <td>
+                      <span className="adm-chip adm-chip-correct">{row.options[row.answer_index]}</span>
+                    </td>
+                    <td>
+                      <span className="adm-pdate">
+                        <span>
+                          {created.toLocaleDateString(dateLocale, { day: "2-digit", month: "short", year: "numeric" })}
+                        </span>
+                        <span className="adm-muted">
+                          {created.toLocaleTimeString(dateLocale, { hour: "2-digit", minute: "2-digit", hour12: false })}
+                        </span>
+                      </span>
+                    </td>
+                    <td>
+                      <span className="adm-practice-actions">
+                        <button
+                          type="button"
+                          className="adm-practice-btn edit"
+                          onClick={() => {
+                            setEditingRow(row);
+                            setStatus(null);
+                            setView("edit");
+                          }}
+                        >
+                          <IconEdit /> {tr("Edit")}
+                        </button>
+                        {canDelete && (
+                          <button type="button" className="adm-practice-btn danger" onClick={() => handleDelete(row)}>
+                            <IconTrash /> {tr("Hapus")}
+                          </button>
+                        )}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+              {rows === null && (
+                <tr>
+                  <td colSpan={7} className="adm-empty-row">
+                    <InlineLoading label={tr("Memuat…")} />
+                  </td>
+                </tr>
+              )}
+              {rows !== null && typeRows.length === 0 && (
+                <tr>
+                  <td colSpan={7} className="adm-muted adm-empty-row">
+                    {tr("Belum ada soal untuk tipe ini. Klik Tambah Soal untuk membuat yang pertama.")}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {typeRows.length > 0 && (
+          <div className="adm-practice-foot">
+            <span className="adm-muted">
+              {tr("Menampilkan {from} - {to} dari {total} data", {
+                from: start + 1,
+                to: Math.min(start + PRACTICE_PAGE_SIZE, typeRows.length),
+                total: typeRows.length,
+              })}
+            </span>
+            <nav className="adm-pager" aria-label={tr("Halaman")}>
+              <button
+                type="button"
+                className="adm-pager-btn"
+                disabled={safePage <= 1}
+                onClick={() => setPage(safePage - 1)}
+                aria-label={tr("Sebelumnya")}
+              >
+                <IconChevronRight className="adm-pager-prev" />
+              </button>
+              {pageList(safePage, totalPages).map((p, i) =>
+                p === "…" ? (
+                  <span className="adm-pager-gap" key={`gap-${i}`}>
+                    ….
+                  </span>
+                ) : (
+                  <button
+                    key={p}
+                    type="button"
+                    className={`adm-pager-btn${p === safePage ? " active" : ""}`}
+                    aria-current={p === safePage ? "page" : undefined}
+                    onClick={() => setPage(p)}
+                  >
+                    {p}
+                  </button>
+                ),
+              )}
+              <button
+                type="button"
+                className="adm-pager-btn"
+                disabled={safePage >= totalPages}
+                onClick={() => setPage(safePage + 1)}
+                aria-label={tr("Berikutnya")}
+              >
+                <IconChevronRight />
+              </button>
+            </nav>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 

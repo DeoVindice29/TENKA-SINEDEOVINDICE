@@ -13,6 +13,9 @@ type Petal = {
 };
 
 const COLORS = ["#FF79C6", "#F8A5C2"];
+// Palet dark mode (opsional via prop `nightBlue`): kelopak biru-indigo biar
+// nyambung sama bg malam & dekorasi bunga biru di bubble panduan.
+const NIGHT_COLORS = ["#7F95FF", "#A9B8FF", "#6AA8FF"];
 
 /**
  * Decorative falling sakura petals, rendered behind the auth card.
@@ -25,10 +28,13 @@ export default function SakuraCanvas({
   className = "login-sakura-canvas",
   density = 35,
   speed = 1,
+  nightBlue = false,
 }: {
   className?: string;
   density?: number;
   speed?: number;
+  /** Di dark mode kelopaknya jadi biru (default: tetap pink). */
+  nightBlue?: boolean;
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -47,6 +53,9 @@ export default function SakuraCanvas({
     let width = (canvas.width = canvas.offsetWidth);
     let height = (canvas.height = canvas.offsetHeight);
 
+    const isNight = () =>
+      nightBlue && document.documentElement.getAttribute("data-theme") === "dark";
+
     const makePetal = (): Petal => ({
       x: Math.random() * width,
       y: Math.random() * -height,
@@ -56,7 +65,9 @@ export default function SakuraCanvas({
       angle: Math.random() * Math.PI * 2,
       spin: (Math.random() * 0.03 - 0.015) * speed,
       opacity: Math.random() * 0.5 + 0.3,
-      color: COLORS[Math.random() > 0.5 ? 0 : 1],
+      color: isNight()
+        ? NIGHT_COLORS[Math.floor(Math.random() * NIGHT_COLORS.length)]
+        : COLORS[Math.random() > 0.5 ? 0 : 1],
     });
 
     const petals: Petal[] = Array.from({ length: density }, makePetal);
@@ -67,13 +78,22 @@ export default function SakuraCanvas({
     };
     window.addEventListener("resize", resize);
 
+    // Kecepatan dihitung per waktu (bukan per frame), jadi layar 90/120Hz tidak
+    // membuat bunga jatuh 2x lebih cepat. Di HP dibuat lebih pelan lagi.
+    const phone = window.matchMedia("(max-width: 680px)");
+    const PHONE_FACTOR = 0.5;
+
     let frameId: number;
-    const tick = () => {
+    let last = performance.now();
+    const tick = (now: number) => {
+      const dt = Math.min((now - last) / (1000 / 60), 3); // 1 = satu frame di 60Hz
+      last = now;
+      const k = dt * (phone.matches ? PHONE_FACTOR : 1);
       ctx.clearRect(0, 0, width, height);
       for (const p of petals) {
-        p.y += p.speedY;
-        p.x += Math.sin(p.angle) * 0.5 + p.speedX;
-        p.angle += p.spin;
+        p.y += p.speedY * k;
+        p.x += (Math.sin(p.angle) * 0.5 + p.speedX) * k;
+        p.angle += p.spin * k;
         if (p.y > height + 20 || p.x < -20 || p.x > width + 20) {
           Object.assign(p, makePetal(), { y: Math.random() * -40 });
         }
@@ -90,7 +110,10 @@ export default function SakuraCanvas({
       }
       frameId = requestAnimationFrame(tick);
     };
-    frameId = requestAnimationFrame(tick);
+    frameId = requestAnimationFrame((t) => {
+      last = t;
+      tick(t);
+    });
 
     return () => {
       cancelAnimationFrame(frameId);

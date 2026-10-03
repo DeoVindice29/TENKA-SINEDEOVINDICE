@@ -53,7 +53,7 @@ export function getTodayTipKey(): string {
 //
 // Kandidat ucapan untuk satu keadaan progres =
 //   (a) ucapan khusus progres (guide.progress.<keadaan>.<n>) yang menyebut
-//       trial berikutnya / pangkat tujuan / hitungan progres, dan
+//       conquest berikutnya / pangkat tujuan / hitungan progres, dan
 //   (b) kutipan umum (CHIBI_QUOTES) yang ditandai cocok untuk keadaan itu.
 // Tiap dibuka dipilih satu secara acak — separuh peluang dari (a) supaya
 // terasa personal, separuhnya dari (b) supaya tetap bervariasi — dan tidak
@@ -61,10 +61,10 @@ export function getTodayTipKey(): string {
 // ---------------------------------------------------------------------------
 
 export type ProgressContext = {
-  /** total trial N5 yang sudah ditaklukkan / seluruhnya */
+  /** total conquest N5 yang sudah ditaklukkan / seluruhnya */
   done: number;
   total: number;
-  /** sisa trial di grup misi yang sedang aktif */
+  /** sisa conquest di grup misi yang sedang aktif */
   remainingInGroup: number;
   allDone: boolean;
 };

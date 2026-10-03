@@ -1518,7 +1518,7 @@ h1 svg {
     flex-direction: column;
     align-items: center;
     min-height: 580px;
-    padding: 80px 24px 40px;
+    padding: 72px 24px 68px;
     background-size: cover;
     background-position: right center;
     background-repeat: no-repeat;
@@ -1577,7 +1577,7 @@ h1 svg {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 16px;
     background: none;
     border: none;
     box-shadow: none;
@@ -1587,7 +1587,7 @@ h1 svg {
 }
 
 .profile-avatar--hero {
-    --avatar-size: 230px;
+    --avatar-size: 208px;
     border: 5px solid rgba(255, 255, 255, 0.85);
     box-shadow: 0 16px 36px rgba(20, 30, 60, 0.3);
 }
@@ -1663,7 +1663,7 @@ h1 svg {
 }
 
 .profile-nickname-wrap--hero {
-    margin-top: 24px;
+    margin-top: 18px;
 }
 
 .profile-nickname-btn--hero,
@@ -1694,7 +1694,8 @@ h1 svg {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-top: 20px;
+    margin-top: 16px;
+    margin-bottom: 8px;
     background: rgba(255, 255, 255, 0.7);
     border: none;
     border-radius: 100px;
@@ -6874,7 +6875,7 @@ button.ghost {
     inset: 0;
     z-index: 500;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     padding: max(16px, env(safe-area-inset-top, 0px)) 16px max(24px, env(safe-area-inset-bottom, 0px));
     background: var(--tenka-bg);
@@ -6975,7 +6976,8 @@ button.ghost {
     z-index: 2;
     width: 100%;
     max-width: 460px;
-    max-height: 100%;
+    margin: auto; /* center when it fits; grow + scroll (no clipping) when it doesn't */
+    flex: 0 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -7143,9 +7145,61 @@ button.ghost {
 
 .login-quick-row {
     display: flex;
+    flex-direction: column;
     align-items: stretch;
     gap: 10px;
     width: 100%;
+}
+
+.login-quick-row > .login-google-btn,
+.login-quick-row > .login-guest-btn {
+    flex: 0 0 auto;
+    width: 100%;
+    padding: 13px 12px;
+    font-size: clamp(12.5px, 3.9vw, 14.5px);
+    white-space: nowrap; /* label tidak boleh turun ke 2 baris */
+    overflow: hidden;
+}
+
+@media (max-width: 360px) {
+    .login-quick-row > .login-google-btn,
+    .login-quick-row > .login-guest-btn {
+        gap: 6px;
+        padding: 12px 8px;
+    }
+}
+
+.login-back-btn {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 6px 4px 2px;
+    margin: 2px 0 0;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: #cbd5e1;
+    background: none;
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color .15s ease;
+}
+
+.login-back-btn:hover {
+    color: #f1f5f9;
+}
+
+.login-back-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.login-email-btn .login-guest-icon {
+    width: 20px;
+    height: 20px;
 }
 
 .login-google-btn {

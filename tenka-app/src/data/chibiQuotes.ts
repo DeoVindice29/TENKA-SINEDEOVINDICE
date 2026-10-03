@@ -1,16 +1,16 @@
 // Kutipan umum si chibi di header popup Misi Pangkat. Tiap kutipan punya
 // ekspresi chibi sendiri — nama file di src/assets/chibi/, tanpa ekstensi —
 // dan daftar KEADAAN PROGRES yang cocok buatnya, supaya kata-katanya tidak
-// pernah bertentangan dengan progres user (mis. "trial berikutnya sudah di
-// depan mata" tidak muncul kalau semua trial N5 sudah tuntas, atau "setiap
-// trial yang kamu selesaikan pantas dirayakan" tidak muncul kalau belum ada
+// pernah bertentangan dengan progres user (mis. "conquest berikutnya sudah di
+// depan mata" tidak muncul kalau semua conquest N5 sudah tuntas, atau "setiap
+// conquest yang kamu selesaikan pantas dirayakan" tidak muncul kalau belum ada
 // satu pun yang selesai). Teksnya ada di I18N.ts (guide.quote.N), en + id.
 //
 // Keadaan progres (lihat data/chibiGuide.ts):
-//   start — belum ada trial yang ditaklukkan
-//   mid   — sudah ada yang beres, dan masih >1 trial tersisa di grup aktif
-//   last  — tinggal 1 trial lagi buat naik ke pangkat berikutnya
-//   done  — semua trial N5 sudah ditaklukkan
+//   start — belum ada conquest yang ditaklukkan
+//   mid   — sudah ada yang beres, dan masih >1 conquest tersisa di grup aktif
+//   last  — tinggal 1 conquest lagi buat naik ke pangkat berikutnya
+//   done  — semua conquest N5 sudah ditaklukkan
 
 export type ProgressState = "start" | "mid" | "last" | "done";
 

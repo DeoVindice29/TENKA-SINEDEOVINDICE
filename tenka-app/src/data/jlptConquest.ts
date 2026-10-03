@@ -981,141 +981,166 @@ export const JLPT_STORY: Record<
   JlptScriptKey,
   { epilogue: Bilingual; phases: Phase[] }
 > = {
+  // ── Kotoba · 4 tier · pangkat Baron (男爵) ───────────────────────────────
+  // Lanjutan kisah Knight: Kapten mengirimmu ke Kotonoha (言の葉), kota pasar
+  // perbatasan yang "mata uangnya adalah kata". Lulus = dianugerahi wilayah.
   kotoba: {
     epilogue: {
-      en: "You passed all four tiers of the N5 vocabulary exam — the examiners stamp your scroll. Kotoba is yours.",
-      id: "Kamu lulus keempat tier ujian kosakata N5 — para penguji membubuhkan cap di gulunganmu. Kotoba resmi kau kuasai.",
+      en: "The Lord Chamberlain presses a wax seal onto the deed, and the market bell of Kotonoha rings out across the valley. “The barony is yours, Baron.” Words are no longer strangers to you — they are your subjects. Beyond the hills, the Viscount's citadel awaits, where the laws that bind words into sentences are kept.",
+      id: "Kepala Rumah Tangga Kerajaan membubuhkan segel lilin pada akta tanahmu, dan lonceng pasar Kotonoha berdentang di seluruh lembah. “Wilayah ini milikmu, Baron.” Kata-kata kini bukan lagi orang asing bagimu — mereka adalah rakyatmu. Di balik perbukitan, benteng sang Viscount menanti, tempat hukum yang merangkai kata menjadi kalimat disimpan.",
     },
     phases: [
       {
         label: {
-          en: "Tier 1 — Find the Kanji",
-          id: "Tier 1 — Tebak Kanjinya",
+          en: "Tier 1 — The Merchants' Ledger",
+          id: "Tier 1 — Buku Besar Para Saudagar",
         },
         text: {
-          en: "🖌️ The exam opens with writing. A sentence appears fully in hiragana with one word underlined — pick how that word is written in kanji.",
-          id: "🖌️ Ujian dibuka dengan menulis. Sebuah kalimat muncul penuh hiragana dengan satu kata digarisbawahi — pilih cara menulis kata itu dalam kanji.",
+          en: "🖌️ Your first morning in Kotonoha, a few days after the harbor ceremony. The guild clerk slides over a ledger he scribbled in a hurry, entirely in hiragana. “A contract without kanji carries no weight in court,” he mutters. One word in each sentence is underlined — pick the kanji that writes it correctly before the ink dries.",
+          id: "🖌️ Pagi pertamamu di Kotonoha, beberapa hari setelah upacara di pelabuhan. Juru tulis serikat dagang menyodorkan buku besar yang ia coret terburu-buru, semuanya hiragana. “Kontrak tanpa kanji tak berbobot di pengadilan,” gumamnya. Satu kata di tiap kalimat digarisbawahi — pilih kanji yang menuliskannya dengan benar sebelum tintanya kering.",
         },
       },
       {
         label: {
-          en: "Tier 2 — Find the Reading",
-          id: "Tier 2 — Tebak Hiragananya",
+          en: "Tier 2 — The Envoy's Letter",
+          id: "Tier 2 — Surat Sang Utusan",
         },
         text: {
-          en: "🔤 Now the other way around. A sentence appears in N5 kanji with one word underlined — pick how it is read (hiragana).",
-          id: "🔤 Sekarang sebaliknya. Sebuah kalimat muncul dalam kanji N5 dengan satu kata digarisbawahi — pilih cara bacanya (hiragana).",
+          en: "🔤 The ledger is settled — and just then a sealed letter from a far-off envoy arrives, dense with N5 kanji. The town crier squints, shakes his head, and the whole square waits for someone to read it aloud. One word in each sentence is underlined: pick how it is read (hiragana).",
+          id: "🔤 Buku besar beres — dan tepat saat itu sepucuk surat bersegel dari utusan jauh tiba, padat dengan kanji N5. Si pembawa pengumuman menyipitkan mata lalu menggeleng, dan seluruh alun-alun menunggu seseorang membacakannya. Satu kata di tiap kalimat digarisbawahi: pilih cara bacanya (hiragana).",
         },
       },
       {
         label: {
-          en: "Tier 3 — Choose the Best Word",
-          id: "Tier 3 — Pilih Kata yang Paling Cocok",
+          en: "Tier 3 — The Gnawed Contract",
+          id: "Tier 3 — Kontrak yang Digerogoti Tikus",
         },
         text: {
-          en: "✍️ A sentence with a blank. Pick the word that fits best.",
-          id: "✍️ Sebuah kalimat dengan bagian kosong. Pilih kata yang paling cocok.",
+          en: "✍️ By lantern light, the market's oldest contract turns up in the cellar — gnawed by mice, one word missing from every clause. “Fill a gap wrong,” the old merchant warns, “and somebody loses their shop.” Read each sentence and pick the word that fits best.",
+          id: "✍️ Di bawah cahaya lentera, kontrak tertua pasar ditemukan di gudang bawah tanah — digerogoti tikus, satu kata hilang di setiap pasalnya. “Kalau salah mengisi,” kata saudagar tua itu, “ada yang kehilangan tokonya.” Baca tiap kalimat dan pilih kata yang paling cocok.",
         },
       },
       {
         label: {
-          en: "Tier 4 — Choose the Correct Sentence",
-          id: "Tier 4 — Pilih Kalimat yang Benar",
+          en: "Tier 4 — The Court of Witnesses",
+          id: "Tier 4 — Pengadilan Para Saksi",
         },
         text: {
-          en: "🧩 The last tier: a word appears in 「 」 and four sentences use it — only one uses it correctly. Pick that sentence.",
-          id: "🧩 Tier terakhir: sebuah kata muncul di dalam 「 」 dan ada empat kalimat yang memakainya — hanya satu yang pemakaiannya benar. Pilih kalimat itu.",
+          en: "🧩 The final test, held in the town court at dusk: a dispute between two merchants, and the verdict falls to you. A word appears in 「 」 and four witnesses each use it in a sentence — only one tells the truth, using the word correctly. Name that witness, and the barony is yours.",
+          id: "🧩 Ujian pemungkas, digelar di pengadilan kota saat senja: perselisihan dua saudagar, dan putusannya ada di tanganmu. Sebuah kata muncul di dalam 「 」 dan empat saksi masing-masing memakainya dalam kalimat — hanya satu yang jujur, memakai kata itu dengan benar. Tunjuk saksi itu, dan wilayah ini jadi milikmu.",
         },
       },
     ],
   },
+
+  // ── Bunpō · 5 tier · pangkat Viscount (子爵) ─────────────────────────────
+  // Sang Viscount menjaga Benteng Hukum di perbatasan. Tata bahasa = hukum
+  // yang menahan seluruh kerajaan agar tidak runtuh.
   bunpo: {
     epilogue: {
-      en: "You passed all five tiers of the N5 grammar exam — the examiners stamp your scroll. Bunpō is yours.",
-      id: "Kamu lulus kelima tier ujian tata bahasa N5 — para penguji membubuhkan cap di gulunganmu. Bunpō resmi kau kuasai.",
+      en: "The Viscount lifts the final tile to the lantern light, and the star at its center glows. “Every sentence in my realm is now in your hands,” he says, pinning the signet of a Viscount to your cloak. Only one title is left on the road through N5 — the Count's, in the capital's Hall of a Thousand Strokes, where the kanji are kept.",
+      id: "Sang Viscount mengangkat ubin terakhir ke cahaya lentera, dan bintang di tengahnya berpendar. “Setiap kalimat di wilayahku kini ada di tanganmu,” katanya sambil menyematkan lambang Viscount di jubahmu. Tinggal satu gelar di jalan N5 — gelar Count, di Balairung Seribu Goresan di ibu kota, tempat para kanji disimpan.",
     },
     phases: [
       {
-        label: { en: "Tier 1 — Pattern Meaning", id: "Tier 1 — Arti Pola" },
-        text: {
-          en: "📜 The exam opens with meanings. A grammar pattern appears — pick its function from four choices.",
-          id: "📜 Ujian dibuka dengan arti pola. Sebuah pola tata bahasa muncul — pilih fungsinya dari empat pilihan.",
+        label: {
+          en: "Tier 1 — The Stone of Old Law",
+          id: "Tier 1 — Batu Hukum Kuno",
         },
-      },
-      {
-        label: { en: "Tier 2 — Choose the Particle", id: "Tier 2 — Tebak Partikel" },
         text: {
-          en: "🔤 Next is particles. A sentence appears with a blank — pick the particle that fits.",
-          id: "🔤 Berikutnya partikel. Sebuah kalimat muncul dengan bagian kosong — pilih partikel yang tepat.",
+          en: "📜 At the gate of the Citadel stands a pillar engraved with the old patterns — the laws every sentence in the realm must obey. The gatekeeper traces one with his finger: “Tell me what it does.” A grammar pattern appears — pick its function from four choices.",
+          id: "📜 Di gerbang Benteng berdiri sebuah tugu berukir pola-pola kuno — hukum yang wajib ditaati setiap kalimat di kerajaan. Penjaga gerbang menelusuri satu ukiran dengan jarinya: “Katakan padaku, apa fungsinya.” Sebuah pola tata bahasa muncul — pilih fungsinya dari empat pilihan.",
         },
       },
       {
         label: {
-          en: "Tier 3 — Verb Conjugation",
-          id: "Tier 3 — Konjugasi Kata Kerja",
+          en: "Tier 2 — The Bridge of Particles",
+          id: "Tier 2 — Jembatan Partikel",
         },
         text: {
-          en: "✍️ Next up, verbs: a sentence with a blank verb. Pick the correctly conjugated form.",
-          id: "✍️ Berikutnya kata kerja: sebuah kalimat dengan kata kerja kosong. Pilih bentuk konjugasi yang tepat.",
+          en: "🌉 To cross the moat you must walk the Bridge of Particles. A plank is missing every few steps, and only the right small word — は, が, を, に, で — will bear your weight. A sentence appears with a blank — pick the particle that fits, and don't look down.",
+          id: "🌉 Untuk menyeberangi parit, kau harus melewati Jembatan Partikel. Setiap beberapa langkah ada papan yang hilang, dan hanya kata kecil yang tepat — は, が, を, に, で — yang sanggup menahan bobotmu. Sebuah kalimat muncul dengan bagian kosong — pilih partikel yang cocok, dan jangan menunduk.",
         },
       },
       {
         label: {
-          en: "Tier 4 — Choose the Correct Sentence",
-          id: "Tier 4 — Pilih Kalimat yang Benar",
+          en: "Tier 3 — The Verb Forge",
+          id: "Tier 3 — Tempa Kata Kerja",
         },
         text: {
-          en: "🧩 A grammar pattern appears in 「 」 and four sentences use it — only one uses it correctly. Pick that sentence.",
-          id: "🧩 Sebuah pola tata bahasa muncul di dalam 「 」 dan ada empat kalimat yang memakainya — hanya satu yang pemakaiannya benar. Pilih kalimat itu.",
+          en: "🔥 Inside, the Citadel's smith hammers verbs on his anvil until they bend into new shapes — て-form, ない-form, ます-form. “A verb shaped wrong will snap in battle,” he grunts. A sentence appears with an empty verb — pick the correctly conjugated form.",
+          id: "🔥 Di dalam, pandai besi Benteng menempa kata kerja di landasannya hingga melengkung menjadi bentuk baru — bentuk て, ない, ます. “Kata kerja yang salah bentuk akan patah di medan perang,” geramnya. Sebuah kalimat muncul dengan kata kerja kosong — pilih bentuk konjugasi yang tepat.",
         },
       },
       {
         label: {
-          en: "Tier 5 — Arrange the Sentence (★)",
-          id: "Tier 5 — Susun Kalimat (★)",
+          en: "Tier 4 — The Forged Decrees",
+          id: "Tier 4 — Titah-Titah Palsu",
         },
         text: {
-          en: "🧱 The last tier, straight from the JLPT: a sentence with four blanks, one marked ★. Put the four pieces in the right order, then pick the piece that lands on ★.",
-          id: "🧱 Tier terakhir, persis ala JLPT: sebuah kalimat dengan empat kotak kosong, salah satunya bertanda ★. Susun keempat potongan dengan urutan yang benar, lalu pilih potongan yang jatuh di posisi ★.",
+          en: "🧩 A royal messenger bursts in with four decrees — three are forgeries, riddled with broken grammar. A pattern appears in 「 」 and four sentences use it; only one uses it correctly. Find the genuine decree before the forgers slip away.",
+          id: "🧩 Seorang kurir kerajaan menerobos masuk membawa empat titah — tiga di antaranya palsu, penuh tata bahasa yang rusak. Sebuah pola muncul di dalam 「 」 dan empat kalimat memakainya; hanya satu yang memakainya dengan benar. Temukan titah yang asli sebelum para pemalsu kabur.",
+        },
+      },
+      {
+        label: {
+          en: "Tier 5 — The Star Chamber (★)",
+          id: "Tier 5 — Ruang Bintang (★)",
+        },
+        text: {
+          en: "🧱 The last door opens onto the Star Chamber, its floor a mosaic with four empty tiles, one marked ★. Put the four pieces in the right order, then pick the piece that lands on ★ — the tile the Viscount himself will check.",
+          id: "🧱 Pintu terakhir terbuka ke Ruang Bintang, lantainya mosaik dengan empat ubin kosong, salah satunya bertanda ★. Susun keempat potongan dengan urutan yang benar, lalu pilih potongan yang jatuh di ★ — ubin yang akan diperiksa sendiri oleh sang Viscount.",
         },
       },
     ],
   },
+
+  // ── Kanji · 4 tier · pangkat Count (伯爵) ────────────────────────────────
+  // Ibu kota, Balairung Seribu Goresan (千画の間). Ujian terakhir jalur N5.
   kanji: {
     epilogue: {
-      en: "You passed all four tiers of the N5 kanji exam — the examiners stamp your scroll. Kanji is yours.",
-      id: "Kamu lulus keempat tier ujian kanji N5 — para penguji membubuhkan cap di gulunganmu. Kanji resmi kau kuasai.",
+      en: "Applause echoes down the Hall of a Thousand Strokes as the Imperial Archivist sets the Count's seal upon your scroll. Hiragana, Katakana, Kotoba, Bunpō, and Kanji — all of N5 now lies within your domain, Count. Beyond the capital's eastern gate, the road to the Marquis's lands stretches on… still sealed, for now.",
+      id: "Tepuk tangan menggema di Balairung Seribu Goresan saat Arsiparis Kekaisaran membubuhkan segel Count pada gulunganmu. Hiragana, Katakana, Kotoba, Bunpō, dan Kanji — seluruh N5 kini berada dalam wilayahmu, Count. Di balik gerbang timur ibu kota, jalan menuju tanah sang Marquis terbentang… untuk sementara masih tersegel.",
     },
     phases: [
       {
-        label: { en: "Tier 1 — Kanji Meaning", id: "Tier 1 — Arti Kanji" },
-        text: {
-          en: "📜 The exam opens with meanings. A kanji appears — pick what it means from four choices.",
-          id: "📜 Ujian dibuka dengan arti kanji. Sebuah kanji muncul — pilih artinya dari empat pilihan.",
+        label: {
+          en: "Tier 1 — The Wall of Ancient Characters",
+          id: "Tier 1 — Dinding Aksara Kuno",
         },
-      },
-      {
-        label: { en: "Tier 2 — Reading Kanji", id: "Tier 2 — Baca Kanji" },
         text: {
-          en: "🔤 Next is reading. A kanji appears — pick how it is read (hiragana).",
-          id: "🔤 Berikutnya membaca. Sebuah kanji muncul — pilih cara bacanya (hiragana).",
-        },
-      },
-      {
-        label: { en: "Tier 3 — Pick the Kanji", id: "Tier 3 — Tebak Kanjinya" },
-        text: {
-          en: "🖌️ Now the other way around. A meaning appears — pick the kanji that has it. Careful: the wrong choices look alike.",
-          id: "🖌️ Sekarang sebaliknya. Sebuah arti muncul — pilih kanji yang punya arti itu. Hati-hati: pilihan salahnya bentuknya mirip.",
+          en: "📜 In the capital, the Imperial Archivist leads you into the Hall of a Thousand Strokes, its walls carved from floor to ceiling with kanji. “Anyone can admire a character,” she says. “A Count must know what it means.” A kanji appears — pick its meaning from four choices.",
+          id: "📜 Di ibu kota, Arsiparis Kekaisaran menuntunmu ke Balairung Seribu Goresan, dindingnya terukir kanji dari lantai hingga langit-langit. “Siapa pun bisa mengagumi sebuah aksara,” katanya. “Seorang Count harus tahu artinya.” Sebuah kanji muncul — pilih artinya dari empat pilihan.",
         },
       },
       {
         label: {
-          en: "Tier 4 — Choose the Best Word",
-          id: "Tier 4 — Pilih Kata yang Paling Cocok",
+          en: "Tier 2 — The Herald's Proclamation",
+          id: "Tier 2 — Maklumat Sang Juru Warta",
         },
         text: {
-          en: "✍️ The last tier: a sentence with a blank. Pick the kanji word that fits best.",
-          id: "✍️ Tier terakhir: sebuah kalimat dengan bagian kosong. Pilih kata kanji yang paling cocok.",
+          en: "🔤 At dawn a proclamation arrives for the court — but the herald has lost his voice, and the nobles are already filing in. You must read it in his place. A kanji appears — pick how it is read (hiragana).",
+          id: "🔤 Menjelang fajar sebuah maklumat tiba untuk dibacakan di hadapan istana — tetapi sang juru warta kehilangan suaranya, dan para bangsawan sudah berdatangan. Kaulah yang harus membacakannya. Sebuah kanji muncul — pilih cara bacanya (hiragana).",
+        },
+      },
+      {
+        label: {
+          en: "Tier 3 — The Forger's Seals",
+          id: "Tier 3 — Stempel Sang Pemalsu",
+        },
+        text: {
+          en: "🖌️ A counterfeiter has been stamping fake seals with characters that look almost like the real ones — one stroke too many, one too few. A meaning appears — pick the kanji that truly carries it. Careful: the wrong choices look alike.",
+          id: "🖌️ Seorang pemalsu mencetak stempel palsu dengan aksara yang nyaris sama dengan aslinya — kelebihan satu goresan, kekurangan satu goresan. Sebuah arti muncul — pilih kanji yang benar-benar memilikinya. Hati-hati: pilihan salahnya bentuknya mirip.",
+        },
+      },
+      {
+        label: {
+          en: "Tier 4 — The Imperial Decree",
+          id: "Tier 4 — Titah Kekaisaran",
+        },
+        text: {
+          en: "✍️ The final tier: the Emperor's own decree lies open on the table, a single kanji word missing from every sentence, waiting for a Count's pen. Read each sentence and pick the kanji word that fits best.",
+          id: "✍️ Tier terakhir: titah Kaisar sendiri terbentang di atas meja, satu kata kanji hilang di setiap kalimatnya, menunggu pena seorang Count. Baca tiap kalimat dan pilih kata kanji yang paling cocok.",
         },
       },
     ],
