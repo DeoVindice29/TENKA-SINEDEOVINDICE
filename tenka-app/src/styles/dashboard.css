@@ -6345,3 +6345,123 @@ button,
     text-align: left;
     cursor: pointer;
 }
+
+
+/* ==========================================================================
+   Penyesuaian layout: layar hasil rata tengah, jarak auto-scroll, popup audio
+   ========================================================================== */
+
+/* ---- layar hasil (kuis, Match, Penaklukan) & cerita Penaklukan:
+   ditaruh di tengah layar, bukan nempel di atas. margin:auto (bukan
+   justify-content:center) supaya kalau isinya lebih tinggi dari layar,
+   bagian atasnya tidak terpotong dan tetap bisa di-scroll. ---- */
+.app-shell.quiz-scenic .stage:has(> #screen-results),
+.app-shell.focus-mode .stage:has(> #screen-conquest-story) {
+    display: flex;
+    flex-direction: column;
+}
+
+.app-shell.quiz-scenic #screen-results.res-card {
+    width: 100%;
+    margin: auto;
+}
+
+.app-shell.focus-mode .stage > #screen-conquest-story {
+    width: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+    min-height: 0;
+}
+
+/* ---- auto-scroll ke bagian berikutnya (Mode Match, Timer, dst.): sisakan
+   ruang di atas supaya tidak mepet / tertutup tombol Conquest & hamburger ---- */
+#options-panel,
+#timer-picker,
+#difficulty-picker,
+#variant-picker,
+#range-picker,
+#btn-start {
+    scroll-margin-top: 120px;
+}
+
+@media (max-width: 720px) {
+    #options-panel,
+    #timer-picker,
+    #difficulty-picker,
+    #variant-picker,
+    #range-picker,
+    #btn-start {
+        scroll-margin-top: 110px;
+    }
+}
+
+/* ---- popup panduan audio: tengah layar, header & tombol selalu terlihat,
+   hanya isinya yang di-scroll ---- */
+.modal-overlay:has(.audio-help-panel) {
+    align-items: center;
+    justify-content: center;
+    padding: max(16px, env(safe-area-inset-top)) 16px
+        max(16px, env(safe-area-inset-bottom));
+}
+
+.audio-help-panel {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 460px;
+    max-height: min(86vh, 680px);
+    max-height: min(86dvh, 680px);
+    padding: 0;
+    overflow: hidden;
+    border-radius: 18px;
+}
+
+.audio-help-head {
+    flex: 0 0 auto;
+    padding: 20px 22px 12px;
+    border-bottom: 1px solid var(--line);
+}
+
+.audio-help-head h2 {
+    margin: 0;
+    font-size: 19px;
+    line-height: 1.3;
+}
+
+.audio-help-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 14px 22px 8px;
+}
+
+.audio-help-foot {
+    flex: 0 0 auto;
+    padding: 12px 22px calc(16px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--line);
+    background: var(--card);
+}
+
+.audio-help-foot button {
+    width: 100%;
+}
+
+.audio-help-body > .audio-help-sub:first-of-type {
+    margin-top: 6px;
+}
+
+@media (max-width: 480px) {
+    .audio-help-head {
+        padding: 16px 16px 10px;
+    }
+
+    .audio-help-body {
+        padding: 12px 16px 6px;
+    }
+
+    .audio-help-foot {
+        padding: 10px 16px calc(14px + env(safe-area-inset-bottom));
+    }
+}

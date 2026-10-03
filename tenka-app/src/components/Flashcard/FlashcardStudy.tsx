@@ -189,6 +189,10 @@ function getCustomCard(deckId: string, idx: number): CardContent {
   }
 }
 
+// Jeda antar audio dalam satu kartu (kata → contoh kalimat, dst.): 1 detik,
+// dihitung dari saat suara sebelumnya BENAR-BENAR selesai.
+const AUDIO_GAP_MS = 1000;
+
 function playAudioQueue(
   queue: string[],
   speakFn: (
@@ -199,29 +203,56 @@ function playAudioQueue(
 ): () => void {
   if (!queue.length) return () => {};
   let cancelled = false;
-  let timer: number | null = null;
+  let gapTimer: number | null = null;
+  let watchdog: number | null = null;
 
-  // Lanjut ke item berikutnya begitu suara selesai (onEnd). Timer perkiraan
-  // jadi cadangan kalau browser tidak memanggil onend (sering di mobile).
+  const clearWatchdog = () => {
+    if (watchdog) window.clearInterval(watchdog);
+    watchdog = null;
+  };
+
   const playNext = (i: number) => {
     if (cancelled || i >= queue.length) return;
     let advanced = false;
     const next = () => {
       if (advanced || cancelled) return;
       advanced = true;
-      if (timer) window.clearTimeout(timer);
-      timer = window.setTimeout(() => playNext(i + 1), 250);
+      clearWatchdog();
+      gapTimer = window.setTimeout(() => playNext(i + 1), AUDIO_GAP_MS);
     };
+
     speakFn(queue[i], null, next);
-    const estimatedMs = Math.max(2500, queue[i].length * 400 + 2000);
-    timer = window.setTimeout(next, estimatedMs);
+
+    // Cadangan kalau browser (sering di Android) tidak memanggil onend:
+    // pantau status speechSynthesis. Begitu suara sempat mulai lalu berhenti,
+    // langsung anggap selesai — tanpa menunggu timer perkiraan yang panjang.
+    const synth =
+      typeof window !== "undefined" && "speechSynthesis" in window
+        ? window.speechSynthesis
+        : null;
+    const t0 = Date.now();
+    let started = false;
+    watchdog = window.setInterval(() => {
+      if (advanced || cancelled) return clearWatchdog();
+      const active = !!synth && (synth.speaking || synth.pending);
+      if (active) started = true;
+      const elapsed = Date.now() - t0;
+      if (
+        (started && !active && elapsed > 300) || // suara selesai
+        (!started && elapsed > 2000) || // suara tak pernah mulai
+        elapsed > 20000 // batas aman
+      ) {
+        next();
+      }
+    }, 150);
   };
 
   playNext(0);
 
   return () => {
     cancelled = true;
-    if (timer) window.clearTimeout(timer);
+    clearWatchdog();
+    if (gapTimer) window.clearTimeout(gapTimer);
   };
 }
 

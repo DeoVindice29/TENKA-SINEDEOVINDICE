@@ -136,7 +136,12 @@ export function useSpeech() {
           cleanup();
           if (requestId === requestIdRef.current) onEnd?.();
         };
-        utter.onerror = cleanup;
+        utter.onerror = () => {
+          cleanup();
+          // error sungguhan (bukan karena dibatalkan oleh speak() berikutnya)
+          // tetap dianggap selesai supaya antrean tidak macet
+          if (requestId === requestIdRef.current) onEnd?.();
+        };
 
         utterRef.current = utter;
         try {
