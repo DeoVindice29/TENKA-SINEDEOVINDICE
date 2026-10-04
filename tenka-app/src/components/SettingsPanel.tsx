@@ -7,6 +7,8 @@ import profileHeroBg from "@/assets/profile-hero-bg.webp";
 import FontSelector from "@/components/Settings/FontSelector";
 import { useFlashAutoplay } from "@/hooks/useFlashAutoplay";
 import AudioHelpModal from "@/components/Audio/AudioHelpModal";
+import { useSfxSettings } from "@/hooks/useSfxSettings";
+import { playSfx } from "@/lib/sfx";
 import RankLadder from "@/components/Settings/RankLadder";
 import TitleCollection from "@/components/Settings/TitleCollection";
 import SpeedrunRecords from "@/components/Settings/SpeedrunRecords";
@@ -56,6 +58,7 @@ export default function SettingsPanel({
   const [signOutConfirmOpen, setSignOutConfirmOpen] = useState(false);
   const [flashAutoplay, setFlashAutoplay] = useFlashAutoplay();
   const [audioHelpOpen, setAudioHelpOpen] = useState(false);
+  const [sfx, setSfx] = useSfxSettings();
   const ownThemeApi = useTheme();
   const {
     theme,
@@ -414,6 +417,58 @@ export default function SettingsPanel({
 
             <section className="settings-card">
               <FontSelector />
+            </section>
+
+            <section className="settings-card">
+              <span className="settings-card-title">{t("sfx.title")}</span>
+              <div className="theme-row">
+                <span id="sfx-enable-label">{t("sfx.enable")}</span>
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={sfx.enabled}
+                    onChange={(e) => {
+                      setSfx({ enabled: e.target.checked });
+                      if (e.target.checked) {
+                        window.setTimeout(() => playSfx("correct"), 30);
+                      }
+                    }}
+                    aria-labelledby="sfx-enable-label"
+                  />
+                  <span className="track" />
+                  <span className="thumb" />
+                </label>
+              </div>
+              <p className="settings-hint">{t("sfx.desc")}</p>
+              <div className="sfx-volume-row">
+                <label htmlFor="sfx-volume">{t("sfx.volume")}</label>
+                <input
+                  id="sfx-volume"
+                  className="sfx-volume-slider"
+                  type="range"
+                  min={0}
+                  max={100}
+                  step={5}
+                  value={Math.round(sfx.volume * 100)}
+                  disabled={!sfx.enabled}
+                  onChange={(e) =>
+                    setSfx({ volume: Number(e.target.value) / 100 })
+                  }
+                  onPointerUp={() => playSfx("correct")}
+                  onKeyUp={() => playSfx("correct")}
+                />
+                <span className="sfx-volume-val">
+                  {Math.round(sfx.volume * 100)}%
+                </span>
+              </div>
+              <button
+                type="button"
+                className="audio-help-link"
+                disabled={!sfx.enabled}
+                onClick={() => playSfx("win")}
+              >
+                🔔 {t("sfx.test")}
+              </button>
             </section>
 
             <section className="settings-card">

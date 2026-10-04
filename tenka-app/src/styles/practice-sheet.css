@@ -1,0 +1,641 @@
+/* ---------- Latihan Soal: lembar soal scroll ala Google Form ---------- */
+
+.ps-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 760px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+  scroll-margin-top: 70px;
+}
+
+/* ── kartu judul ── */
+.ps-title-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 6px 18px var(--shadow-soft);
+}
+
+.ps-title-accent {
+  height: 10px;
+  background: linear-gradient(90deg, var(--indigo), var(--gold), var(--moss));
+}
+
+.ps-title-body {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 18px 20px 20px;
+}
+
+.ps-title-icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  font-size: 24px;
+  border-radius: 14px;
+  background: var(--paper-dark);
+}
+
+.ps-title {
+  margin: 0 0 4px;
+  font-size: 22px;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+.ps-title-desc {
+  margin: 0 0 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.ps-title-meta {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--indigo);
+}
+
+/* ── tombol kembali (selalu di paling atas) ── */
+.ps-topbar {
+  display: flex;
+}
+
+.ps-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px 9px 10px;
+  font: inherit;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  box-shadow: 0 3px 10px var(--shadow-soft);
+  transition:
+    border-color 0.15s ease,
+    transform 0.1s ease;
+}
+
+.ps-back svg {
+  width: 20px;
+  height: 20px;
+}
+
+.ps-back:hover {
+  border-color: var(--indigo);
+}
+
+.ps-back:active {
+  transform: scale(0.97);
+}
+
+/* ── progres (nempel di bawah topbar) ── */
+.ps-progress {
+  position: sticky;
+  top: 60px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--shadow-soft);
+}
+
+.ps-progress-track {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--paper-dark);
+  overflow: hidden;
+}
+
+.ps-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--indigo), var(--moss));
+  transition: width 0.25s ease;
+}
+
+.ps-progress-text {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+/* ── daftar kartu soal ── */
+.ps-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ps-card {
+  position: relative;
+  padding: 18px 20px 20px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--indigo);
+  border-radius: 16px;
+  box-shadow: 0 6px 18px var(--shadow-soft);
+  scroll-margin-top: 120px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.ps-card:focus-within {
+  box-shadow: 0 8px 22px var(--shadow);
+}
+
+.ps-card.is-correct {
+  border-left-color: var(--quiz-correct);
+}
+
+.ps-card.is-wrong {
+  border-left-color: var(--quiz-wrong);
+}
+
+.ps-card.is-missing {
+  border-color: var(--quiz-wrong);
+  border-left-color: var(--quiz-wrong);
+}
+
+.ps-card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.ps-num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--on-accent);
+  background: var(--indigo);
+}
+
+.ps-card.is-correct .ps-num {
+  background: var(--quiz-correct);
+}
+
+.ps-card.is-wrong .ps-num {
+  background: var(--quiz-wrong);
+}
+
+.ps-req {
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 700;
+  color: var(--quiz-wrong);
+}
+
+.ps-verdict {
+  margin-left: auto;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.ps-verdict.ok {
+  color: var(--quiz-correct);
+  background: color-mix(in srgb, var(--quiz-correct) 14%, transparent);
+}
+
+.ps-verdict.no {
+  color: var(--quiz-wrong);
+  background: color-mix(in srgb, var(--quiz-wrong) 14%, transparent);
+}
+
+/* ── isi soal, gaya beda per bentuk ── */
+.ps-q {
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+
+.ps-q--sentence {
+  font-size: clamp(18px, 4.6vw, 23px);
+  line-height: 1.85;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.ps-q--term {
+  display: flex;
+  justify-content: center;
+  padding: 14px 10px;
+  border-radius: 14px;
+  background: var(--paper-dark);
+  font-size: clamp(34px, 11vw, 56px);
+  line-height: 1.2;
+  font-weight: 700;
+  text-align: center;
+}
+
+.ps-q--usage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  font-size: clamp(17px, 4.4vw, 21px);
+  line-height: 1.6;
+}
+
+.ps-usage-chip {
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-weight: 800;
+  color: var(--on-accent);
+  background: var(--indigo);
+  box-shadow: 0 3px 0 var(--indigo-deep);
+}
+
+/* kata digarisbawahi (tebak kanji / bacaan) */
+.ps-mark {
+  text-decoration: none;
+  font-weight: inherit;
+  padding: 0 2px 1px;
+  border-bottom: 2px solid var(--indigo);
+  background: color-mix(in srgb, var(--gold) 14%, transparent);
+  border-radius: 3px 3px 0 0;
+}
+
+/* bagian kosong kalimat */
+.ps-blank {
+  display: inline-block;
+  vertical-align: -0.2em;
+  width: 3.2em;
+  height: 1.25em;
+  margin: 0 4px;
+  border-bottom: 3px solid var(--ink);
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--indigo) 10%, transparent);
+}
+
+/* kotak susun kalimat; yang ★ disorot */
+.ps-q--arrange {
+  line-height: 2.3;
+}
+
+.ps-slot {
+  display: inline-grid;
+  place-items: center;
+  vertical-align: middle;
+  min-width: 2.3em;
+  height: 1.7em;
+  margin: 0 3px;
+  border: 2px dashed var(--ink-soft);
+  border-radius: 8px;
+  font-size: 0.9em;
+}
+
+.ps-slot-star {
+  border-style: solid;
+  border-color: var(--gold);
+  color: #7a4a00;
+  font-weight: 800;
+  background: color-mix(in srgb, var(--gold) 38%, transparent);
+}
+
+[data-theme="dark"] .ps-slot-star {
+  color: var(--gold);
+}
+
+/* ── pilihan jawaban ── */
+.ps-opts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ps-opt {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 52px;
+  padding: 10px 14px;
+  text-align: left;
+  cursor: pointer;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  font: inherit;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    transform 0.1s ease;
+}
+
+.ps-opt:not(:disabled):hover {
+  border-color: var(--indigo);
+  background: color-mix(in srgb, var(--indigo) 7%, var(--paper));
+}
+
+.ps-opt:not(:disabled):active {
+  transform: scale(0.99);
+}
+
+.ps-opt:disabled {
+  cursor: default;
+}
+
+.ps-radio {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--ink-soft);
+  border-radius: 50%;
+  background: transparent;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+
+.ps-opt-text {
+  flex: 1;
+  min-width: 0;
+  font-size: clamp(16px, 4.2vw, 19px);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.ps-opt.is-selected {
+  border-color: var(--indigo);
+  background: color-mix(in srgb, var(--indigo) 11%, var(--paper));
+}
+
+.ps-opt.is-selected .ps-radio {
+  border-color: var(--indigo);
+  box-shadow: inset 0 0 0 4px var(--card), inset 0 0 0 20px var(--indigo);
+}
+
+.ps-opt.is-answer {
+  border-color: var(--quiz-correct);
+  background: color-mix(in srgb, var(--quiz-correct) 13%, var(--paper));
+}
+
+.ps-opt.is-answer .ps-radio {
+  border-color: var(--quiz-correct);
+  box-shadow: inset 0 0 0 4px var(--card), inset 0 0 0 20px var(--quiz-correct);
+}
+
+.ps-opt.is-bad {
+  border-color: var(--quiz-wrong);
+  background: color-mix(in srgb, var(--quiz-wrong) 12%, var(--paper));
+}
+
+.ps-opt.is-bad .ps-radio {
+  border-color: var(--quiz-wrong);
+  box-shadow: inset 0 0 0 4px var(--card), inset 0 0 0 20px var(--quiz-wrong);
+}
+
+.ps-opt-mark {
+  flex-shrink: 0;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.ps-opt-mark.ok {
+  color: var(--quiz-correct);
+}
+
+.ps-opt-mark.no {
+  color: var(--quiz-wrong);
+}
+
+.ps-missing {
+  margin: 10px 0 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--quiz-wrong);
+}
+
+/* ── pembahasan setelah dikirim ── */
+.ps-explain {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--paper-dark);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.ps-explain p {
+  margin: 0;
+}
+
+.ps-explain p + p {
+  margin-top: 6px;
+}
+
+.ps-explain-label {
+  margin-right: 6px;
+  font-weight: 800;
+  color: var(--indigo);
+}
+
+.ps-explain-label::after {
+  content: ":";
+}
+
+/* ── footer & tombol ── */
+.ps-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding-top: 6px;
+}
+
+/* ── kartu hasil ── */
+.ps-result {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 8px 22px var(--shadow-soft);
+}
+
+.ps-ring {
+  --pct: 0;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--moss) calc(var(--pct) * 1%),
+    var(--paper-dark) 0
+  );
+}
+
+.ps-ring-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+.ps-ring-inner b {
+  font-size: 28px;
+}
+
+.ps-ring-inner span {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.ps-result-text {
+  min-width: 0;
+}
+
+.ps-result-text h3 {
+  margin: 0 0 4px;
+  font-size: 20px;
+  color: var(--ink);
+}
+
+.ps-result-text p {
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.ps-result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.ps-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+@media (max-width: 520px) {
+  .ps-card {
+    padding: 16px 14px 16px;
+  }
+
+  .ps-result {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .ps-result-actions {
+    justify-content: center;
+  }
+
+  .ps-title-body {
+    padding: 16px 14px 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ps-progress-fill,
+  .ps-opt,
+  .ps-card {
+    transition: none;
+  }
+}
+
+/* ── hasil tier Penaklukan: hijau kalau lulus, merah kalau belum ── */
+.ps-result.is-pass {
+  border-color: color-mix(in srgb, var(--quiz-correct) 55%, transparent);
+}
+
+.ps-result.is-fail {
+  border-color: color-mix(in srgb, var(--quiz-wrong) 55%, transparent);
+}
+
+.ps-result.is-fail .ps-ring {
+  background: conic-gradient(
+    var(--quiz-wrong) calc(var(--pct) * 1%),
+    var(--paper-dark) 0
+  );
+}
+
+/* ── chibi di kartu hasil tier Penaklukan ── */
+.cs-chibi-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.cs-chibi-img {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 6px var(--shadow-soft));
+}
+
+.cs-chibi-bubble {
+  margin: 0 !important;
+  padding: 8px 12px;
+  border-radius: 14px;
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--ink);
+  background: var(--paper-dark);
+}
+
+@media (max-width: 520px) {
+  .ps-result {
+    flex-wrap: wrap;
+  }
+  .cs-chibi-img {
+    width: 48px;
+    height: 48px;
+  }
+}

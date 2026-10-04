@@ -98,7 +98,12 @@ export default function ConquestModal({
   const bothConquered = isConquered("hiragana") && isConquered("katakana");
   const rules: string[] = [];
   if (isJlpt) {
-    rules.push(t("conquestModal.rule.jlptChoices", { label: script.label }));
+    rules.push(
+      t("conquestModal.rule.jlptChoices", {
+        label: script.label,
+        count: jlptQuestionsPerTier(scriptKey),
+      }),
+    );
     rules.push(
       t("conquestModal.rule.jlptPassMark", { percent: JLPT_PASS_PERCENT }),
     );

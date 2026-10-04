@@ -19,6 +19,7 @@ import {
   isJlptScript,
   isPracticeType,
   jlptMaxWrong,
+  jlptPassMark,
   stripMarks,
 } from "@/data/jlptConquest";
 import { logActivity } from "@/lib/activityLog";
@@ -81,6 +82,8 @@ type QuizAction =
   | { type: "ADMIN_SKIP_ALL" }
   | { type: "ADMIN_SKIP_PHASE"; phaseIndex: number }
   | { type: "ENTER_PHASE"; phaseIndex: number }
+  /** Penaklukan ala JLPT: kirim semua jawaban satu tier sekaligus (lembar soal) */
+  | { type: "SUBMIT_TIER"; answers: string[]; silent?: boolean }
   | { type: "RESET" };
 
 const initialState: QuizState = {
@@ -251,6 +254,54 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
       };
     }
 
+    // Penaklukan ala JLPT (lembar soal): semua soal satu tier dijawab sekaligus.
+    // Benar >= 80% → lanjut ke awal tier berikutnya (layar cerita muncul) atau
+    // ke layar hasil kalau ini tier terakhir. Kurang dari itu → gagal.
+    case "SUBMIT_TIER": {
+      const b = state.conquestPhaseBoundaries;
+      if (!state.conquest || !b || b.length < 2) return state;
+      const p = Math.max(0, Math.min(state.conquestPhaseIndex, b.length - 2));
+      const start = b[p];
+      const end = b[p + 1];
+      const norm = (v: unknown) => String(v).trim().toLowerCase();
+
+      const results = [...state.results];
+      const missed = [...state.missed];
+      let streak = state.streak;
+      let maxStreak = state.maxStreak;
+      let right = 0;
+      for (let i = start; i < end; i++) {
+        const item = state.queue[i];
+        const ok = !!item && norm(action.answers[i - start]) === norm(item[1]);
+        results[i] = ok;
+        if (ok) {
+          right++;
+          streak++;
+          maxStreak = Math.max(maxStreak, streak);
+        } else {
+          streak = 0;
+          if (item) missed.push(item);
+        }
+      }
+      const passed = right >= jlptPassMark(end - start);
+      const score = state.score + right;
+
+      return {
+        ...state,
+        results,
+        missed,
+        score,
+        streak,
+        maxStreak,
+        conquestFailed: !passed,
+        // lulus → awal tier berikutnya / akhir queue; gagal → akhir queue (hasil)
+        index: passed ? end : state.queue.length,
+        answered: false,
+        lastChosen: null,
+        lastCorrect: false,
+      };
+    }
+
     case "ENTER_PHASE":
       // PENTING: jangan reset index — biar lanjut ke soal Tier berikutnya
       return { ...state, conquestPhaseIndex: action.phaseIndex };
@@ -393,6 +444,35 @@ export function QuizProvider({ children }: { children: ReactNode }) {
             String(action.chosen).trim().toLowerCase() ===
             String(current[1]).trim().toLowerCase(),
         });
+      }
+    }
+    if (action.type === "SUBMIT_TIER" && !action.silent) {
+      const s = stateRef.current;
+      const b = s.conquestPhaseBoundaries;
+      if (s.conquest && b && s.script) {
+        const start = b[s.conquestPhaseIndex];
+        const end = b[s.conquestPhaseIndex + 1];
+        for (let i = start; i < end; i++) {
+          const item = s.queue[i];
+          if (!item) continue;
+          const okAns =
+            String(action.answers[i - start]).trim().toLowerCase() ===
+            String(item[1]).trim().toLowerCase();
+          appendStudyLog(
+            "quiz",
+            `quiz:${s.script}:${stripMarks(item[0])}`,
+            okAns ? "good" : "again",
+            Date.now(),
+            stripMarks(item[0]),
+          );
+          logActivity({
+            kind: "answer",
+            script: s.script,
+            item: stripMarks(item[0]),
+            hint: item[1],
+            correct: okAns,
+          });
+        }
       }
     }
     rawDispatch(action);

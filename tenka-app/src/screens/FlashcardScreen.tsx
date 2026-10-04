@@ -5,7 +5,7 @@ import type { FlashDeckRef } from "@/data/flashDecks";
 import { useUI } from "@/state/UIContext";
 
 export default function FlashcardScreen() {
-  const { pendingFlashDeck, setPendingFlashDeck } = useUI();
+  const { pendingFlashDeck, setPendingFlashDeck, setSessionActive } = useUI();
   const [picked, setPicked] = useState<{
     ref: FlashDeckRef;
     label: string;
@@ -26,6 +26,13 @@ export default function FlashcardScreen() {
   }, []);
 
   const handleBack = () => setPicked(null);
+
+  // lagi belajar satu deck → sembunyikan tombol Conquests di topbar
+  const studying = picked !== null;
+  useEffect(() => {
+    setSessionActive(studying);
+    return () => setSessionActive(false);
+  }, [studying, setSessionActive]);
 
   // buka/tutup deck = ganti "layar": selalu mulai dari atas
   useEffect(() => {

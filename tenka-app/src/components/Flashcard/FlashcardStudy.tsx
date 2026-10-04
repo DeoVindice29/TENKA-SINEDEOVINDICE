@@ -1,4 +1,11 @@
-import { useState, useMemo, useEffect, useCallback, useRef } from "react";
+import {
+  useState,
+  useMemo,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+  useRef,
+} from "react";
 import { useLang } from "@/i18n/LangContext";
 import { useFlash } from "@/state/FlashContext";
 import {
@@ -11,6 +18,7 @@ import { LEARN_STEP_MINUTES, nextInterval } from "@/state/flashSchedule";
 import { useSpeech } from "@/hooks/useSpeech";
 import { useFlashAutoplay } from "@/hooks/useFlashAutoplay";
 import AudioHelpNotice from "@/components/Audio/AudioHelpNotice";
+import { playSfx } from "@/lib/sfx";
 import {
   buildDeckCardDescriptors,
   type FlashCardDescriptor,
@@ -18,6 +26,20 @@ import {
 } from "@/data/flashDecks";
 import { KOTOBA_N5_CHAPTERS, KOTOBA_TIER_KEYS } from "@/data/kotobaN5";
 import { KANJI_N5_CHAPTERS, KANJI_TIER_KEYS } from "@/data/kanjiN5";
+import type { KanjiEntry, KotobaEntry } from "@/data/types";
+import type { DbCardEntry } from "@/lib/flashDbDecks";
+import { loadDbDeckCards } from "@/lib/flashDbDecks";
+import {
+  MEDIA_MARKER_RE,
+  MEDIA_STATE_EVENT,
+  getMediaUrl,
+  mediaQueueItem,
+  parseMediaQueueItem,
+  playMedia,
+  stopMedia,
+} from "@/lib/flashMedia";
+import { LoadingState } from "@/components/ui/Loader";
+import Button from "@/components/ui/Button";
 
 type FlashcardStudyProps = {
   deckRef: FlashDeckRef;
@@ -95,6 +117,13 @@ function getKotobaCard(
   if (ti < 0) return { front: "", back: "", audioQueue: [] };
   const item = KOTOBA_N5_CHAPTERS[ti][idx];
   if (!item) return { front: "", back: "", audioQueue: [] };
+  return renderKotobaItem(item, lang);
+}
+
+function renderKotobaItem(
+  item: KotobaEntry,
+  lang: "en" | "id",
+): CardContent {
   const [
     kana,
     romaji,
@@ -151,7 +180,15 @@ function getKanjiCard(
   if (ti < 0) return { front: "", back: "", audioQueue: [] };
   const item = KANJI_N5_CHAPTERS[ti][idx];
   if (!item) return { front: "", back: "", audioQueue: [] };
-  const [char, reading, meaning, kana] = item;
+  return renderKanjiItem(item, lang);
+}
+
+function renderKanjiItem(item: KanjiEntry, lang: "en" | "id"): CardContent {
+  const [rawChar, rawReading, meaning, rawKana] = item;
+  // teks dari admin: di-escape supaya aman dipakai sebagai HTML
+  const char = escapeHtml(rawChar);
+  const reading = escapeHtml(rawReading);
+  const kana = escapeHtml(rawKana);
 
   const front = `<div class="fc-kanji-char">${char}</div>`;
   const back = `
@@ -159,13 +196,60 @@ function getKanjiCard(
     <hr>
     <div class="fc-reading">${reading}</div>
     ${kana ? `<div class="fc-kana-reading" data-speak="${kana}">${kana}<span class="fc-audio-icon">🔊</span></div>` : ""}
-    <div class="fc-meaning">${tfLocal(meaning, lang)}</div>
+    <div class="fc-meaning">${escapeHtml(tfLocal(meaning, lang))}</div>
   `;
 
   const audioQueue: string[] = [];
-  if (kana && kana.trim()) audioQueue.push(kana);
+  if (rawKana && rawKana.trim()) audioQueue.push(rawKana);
 
   return { front, back, audioQueue };
+}
+
+function getDbCard(data: DbCardEntry, lang: "en" | "id"): CardContent {
+  if (data.content === "kotoba") return renderKotobaItem(data.entry, lang);
+  return renderKanjiItem(data.entry, lang);
+}
+
+// Teks kartu custom → HTML. Penanda [sound:x] jadi tombol 🔊 dan [img:x] jadi
+// <img>; file aslinya diambil dari IndexedDB setelah kartu tampil (lihat efek
+// "resolve media" di FlashcardStudySession).
+function mediaHtml(escaped: string): string {
+  return escaped.replace(
+    MEDIA_MARKER_RE,
+    (_m, kind: string, name: string) =>
+      kind === "sound"
+        ? `<button type="button" class="fc-media-audio" data-audio="${name}" aria-label="Play audio">🔊</button>`
+        : `<img class="fc-media-img" data-media="${name}" alt="" />`,
+  );
+}
+
+// Sisi depan: kata/kalimat pendek tampil BESAR (seperti deck bawaan), makin
+// panjang teksnya makin kecil. Sisi belakang: tiap field (dipisah baris kosong)
+// jadi blok sendiri — field pertama sebagai judul.
+function renderCustomText(raw: string, side: "front" | "back"): string {
+  if (side === "front") {
+    const plain = raw.replace(MEDIA_MARKER_RE, "").trim();
+    const len = Array.from(plain).length;
+    const size = len <= 10 ? "xl" : len <= 20 ? "lg" : len <= 40 ? "md" : "sm";
+    const html = mediaHtml(escapeHtml(raw)).split("\n").join("<br>");
+    return `<div class="fc-custom-text fc-custom-front fc-size-${size}">${html}</div>`;
+  }
+  const blocks = raw
+    .split(/\n{2,}/)
+    .map((b) => b.trim())
+    .filter(Boolean)
+    .map((b, i) => {
+      const html = mediaHtml(escapeHtml(b)).split("\n").join("<br>");
+      return `<div class="fc-custom-block${i === 0 ? " fc-custom-lead" : ""}">${html}</div>`;
+    })
+    .join("");
+  return `<div class="fc-custom-text fc-custom-back">${blocks}</div>`;
+}
+
+function soundNames(raw: string): string[] {
+  return Array.from(raw.matchAll(MEDIA_MARKER_RE))
+    .filter((m) => m[1] === "sound")
+    .map((m) => m[2]);
 }
 
 function getCustomCard(deckId: string, idx: number): CardContent {
@@ -175,18 +259,44 @@ function getCustomCard(deckId: string, idx: number): CardContent {
     const deck = decks.find((d: { id: string }) => d.id === deckId);
     const card = deck?.cards[idx];
     if (!card) return { front: "", back: "", audioQueue: [] };
+    // autoplay saat kartu dibalik: audio di sisi belakang; kalau tidak ada,
+    // pakai audio di sisi depan
+    const sounds = soundNames(card.back).length
+      ? soundNames(card.back)
+      : soundNames(card.front);
     return {
-      front: `<div class="fc-custom-text">${escapeHtml(card.front)
-        .split("\n")
-        .join("<br>")}</div>`,
-      back: `<div class="fc-custom-text">${escapeHtml(card.back)
-        .split("\n")
-        .join("<br>")}</div>`,
-      audioQueue: [],
+      front: renderCustomText(card.front, "front"),
+      back: renderCustomText(card.back, "back"),
+      audioQueue: sounds.map((n) => mediaQueueItem(deckId, n)),
     };
   } catch {
     return { front: "", back: "", audioQueue: [] };
   }
+}
+
+// Teks utama kartu (kana / kanji besar) harus muat SATU baris: kalau kata
+// terlalu panjang, font-size-nya diperkecil sampai pas selebar kartu (tidak
+// pernah turun ke baris kedua). Kalimat contoh & arti tetap boleh membungkus.
+const FIT_SELECTOR = ".fc-kana, .fc-kanji-front, .fc-kanji-char";
+const FIT_MIN_PX = 12;
+
+function fitOneLine(face: HTMLElement | null) {
+  if (!face || face.clientWidth === 0) return;
+  const cs = getComputedStyle(face);
+  const avail =
+    face.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+  if (!(avail > 0)) return;
+  face.querySelectorAll<HTMLElement>(FIT_SELECTOR).forEach((el) => {
+    el.style.fontSize = ""; // balik ke ukuran dari CSS dulu
+    let size = parseFloat(getComputedStyle(el).fontSize);
+    for (let i = 0; i < 8 && el.scrollWidth > avail && size > FIT_MIN_PX; i++) {
+      size = Math.max(
+        FIT_MIN_PX,
+        Math.floor(size * Math.min(0.97, avail / el.scrollWidth)),
+      );
+      el.style.fontSize = `${size}px`;
+    }
+  });
 }
 
 // Jeda antar audio dalam satu kartu (kata → contoh kalimat, dst.): 1 detik,
@@ -221,6 +331,13 @@ function playAudioQueue(
       gapTimer = window.setTimeout(() => playNext(i + 1), AUDIO_GAP_MS);
     };
 
+    // file audio dari deck hasil import (.apkg) → putar langsung, tanpa TTS
+    const media = parseMediaQueueItem(queue[i]);
+    if (media) {
+      void playMedia(media.deckId, media.name, next);
+      return;
+    }
+
     speakFn(queue[i], null, next);
 
     // Cadangan kalau browser (sering di Android) tidak memanggil onend:
@@ -253,10 +370,11 @@ function playAudioQueue(
     cancelled = true;
     clearWatchdog();
     if (gapTimer) window.clearTimeout(gapTimer);
+    stopMedia();
   };
 }
 
-export default function FlashcardStudy({
+function FlashcardStudySession({
   deckRef,
   deckLabel,
   onBack,
@@ -283,6 +401,13 @@ export default function FlashcardStudy({
   const [idx, setIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [ratedCount, setRatedCount] = useState(0);
+  // rekap jawaban sesi ini (ditampilkan di layar selesai)
+  const [tally, setTally] = useState<Record<FlashRating, number>>({
+    again: 0,
+    hard: 0,
+    good: 0,
+    easy: 0,
+  });
   const [done, setDone] = useState(queue.length === 0);
   // true kalau lagi "Ulangi Deck" (semua kartu, termasuk yang belum jatuh tempo)
   const [studyAhead, setStudyAhead] = useState(false);
@@ -298,6 +423,8 @@ export default function FlashcardStudy({
 
   const frontRef = useRef<HTMLDivElement>(null);
   const backRef = useRef<HTMLDivElement>(null);
+  // gambar kartu impor yang sedang diperbesar (blob URL), null = tertutup
+  const [zoomSrc, setZoomSrc] = useState<string | null>(null);
 
   const content = useMemo(() => {
     if (!current) return { front: "", back: "", audioQueue: [] };
@@ -307,6 +434,7 @@ export default function FlashcardStudy({
       return getKanjiCard(current.tierKey || "", current.idx, lang);
     if (current.kind === "custom" && current.deckId)
       return getCustomCard(current.deckId, current.idx);
+    if (current.kind === "db" && current.db) return getDbCard(current.db, lang);
     return { front: "", back: "", audioQueue: [] };
   }, [current, lang]);
 
@@ -360,11 +488,86 @@ export default function FlashcardStudy({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queue, idx, waiting, getCardState, reloadFlag, studyAhead, frozenCats]);
 
+  // Pas-kan teks utama kartu ke satu baris (lihat fitOneLine). Dijalankan ulang
+  // saat kartu berganti, ukuran kartu berubah (rotasi/resize), dan font selesai
+  // dimuat (lebar teks berubah setelah font Jepang siap).
+  useLayoutEffect(() => {
+    const run = () => {
+      fitOneLine(frontRef.current);
+      fitOneLine(backRef.current);
+    };
+    run();
+    // sekali lagi di frame berikutnya: di HP ukuran kartu kadang baru final
+    // setelah layout selesai (address bar / keyboard / rotasi layar)
+    const raf = window.requestAnimationFrame(run);
+    const ro =
+      typeof ResizeObserver !== "undefined" ? new ResizeObserver(run) : null;
+    if (ro) {
+      if (frontRef.current) ro.observe(frontRef.current);
+      if (backRef.current) ro.observe(backRef.current);
+    }
+    window.addEventListener("resize", run);
+    window.addEventListener("orientationchange", run);
+    void document.fonts?.ready.then(run);
+    return () => {
+      window.cancelAnimationFrame(raf);
+      ro?.disconnect();
+      window.removeEventListener("resize", run);
+      window.removeEventListener("orientationchange", run);
+    };
+  }, [content.front, content.back]);
+
   // Reset scroll tiap ganti kartu
   useEffect(() => {
     if (frontRef.current) frontRef.current.scrollTop = 0;
     if (backRef.current) backRef.current.scrollTop = 0;
   }, [current?.id, flipped]);
+
+  // Gambar kartu hasil import: isi src dari IndexedDB setelah kartu tampil.
+  // Audio yang masih jalan dihentikan saat pindah kartu.
+  useEffect(() => {
+    if (current?.kind !== "custom" || !current.deckId) return;
+    const deckId = current.deckId;
+    let alive = true;
+    [frontRef.current, backRef.current].forEach((root) => {
+      root
+        ?.querySelectorAll<HTMLImageElement>("img[data-media]")
+        .forEach((img) => {
+          const name = img.getAttribute("data-media");
+          if (!name || img.getAttribute("src")) return;
+          void getMediaUrl(deckId, name).then((url) => {
+            if (alive && url) img.src = url;
+          });
+        });
+    });
+    return () => {
+      alive = false;
+      stopMedia();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current?.id, content]);
+
+  // Animasi tombol 🔊 selagi file audio kartu impor diputar (termasuk autoplay).
+  useEffect(() => {
+    const onState = (e: Event) => {
+      const name = (e as CustomEvent<{ name: string | null }>).detail?.name;
+      document.querySelectorAll<HTMLElement>(".fc-media-audio").forEach((el) => {
+        el.classList.toggle("is-playing", name != null && el.dataset.audio === name);
+      });
+    };
+    window.addEventListener(MEDIA_STATE_EVENT, onState);
+    return () => window.removeEventListener(MEDIA_STATE_EVENT, onState);
+  }, []);
+
+  // Esc menutup gambar yang diperbesar
+  useEffect(() => {
+    if (!zoomSrc) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setZoomSrc(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [zoomSrc]);
 
   // Auto-speak queue waktu kartu di-flip ke BACK
   useEffect(() => {
@@ -424,6 +627,16 @@ export default function FlashcardStudy({
       // kartu, jadi angka Baru/Belajar/Ulang di daftar deck tidak ikut berubah.
       if (!studyAhead) rateCard(current.id, rating);
       setRatedCount((n) => n + 1);
+      setTally((tl) => ({ ...tl, [rating]: tl[rating] + 1 }));
+      playSfx(
+        rating === "again"
+          ? "rateAgain"
+          : rating === "hard"
+            ? "rateHard"
+            : rating === "good"
+              ? "rateGood"
+              : "rateEasy",
+      );
 
       let nextQueue = queue;
       let nextWaiting = waiting;
@@ -456,6 +669,18 @@ export default function FlashcardStudy({
     [current, queue, waiting, idx, rateCard, studyAhead],
   );
 
+  // suara balik kartu (hanya saat jawaban dibuka) + suara deck selesai
+  useEffect(() => {
+    if (flipped) playSfx("flip");
+  }, [flipped]);
+  useEffect(() => {
+    if (done && ratedCount > 0) {
+      const to = window.setTimeout(() => playSfx("win"), 150);
+      return () => window.clearTimeout(to);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [done]);
+
   const handleRestart = () => {
     const frozen: Record<string, FlashCategory> = {};
     allCards.forEach((c) => {
@@ -466,6 +691,7 @@ export default function FlashcardStudy({
     setIdx(0);
     setFlipped(false);
     setRatedCount(0);
+    setTally({ again: 0, hard: 0, good: 0, easy: 0 });
     setWaiting([]);
     setDone(allCards.length === 0);
     setStudyAhead(true);
@@ -494,6 +720,19 @@ export default function FlashcardStudy({
 
   const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement;
+    const audioEl = target.closest("[data-audio]") as HTMLElement | null;
+    if (audioEl && current?.kind === "custom" && current.deckId) {
+      e.stopPropagation();
+      const name = audioEl.getAttribute("data-audio");
+      if (name) void playMedia(current.deckId, name);
+      return;
+    }
+    const imgEl = target.closest("img.fc-media-img") as HTMLImageElement | null;
+    if (imgEl?.getAttribute("src")) {
+      e.stopPropagation();
+      setZoomSrc(imgEl.getAttribute("src"));
+      return;
+    }
     const speakEl = target.closest("[data-speak]") as HTMLElement | null;
     if (speakEl) {
       e.stopPropagation();
@@ -503,6 +742,13 @@ export default function FlashcardStudy({
   };
 
   if (done) {
+    const nothingToReview = ratedCount === 0;
+    const rateChips: { key: FlashRating; label: string }[] = [
+      { key: "again", label: t("flash.again") },
+      { key: "hard", label: t("flash.hard") },
+      { key: "good", label: t("flash.good") },
+      { key: "easy", label: t("flash.easy") },
+    ];
     return (
       <>
         <div className="quiz-back-row flash-back-row">
@@ -514,35 +760,57 @@ export default function FlashcardStudy({
           >
             {t("common.back")}
           </button>
-          <button
-            className="quiz-back flash-back-btn"
-            type="button"
-            data-i18n="flash.restart"
-            onClick={handleRestart}
-          >
-            {t("flash.restart")}
-          </button>
         </div>
-        <div className="flash-done">
-          <p className="flash-done-title">
-            {ratedCount === 0 ? t("flash.caughtUpTitle") : t("flash.doneTitle")}
-          </p>
-          <p className="flash-done-sub">
-            {ratedCount === 0
-              ? t("flash.caughtUpSub", { label: deckLabel })
-              : t("flash.doneSub", { count: ratedCount, label: deckLabel })}
-          </p>
-          <button className="primary" type="button" onClick={handleRestart}>
-            {t("flash.reviewAgain")}
-          </button>
-          <button
-            className="ghost"
-            type="button"
-            data-i18n="flash.chooseAnother"
-            onClick={onBack}
-          >
-            {t("flash.chooseAnother")}
-          </button>
+        <div className="flash-done-wrap">
+          <div className="flash-done" role="status">
+            <span className="flash-done-badge" aria-hidden="true">
+              {nothingToReview ? "☾" : "✓"}
+            </span>
+            <p className="flash-done-deck">{deckLabel}</p>
+            <p className="flash-done-title">
+              {nothingToReview
+                ? t("flash.caughtUpTitle")
+                : t("flash.doneTitle")}
+            </p>
+            {nothingToReview ? (
+              <p className="flash-done-sub">
+                {t("flash.caughtUpSub", { label: deckLabel })}
+              </p>
+            ) : (
+              <>
+                <div className="flash-done-total">
+                  <span className="flash-done-total-num">{ratedCount}</span>
+                  <span className="flash-done-total-label">
+                    {t("flash.cards")}
+                  </span>
+                </div>
+                <div className="flash-done-tally">
+                  {rateChips.map((c) => (
+                    <span
+                      key={c.key}
+                      className={`flash-done-chip flash-done-chip--${c.key}`}
+                    >
+                      <b>{tally[c.key]}</b>
+                      <i>{c.label}</i>
+                    </span>
+                  ))}
+                </div>
+              </>
+            )}
+            <div className="flash-done-actions">
+              <button className="primary" type="button" onClick={handleRestart}>
+                {t("flash.reviewAgain")}
+              </button>
+              <button
+                className="ghost"
+                type="button"
+                data-i18n="flash.chooseAnother"
+                onClick={onBack}
+              >
+                {t("flash.chooseAnother")}
+              </button>
+            </div>
+          </div>
         </div>
       </>
     );
@@ -561,16 +829,24 @@ export default function FlashcardStudy({
           <button className="quiz-back flash-back-btn" type="button" onClick={onBack}>
             {t("common.back")}
           </button>
-          <button className="quiz-back flash-back-btn" type="button" onClick={handleRestart}>
-            {t("flash.restart")}
-          </button>
         </div>
-        <div className="flash-done">
-          <p className="flash-done-title">{t("flash.waitingTitle")}</p>
-          <p className="flash-done-sub">{t("flash.waitingSub", { time })}</p>
-          <button className="primary" type="button" onClick={skipWait}>
-            {t("flash.waitingSkip")}
-          </button>
+        <div className="flash-done-wrap">
+          <div className="flash-done flash-done--wait" role="status">
+            <span className="flash-done-badge" aria-hidden="true">
+              ⏳
+            </span>
+            <p className="flash-done-deck">{deckLabel}</p>
+            <p className="flash-done-title">{t("flash.waitingTitle")}</p>
+            <div className="flash-done-total">
+              <span className="flash-done-total-num">{time}</span>
+            </div>
+            <p className="flash-done-sub">{t("flash.waitingSub", { time })}</p>
+            <div className="flash-done-actions">
+              <button className="primary" type="button" onClick={skipWait}>
+                {t("flash.waitingSkip")}
+              </button>
+            </div>
+          </div>
         </div>
       </>
     );
@@ -586,14 +862,6 @@ export default function FlashcardStudy({
           onClick={onBack}
         >
           {t("common.back")}
-        </button>
-        <button
-          className="quiz-back flash-back-btn"
-          type="button"
-          data-i18n="flash.restart"
-          onClick={handleRestart}
-        >
-          {t("flash.restart")}
         </button>
         {speechSupported && (
           <button
@@ -723,6 +991,74 @@ export default function FlashcardStudy({
           </button>
         </div>
       )}
+
+      {zoomSrc && (
+        <div
+          className="fc-lightbox"
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setZoomSrc(null)}
+        >
+          <img className="fc-lightbox-img" src={zoomSrc} alt="" />
+          <button
+            type="button"
+            className="fc-lightbox-close"
+            aria-label={t("aria.closeZoom")}
+            onClick={() => setZoomSrc(null)}
+          >
+            ✕
+          </button>
+        </div>
+      )}
     </>
   );
+}
+
+// Deck dari konten admin dimuat dulu dari Supabase (cache bareng layar Lessons),
+// baru sesi belajarnya dibuka. Deck bawaan / impor langsung jalan seperti biasa.
+export default function FlashcardStudy(props: FlashcardStudyProps) {
+  const { t } = useLang();
+  const ref = props.deckRef;
+  const [state, setState] = useState<
+    { status: "loading" } | { status: "ready" } | { status: "error"; error: string }
+  >({ status: "loading" });
+  const [attempt, setAttempt] = useState(0);
+  const isDb = ref.kind === "db";
+  const dbKey =
+    ref.kind === "db" ? `${ref.content}:${ref.level}:${ref.sourceId}` : "";
+
+  useEffect(() => {
+    if (ref.kind !== "db") return;
+    let cancelled = false;
+    setState({ status: "loading" });
+    loadDbDeckCards(ref).then((res) => {
+      if (cancelled) return;
+      if (res.error !== null) setState({ status: "error", error: res.error });
+      else setState({ status: "ready" });
+    });
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dbKey, attempt]);
+
+  if (!isDb || state.status === "ready")
+    return <FlashcardStudySession {...props} key={dbKey} />;
+
+  if (state.status === "error") {
+    return (
+      <div className="flash-empty-hint">
+        <p>{t("flash.adminLoadError")}</p>
+        <p>{state.error}</p>
+        <Button type="button" onClick={() => setAttempt((n) => n + 1)}>
+          {t("flash.adminRetry")}
+        </Button>{" "}
+        <Button type="button" variant="secondary" onClick={props.onBack}>
+          {t("flash.chooseAnother")}
+        </Button>
+      </div>
+    );
+  }
+
+  return <LoadingState label={t("flash.adminLoading")} />;
 }

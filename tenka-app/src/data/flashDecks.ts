@@ -9,23 +9,43 @@ import {
   KANJI_TIER_KEYS,
   KANJI_LEVEL_META,
 } from "./kanjiN5";
+import {
+  getCachedDbDeckCards,
+  type DbCardEntry,
+  type DbDeckRef,
+} from "../lib/flashDbDecks";
 
 export type FlashDeckRef =
   | { kind: "kotoba"; tierKey: string }
   | { kind: "kanji"; tierKey: string }
-  | { kind: "custom"; deckId: string };
+  | { kind: "custom"; deckId: string }
+  | DbDeckRef;
 
 export type FlashCardDescriptor = {
   id: string;
-  kind: "kotoba" | "kanji" | "custom";
+  kind: "kotoba" | "kanji" | "custom" | "db";
   tierKey?: string;
   idx: number;
   deckId?: string;
+  /** Isi kartu untuk deck dari konten admin (kind "db"). */
+  db?: DbCardEntry;
 };
 
 export function buildDeckCardDescriptors(
   ref: FlashDeckRef,
 ): FlashCardDescriptor[] {
+  // Deck dari konten admin (Supabase): datanya harus sudah dimuat
+  // (loadDbDeckCards) — kalau belum ada di cache, deck dianggap kosong.
+  if (ref.kind === "db") {
+    const cards = getCachedDbDeckCards(ref) ?? [];
+    return cards.map((c, i) => ({
+      id: c.id,
+      kind: "db" as const,
+      idx: i,
+      db: c.data,
+    }));
+  }
+
   // Custom deck: baca dari localStorage
   if (ref.kind === "custom") {
     try {

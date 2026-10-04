@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLang } from "@/i18n/LangContext";
 import { useQuiz } from "@/state/QuizContext";
+import { playSfx } from "@/lib/sfx";
 
 export default function QuizHeader() {
   const { state, dispatch } = useQuiz();
@@ -47,6 +48,15 @@ export default function QuizHeader() {
     };
   }, [state.index, state.timerSeconds, state.answered, dispatch, state.queue]);
 
+  // tik-tik di 3 detik terakhir (tidak bunyi di detik pertama timer)
+  useEffect(() => {
+    if (!showTimer) return;
+    if (remaining > 0 && remaining <= 3 && remaining < state.timerSeconds) {
+      playSfx("tick");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [remaining]);
+
   if (!showTimer) return null;
 
   return (
@@ -67,8 +77,9 @@ export function QuizStreak() {
   const showStreak = state.streak >= 1;
   if (!showStreak) return null;
 
-  // makin panjang streak, makin banyak api: 1-2 → 🔥, 3-5 → 🔥🔥, 6+ → 🔥🔥🔥
-  const flames = state.streak >= 6 ? 3 : state.streak >= 3 ? 2 : 1;
+  // api bertambah tiap kelipatan 5: 1-4 → 🔥, 5-9 → 🔥🔥, 10-14 → 🔥🔥🔥, ...
+  // (maksimal 5 api supaya tidak melebar)
+  const flames = Math.min(5, 1 + Math.floor(state.streak / 5));
 
   return (
     <div className="quiz-card-streak-row">

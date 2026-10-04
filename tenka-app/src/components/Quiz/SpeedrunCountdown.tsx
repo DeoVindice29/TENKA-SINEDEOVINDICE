@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useLang } from "@/i18n/LangContext";
+import { playSfx } from "@/lib/sfx";
 
 type SpeedrunCountdownProps = {
   open: boolean;
@@ -27,9 +28,15 @@ export default function SpeedrunCountdown({
   useEffect(() => {
     if (!open) return;
     setStep(0);
+    playSfx("countdown");
     const timers: number[] = [];
     for (let i = 1; i < labels.length; i++) {
-      timers.push(window.setTimeout(() => setStep(i), i * 1000));
+      timers.push(
+        window.setTimeout(() => {
+          setStep(i);
+          playSfx(i === labels.length - 1 ? "go" : "countdown");
+        }, i * 1000),
+      );
     }
     timers.push(window.setTimeout(() => doneRef.current(), labels.length * 1000));
     return () => timers.forEach((id) => window.clearTimeout(id));

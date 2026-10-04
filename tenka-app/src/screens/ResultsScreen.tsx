@@ -14,6 +14,7 @@ import {
 } from "@/data/ranks";
 import { formatSpeedrunTime } from "@/utils/formatTime";
 import { getChibiAvatarByName } from "@/lib/chibiAvatar";
+import { playSfx } from "@/lib/sfx";
 import {
   isJlptScript,
   JLPT_PASS_PERCENT,
@@ -47,6 +48,33 @@ export default function ResultsScreen() {
     prevBest: number | null;
     isNewRecord: boolean;
   } | null>(null);
+
+  // efek suara hasil: menang / kalah, + bonus kalau rekor Speedrun baru
+  const sfxPlayedRef = useRef(false);
+  useEffect(() => {
+    if (sfxPlayedRef.current) return;
+    sfxPlayedRef.current = true;
+    const total = state.queue.length;
+    const pct = total > 0 ? state.score / total : 0;
+    if (
+      (state.conquest && state.conquestFailed) ||
+      (state.speedrun && state.speedrunFailed)
+    ) {
+      playSfx("lose");
+    } else if (state.conquest || state.speedrun || pct >= 0.8) {
+      playSfx("win");
+    } else if (pct >= 0.5) {
+      playSfx("roundClear");
+    } else {
+      playSfx("lose");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    if (!speedrunInfo?.isNewRecord) return;
+    const to = window.setTimeout(() => playSfx("record"), 700);
+    return () => window.clearTimeout(to);
+  }, [speedrunInfo]);
 
   // catat sesi latihan ke statistik admin — sekali per tampil layar hasil
   const loggedRef = useRef(false);

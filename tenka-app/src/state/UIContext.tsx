@@ -92,6 +92,14 @@ type UIContextValue = {
    */
   pendingConquestOpen: boolean;
   setPendingConquestOpen: (v: boolean) => void;
+
+  /**
+   * Nyala selama user lagi ngerjain sesi soal di dalam layar biasa (mis. lembar
+   * soal Latihan). Selama nyala, tombol Conquests di topbar disembunyikan —
+   * sama seperti layar fokus (quiz/match/flashcard).
+   */
+  sessionActive: boolean;
+  setSessionActive: (v: boolean) => void;
 };
 
 const UIContext = createContext<UIContextValue | null>(null);
@@ -116,6 +124,7 @@ export function UIProvider({ children }: { children: ReactNode }) {
   const [pendingFlashDeck, setPendingFlashDeck] =
     useState<PendingFlashDeck | null>(null);
   const [pendingConquestOpen, setPendingConquestOpen] = useState(false);
+  const [sessionActive, setSessionActive] = useState(false);
 
   const setScreen = useCallback(
     (s: Screen) => {
@@ -160,6 +169,8 @@ export function UIProvider({ children }: { children: ReactNode }) {
         setPendingFlashDeck,
         pendingConquestOpen,
         setPendingConquestOpen,
+        sessionActive,
+        setSessionActive,
       }}
     >
       {children}

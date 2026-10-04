@@ -12,6 +12,7 @@ import {
 } from "./flashCategory";
 import { capLearnDue, nextInterval } from "./flashSchedule";
 import { appendFlashLog } from "./flashStats";
+import { deleteDeckMedia } from "@/lib/flashMedia";
 
 const FLASH_SRS_KEY = "tebakAksara_flashSRS_v1";
 const FLASH_CUSTOM_DECKS_KEY = "tebakAksara_flashCustomDecks_v1";
@@ -28,11 +29,14 @@ export type FlashCardState = {
 };
 
 export type CustomDeckCard = { front: string; back: string };
+export type CustomDeckMedia = { audio: number; images: number };
 export type CustomDeck = {
   id: string;
   name: string;
   cards: CustomDeckCard[];
   createdAt: number;
+  /** jumlah audio/gambar hasil import .apkg (untuk lencana di daftar deck) */
+  media?: CustomDeckMedia;
 };
 
 function getSRS(): Record<string, FlashCardState> {
@@ -79,7 +83,11 @@ type FlashContextValue = {
     due: number;
   };
   getCustomDecks: () => CustomDeck[];
-  addCustomDeck: (name: string, cards: CustomDeckCard[]) => string | null;
+  addCustomDeck: (
+    name: string,
+    cards: CustomDeckCard[],
+    media?: CustomDeckMedia,
+  ) => string | null;
   deleteCustomDeck: (id: string) => void;
   reload: () => void;
   reloadFlag: number;
@@ -158,11 +166,21 @@ export function FlashProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const addCustomDeck = useCallback(
-    (name: string, cards: CustomDeckCard[]): string | null => {
+    (
+      name: string,
+      cards: CustomDeckCard[],
+      media?: CustomDeckMedia,
+    ): string | null => {
       const decks = getCustomDecks();
       const id =
         "d" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-      decks.push({ id, name, cards, createdAt: Date.now() });
+      decks.push({
+        id,
+        name,
+        cards,
+        createdAt: Date.now(),
+        ...(media && media.audio + media.images > 0 ? { media } : {}),
+      });
       const ok = saveCustomDecks(decks);
       if (ok) setReloadFlag((n) => n + 1);
       return ok ? id : null;
@@ -172,6 +190,8 @@ export function FlashProvider({ children }: { children: ReactNode }) {
 
   const deleteCustomDeck = useCallback((id: string) => {
     saveCustomDecks(getCustomDecks().filter((d) => d.id !== id));
+    // audio & gambar deck ini (IndexedDB) ikut dihapus
+    void deleteDeckMedia(id);
     const srs = getSRS();
     let changed = false;
     Object.keys(srs).forEach((k) => {

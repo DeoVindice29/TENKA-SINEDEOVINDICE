@@ -31,7 +31,7 @@ import quizSceneBgNight from "@/assets/bg-quiz-night.webp";
 const FOCUS_SCREENS = new Set(["quiz", "match", "flashcard", "conquest-story"]);
 
 export default function App() {
-  const { screen, setScreen } = useUI();
+  const { screen, setScreen, sessionActive } = useUI();
   const { t } = useLang();
   const { user, isGuest } = useAuth();
   const themeApi = useTheme();
@@ -84,6 +84,9 @@ export default function App() {
   }, [screen]);
 
   const focusMode = FOCUS_SCREENS.has(screen);
+  // tombol Conquests disembunyikan selama sesi soal berjalan (layar fokus
+  // sudah menyembunyikan seluruh topbar; ini untuk sesi di layar biasa)
+  const hideMissionsBtn = focusMode || sessionActive;
 
   return (
     <>
@@ -128,22 +131,24 @@ export default function App() {
                 <span />
               </button>
               <div className="topbar-spacer" />
-              <button
-                type="button"
-                className="topbar-missions-btn"
-                aria-label={t("missions.open")}
-                onClick={() => setMissionsOpen(true)}
-              >
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
-                  <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="2" />
-                  <circle cx="12" cy="12" r="1.2" fill="currentColor" />
-                </svg>
-                <span className="topbar-missions-label">{t("missions.button")}</span>
-                <span className="topbar-missions-count">
-                  {missionProgress.done}/{missionProgress.total}
-                </span>
-              </button>
+              {!hideMissionsBtn && (
+                <button
+                  type="button"
+                  className="topbar-missions-btn"
+                  aria-label={t("missions.open")}
+                  onClick={() => setMissionsOpen(true)}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
+                    <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="2" />
+                    <circle cx="12" cy="12" r="1.2" fill="currentColor" />
+                  </svg>
+                  <span className="topbar-missions-label">{t("missions.button")}</span>
+                  <span className="topbar-missions-count">
+                    {missionProgress.done}/{missionProgress.total}
+                  </span>
+                </button>
+              )}
             </header>
           )}
           <div className="stage">

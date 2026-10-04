@@ -791,6 +791,106 @@ export const I18N: Record<string, I18NEntry> = {
     en: "Start — {count} Questions",
     id: "Mulai — {count} Soal",
   },
+  "practice.sheet.meta": {
+    en: "{count} questions · scroll down and answer them all",
+    id: "{count} soal · scroll ke bawah dan jawab semuanya",
+  },
+  "practice.sheet.progress": {
+    en: "{done} / {total} answered",
+    id: "{done} / {total} terjawab",
+  },
+  "practice.sheet.required": {
+    en: "Required",
+    id: "Wajib dijawab",
+  },
+  "practice.sheet.missing": {
+    en: "This question is required.",
+    id: "Soal ini wajib dijawab.",
+  },
+  "practice.sheet.submit": {
+    en: "Submit answers",
+    id: "Kirim jawaban",
+  },
+  "practice.sheet.retry": {
+    en: "Try new questions",
+    id: "Ulangi dengan soal baru",
+  },
+  "practice.sheet.back": {
+    en: "Back",
+    id: "Kembali",
+  },
+  "practice.sheet.onlyWrong": {
+    en: "Show wrong answers only",
+    id: "Tampilkan yang salah saja",
+  },
+  "practice.sheet.correct": {
+    en: "Correct",
+    id: "Benar",
+  },
+  "practice.sheet.wrong": {
+    en: "Wrong",
+    id: "Salah",
+  },
+  "practice.sheet.answerWas": {
+    en: "Correct answer:",
+    id: "Jawaban yang benar:",
+  },
+  "practice.sheet.verdictGreat": {
+    en: "Excellent!",
+    id: "Mantap!",
+  },
+  "practice.sheet.verdictGood": {
+    en: "Nice work!",
+    id: "Bagus!",
+  },
+  "practice.sheet.verdictTry": {
+    en: "Keep practicing!",
+    id: "Terus berlatih!",
+  },
+  "practice.sheet.resultLine": {
+    en: "{score} of {total} correct ({percent}%)",
+    id: "{score} dari {total} benar ({percent}%)",
+  },
+  "conquest.sheet.tierMeta": {
+    en: "{count} questions · get at least {need} right ({percent}%) to clear this tier",
+    id: "{count} soal · benar minimal {need} ({percent}%) untuk lulus tier ini",
+  },
+  "conquest.sheet.passTitle": {
+    en: "Tier cleared! 🎉",
+    id: "Tier lulus! 🎉",
+  },
+  "conquest.sheet.failTitle": {
+    en: "Not enough this time",
+    id: "Belum cukup kali ini",
+  },
+  "conquest.sheet.need": {
+    en: "You need at least {need} of {total} correct to move on.",
+    id: "Kamu butuh minimal {need} dari {total} benar untuk lanjut.",
+  },
+  "conquest.sheet.passNext": {
+    en: "Continue to the next tier",
+    id: "Lanjut ke tier berikutnya",
+  },
+  "conquest.sheet.passFinish": {
+    en: "Finish the conquest",
+    id: "Selesaikan penaklukan",
+  },
+  "conquest.sheet.chibiPass": {
+    en: "Nice one, {name}! Tier cleared — on to the next!",
+    id: "Mantap, {name}! Tier ini lulus — lanjut ke berikutnya!",
+  },
+  "conquest.sheet.chibiPassLast": {
+    en: "That's the last tier, {name}! One more step and {label} is yours!",
+    id: "Itu tier terakhir, {name}! Tinggal selangkah lagi {label} jadi milikmu!",
+  },
+  "conquest.sheet.chibiFail": {
+    en: "So close, {name}… review the wrong ones below, then try again!",
+    id: "Hampir, {name}… ulas dulu yang salah di bawah, lalu coba lagi!",
+  },
+  "conquest.sheet.failSee": {
+    en: "See result",
+    id: "Lihat hasil",
+  },
   "aria.learnSearch": {
     en: "Search this study set",
     id: "Cari di lessons ini",
@@ -1336,14 +1436,95 @@ export const I18N: Record<string, I18NEntry> = {
   },
   "flash.builtinHeading": { en: "Built-in Decks", id: "Deck Bawaan" },
   "flash.myDecksHeading": { en: "My Imported Decks", id: "Deck Impor Saya" },
+  "flash.tabKotoba": { en: "Kotoba", id: "Kotoba" },
+  "flash.tabKanji": { en: "Kanji", id: "Kanji" },
+  "flash.tabImported": { en: "Imported", id: "Impor" },
+  "flash.noSourceDecks": {
+    en: "No decks at this level yet.",
+    id: "Belum ada deck di level ini.",
+  },
+  "flash.emptyDeck": { en: "No cards yet", id: "Belum ada kartu" },
+  "flash.adminLoading": { en: "Loading deck…", id: "Memuat deck…" },
+  "flash.adminLoadError": {
+    en: "Couldn't load this deck.",
+    id: "Deck ini gagal dimuat.",
+  },
+  "flash.adminRetry": { en: "Try again", id: "Coba lagi" },
   "flash.noCustomDecks": {
     en: "No decks imported yet.",
     id: "Belum ada deck yang diimpor.",
   },
   "flash.importBtn": { en: "Import .apkg Deck", id: "Impor Deck .apkg" },
   "flash.importHint": {
-    en: "Your .apkg file is read entirely in your browser — nothing is uploaded anywhere.",
-    id: "File .apkg kamu dibaca sepenuhnya di browser — tidak ada yang diunggah ke mana pun.",
+    en: "Your .apkg file is read entirely in your browser — nothing is uploaded anywhere. Audio and images are saved in this browser only. Tip: when exporting from Anki, tick “Support older Anki versions”.",
+    id: "File .apkg kamu dibaca sepenuhnya di browser — tidak ada yang diunggah ke mana pun. Audio dan gambar disimpan hanya di browser ini. Tips: saat export dari Anki, centang “Support older Anki versions”.",
+  },
+  "flash.importMedia": {
+    en: "({count} audio/image files saved)",
+    id: "({count} file audio/gambar tersimpan)",
+  },
+  "flash.importDrop": {
+    en: "Drop your .apkg deck here",
+    id: "Tarik deck .apkg ke sini",
+  },
+  "flash.importDropSub": {
+    en: "or tap to choose a file",
+    id: "atau klik untuk memilih file",
+  },
+  "flash.importDropActive": {
+    en: "Release to import",
+    id: "Lepas untuk impor",
+  },
+  "flash.importWrongType": {
+    en: "Please choose a .apkg file.",
+    id: "Pilih file berformat .apkg.",
+  },
+  "flash.stepZip": { en: "Opening the file", id: "Membuka file" },
+  "flash.stepCards": { en: "Reading cards", id: "Membaca kartu" },
+  "flash.stepMedia": {
+    en: "Extracting audio & images",
+    id: "Mengambil audio & gambar",
+  },
+  "flash.stepSave": {
+    en: "Saving to this browser",
+    id: "Menyimpan di browser ini",
+  },
+  "flash.importDone": {
+    en: "Imported “{name}”",
+    id: "“{name}” berhasil diimpor",
+  },
+  "flash.chipCards": { en: "{count} cards", id: "{count} kartu" },
+  "flash.chipAudio": { en: "{count} audio", id: "{count} audio" },
+  "flash.chipImages": { en: "{count} images", id: "{count} gambar" },
+  "flash.importMissing": {
+    en: "{count} file(s) used by the cards weren't found inside the deck and were skipped.",
+    id: "{count} file yang dipakai kartu tidak ditemukan di dalam deck dan dilewati.",
+  },
+  "flash.reimportNeeded": {
+    en: "Imported with an older version — delete & re-import for audio and images",
+    id: "Diimpor versi lama — hapus & impor ulang untuk audio dan gambar",
+  },
+  "flash.storageTitle": {
+    en: "Browser storage",
+    id: "Penyimpanan browser",
+  },
+  "flash.storageUsed": {
+    en: "{used} used of {total} · {free} left",
+    id: "{used} terpakai dari {total} · sisa {free}",
+  },
+  "flash.storageMedia": {
+    en: "Imported audio & images: {size}",
+    id: "Audio & gambar deck impor: {size}",
+  },
+  "flash.storageLow": {
+    en: "Storage is almost full — delete a deck you no longer need.",
+    id: "Penyimpanan hampir penuh — hapus deck yang sudah tidak dipakai.",
+  },
+  "flash.studyNow": { en: "Study now", id: "Belajar sekarang" },
+  "flash.importAnother": { en: "Import another", id: "Impor lagi" },
+  "flash.importFailHint": {
+    en: "Still failing? In Anki choose File → Export, tick “Support older Anki versions” and try again.",
+    id: "Masih gagal? Di Anki pilih File → Export, centang “Support older Anki versions”, lalu coba lagi.",
   },
   "flash.dueNow": { en: "due now", id: "jatuh tempo" },
   "flash.cards": { en: "cards", id: "kartu" },
@@ -1450,6 +1631,26 @@ export const I18N: Record<string, I18NEntry> = {
   "audioHelp.settingsLink": {
     en: "Audio not playing? See how to fix it",
     id: "Audio tidak keluar? Lihat cara memperbaikinya",
+  },
+  "sfx.title": {
+    en: "Sound effects",
+    id: "Efek suara",
+  },
+  "sfx.enable": {
+    en: "Sound effects",
+    id: "Efek suara",
+  },
+  "sfx.desc": {
+    en: "Plays sounds for correct and wrong answers, the timer, matches, flashcards, and results.",
+    id: "Bunyi untuk jawaban benar/salah, timer, Match, flashcard, dan hasil.",
+  },
+  "sfx.volume": {
+    en: "Volume",
+    id: "Volume",
+  },
+  "sfx.test": {
+    en: "Test sound",
+    id: "Coba suara",
   },
   "flash.restart": { en: "Restart Deck", id: "Ulangi Deck" },
   "flash.doneTitle": {
@@ -1567,12 +1768,12 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Ujiannya ala JLPT N5 Moji · Goi: 4 tier — hiragana → kanji, kanji → hiragana, memilih kata yang paling cocok untuk kalimat, dan memilih kalimat yang benar untuk sebuah kata — masing-masing {count} soal acak {label} (total {total} soal).",
   },
   "conquestModal.rule.jlptChoices": {
-    en: "Every tier is <b>multiple choice with 4 options</b>. The questions are drawn at random from {label} each attempt.",
-    id: "Semua tier berupa <b>pilihan ganda 4 opsi</b>. Soal diambil acak dari {label} setiap percobaan.",
+    en: "Every tier is a <b>sheet of {count} multiple-choice questions</b> (4 options each) that you answer in one go. The questions are drawn at random from {label} each attempt.",
+    id: "Setiap tier adalah <b>satu lembar berisi {count} soal pilihan ganda</b> (4 opsi) yang dikerjakan sekaligus. Soal diambil acak dari {label} setiap percobaan.",
   },
   "conquestModal.rule.jlptPassMark": {
-    en: "You need <b>at least {percent}% correct in every tier</b>. Fall below that and the conquest ends in <b>DEFEAT</b> right away.",
-    id: "Kamu harus <b>minimal {percent}% benar di setiap tier</b>. Kalau nilainya sudah tidak mungkin cukup, penaklukkan langsung berakhir <b>KEKALAHAN</b>.",
+    en: "Submit the sheet and I'll check it: get <b>at least {percent}% correct</b> and you move on to the <b>next tier</b>. Fall below that and the conquest ends in <b>DEFEAT</b>.",
+    id: "Kirim lembarnya, nanti aku periksa: kalau <b>benar minimal {percent}%</b>, kamu lanjut ke <b>tier berikutnya</b>. Kalau kurang dari itu, penaklukkan berakhir <b>KEKALAHAN</b>.",
   },
   "conquestModal.rule.jlptFailRestart": {
     en: "If you fall, you'll have to march again from Tier 1.",
@@ -1742,8 +1943,8 @@ export const I18N: Record<string, I18NEntry> = {
     id: "💀 <b>Penaklukkan Gagal</b> — meleset{phaseNote} (soal ke-{current} dari {total}). {label} belum takluk, coba lagi dari awal!",
   },
   "results.jlptFailBanner": {
-    en: "💀 <b>Conquest Failed</b> — too many mistakes{phaseNote} (question {current} of {total}). You need at least {percent}% correct in every tier of {label} — try again from the start!",
-    id: "💀 <b>Penaklukkan Gagal</b> — kebanyakan salah{phaseNote} (soal ke-{current} dari {total}). Kamu perlu minimal {percent}% benar di setiap tier {label} — coba lagi dari awal!",
+    en: "💀 <b>Conquest Failed</b> — too many mistakes{phaseNote}. You need at least {percent}% correct in every tier of {label} — try again from the start!",
+    id: "💀 <b>Penaklukkan Gagal</b> — kebanyakan salah{phaseNote}. Kamu perlu minimal {percent}% benar di setiap tier {label} — coba lagi dari awal!",
   },
   "results.greetConquestPassed": {
     en: "You passed, {name}! 🏆",

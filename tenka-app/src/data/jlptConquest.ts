@@ -42,6 +42,7 @@ import { KOTOBA_USAGE } from "./kotobaUsage";
 import { KANJI_ALT_READINGS } from "./kanjiReadings";
 import { BUNPO_USAGE } from "./bunpoUsage";
 import { BUNPO_ARRANGE } from "./bunpoArrange";
+import { BUNPO_PARTICLE_PAIRS } from "./bunpoParticle2";
 import type { VerbFormKey } from "./types";
 import { shuffle } from "../utils/shuffle";
 import { pickLang } from "../lib/quizLang";
@@ -627,7 +628,7 @@ const PARTICLE_TIER: Record<number, readonly string[]> = {
 // Mirip bunpoFill, tapi kandidatnya dibatasi ke pola yang murni satu partikel,
 // jadi soalnya konsisten "tebak partikelnya" (bukan pola lain).
 function bunpoParticleFill(): Candidate[] {
-  return BUNPO_N5_CHAPTERS.flatMap((ch, group) =>
+  const single = BUNPO_N5_CHAPTERS.flatMap((ch, group) =>
     ch.flatMap((e) => {
       const particle = bareParticle(e[0]);
       if (!PARTICLE_TIER[group]?.includes(particle)) return [];
@@ -644,6 +645,24 @@ function bunpoParticleFill(): Candidate[] {
       ];
     }),
   );
+
+  // Soal dua kotak kosong (ditulis tangan di bunpoParticle2.ts): pilihannya
+  // pasangan partikel, mis. "から/を". Pilihan salahnya sudah ditentukan.
+  const pairs = BUNPO_PARTICLE_PAIRS.map(
+    ([sentence, correct, wrongA, wrongB, wrongC, meaning], i) => ({
+      q: sentence,
+      a: correct,
+      group: 1000 + i,
+      id: `particle2-${i}`,
+      distractors: [wrongA, wrongB, wrongC],
+      extra: `${sentence
+        .replace("...", correct.split("/")[0])
+        .replace("...", correct.split("/")[1])} — ${en(meaning)}`,
+      extraLabelKey: L_EXAMPLE,
+    }),
+  );
+
+  return [...single, ...pairs];
 }
 
 // Kalimat dengan pola/partikel dikosongkan ("...") → pilih pola yang cocok.
@@ -776,6 +795,18 @@ const SPECS: Record<JlptScriptKey, TierSpec[]> = {
       type: JLPT_TIER_TYPES.particle,
       cands: bunpoParticleFill,
       mode: "any",
+      // soal satu kotak kosong cuma boleh dapat pilihan salah berupa SATU
+      // partikel (bukan pasangan "から/を" dari soal dua kotak kosong)
+      distract: (correct, all) =>
+        shuffle(
+          Array.from(
+            new Set(
+              all
+                .filter((c) => !c.a.includes("/") && c.a !== correct.a)
+                .map((c) => c.a),
+            ),
+          ),
+        ).slice(0, CHOICE_COUNT - 1),
     },
     { type: JLPT_TIER_TYPES.conjugation, cands: bunpoConjugation, mode: "any" },
     { type: JLPT_TIER_TYPES.usage, cands: bunpoUsage, mode: "any" },

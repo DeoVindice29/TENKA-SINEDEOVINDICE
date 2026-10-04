@@ -12,7 +12,9 @@ import Feedback from "@/components/Quiz/Feedback";
 import ResultsScreen from "@/screens/ResultsScreen";
 import ConquestStory from "@/components/Conquest/ConquestStory";
 import AdminQuizTools from "@/components/Quiz/AdminQuizTools";
-import { practiceTypeKeyOfQueueType } from "@/data/jlptConquest";
+import ConquestSheet from "@/components/Conquest/ConquestSheet";
+import { isJlptScript, practiceTypeKeyOfQueueType } from "@/data/jlptConquest";
+import { playSfx } from "@/lib/sfx";
 
 function fmtTime(ms: number): string {
   const totalCs = Math.floor(ms / 10);
@@ -131,6 +133,26 @@ function QuizScreenInner() {
     return () => window.clearTimeout(to);
   }, [state.speedrun, state.answered, state.lastCorrect, dispatch]);
 
+  // Efek suara jawaban: benar / salah / waktu habis (+ bonus saat streak naik)
+  const prevAnsweredRef = useRef(false);
+  useEffect(() => {
+    const was = prevAnsweredRef.current;
+    prevAnsweredRef.current = state.answered;
+    if (!state.answered || was) return;
+    if (state.lastChosen === "__TIMEOUT__") {
+      playSfx("timeout");
+    } else if (state.lastCorrect) {
+      playSfx("correct");
+      // bonus suara hanya di kelipatan 5 (5, 10, 15, ...)
+      if (state.streak > 0 && state.streak % 5 === 0) {
+        window.setTimeout(() => playSfx("streak"), 260);
+      }
+    } else {
+      playSfx("wrong");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.answered]);
+
   // PRIORITAS 1: kalau queue habis → Results
   if (state.queue.length > 0 && state.index >= state.queue.length) {
     return <ResultsScreen />;
@@ -232,8 +254,18 @@ function QuizScreenInner() {
     if (typeKey) modeLabel = t(`practice.${state.script}.${typeKey}`);
   }
 
-  const position = state.index + 1;
-  const total = state.queue.length;
+  // Penaklukan ala JLPT: satu Tier = satu lembar soal (gaya Latihan Tipe Soal)
+  const isSheet =
+    state.conquest &&
+    !!state.conquestPhaseBoundaries &&
+    !!state.script &&
+    isJlptScript(state.script);
+
+  const tierTotal = state.conquestPhaseBoundaries
+    ? state.conquestPhaseBoundaries.length - 1
+    : 0;
+  const position = isSheet ? state.conquestPhaseIndex + 1 : state.index + 1;
+  const total = isSheet ? tierTotal : state.queue.length;
   const pct = total > 0 ? Math.min(100, (position / total) * 100) : 0;
 
   return (
@@ -296,29 +328,33 @@ function QuizScreenInner() {
         </button>
       </div>
 
-      <div className="quiz-card">
-        {state.speedrun && (
-          <div className="quiz-substatus-row">
-            <div className="speedrun-timer">⏱️ {fmtTime(speedrunElapsed)}</div>
+      {isSheet ? (
+        <ConquestSheet key={state.conquestPhaseIndex} />
+      ) : (
+        <div className="quiz-card">
+          {state.speedrun && (
+            <div className="quiz-substatus-row">
+              <div className="speedrun-timer">⏱️ {fmtTime(speedrunElapsed)}</div>
+            </div>
+          )}
+
+          {!state.speedrun && <QuizHeader />}
+
+          <QuizStamp />
+
+          <div className="quiz-mode-label">
+            <span className="mode-label-line" aria-hidden="true" />
+            <span className="mode-label-text">{modeLabel}</span>
+            <span className="mode-label-line" aria-hidden="true" />
           </div>
-        )}
 
-        {!state.speedrun && <QuizHeader />}
+          {state.difficulty === "hard" ? <HardInput /> : <Choices />}
 
-        <QuizStamp />
+          <Feedback />
 
-        <div className="quiz-mode-label">
-          <span className="mode-label-line" aria-hidden="true" />
-          <span className="mode-label-text">{modeLabel}</span>
-          <span className="mode-label-line" aria-hidden="true" />
+          <QuizStreak />
         </div>
-
-        {state.difficulty === "hard" ? <HardInput /> : <Choices />}
-
-        <Feedback />
-
-        <QuizStreak />
-      </div>
+      )}
     </section>
   );
 }

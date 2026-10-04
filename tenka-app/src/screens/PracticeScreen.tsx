@@ -1,9 +1,8 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLang } from "@/i18n/LangContext";
 import { useUI } from "@/state/UIContext";
-import { useQuiz } from "@/state/QuizContext";
 import { SCRIPTS } from "@/data/scripts";
-import TimerPicker from "@/components/Pickers/TimerPicker";
+import PracticeSheet from "@/components/Practice/PracticeSheet";
 import ScrollTopButton from "@/components/ScrollTopButton";
 import {
   isJlptScript,
@@ -19,6 +18,9 @@ import PageHero from "@/components/PageHero";
 // seperti Flashcard). Isinya tipe-tipe soal Penaklukan yang bisa dilatih
 // sendiri-sendiri, untuk Basic Kotoba, Bunpō, dan Kanji N5. Daftar tipe tiap
 // aksara diambil dari data/jlptConquest.ts (sama dengan tier Penaklukan-nya).
+//
+// Setelah menekan Mulai, soal tampil sebagai SATU lembar yang di-scroll ke bawah
+// (kayak Google Form) lewat <PracticeSheet>, bukan kuis satu-satu lagi.
 
 const TYPE_ICONS: Record<PracticeTypeKey, string> = {
   meaning: "📜",
@@ -40,8 +42,7 @@ function countSteps(total: number): number[] {
 
 export default function PracticeScreen() {
   const { t } = useLang();
-  const { setScreen, selectedTimerSeconds, currentScript } = useUI();
-  const { startPractice } = useQuiz();
+  const { currentScript, setSessionActive } = useUI();
 
   // Buka Practice dengan script yang sedang aktif di Home (kalau termasuk
   // JLPT), mis. dari kartu "Go to Practice" milik Basic Bunpō.
@@ -82,10 +83,34 @@ export default function PracticeScreen() {
     setCustomDraft(null);
   };
 
-  const start = () => {
-    startPractice(script, type, activeCount, selectedTimerSeconds);
-    setScreen("quiz");
-  };
+  // lembar soal yang lagi dikerjakan (null = masih di layar pengaturan)
+  const [sheet, setSheet] = useState<{ count: number } | null>(null);
+
+  const start = () => setSheet({ count: activeCount });
+
+  // selama lembar soal terbuka: sembunyikan tombol Conquests di topbar
+  const sheetOpen = sheet !== null;
+  useEffect(() => {
+    setSessionActive(sheetOpen);
+    return () => setSessionActive(false);
+  }, [sheetOpen, setSessionActive]);
+
+  // Lembar soal: hero disembunyikan biar fokus ke soal
+  if (sheet) {
+    return (
+      <section id="screen-practice">
+        <PracticeSheet
+          key={`${script}:${type}:${sheet.count}`}
+          script={script}
+          type={type}
+          icon={TYPE_ICONS[type]}
+          count={sheet.count}
+          onBack={() => setSheet(null)}
+        />
+        <ScrollTopButton id="btn-practice-scrolltop" />
+      </section>
+    );
+  }
 
   return (
     <section id="screen-practice">
@@ -177,8 +202,6 @@ export default function PracticeScreen() {
           />
         </div>
       </div>
-
-      <TimerPicker variant="practice" />
 
       <button
         className="primary"

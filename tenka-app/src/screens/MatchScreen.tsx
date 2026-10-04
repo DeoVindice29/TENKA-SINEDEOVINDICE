@@ -4,6 +4,7 @@ import { useLang } from "@/i18n/LangContext";
 import { useUI } from "@/state/UIContext";
 import { useAuth } from "@/state/AuthContext";
 import { getChibiAvatarByName } from "@/lib/chibiAvatar";
+import { playSfx } from "@/lib/sfx";
 import { SCRIPTS } from "@/data/scripts";
 import { appendStudyLog } from "@/state/flashStats";
 import { computeRangeIndices } from "@/utils/range";
@@ -228,12 +229,17 @@ export default function MatchScreen() {
       setKanaTiles(newKana);
       setRomajiTiles(newRomaji);
       appendStudyLog("match", "match", "good");
+      playSfx("matchOk");
       setMatchedCount((c) => c + 1);
       setSelectedKana(null);
       setSelectedRomaji(null);
 
       const total = newKana.filter((t) => t.matched).length;
       if (total === newKana.length) {
+        // ronde terakhir ditutup oleh suara "menang" di layar hasil
+        if (roundIndex + 1 < rounds.length) {
+          window.setTimeout(() => playSfx("roundClear"), 180);
+        }
         window.setTimeout(() => {
           if (roundIndex + 1 >= rounds.length) {
             setDone(true);
@@ -244,6 +250,7 @@ export default function MatchScreen() {
       }
     } else {
       appendStudyLog("match", "match", "again");
+      playSfx("matchBad");
       setMistakes((m) => m + 1);
       setWrongKana(kanaIdx);
       setWrongRomaji(romajiIdx);
@@ -263,6 +270,7 @@ export default function MatchScreen() {
       return;
     }
     setSelectedKana(idx);
+    if (selectedRomaji === null) playSfx("click");
 
     if (selectedRomaji !== null) {
       checkMatch(idx, selectedRomaji);
@@ -276,11 +284,19 @@ export default function MatchScreen() {
       return;
     }
     setSelectedRomaji(idx);
+    if (selectedKana === null) playSfx("click");
 
     if (selectedKana !== null) {
       checkMatch(selectedKana, idx);
     }
   };
+
+  // suara saat semua ronde selesai (tanpa salah = fanfare penuh)
+  useEffect(() => {
+    if (!done) return;
+    playSfx(mistakes === 0 ? "win" : "roundClear");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [done]);
 
   const totalPairs = pairs.length;
 

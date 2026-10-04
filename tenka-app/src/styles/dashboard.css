@@ -3579,10 +3579,280 @@ body:has(.app-shell.quiz-scenic) {
 
 .flash-import-box {
     margin-top: 26px;
-    padding: 18px;
-    border: 1.5px dashed color-mix(in srgb, var(--indigo) 30%, var(--line));
-    border-radius: 18px;
+}
+
+/* ---------- impor .apkg: dropzone, progres, hasil ---------- */
+.flash-dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 28px 18px 24px;
+    text-align: center;
+    cursor: pointer;
+    border: 2px dashed color-mix(in srgb, var(--indigo) 35%, var(--line));
+    border-radius: 20px;
     background: color-mix(in srgb, var(--indigo) 4%, var(--card));
+    transition: border-color .18s ease, background .18s ease, transform .18s ease;
+}
+
+.flash-dropzone:hover,
+.flash-dropzone:focus-visible,
+.flash-dropzone.is-dragging {
+    border-color: var(--indigo);
+    background: color-mix(in srgb, var(--indigo) 10%, var(--card));
+    outline: none;
+}
+
+.flash-dropzone.is-dragging {
+    transform: scale(1.01);
+}
+
+.flash-dropzone-icon {
+    font-size: 34px;
+    line-height: 1;
+}
+
+.flash-dropzone-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--ink);
+}
+
+.flash-dropzone-sub {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+}
+
+.flash-dropzone-btn {
+    margin-top: 10px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: var(--indigo);
+    color: var(--on-accent);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.flash-import-steps {
+    list-style: none;
+    margin: 0;
+    padding: 18px;
+    display: grid;
+    gap: 10px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--card);
+    box-shadow: 0 2px 10px var(--shadow-soft);
+}
+
+.flash-import-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    transition: color .2s ease;
+}
+
+.flash-import-step.active {
+    color: var(--ink);
+    font-weight: 800;
+}
+
+.flash-import-step.done {
+    color: var(--moss);
+}
+
+.flash-import-step-mark {
+    flex: 0 0 22px;
+    width: 22px;
+    height: 22px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1.5px solid var(--line);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.flash-import-step.active .flash-import-step-mark {
+    border-color: var(--indigo);
+}
+
+.flash-import-step.done .flash-import-step-mark {
+    border-color: var(--moss);
+    background: color-mix(in srgb, var(--moss) 14%, var(--card));
+}
+
+.flash-import-result {
+    padding: 18px;
+    border: 1px solid color-mix(in srgb, var(--moss) 40%, var(--line));
+    border-radius: 18px;
+    background: linear-gradient(120deg, color-mix(in srgb, var(--moss) 9%, var(--card)) 0%, var(--card) 60%);
+    box-shadow: 0 2px 10px var(--shadow-soft);
+}
+
+.flash-import-result-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    overflow-wrap: anywhere;
+}
+
+.flash-import-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.flash-import-chip {
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--paper-dark);
+    border: 1px solid var(--line);
+    font-size: 12.5px;
+    font-weight: 700;
+}
+
+.flash-import-warn {
+    margin: 12px 0 0;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+}
+
+.flash-import-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.flash-import-error {
+    margin-bottom: 12px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 1px solid color-mix(in srgb, var(--quiz-wrong) 45%, var(--line));
+    background: color-mix(in srgb, var(--quiz-wrong) 8%, var(--card));
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--quiz-wrong);
+    overflow-wrap: anywhere;
+}
+
+.flash-import-error p {
+    margin: 0;
+}
+
+.flash-import-error .flash-import-error-hint {
+    margin-top: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-soft);
+}
+
+/* lencana audio/gambar di kartu deck impor */
+.flash-deck-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.flash-deck-badge {
+    padding: 2px 9px;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--indigo) 25%, var(--line));
+    background: color-mix(in srgb, var(--indigo) 8%, var(--card));
+    font-size: 11.5px;
+    font-weight: 700;
+}
+
+/* ---------- audio & gambar di kartu impor ---------- */
+.fc-media-audio {
+    transition: transform .15s ease, border-color .15s ease, background .15s ease;
+}
+
+.fc-media-audio:hover {
+    transform: scale(1.08);
+}
+
+.fc-media-audio:focus-visible {
+    outline: 2px solid var(--indigo);
+    outline-offset: 2px;
+}
+
+.fc-media-audio.is-playing {
+    border-color: var(--indigo);
+    background: color-mix(in srgb, var(--indigo) 16%, var(--card));
+    animation: fc-audio-pulse 1.2s ease-out infinite;
+}
+
+@keyframes fc-audio-pulse {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--indigo) 45%, transparent); }
+    100% { box-shadow: 0 0 0 10px transparent; }
+}
+
+.fc-media-img {
+    cursor: zoom-in;
+    border: 1px solid var(--line);
+    background: var(--card);
+    box-shadow: 0 2px 10px var(--shadow-soft);
+}
+
+.fc-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: rgba(10, 14, 28, 0.84);
+    cursor: zoom-out;
+}
+
+.fc-lightbox-img {
+    max-width: min(92vw, 1100px);
+    max-height: 86vh;
+    object-fit: contain;
+    border-radius: 14px;
+    background: var(--card);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.fc-lightbox-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.fc-lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.28);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fc-media-audio.is-playing {
+        animation: none;
+    }
+
+    .flash-dropzone,
+    .fc-media-audio {
+        transition: none;
+    }
 }
 
 /* ---------- layar belajar ---------- */
@@ -6463,5 +6733,448 @@ button,
 
     .audio-help-foot {
         padding: 10px 16px calc(14px + env(safe-area-inset-bottom));
+    }
+}
+
+
+/* ---------- pengaturan efek suara ---------- */
+.sfx-volume-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.sfx-volume-slider {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 6px;
+    accent-color: var(--indigo);
+    cursor: pointer;
+}
+
+.sfx-volume-slider:disabled,
+.audio-help-link:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.sfx-volume-val {
+    flex: 0 0 auto;
+    min-width: 40px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-soft);
+}
+
+
+/* ---- dark mode: kartu penjelasan (romaji / kanji / catatan) ----
+   Sebelumnya latarnya tetap putih-kebiruan sementara teksnya (var(--ink))
+   berubah terang di dark mode → hampir tidak terbaca. */
+[data-theme="dark"] #screen-quiz .quiz-note-card {
+    background: linear-gradient(
+        160deg,
+        rgba(38, 50, 116, 0.82),
+        rgba(18, 24, 70, 0.88)
+    );
+    border: 1px solid rgba(150, 170, 255, 0.32);
+    box-shadow: 0 10px 26px rgba(3, 6, 28, 0.5);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    color: #e6ebff;
+}
+
+[data-theme="dark"] #screen-quiz .quiz-note-sparkle {
+    color: #9fb2ff;
+}
+
+[data-theme="dark"] #screen-quiz .quiz-note-avatar {
+    background: #151c52;
+    border-color: rgba(200, 212, 255, 0.85);
+    box-shadow: 0 4px 12px rgba(3, 6, 28, 0.5);
+}
+
+[data-theme="dark"] #screen-quiz .quiz-note-icon {
+    background: rgba(125, 150, 255, 0.22);
+    color: #b9c6ff;
+}
+
+[data-theme="dark"] #screen-quiz .quiz-note-row-note .quiz-note-icon {
+    background: rgba(255, 200, 90, 0.2);
+    color: #ffd47a;
+}
+
+[data-theme="dark"] #screen-quiz .quiz-note-label {
+    color: #7fd6ff;
+}
+
+[data-theme="dark"] #screen-quiz .quiz-note-colon {
+    color: #8e9cd8;
+}
+
+[data-theme="dark"] #screen-quiz .quiz-note-value {
+    color: #f3f5ff;
+}
+
+[data-theme="dark"] #screen-quiz .quiz-note-row-note .quiz-note-value {
+    color: #cdd5fa;
+}
+
+
+/* ---- dark mode: warna Baru / Belajar / Ulang dibuat lebih redup ----
+   Sebelumnya memakai biru, merah, dan hijau penuh yang terlalu menyala di
+   latar gelap. Sekarang berupa tinta pastel dengan latar tipis. */
+[data-theme="dark"] .fds-num.fds-new {
+    background: rgba(98, 160, 205, 0.2);
+    color: #9ccbe9;
+    box-shadow: inset 0 0 0 1px rgba(98, 160, 205, 0.32);
+}
+
+[data-theme="dark"] .fds-num.fds-learn {
+    background: rgba(214, 112, 116, 0.2);
+    color: #e5a3a6;
+    box-shadow: inset 0 0 0 1px rgba(214, 112, 116, 0.32);
+}
+
+[data-theme="dark"] .fds-num.fds-due {
+    background: rgba(104, 184, 140, 0.2);
+    color: #9fd6b8;
+    box-shadow: inset 0 0 0 1px rgba(104, 184, 140, 0.32);
+}
+
+[data-theme="dark"] .flash-queue-counts .fqc-new {
+    color: #9ccbe9;
+}
+
+[data-theme="dark"] .flash-queue-counts .fqc-learn {
+    color: #e5a3a6;
+}
+
+[data-theme="dark"] .flash-queue-counts .fqc-review {
+    color: #9fd6b8;
+}
+
+[data-theme="dark"] .flash-queue-counts .fqc-item.active:nth-child(1) {
+    border-color: rgba(156, 203, 233, 0.6);
+}
+
+[data-theme="dark"] .flash-queue-counts .fqc-item.active:nth-child(2) {
+    border-color: rgba(229, 163, 166, 0.6);
+}
+
+[data-theme="dark"] .flash-queue-counts .fqc-item.active:nth-child(3) {
+    border-color: rgba(159, 214, 184, 0.6);
+}
+
+[data-theme="dark"] .flash-cat-chip {
+    color: #eef3fb;
+    box-shadow: none;
+}
+
+[data-theme="dark"] .flash-cat-new {
+    background: #3b6f93;
+}
+
+[data-theme="dark"] .flash-cat-learn {
+    background: #9a4f55;
+}
+
+[data-theme="dark"] .flash-cat-due {
+    background: #3f7a5e;
+}
+
+[data-theme="dark"] .flash-deck-caughtup {
+    background: rgba(104, 184, 140, 0.12);
+    border-color: rgba(104, 184, 140, 0.3);
+    color: #9fd6b8;
+}
+
+/* ---------- navigasi deck flashcard (tab Kotoba / Kanji / Impor) ---------- */
+.flash-kind-tabs {
+    margin-top: 18px;
+}
+
+.flash-kind-tabs .source-switch-seg {
+    display: flex;
+    width: 100%;
+    max-width: 420px;
+}
+
+.flash-kind-tabs .source-pill {
+    flex: 1;
+    padding: 8px 14px;
+    font-size: 13px;
+}
+
+.flash-picker-list {
+    margin-top: 16px;
+}
+
+/* teks utama kartu flashcard selalu 1 baris; ukurannya dipas-kan lewat JS
+   (fitOneLine di FlashcardStudy) kalau katanya panjang */
+.fc-kana,
+.fc-kanji-front,
+.fc-kanji-char {
+    white-space: nowrap;
+}
+
+/* ---------- layar kartu habis / menunggu ---------- */
+/* di layar belajar (1 layar penuh) blok ini mengisi sisa tinggi & berada di
+   tengah; kalau layar sangat pendek, scroll di dalamnya (tidak terpotong) */
+#screen-flashcard .flash-done-wrap {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    overflow-y: auto;
+    padding: 4px 2px 10px;
+}
+
+.flash-done-wrap .flash-done {
+    margin: auto;
+    width: 100%;
+    max-width: 440px;
+    padding: 30px 20px 22px;
+    gap: 12px;
+}
+
+.flash-done-wrap .flash-done::before {
+    content: none;
+}
+
+.flash-done-badge {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--moss);
+    background: color-mix(in srgb, var(--moss) 16%, var(--card));
+    border: 1px solid color-mix(in srgb, var(--moss) 32%, var(--line));
+    box-shadow:
+        0 0 0 8px color-mix(in srgb, var(--moss) 8%, transparent),
+        0 10px 24px color-mix(in srgb, var(--moss) 22%, transparent);
+    animation: flash-done-pop .5s cubic-bezier(.2, 1.4, .4, 1) both;
+}
+
+.flash-done--wait .flash-done-badge {
+    color: var(--indigo);
+    background: color-mix(in srgb, var(--indigo) 14%, var(--card));
+    border-color: color-mix(in srgb, var(--indigo) 30%, var(--line));
+    box-shadow:
+        0 0 0 8px color-mix(in srgb, var(--indigo) 8%, transparent),
+        0 10px 24px color-mix(in srgb, var(--indigo) 20%, transparent);
+}
+
+@keyframes flash-done-pop {
+    from { transform: scale(.6); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .flash-done-badge { animation: none; }
+}
+
+.flash-done-deck {
+    max-width: 100%;
+    margin: 0;
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--indigo) 8%, var(--card));
+    color: var(--ink-soft);
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.flash-done-wrap .flash-done-title {
+    font-size: 22px;
+    line-height: 1.25;
+}
+
+.flash-done-wrap .flash-done-sub {
+    margin: 0;
+}
+
+.flash-done-total {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.flash-done-total-num {
+    font-size: 44px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--indigo);
+    font-variant-numeric: tabular-nums;
+}
+
+.flash-done-total-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+}
+
+.flash-done-tally {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    width: 100%;
+}
+
+.flash-done-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 8px 4px;
+    border-radius: 14px;
+    border: 1px solid var(--chip-c, var(--line));
+    background: color-mix(in srgb, var(--chip-c, var(--line)) 10%, var(--card));
+}
+
+.flash-done-chip b {
+    font-size: 18px;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    color: var(--chip-c, var(--ink));
+}
+
+.flash-done-chip i {
+    font-style: normal;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink-soft);
+}
+
+.flash-done-chip--again { --chip-c: var(--quiz-wrong); }
+.flash-done-chip--hard { --chip-c: var(--gold); }
+.flash-done-chip--good { --chip-c: var(--indigo); }
+.flash-done-chip--easy { --chip-c: var(--moss); }
+
+.flash-done-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin-top: 6px;
+}
+
+.flash-done-actions button {
+    width: 100%;
+    max-width: none;
+}
+
+/* ---------- teks kartu deck impor (.apkg) ---------- */
+.fc-custom-text {
+    width: 100%;
+}
+
+.fc-custom-front {
+    font-family: var(--kana-font);
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--ink);
+    text-shadow: 0 2px 14px color-mix(in srgb, var(--indigo) 18%, transparent);
+}
+
+.fc-custom-front.fc-size-xl { font-size: clamp(44px, 12vw, 68px); color: var(--indigo); }
+.fc-custom-front.fc-size-lg { font-size: clamp(34px, 9vw, 48px); color: var(--indigo); }
+.fc-custom-front.fc-size-md { font-size: clamp(24px, 6vw, 32px); }
+.fc-custom-front.fc-size-sm { font-size: clamp(18px, 4.5vw, 22px); font-weight: 600; line-height: 1.5; }
+
+.fc-custom-back {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+
+.fc-custom-block {
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.fc-custom-block + .fc-custom-block {
+    padding-top: 14px;
+    border-top: 1px solid color-mix(in srgb, var(--indigo) 14%, var(--line));
+    width: 70%;
+}
+
+.fc-custom-lead {
+    font-family: var(--kana-font);
+    font-size: clamp(26px, 7vw, 36px);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--indigo);
+}
+
+.flash-deck-stale {
+    border-color: color-mix(in srgb, var(--gold) 55%, var(--line));
+    background: color-mix(in srgb, var(--gold) 14%, var(--card));
+    white-space: normal;
+}
+
+/* ---------- meter penyimpanan di halaman impor ---------- */
+.flash-storage {
+    margin-top: 16px;
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--card);
+    display: grid;
+    gap: 6px;
+}
+
+.flash-storage-title {
+    font-size: 12.5px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+}
+
+.flash-storage-bar {
+    height: 8px;
+    border-radius: 999px;
+    background: var(--paper-dark);
+    overflow: hidden;
+}
+
+.flash-storage-bar > span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--indigo);
+    transition: width .4s ease;
+}
+
+.flash-storage-bar.is-low > span {
+    background: var(--quiz-wrong);
+}
+
+.flash-storage-text {
+    font-size: 12px;
+    color: var(--ink-soft);
+}
+
+.flash-storage-warn {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--quiz-wrong);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .flash-storage-bar > span {
+        transition: none;
     }
 }
