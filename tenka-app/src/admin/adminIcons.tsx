@@ -308,16 +308,6 @@ export function IconFilter(props: IconProps) {
   );
 }
 
-export function IconDotsVertical(props: IconProps) {
-  return (
-    <svg {...base} {...props}>
-      <circle cx="12" cy="5.5" r="1.7" fill="currentColor" />
-      <circle cx="12" cy="12" r="1.7" fill="currentColor" />
-      <circle cx="12" cy="18.5" r="1.7" fill="currentColor" />
-    </svg>
-  );
-}
-
 export function IconCalendar(props: IconProps) {
   return (
     <svg {...base} {...props}>
@@ -350,14 +340,6 @@ export function IconUser(props: IconProps) {
     <svg {...base} {...props}>
       <circle cx="12" cy="8" r="3.6" stroke="currentColor" strokeWidth="2" />
       <path d="M4.8 20c0-3.6 3.2-6 7.2-6s7.2 2.4 7.2 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-export function IconCheck(props: IconProps) {
-  return (
-    <svg {...base} {...props}>
-      <path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

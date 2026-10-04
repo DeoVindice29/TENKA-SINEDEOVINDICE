@@ -17,7 +17,6 @@ import { registerQuizView } from "@/lib/quizModes";
  */
 
 export type KotobaLevel = (typeof TIER_LEVELS)[number];
-export type KotobaSource = "local" | KotobaLevel;
 export const KOTOBA_LEVELS = TIER_LEVELS;
 
 type Lang = "en" | "id";

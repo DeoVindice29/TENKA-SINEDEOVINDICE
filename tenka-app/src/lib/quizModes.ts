@@ -216,7 +216,3 @@ onQuizLangChange(() => {
   registeredViews.forEach((view) => registerQuizView(view));
 });
 
-/** Mode kuis dari Supabase selalu berawalan "sb-" (data bawaan tidak pernah). */
-export function isSupabaseQuizMode(mode: string | null | undefined): boolean {
-  return !!mode && mode.startsWith("sb-");
-}

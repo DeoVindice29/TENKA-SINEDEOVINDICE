@@ -23,10 +23,6 @@ function readStored(): Lang {
 let current: Lang = readStored();
 const listeners = new Set<() => void>();
 
-export function getQuizLang(): Lang {
-  return current;
-}
-
 export function setQuizLang(next: Lang): void {
   if (next === current) return;
   current = next;

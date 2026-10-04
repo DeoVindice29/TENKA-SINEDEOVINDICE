@@ -82,11 +82,6 @@ export async function fetchChapterTitle(
   return fetchSectionTitle(kind, tier, chapter, CHAPTER_TITLE_SUB_TIER);
 }
 
-/** Ambil semua nama Chapter buat satu tier — dipakai N4Screen buat header "Chapter N — Nama". */
-export function chapterTitlesOf(titles: SectionTitleRow[]): SectionTitleRow[] {
-  return titles.filter((row) => row.sub_tier === CHAPTER_TITLE_SUB_TIER);
-}
-
 /** Simpan/update nama Chapter (baris sub_tier = 0), sama aturannya kayak upsertSectionTitle. */
 export async function upsertChapterTitle(
   kind: TreeKind,

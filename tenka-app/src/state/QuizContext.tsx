@@ -18,7 +18,6 @@ import {
   buildPractice,
   isJlptScript,
   isPracticeType,
-  jlptMaxWrong,
   jlptPassMark,
   stripMarks,
 } from "@/data/jlptConquest";
@@ -147,23 +146,8 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
       let speedrunFailed = state.speedrunFailed;
 
       if (!isCorrect) {
-        if (state.conquest) {
-          const b = state.conquestPhaseBoundaries;
-          if (state.script && isJlptScript(state.script) && b) {
-            // Ujian ala JLPT: tidak gagal di satu salah, tapi begitu jumlah
-            // salah di tier ini melewati batas (lulus = min. 80% benar per
-            // tier), nilai tier ini sudah pasti tidak akan cukup.
-            const start = b[state.conquestPhaseIndex];
-            const end = b[state.conquestPhaseIndex + 1];
-            let wrongInTier = 0;
-            for (let i = start; i <= state.index; i++) {
-              if (nextResults[i] === false) wrongInTier++;
-            }
-            if (wrongInTier > jlptMaxWrong(end - start)) conquestFailed = true;
-          } else {
-            conquestFailed = true;
-          }
-        }
+        // Penaklukan ala JLPT dinilai per Tier lewat SUBMIT_TIER, bukan di sini
+        if (state.conquest) conquestFailed = true;
         if (state.speedrun) {
           speedrunMistakes += 1;
           if (speedrunMistakes > 3) speedrunFailed = true;

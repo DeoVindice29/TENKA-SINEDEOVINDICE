@@ -51,7 +51,6 @@ import {
   IconClock,
   IconCode,
   IconBook,
-  IconChart,
   IconChat,
   IconChevronDown,
   IconClose,

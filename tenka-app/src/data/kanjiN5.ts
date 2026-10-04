@@ -163,14 +163,6 @@ export const KANJI_N5_CHAPTERS: readonly (readonly KanjiEntry[])[] = [
   KANJI_N5_CH8,
   KANJI_N5_CH9,
 ];
-// reading lookup used only in Learn mode + as a quiz hint
-export const KANJI_READING: Record<string, string> = {};
-KANJI_N5_CHAPTERS.forEach((ch) =>
-  ch.forEach(([c, r]) => {
-    KANJI_READING[c] = r;
-  }),
-);
-
 export const KANJI_TIER_KEYS = ["tier1", "tier2", "tier3", "tier4", "tier5", "tier6", "tier7", "tier8", "tier9"] as const;
 
 export const KANJI_LEVEL_META = [

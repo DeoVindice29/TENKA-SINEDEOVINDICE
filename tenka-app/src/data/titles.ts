@@ -40,12 +40,6 @@ export const LEVEL_CONQUEST_KEYS: Record<string, string> = {
   N1: "level_n1",
 };
 
-/** Tandai satu level (N4-N1) sebagai sudah ditaklukkan. */
-export function earnLevelConquest(level: string): boolean {
-  const key = LEVEL_CONQUEST_KEYS[level];
-  return key ? earnConquestTitle(key) : false;
-}
-
 // Kunci urutan Penaklukan (harus takluk aksara sebelumnya dulu).
 export const CONQUEST_LOCK_ENABLED = true;
 

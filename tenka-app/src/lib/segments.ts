@@ -2,31 +2,6 @@ import type { SegmentPair } from "@/lib/contentTypes";
 import { KOTOBA_N5_CHAPTERS } from "@/data/kotobaN5";
 import { BUNPO_N5_CHAPTERS } from "@/data/bunpoN5";
 
-/**
- * Format input manual di form admin: satu baris per kata, dipisah "|".
- *   わたし|watashi
- *   は|wa
- *   がくせい|gakusei
- * Baris yang gak punya "|" atau kosong, dilewatin aja (gak bikin error),
- * biar gak ribet — sesuai kesepakatan: input manual apa adanya, gak usah
- * auto-split dari kalimat.
- */
-export function parseSegmentsInput(text: string): SegmentPair[] {
-  return text
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((line) => {
-      const idx = line.indexOf("|");
-      if (idx === -1) return null;
-      const kana = line.slice(0, idx).trim();
-      const romaji = line.slice(idx + 1).trim();
-      if (!kana || !romaji) return null;
-      return [kana, romaji] as SegmentPair;
-    })
-    .filter((seg): seg is SegmentPair => seg !== null);
-}
-
 export function segmentsToInput(segments: SegmentPair[] | null | undefined): string {
   if (!segments || segments.length === 0) return "";
   return segments.map(([kana, romaji]) => `${kana}|${romaji}`).join("\n");
@@ -78,17 +53,6 @@ const KANA: Record<string, string> = {
 
 // partikel yang bacaannya beda waktu dipakai sebagai partikel (bukan bagian kata)
 const PARTICLE_READING: Record<string, string> = { は: "wa", へ: "e", を: "o" };
-
-// akhiran umum yang biasa "nempel" di ujung kata dalam kalimat contoh, dicek
-// dari yang paling panjang biar gak salah potong (mis. "ではありません" harus
-// ke-detect duluan sebelum "は" sendirian).
-const DETACHABLE_SUFFIXES = [
-  "ではありません", "じゃありません", "ませんでした",
-  "でした", "ません", "ました", "じゃない", "ではない",
-  "だった", "です", "ます", "だ",
-  "から", "まで", "より", "とは", "には", "では",
-  "は", "が", "を", "に", "で", "と", "も", "や", "の", "へ", "ね", "よ", "か",
-];
 
 // Gabungan partikel yang bacaannya beda dari mora-per-mora (は dibaca "wa").
 const COMPOUND_READING: Record<string, string> = {

@@ -15,6 +15,7 @@ import AdminQuizTools from "@/components/Quiz/AdminQuizTools";
 import ConquestSheet from "@/components/Conquest/ConquestSheet";
 import { isJlptScript, practiceTypeKeyOfQueueType } from "@/data/jlptConquest";
 import { playSfx } from "@/lib/sfx";
+import { useKeyboardOpen } from "@/hooks/useKeyboardOpen";
 
 function fmtTime(ms: number): string {
   const totalCs = Math.floor(ms / 10);
@@ -53,6 +54,20 @@ function QuizScreenInner() {
     );
   });
   const [speedrunElapsed, setSpeedrunElapsed] = useState(0);
+
+  // Keyboard HP terbuka (mode ketik): layar dipadatkan, dan kartu soal
+  // digulung ke atas area yang terlihat tiap ganti soal / habis menjawab,
+  // jadi user tidak perlu menggulung manual lagi.
+  const kbOpen = useKeyboardOpen();
+  const cardRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!kbOpen) return;
+    const id = window.setTimeout(
+      () => cardRef.current?.scrollIntoView({ block: "start" }),
+      80,
+    );
+    return () => window.clearTimeout(id);
+  }, [kbOpen, state.index, state.answered]);
 
   // soal sudah maju (mis. admin skip Tier/Chapter dari layar cerita awal) →
   // jangan tampilkan lagi cerita pembuka
@@ -271,13 +286,13 @@ function QuizScreenInner() {
   return (
     <section
       id="screen-quiz"
-      className={
-        state.conquest
-          ? "conquest-active"
-          : state.speedrun
-            ? "speedrun-active"
-            : ""
-      }
+      className={[
+        state.conquest ? "conquest-active" : "",
+        state.speedrun ? "speedrun-active" : "",
+        kbOpen ? "kb-open" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
     >
       <div className="quiz-topbar">
         <button
@@ -331,7 +346,7 @@ function QuizScreenInner() {
       {isSheet ? (
         <ConquestSheet key={state.conquestPhaseIndex} />
       ) : (
-        <div className="quiz-card">
+        <div className="quiz-card" ref={cardRef}>
           {state.speedrun && (
             <div className="quiz-substatus-row">
               <div className="speedrun-timer">⏱️ {fmtTime(speedrunElapsed)}</div>

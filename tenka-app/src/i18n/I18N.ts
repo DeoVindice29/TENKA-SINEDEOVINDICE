@@ -38,22 +38,11 @@ export const I18N: Record<string, I18NEntry> = {
   "nav.practice": { en: "Practice", id: "Latihan Soal" },
   "nav.statistik": { en: "Statistics", id: "Statistik" },
   "nav.settings": { en: "Settings", id: "Pengaturan" },
-  "nav.tagline": { en: "Learn Japanese", id: "天の学び" },
-  "statistik.title": { en: "Statistics", id: "Statistik" },
-  "statistik.comingSoonTitle": {
-    en: "Coming soon",
-    id: "Segera hadir",
-  },
-  "statistik.comingSoonDesc": {
-    en: "Your progress stats — streaks, accuracy, and time studied — will show up here once this feature is ready.",
-    id: "Statistik progres kamu — streak, akurasi, dan waktu belajar — akan muncul di sini setelah fitur ini siap.",
-  },
   "aria.openSettings": { en: "Open settings", id: "Buka pengaturan" },
   "aria.closeSettings": { en: "Close settings", id: "Tutup pengaturan" },
   "aria.changePhoto": { en: "Change profile image", id: "Ganti gambar profil" },
   "aria.viewPhoto": { en: "View profile photo", id: "Lihat foto profil" },
   "aria.closeZoom": { en: "Close photo", id: "Tutup foto" },
-  "aria.setNickname": { en: "Set your nickname", id: "Atur nickname kamu" },
   "aria.chooseLanguage": { en: "Choose language", id: "Pilih bahasa" },
   "aria.chooseBorderStyle": {
     en: "Choose theme color",
@@ -111,11 +100,6 @@ export const I18N: Record<string, I18NEntry> = {
     en: "Reset custom theme colors to the rainbow defaults",
     id: "Reset warna tema kustom ke warna rainbow default",
   },
-  "aria.chooseScript": { en: "Choose a script", id: "Pilih aksara" },
-  "aria.chooseScriptStudy": {
-    en: "Choose a script to study",
-    id: "Pilih aksara untuk belajar",
-  },
   "profile.addNickname": { en: "+ Add nickname", id: "+ Tambah nickname" },
   "profile.joinedOn": { en: "Joined {date}", id: "Bergabung {date}" },
   "profile.viewProgress": { en: "View progress", id: "Lihat progres" },
@@ -135,10 +119,6 @@ export const I18N: Record<string, I18NEntry> = {
   "auth.tagline": {
     en: "Master Japanese, Hold the World",
     id: "Kuasai Bahasa Jepang, Genggam Dunia",
-  },
-  "auth.loginPrompt": {
-    en: "Sign in to save your progress and profile.",
-    id: "Masuk dulu buat nyimpen progress dan profile kamu.",
   },
   "auth.howSignupWorks": {
     en: "How does signup work?",
@@ -194,12 +174,6 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Ingat saya di perangkat ini",
   },
   "auth.loginButton": { en: "Log in to 天下", id: "Masuk ke 天下" },
-  "auth.loginButtonLoading": { en: "Logging in…", id: "Sedang masuk…" },
-  "auth.signupNameLabel": {
-    en: "Full Name / Username",
-    id: "Nama Lengkap / Username",
-  },
-  "auth.namePlaceholder": { en: "e.g. Mike Miller", id: "Contoh: Mike Miller" },
   "auth.signupEmailLabel": { en: "Activation Email", id: "Email Aktivasi" },
   "auth.signupEmailPlaceholder": {
     en: "Mike@domain.com",
@@ -213,11 +187,6 @@ export const I18N: Record<string, I18NEntry> = {
   "auth.signupButton": {
     en: "Create Account",
     id: "Buat Akun",
-  },
-  "auth.signupButtonLoading": { en: "Creating account…", id: "Membuat akun…" },
-  "auth.orContinueWith": {
-    en: "or continue with",
-    id: "atau lanjutkan dengan",
   },
   "auth.backToOptions": { en: "Back to other options", id: "Kembali ke pilihan lain" },
   "auth.or": { en: "or", id: "atau" },
@@ -241,7 +210,6 @@ export const I18N: Record<string, I18NEntry> = {
     en: "Password is required",
     id: "Kata sandi wajib diisi",
   },
-  "auth.nameRequired": { en: "Name is required", id: "Nama wajib diisi" },
   "auth.passwordMinLength": {
     en: "Password must be at least 8 characters",
     id: "Kata sandi minimal 8 karakter",
@@ -266,7 +234,6 @@ export const I18N: Record<string, I18NEntry> = {
     en: "Account created — check {email} to confirm it.",
     id: "Akun dibuat — cek {email} buat konfirmasi.",
   },
-  "auth.toastErrorTitle": { en: "Something went wrong", id: "Ada yang salah" },
   "auth.toastForgotTitle": { en: "Forgot Password", id: "Lupa Kata Sandi" },
   "auth.toastForgotMessage": {
     en: "A recovery link has been sent to your email.",
@@ -407,10 +374,6 @@ export const I18N: Record<string, I18NEntry> = {
     en: "Enter a valid email address",
     id: "Masukin alamat email yang valid",
   },
-  "auth.passwordTooShortInline": {
-    en: "At least 8 characters",
-    id: "Minimal 8 karakter",
-  },
   "auth.signupFixFields": {
     en: "Fix the highlighted fields to continue.",
     id: "Perbaiki kolom yang ditandai dulu buat lanjut.",
@@ -467,10 +430,6 @@ export const I18N: Record<string, I18NEntry> = {
   "start.studyFirst": {
     en: "Study First",
     id: "Belajar Dulu",
-  },
-  "start.studyScriptFirst": {
-    en: "Study {label} First",
-    id: "Belajar {label} Dulu",
   },
   "start.startCount": {
     en: "Start — {title} ({count} Questions)",
@@ -575,10 +534,6 @@ export const I18N: Record<string, I18NEntry> = {
     en: "Memorize the shape and reading of each character before starting a Conquest. Choose a script below.",
     id: "Hafalkan dulu bentuk dan cara baca tiap karakter sebelum mulai Conquest. Pilih aksaranya di bawah.",
   },
-  "learn.readyStart": {
-    en: "Ready — Start Conquest",
-    id: "Sudah Siap — Mulai Conquest",
-  },
   "learn.characters": { en: "characters", id: "karakter" },
   "learn.words": { en: "words", id: "kata" },
   "learn.patterns": { en: "patterns", id: "pola" },
@@ -593,10 +548,6 @@ export const I18N: Record<string, I18NEntry> = {
   "learn.noResults": {
     en: 'No matches for "{query}". Try a different word.',
     id: 'Tidak ada yang cocok dengan "{query}". Coba kata lain.',
-  },
-  "learn.studyAsFlashcards": {
-    en: "Study This as Flashcards",
-    id: "Pelajari Ini sebagai Flashcard",
   },
   "levels.groupChapter": { en: "Chapter {n}", id: "Chapter {n}" },
   "levels.subTiers": { en: "sub chapters", id: "sub chapter" },
@@ -620,12 +571,7 @@ export const I18N: Record<string, I18NEntry> = {
 
   "source.label": { en: "Organize by", id: "Susun berdasarkan" },
   "source.local": { en: "Topic", id: "Topik" },
-  "source.minna": { en: "Minna no Nihongo", id: "Minna no Nihongo" },
   "source.level": { en: "Level", id: "Level" },
-  "source.topicOnlyN5": {
-    en: "Topic view is only available for N5.",
-    id: "Tampilan Topic hanya tersedia untuk N5.",
-  },
   "source.lockedHint": {
     en: "Conquer N5 to unlock N4, conquer N4 to unlock N3, and so on.",
     id: "Taklukkan N5 untuk membuka N4, taklukkan N4 untuk membuka N3, dan seterusnya.",
@@ -640,7 +586,6 @@ export const I18N: Record<string, I18NEntry> = {
   },
   "source.loadError": { en: "Failed to load data", id: "Gagal memuat data" },
   "source.retry": { en: "Try again", id: "Coba lagi" },
-  "loading.generic": { en: "Loading…", id: "Memuat…" },
   "loading.auth": {
     en: "Checking your session…",
     id: "Mengecek sesi kamu…",
@@ -689,14 +634,6 @@ export const I18N: Record<string, I18NEntry> = {
   "common.backArmed": {
     en: "Sure? Click again to cancel",
     id: "Yakin? Klik lagi untuk batalkan",
-  },
-  "aria.openFlashcards": {
-    en: "Open Flashcards",
-    id: "Buka Flashcard",
-  },
-  "aria.openPractice": {
-    en: "Open Question Practice",
-    id: "Buka Latihan Soal",
   },
   "practice.eyebrow": { en: "question types", id: "tipe soal" },
   "practice.title": { en: "Question Practice", id: "Latihan Soal" },
@@ -909,14 +846,6 @@ export const I18N: Record<string, I18NEntry> = {
   },
   "theme.light": { en: "Light Mode", id: "Mode Terang" },
   "theme.dark": { en: "Dark Mode", id: "Mode Gelap" },
-  "aria.switchToLight": {
-    en: "Switch to light mode",
-    id: "Ganti ke mode terang",
-  },
-  "aria.switchToDark": {
-    en: "Switch to dark mode",
-    id: "Ganti ke mode gelap",
-  },
   "borderStyle.default": { en: "Default", id: "Default" },
   "borderStyle.custom": { en: "Custom", id: "Kustom" },
   "borderStyle.customAccent": { en: "Accent", id: "Aksen" },
@@ -954,7 +883,6 @@ export const I18N: Record<string, I18NEntry> = {
   },
 
   "results.correct": { en: "correct", id: "tepat" },
-  "results.accuracy": { en: "Accuracy {acc}%", id: "Akurasi {acc}%" },
   "results.retrySet": { en: "Retry This Set", id: "Ulangi Set Ini" },
 
   "quiz.timeUpAnswerWas": {
@@ -1017,7 +945,6 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Ada ide? Nemu bug? Kasih tau kami!",
   },
   "settings.appearance.display": { en: "Display", id: "Tampilan" },
-  "settings.appearance.font": { en: "Font", id: "Font" },
   "settings.appearance.customColors": {
     en: "Customize colors",
     id: "Kustomisasi warna",
@@ -1062,12 +989,6 @@ export const I18N: Record<string, I18NEntry> = {
   "missions.open": { en: "Rank conquests", id: "Conquest kenaikan pangkat" },
   "missions.button": { en: "Conquests", id: "Conquest" },
   "missions.title": { en: "Rank Conquests", id: "Conquest Pangkat" },
-  "missions.sub": {
-    en: "Finish these conquests to climb the noble ranks.",
-    id: "Selesaikan conquest ini untuk naik pangkat bangsawan.",
-  },
-  "missions.current": { en: "Current", id: "Sekarang" },
-  "missions.next": { en: "Next", id: "Berikutnya" },
   "missions.progress": {
     en: "{done} of {total} conquests done",
     id: "{done} dari {total} conquest selesai",
@@ -1076,8 +997,6 @@ export const I18N: Record<string, I18NEntry> = {
     en: "Conquer all of {label}",
     id: "Taklukkan seluruh {label}",
   },
-  "missions.unlocks": { en: "Unlocks {rank}", id: "Membuka {rank}" },
-  "missions.done": { en: "Done", id: "Selesai" },
   "missions.go": {
     en: "Begin",
     id: "Mulai",
@@ -1091,7 +1010,6 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Conquest N4 – N1 menanti di negeri seberang.",
   },
   "missions.close": { en: "Close", id: "Tutup" },
-  "missions.badge": { en: "LEARN", id: "BELAJAR" },
   "missions.steps": { en: "Path to {rank}", id: "Jalan Menuju {rank}" },
   "missions.stepsSub": {
     en: "Complete these conquests to earn your next rank.",
@@ -1110,26 +1028,6 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Setiap conquest membawamu lebih dekat ke tahta.",
   },
 
-  "guide.msg.start": {
-    en: "Let's start today's conquest together — you've got this!",
-    id: "Ayo kita mulai conquest hari ini bareng-bareng — kamu pasti bisa!",
-  },
-  "guide.msg.progress": {
-    en: "You're on the right path, keep up the spirit!",
-    id: "Kamu sudah berada di jalan yang tepat, terus semangat!",
-  },
-  "guide.msg.almost": {
-    en: "Almost there — just one more step to finish this conquest!",
-    id: "Sedikit lagi — satu langkah lagi buat menyelesaikan conquest ini!",
-  },
-  "guide.msg.done": {
-    en: "Amazing, conquest complete! Ready for the next one?",
-    id: "Keren, conquest selesai! Siap lanjut ke conquest berikutnya?",
-  },
-  "guide.msg.sub": {
-    en: "Every letter you learn is a step toward your goal.",
-    id: "Setiap huruf yang kamu pelajari adalah langkah menuju tujuanmu.",
-  },
   "guide.intro.0": {
     en: "Hiya, welcome to Tenka! 🎉",
     id: "Halo, selamat datang di Tenka! 🎉",
@@ -1273,37 +1171,7 @@ export const I18N: Record<string, I18NEntry> = {
     en: "N5 complete! Want to keep sharpening your skills? Head to Practice!",
     id: "N5 tuntas! Mau terus mengasah kemampuan? Ayo ke Practice!",
   },
-  "guide.tipsHeading": { en: "Tip of the Day", id: "Tips Hari Ini" },
-  "guide.tipsSource": {
-    en: "— A message from your companion",
-    id: "— Pesan dari temanmu",
-  },
-  "guide.tip.0": {
-    en: "「 Little by little, a little becomes a lot. 」",
-    id: "「 Sedikit demi sedikit, lama-lama jadi bukit. 」",
-  },
-  "guide.tip.1": {
-    en: "「 A journey of a thousand miles begins with a single step. 」",
-    id: "「 Perjalanan seribu mil dimulai dengan satu langkah. 」",
-  },
-  "guide.tip.2": {
-    en: "「 Review yesterday's letters before learning new ones. 」",
-    id: "「 Ulangi huruf kemarin sebelum belajar yang baru. 」",
-  },
-  "guide.tip.3": {
-    en: "「 Ten minutes a day beats one long session a week. 」",
-    id: "「 Sepuluh menit tiap hari lebih baik dari sekali seminggu. 」",
-  },
-  "guide.tip.4": {
-    en: "「 Mistakes are proof that you're actually trying. 」",
-    id: "「 Salah itu tanda kamu benar-benar sedang mencoba. 」",
-  },
-  "guide.tip.5": {
-    en: "「 Say it out loud — your ears learn too. 」",
-    id: "「 Ucapkan dengan suara — telingamu juga ikut belajar. 」",
-  },
 
-  "feedback.heading": { en: "Send Feedback", id: "Kirim Masukan" },
   "feedback.button": { en: "Send Feedback", id: "Kirim Masukan" },
   "feedback.placeholder": {
     en: "Got a suggestion, idea, or found a bug? Write it here...",
@@ -1312,10 +1180,6 @@ export const I18N: Record<string, I18NEntry> = {
   "feedback.subject": {
     en: "Feedback — Learning Japanese App",
     id: "Masukan — Learning Japanese App",
-  },
-  "feedback.bodyDefault": {
-    en: "Write your feedback here...",
-    id: "Tulis masukanmu di sini...",
   },
   "feedback.sending": { en: "Sending…", id: "Mengirim…" },
   "feedback.error": {
@@ -1423,10 +1287,6 @@ export const I18N: Record<string, I18NEntry> = {
     en: "Nicely done, {name}! Play again to get a perfect run.",
     id: "Kerja bagus, {name}! Main lagi untuk dapat nol salah.",
   },
-  "matchMode.doneSub": {
-    en: "{pairs} pairs · {mistakes} mistakes · {time}",
-    id: "{pairs} pasangan · {mistakes} kali salah · {time}",
-  },
 
   "flash.eyebrow": { en: "flashcard mode", id: "mode flashcard" },
   "flash.title": { en: "Flashcards", id: "Flashcard" },
@@ -1434,8 +1294,6 @@ export const I18N: Record<string, I18NEntry> = {
     en: "Anki-style flip cards with built-in spaced repetition. Pick a deck below, or import your own .apkg file.",
     id: "Kartu balik ala Anki dengan pengulangan berjarak bawaan. Pilih deck di bawah, atau impor file .apkg milikmu sendiri.",
   },
-  "flash.builtinHeading": { en: "Built-in Decks", id: "Deck Bawaan" },
-  "flash.myDecksHeading": { en: "My Imported Decks", id: "Deck Impor Saya" },
   "flash.tabKotoba": { en: "Kotoba", id: "Kotoba" },
   "flash.tabKanji": { en: "Kanji", id: "Kanji" },
   "flash.tabImported": { en: "Imported", id: "Impor" },
@@ -1458,10 +1316,6 @@ export const I18N: Record<string, I18NEntry> = {
   "flash.importHint": {
     en: "Your .apkg file is read entirely in your browser — nothing is uploaded anywhere. Audio and images are saved in this browser only. Tip: when exporting from Anki, tick “Support older Anki versions”.",
     id: "File .apkg kamu dibaca sepenuhnya di browser — tidak ada yang diunggah ke mana pun. Audio dan gambar disimpan hanya di browser ini. Tips: saat export dari Anki, centang “Support older Anki versions”.",
-  },
-  "flash.importMedia": {
-    en: "({count} audio/image files saved)",
-    id: "({count} file audio/gambar tersimpan)",
   },
   "flash.importDrop": {
     en: "Drop your .apkg deck here",
@@ -1526,7 +1380,6 @@ export const I18N: Record<string, I18NEntry> = {
     en: "Still failing? In Anki choose File → Export, tick “Support older Anki versions” and try again.",
     id: "Masih gagal? Di Anki pilih File → Export, centang “Support older Anki versions”, lalu coba lagi.",
   },
-  "flash.dueNow": { en: "due now", id: "jatuh tempo" },
   "flash.cards": { en: "cards", id: "kartu" },
   "flash.new": { en: "New", id: "Baru" },
   "flash.learn": { en: "Learn", id: "Belajar" },
@@ -1652,14 +1505,9 @@ export const I18N: Record<string, I18NEntry> = {
     en: "Test sound",
     id: "Coba suara",
   },
-  "flash.restart": { en: "Restart Deck", id: "Ulangi Deck" },
   "flash.doneTitle": {
     en: "Deck complete for now!",
     id: "Deck selesai untuk sekarang!",
-  },
-  "flash.doneSub": {
-    en: "You reviewed {count} card(s) from {label}.",
-    id: "Kamu sudah mengulang {count} kartu dari {label}.",
   },
   "flash.caughtUp": {
     en: "No cards to review right now. They'll come back when they're due.",
@@ -1693,8 +1541,6 @@ export const I18N: Record<string, I18NEntry> = {
   },
   "flash.chooseAnother": { en: "Choose Another Deck", id: "Pilih Deck Lain" },
 
-  "conquest.modeTitle": { en: "Conquer Mode", id: "Mode penaklukkan" },
-  "conquest.conquered": { en: "Conquered", id: "Ditaklukkan" },
   "conquest.cancelConquest": {
     en: "Cancel Conquest",
     id: "Batalkan penaklukkan",
@@ -1706,10 +1552,6 @@ export const I18N: Record<string, I18NEntry> = {
   "conquest.cardTitleWithLabel": {
     en: "Conquer {label}",
     id: "Taklukkan {label}",
-  },
-  "conquest.jlptRetryCardTitleWithLabel": {
-    en: "Retake the {label} Conquest",
-    id: "Ulangi Conquest {label}",
   },
   "conquest.goToPracticeCardTitle": {
     en: "Want to practice? Head to Practice",
@@ -1730,10 +1572,6 @@ export const I18N: Record<string, I18NEntry> = {
   "conquest.lockNote": {
     en: "🔒 Conquer {lockLabel} first before you can conquer {label}.",
     id: "🔒 Taklukkan {lockLabel} dulu sebelum bisa menaklukkan {label}.",
-  },
-  "conquest.modalTitleWithLabel": {
-    en: "⚔️ Conquer {label}",
-    id: "⚔️ Taklukkan {label}",
   },
   "conquestModal.confirm": {
     en: "Begin the Conquest",
@@ -1835,33 +1673,13 @@ export const I18N: Record<string, I18NEntry> = {
     en: "📝 Final tier",
     id: "📝 Tier terakhir",
   },
-  "conquestStory.jlptMeta": {
-    en: "{count} questions in this tier · 4 choices · at least {percent}% correct to pass ({need} of {count}).",
-    id: "{count} soal di tier ini · 4 pilihan · minimal {percent}% benar untuk lulus ({need} dari {count}).",
-  },
   "conquestStory.startThisTier": {
     en: "Enter This Tier",
     id: "Masuki Tier Ini",
   },
-  "conquestStory.startThisChapter": {
-    en: "Enter This Tier",
-    id: "Masuki Tier Ini",
-  },
-  "conquestStory.diffLabel": {
-    en: "🔥 type your own answer",
-    id: "🔥 ketik jawaban sendiri",
-  },
-  "conquestStory.meta": {
-    en: "{count} questions in this Tier · {diff} · one mistake and the whole conquest fails.",
-    id: "{count} soal di Tier ini · {diff} · satu kali salah, seluruh penaklukkan gagal.",
-  },
   "speedrun.cardTitleWithLabel": {
     en: "Speedrun {label}",
     id: "Speedrun {label}",
-  },
-  "speedrun.modalTitleWithLabel": {
-    en: "⚡ Speedrun {label}",
-    id: "⚡ Speedrun {label}",
   },
   "speedrun.descNoRecord": {
     en: "Race through all {count} {label} questions as fast as you can — no record yet.",
@@ -1906,26 +1724,8 @@ export const I18N: Record<string, I18NEntry> = {
     en: "⚔️ Try Again From Start",
     id: "⚔️ Coba Lagi dari Awal",
   },
-  "results.conquerAgain": { en: "⚔️ Conquer Again", id: "⚔️ Taklukkan Lagi" },
-  "results.goToPractice": { en: "🎯 Go to Practice", id: "🎯 Ke Latihan" },
   "results.speedrunAgain": { en: "⚡ Speedrun Again", id: "⚡ Speedrun Lagi" },
 
-  "results.bestStreak": {
-    en: " · best streak {n}",
-    id: " · beruntun terbaik {n}",
-  },
-  "results.greetConquestFail": {
-    en: "Keep going, {name}! 💪",
-    id: "Semangat, {name}! 💪",
-  },
-  "results.greetConquestSuccess": {
-    en: "Perfect, {name}! 🏆",
-    id: "Sempurna, {name}! 🏆",
-  },
-  "results.greetPerfect": {
-    en: "Perfect, {name}! 🎉",
-    id: "Sempurna, {name}! 🎉",
-  },
   "results.greetAlmost": {
     en: "Almost perfect, {name}! Just a bit more.",
     id: "Hampir sempurna, {name}! Sedikit lagi.",
@@ -1945,10 +1745,6 @@ export const I18N: Record<string, I18NEntry> = {
   "results.jlptFailBanner": {
     en: "💀 <b>Conquest Failed</b> — too many mistakes{phaseNote}. You need at least {percent}% correct in every tier of {label} — try again from the start!",
     id: "💀 <b>Penaklukkan Gagal</b> — kebanyakan salah{phaseNote}. Kamu perlu minimal {percent}% benar di setiap tier {label} — coba lagi dari awal!",
-  },
-  "results.greetConquestPassed": {
-    en: "You passed, {name}! 🏆",
-    id: "Lulus, {name}! 🏆",
   },
   "results.conquestFailPhaseNote": {
     en: " in {phase}",
@@ -1981,19 +1777,6 @@ export const I18N: Record<string, I18NEntry> = {
   "results.rankUpPlain": {
     en: "Your rank rose! You are now <b>{emoji} {title} ({subtitle})</b>",
     id: "Tingkatanmu naik! Sekarang kamu adalah <b>{emoji} {title} ({subtitle})</b>",
-  },
-  "results.speedrunTime": { en: "Time: {time}", id: "Waktu: {time}" },
-  "results.speedrunNewRecord": {
-    en: "⚡ <b>New Record!</b> You finished {label} in <b>{time}</b>.",
-    id: "⚡ <b>Rekor Baru!</b> Kamu menyelesaikan {label} dalam <b>{time}</b>.",
-  },
-  "results.speedrunFirstRecord": {
-    en: "⚡ <b>First record set!</b> You finished {label} in <b>{time}</b>.",
-    id: "⚡ <b>Rekor pertama tercatat!</b> Kamu menyelesaikan {label} dalam <b>{time}</b>.",
-  },
-  "results.speedrunNoRecord": {
-    en: "You finished {label} in <b>{time}</b> — your best is still {best}.",
-    id: "Kamu menyelesaikan {label} dalam <b>{time}</b> — rekor terbaikmu masih {best}.",
   },
   "results.speedrunFailBanner": {
     en: "💀 <b>Speedrun Failed</b> — too many mistakes (question {current} of {total}). Try again!",
@@ -2076,29 +1859,9 @@ export const I18N: Record<string, I18NEntry> = {
     id: "⚡ Speedrun — {label} · Soal {current}/{total}",
   },
 
-  "profile.nextRank": {
-    en: "{req} and rise to {emoji} {title}",
-    id: "{req} untuk naik menjadi {emoji} {title}",
-  },
-  "profile.highestN5": {
-    en: "Highest N5 rank reached — {emoji} {title} unlocks once N4 lessons arrive.",
-    id: "Tingkatan N5 tertinggi tercapai — {emoji} {title} akan terbuka begitu lessons N4 hadir.",
-  },
-  "profile.highestReached": {
-    en: "Highest rank reached — take the throne, Emperor! 👑",
-    id: "Tingkatan tertinggi tercapai — bertahtalah, Emperor! 👑",
-  },
 
   "borderStyle.heading": { en: "Theme Color", id: "Warna Tema" },
 
-  "flash.importing": {
-    en: "Reading your .apkg file…",
-    id: "Membaca file .apkg kamu…",
-  },
-  "flash.importSuccess": {
-    en: '✅ Imported "{name}" — {count} card(s) added.',
-    id: '✅ "{name}" diimpor — {count} kartu ditambahkan.',
-  },
   "flash.importFailed": {
     en: "❌ Import failed: {msg}",
     id: "❌ Impor gagal: {msg}",
@@ -2174,10 +1937,6 @@ export const I18N: Record<string, I18NEntry> = {
   "admin.nav.practice": {
     en: "Script Practice",
     id: "Script Practice",
-  },
-  "admin.nav.questions": {
-    en: "Questions",
-    id: "Soal",
   },
   "admin.nav.quotes": {
     en: "Quotes",

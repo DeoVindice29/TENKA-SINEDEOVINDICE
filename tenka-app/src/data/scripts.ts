@@ -10,10 +10,6 @@ function tf(entry: Bilingual | string | null | undefined): string {
   return pickLang(entry);
 }
 
-function primaryReading(str: string): string {
-  return str.includes(" / ") ? str.split(" / ")[0].trim() : str;
-}
-
 import {
   HIRAGANA_TIER1,
   HIRAGANA_TIER2,
@@ -52,7 +48,6 @@ import {
   KANJI_N5_CH7,
   KANJI_N5_CH8,
   KANJI_N5_CH9,
-  KANJI_READING,
   KANJI_TIER_KEYS,
   KANJI_LEVEL_META,
 } from "./kanjiN5";

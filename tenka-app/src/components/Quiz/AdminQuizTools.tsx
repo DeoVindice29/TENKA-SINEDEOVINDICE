@@ -1,4 +1,5 @@
 import { useQuiz } from "@/state/QuizContext";
+import { isJlptScript } from "@/data/jlptConquest";
 import AdminSkipTools from "@/components/Admin/AdminSkipTools";
 
 // Tombol skip admin buat semua jenis kuis (Penaklukan, Speedrun, kuis biasa,
@@ -46,9 +47,13 @@ export default function AdminQuizTools() {
       ? pendingPhaseIdx
       : state.conquestPhaseIndex;
 
+  // Penaklukan ala JLPT = lembar soal per Tier → "skip satu soal" tidak ada
+  // artinya di sana (yang ada Skip Tier & Skip semua)
+  const isSheet = hasPhases && !!state.script && isJlptScript(state.script);
+
   return (
     <AdminSkipTools
-      onSkipOne={skipOne}
+      onSkipOne={isSheet ? undefined : skipOne}
       onSkipPhase={
         hasPhases
           ? () =>

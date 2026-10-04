@@ -55,11 +55,6 @@ export function jlptPassMark(tierLength: number): number {
   return Math.ceil((tierLength * JLPT_PASS_PERCENT) / 100);
 }
 
-/** Batas salah yang masih boleh di satu tier; lewat dari ini = gagal. */
-export function jlptMaxWrong(tierLength: number): number {
-  return tierLength - jlptPassMark(tierLength);
-}
-
 export const JLPT_SCRIPTS = ["kotoba", "bunpo", "kanji"] as const;
 export type JlptScriptKey = (typeof JLPT_SCRIPTS)[number];
 
@@ -170,7 +165,6 @@ const isCjk = (ch: string) => /[\u4e00-\u9fff]/.test(ch);
 // Kandidat soal per script
 // ---------------------------------------------------------------------------
 
-const L_ROMAJI = "quiz.romajiLabel";
 const L_READING = "quiz.readingLabel";
 const L_MEANING = "quiz.meaningLabel";
 const L_EXAMPLE = "quiz.kalimatLabel";
@@ -663,27 +657,6 @@ function bunpoParticleFill(): Candidate[] {
   );
 
   return [...single, ...pairs];
-}
-
-// Kalimat dengan pola/partikel dikosongkan ("...") → pilih pola yang cocok.
-// Sudah tidak dipakai di Tier 3 (diganti bunpoConjugation), disimpan buat
-// kandidat Tier 4 nanti.
-function bunpoFill(): Candidate[] {
-  return BUNPO_N5_CHAPTERS.flatMap((ch, group) =>
-    ch.flatMap((e) => {
-      const blank = e[4];
-      if (!blank || !blank.includes("...")) return [];
-      return [
-        {
-          q: blank,
-          a: e[0],
-          group,
-          extra: `${e[1]} — ${en(e[5])}`,
-          extraLabelKey: L_EXAMPLE,
-        },
-      ];
-    }),
-  );
 }
 
 // Kalimat dengan kata kerja dikosongkan ("...") → pilih bentuk konjugasi yang

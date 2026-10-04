@@ -18,11 +18,6 @@ export const PROGRESS_ACCOUNT_EVENT = "tenka:progress-account-changed";
 
 let currentUserId: string | null = null;
 
-/** null = belum login / mode tamu → progres cuma lokal (namespace "guest"). */
-export function getProgressUserId(): string | null {
-  return currentUserId;
-}
-
 /** Bikin key localStorage unik per akun, misal "tebakAksara_rank_v1::<uid>". */
 export function scopedKey(baseKey: string): string {
   return `${baseKey}::${currentUserId ?? "guest"}`;

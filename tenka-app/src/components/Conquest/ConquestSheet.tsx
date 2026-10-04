@@ -13,6 +13,7 @@ import {
   stripMarks,
 } from "@/data/jlptConquest";
 import QuestionBody from "@/components/Quiz/QuestionBody";
+import ScrollTopButton from "@/components/ScrollTopButton";
 import "@/styles/practice-sheet.css";
 
 // Penaklukan ala ujian JLPT, tampil seperti Latihan Tipe Soal: satu Tier =
@@ -48,6 +49,7 @@ export default function ConquestSheet() {
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [submitted, setSubmitted] = useState(false);
   const [showMissing, setShowMissing] = useState(false);
+  const [onlyWrong, setOnlyWrong] = useState(false);
   const topRef = useRef<HTMLDivElement>(null);
 
   const story = getStory(state.script!);
@@ -186,6 +188,16 @@ export default function ConquestSheet() {
                     : t("conquest.sheet.passNext")
                   : t("conquest.sheet.failSee")}
               </button>
+              {score < total && (
+                <label className="ps-toggle">
+                  <input
+                    type="checkbox"
+                    checked={onlyWrong}
+                    onChange={(e) => setOnlyWrong(e.target.checked)}
+                  />
+                  <span>{t("practice.sheet.onlyWrong")}</span>
+                </label>
+              )}
             </div>
           </div>
         </section>
@@ -209,6 +221,7 @@ export default function ConquestSheet() {
         {items.map((item, i) => {
           const ok = submitted && isRight(i);
           const bad = submitted && !ok;
+          if (submitted && onlyWrong && ok) return null;
           const chosen = answers[i];
           const missing = showMissing && chosen === undefined;
           const choices = item[5] ?? [];
@@ -315,6 +328,8 @@ export default function ConquestSheet() {
           </button>
         </div>
       )}
+
+      <ScrollTopButton id="btn-conquest-scrolltop" />
     </div>
   );
 }

@@ -22,7 +22,7 @@ export default function HardInput() {
     setValue("");
     setWarn(false);
     setShake(false);
-    inputRef.current?.focus();
+    inputRef.current?.focus({ preventScroll: true });
   }, [state.index]);
 
   if (!current) return null;
@@ -37,7 +37,7 @@ export default function HardInput() {
       setShake(false);
       // restart animasi shake walau dipicu berkali-kali beruntun
       requestAnimationFrame(() => setShake(true));
-      inputRef.current?.focus();
+      inputRef.current?.focus({ preventScroll: true });
       return;
     }
     setWarn(false);

@@ -418,7 +418,6 @@ function FlashcardStudySession({
   // (dan loncat pas klik Ulangi Deck karena semua kartu ikut dihitung ulang).
   const [frozenCats, setFrozenCats] = useState<Record<string, FlashCategory>>({});
 
-  const total = queue.length;
   const current = queue[idx];
 
   const frontRef = useRef<HTMLDivElement>(null);

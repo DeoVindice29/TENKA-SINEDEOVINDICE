@@ -16,9 +16,6 @@ export type KotobaEntry = readonly [
   Bilingual | "",
 ];
 
-// [kana, romaji]
-export type KanaEntry = readonly [string, string];
-
 export type KotobaLearnSection = {
   tierKey: string;
   title: Bilingual;

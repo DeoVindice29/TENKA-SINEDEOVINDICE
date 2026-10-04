@@ -19,9 +19,7 @@ import {
 // jadi ganti akun di browser yang sama gak bikin progres "ketuker". Nilai
 // mentah di sini cuma dipakai sebagai prefix key-nya.
 export const RANK_KEY = "tebakAksara_rank_v1";
-export const PHOTO_KEY = "tebakAksara_photo_v1";
 export const ConquerY_KEY = "tebakAksara_Conquery_v1";
-export const NICKNAME_KEY = "tebakAksara_nickname_v1";
 
 // Urutan pangkat = urutan index yang disimpan di localStorage/Supabase
 // (profiles.rank_index). 9 pangkat total (Archduke sudah dihapus):
@@ -220,14 +218,6 @@ export const MISSION_TOTAL = RANK_MISSIONS.reduce(
   (n, g) => n + g.scripts.length,
   0,
 );
-
-export function countMissionsDone(): number {
-  const m = getConquery();
-  return RANK_MISSIONS.reduce(
-    (n, g) => n + g.scripts.filter((k) => m[k]).length,
-    0,
-  );
-}
 
 // Progres misi grup yang sedang aktif (buat counter "Misi" di topbar): grup
 // pertama yang masih ada misi belum tuntas, mis. Knight = Hiragana + Katakana

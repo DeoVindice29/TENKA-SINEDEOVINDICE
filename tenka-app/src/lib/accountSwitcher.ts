@@ -151,18 +151,6 @@ export function removeAccount(id: string): SavedAccount[] {
   return list;
 }
 
-export function clearAccounts() {
-  try {
-    localStorage.removeItem(LIST_KEY);
-    sessionStorage.removeItem(LIST_KEY);
-    localStorage.removeItem(LEGACY_ADMIN_KEY);
-    sessionStorage.removeItem(LEGACY_ADMIN_KEY);
-    sessionStorage.removeItem(ADDING_KEY);
-  } catch {
-    /* abaikan */
-  }
-}
-
 /** Ditandai sebelum redirect login Google, supaya akun yang balik dari sana ikut tersimpan. */
 export function markAddingAccount() {
   try {
