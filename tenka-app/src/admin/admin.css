@@ -4605,3 +4605,36 @@ body:has(.adm-shell) {
         --slide-shadow: 0 1px 4px rgba(8, 16, 46, 0.45);
     }
 }
+
+/* ==========================================================================
+   Drawer admin mode HP: dipersempit (sebelumnya min(86vw, 310px), terlalu
+   lebar sampai menutupi hampir seluruh layar). Posisi tersembunyi ikut
+   dihitung dari lebar baru supaya animasi geser tetap pas.
+   ========================================================================== */
+@media (max-width: 680px) {
+    .adm-sidebar {
+        width: min(72vw, 256px);
+        left: calc(-1 * min(72vw, 256px) - 24px);
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .adm-sidebar.open {
+        left: 0;
+    }
+
+    .adm-sidebar .adm-brand {
+        gap: 10px;
+        padding-right: 44px;
+    }
+
+    .adm-sidebar .adm-nav-item,
+    .adm-sidebar .adm-nav-group {
+        padding: 11px 12px;
+        font-size: 14.5px;
+    }
+
+    .adm-sidebar .adm-nav-sub {
+        margin-left: 22px;
+    }
+}

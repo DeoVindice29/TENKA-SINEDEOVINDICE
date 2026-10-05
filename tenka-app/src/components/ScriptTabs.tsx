@@ -52,7 +52,6 @@ export default function ScriptTabs() {
         >
           <span className="script-tab-icon">
             {s.glyph}
-            <span className="tab-conquered-badge" />
           </span>
           <span className="script-tab-label">{s.label}</span>
         </button>
