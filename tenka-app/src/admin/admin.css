@@ -4486,3 +4486,122 @@ body:has(.adm-shell) {
         height: 15px;
     }
 }
+
+/* ==========================================================================
+   Perbaikan nav admin mode HP (drawer + bar atas)
+   --------------------------------------------------------------------------
+   1. Footer drawer (akun, kembali ke app, KELUAR) ikut kepotong di layar
+      pendek: isi drawer lebih tinggi dari layar, jadi tombol Keluar ada di
+      luar layar dan harus di-scroll. Sekarang footer dipaku di bawah dan yang
+      di-scroll cuma daftar menunya; di layar pendek ukuran item dirapatkan.
+   2. index.html memakai viewport-fit=cover, tapi bar atas & drawer belum
+      memperhitungkan notch / home indicator, jadi hamburger dan tombol
+      tutup bisa tertutup notch. Ditambah safe-area inset.
+   3. Drawer hilang mendadak saat ditutup (visibility langsung hidden sebelum
+      animasi geser selesai). Sekarang visibility ditunda selama animasi.
+   ========================================================================== */
+@media (max-width: 680px) {
+    .adm-mobilebar {
+        height: calc(56px + env(safe-area-inset-top));
+        padding: env(safe-area-inset-top) calc(12px + env(safe-area-inset-right)) 0 calc(12px + env(safe-area-inset-left));
+    }
+
+    .adm-sidebar {
+        overflow: hidden;
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: calc(14px + env(safe-area-inset-bottom));
+        transition: left 0.22s ease, box-shadow 0.22s ease, visibility 0s linear 0.22s;
+    }
+
+    .adm-sidebar.open {
+        transition: left 0.22s ease, box-shadow 0.22s ease, visibility 0s;
+    }
+
+    .adm-drawer-close {
+        top: calc(14px + env(safe-area-inset-top));
+    }
+
+    /* hanya daftar menu yang scroll; brand & footer tetap kelihatan */
+    .adm-sidebar .adm-nav {
+        flex: 1 1 0;
+        min-height: 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .adm-sidebar .adm-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .adm-sidebar .adm-sidebar-footer {
+        margin-top: 8px;
+        padding-top: 12px;
+    }
+}
+
+/* layar pendek: rapatkan brand, item, dan footer supaya muat tanpa scroll */
+@media (max-width: 680px) and (max-height: 760px) {
+    .adm-sidebar .adm-brand {
+        padding: 14px 8px 10px;
+        margin-bottom: 4px;
+    }
+
+    .adm-sidebar .adm-nav {
+        gap: 2px;
+    }
+
+    .adm-sidebar .adm-nav-item,
+    .adm-sidebar .adm-nav-group {
+        padding: 9px 12px;
+        font-size: 14.5px;
+    }
+
+    .adm-sidebar .adm-nav-sub {
+        margin-bottom: 4px;
+    }
+
+    .adm-sidebar .adm-nav-sub .adm-nav-item {
+        padding: 7px 12px 7px 22px;
+        font-size: 14px;
+    }
+
+    .adm-sidebar .adm-sidebar-footer {
+        gap: 4px;
+        margin-top: 6px;
+        padding-top: 10px;
+    }
+}
+
+/* ==========================================================================
+   Toggle bahasa EN | ID di bar atas HP: penanda aktif tidak kelihatan.
+   --------------------------------------------------------------------------
+   Aturan HP di atas memberi .adm-lang-toggle `position: static`, padahal
+   penanda aktif yang meluncur (slide-nav.css, ::before absolut) butuh
+   container yang positioned. Akibatnya penanda nyasar ke luar pil, sementara
+   tombol aktif sudah transparan dan teksnya gelap (#121d44) di atas navy
+   → EN/ID yang aktif nyaris tidak terbaca. Container dibuat relative lagi,
+   dan warna teks tombol tidak aktif dibedakan jelas dari yang aktif.
+   ========================================================================== */
+@media (max-width: 680px) {
+    .adm-mobilebar-actions .adm-lang-toggle {
+        position: relative;
+        isolation: isolate;
+    }
+
+    .adm-mobilebar-actions .adm-lang-toggle button {
+        color: #b9c9f5;
+        font-weight: 700;
+    }
+
+    .adm-mobilebar-actions .adm-lang-toggle button.active {
+        color: #0e1840;
+        font-weight: 800;
+    }
+
+    .adm-mobilebar-actions .adm-lang-toggle[data-slide] {
+        --slide-bg: linear-gradient(135deg, #d7e3ff 0%, #9db8f5 100%);
+        --slide-shadow: 0 1px 4px rgba(8, 16, 46, 0.45);
+    }
+}

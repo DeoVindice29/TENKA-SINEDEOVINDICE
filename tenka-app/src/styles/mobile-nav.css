@@ -291,11 +291,6 @@
     max-width: 78px;
     letter-spacing: 0.01em;
   }
-
-  #script-tabs .script-tab .tab-conquered-badge {
-    top: -12px;
-    filter: drop-shadow(0 1px 2px rgba(255, 170, 30, 0.5));
-  }
 }
 
 @media (max-width: 340px) {
