@@ -161,7 +161,7 @@ export default function StartScreen() {
               <span className="hero-h1-line2">To Emperor 『天皇』</span>
             </h1>
             <p className="sub">
-              "Train hard, conquer every conquest in your way, and claim your
+              "Train hard, conquer every conquest, and claim your
               throne as <b>Emperor</b>."
             </p>
           </div>

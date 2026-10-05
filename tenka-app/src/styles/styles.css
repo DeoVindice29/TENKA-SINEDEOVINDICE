@@ -6103,17 +6103,11 @@ button.ghost {
 .tab-conquered-badge::before {
     content: "";
     display: inline-block;
-    width: 1.15em;
-    height: 1.15em;
-    background-color: var(--gold);
-    -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cpolygon%20points%3D%222%2018%202%208%207%2012%2012%205%2017%2012%2022%208%2022%2018%22%20fill%3D%22black%22%20stroke%3D%22none%22%2F%3E%3C%2Fsvg%3E");
-    mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cpolygon%20points%3D%222%2018%202%208%207%2012%2012%205%2017%2012%2022%208%2022%2018%22%20fill%3D%22black%22%20stroke%3D%22none%22%2F%3E%3C%2Fsvg%3E");
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-    mask-position: center;
-    -webkit-mask-size: contain;
-    mask-size: contain;
+    width: 1.45em;
+    height: 1.27em;
+    /* mahkota detail: gradasi emas, mutiara di ujung, permata di pita */
+    background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2028'%3E%3Cdefs%3E%3ClinearGradient%20id='g'%20x1='0'%20y1='0'%20x2='0'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='#fff1a8'/%3E%3Cstop%20offset='0.45'%20stop-color='#ffc93c'/%3E%3Cstop%20offset='1'%20stop-color='#c77d0a'/%3E%3C/linearGradient%3E%3ClinearGradient%20id='b'%20x1='0'%20y1='0'%20x2='0'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='#ffd966'/%3E%3Cstop%20offset='1'%20stop-color='#b66a00'/%3E%3C/linearGradient%3E%3CradialGradient%20id='r'%20cx='0.35'%20cy='0.3'%20r='0.8'%3E%3Cstop%20offset='0'%20stop-color='#ff9aa8'/%3E%3Cstop%20offset='0.55'%20stop-color='#e0193a'/%3E%3Cstop%20offset='1'%20stop-color='#8a0c22'/%3E%3C/radialGradient%3E%3CradialGradient%20id='s'%20cx='0.35'%20cy='0.3'%20r='0.8'%3E%3Cstop%20offset='0'%20stop-color='#bfeaff'/%3E%3Cstop%20offset='0.6'%20stop-color='#2d8fe6'/%3E%3Cstop%20offset='1'%20stop-color='#0f4a99'/%3E%3C/radialGradient%3E%3CradialGradient%20id='p'%20cx='0.35'%20cy='0.3'%20r='0.8'%3E%3Cstop%20offset='0'%20stop-color='#ffffff'/%3E%3Cstop%20offset='1'%20stop-color='#f1d98a'/%3E%3C/radialGradient%3E%3C/defs%3E%3Cpath%20d='M4.2%2021%20L2.6%208.6%20L9.6%2014.4%20L16%204.6%20L22.4%2014.4%20L29.4%208.6%20L27.8%2021%20Z'%20fill='url(%23g)'%20stroke='%237a4700'%20stroke-width='1'%20stroke-linejoin='round'/%3E%3Cpath%20d='M16%204.6%20L13.2%2013.2%20L16%2021%20L18.8%2013.2%20Z'%20fill='%23fff4b8'%20fill-opacity='0.55'/%3E%3Cpath%20d='M9.6%2014.4%20L7.4%2021%20M22.4%2014.4%20L24.6%2021'%20stroke='%23a96300'%20stroke-width='0.7'%20stroke-opacity='0.7'%20fill='none'%20stroke-linecap='round'/%3E%3Crect%20x='3.4'%20y='20.4'%20width='25.2'%20height='6'%20rx='1.6'%20fill='url(%23b)'%20stroke='%237a4700'%20stroke-width='1'/%3E%3Crect%20x='4.6'%20y='21.4'%20width='22.8'%20height='1.2'%20rx='0.6'%20fill='%23fff1a8'%20fill-opacity='0.65'/%3E%3Ccircle%20cx='16'%20cy='23.6'%20r='1.9'%20fill='url(%23r)'%20stroke='%235a0618'%20stroke-width='0.5'/%3E%3Ccircle%20cx='9.4'%20cy='23.6'%20r='1.25'%20fill='url(%23s)'%20stroke='%230a3370'%20stroke-width='0.4'/%3E%3Ccircle%20cx='22.6'%20cy='23.6'%20r='1.25'%20fill='url(%23s)'%20stroke='%230a3370'%20stroke-width='0.4'/%3E%3Ccircle%20cx='2.6'%20cy='7.6'%20r='2'%20fill='url(%23p)'%20stroke='%237a4700'%20stroke-width='0.7'/%3E%3Ccircle%20cx='16'%20cy='3.4'%20r='2.2'%20fill='url(%23p)'%20stroke='%237a4700'%20stroke-width='0.7'/%3E%3Ccircle%20cx='29.4'%20cy='7.6'%20r='2'%20fill='url(%23p)'%20stroke='%237a4700'%20stroke-width='0.7'/%3E%3C/svg%3E") center / contain no-repeat;
+    filter: drop-shadow(0 1px 1px rgba(60, 30, 0, 0.35));
     flex-shrink: 0;
 }
 
