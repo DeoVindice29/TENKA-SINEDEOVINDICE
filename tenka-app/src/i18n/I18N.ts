@@ -523,7 +523,7 @@ export const I18N: Record<string, I18NEntry> = {
     en: "Number of questions (picked randomly from this whole tier)",
     id: "Jumlah soal (diambil acak dari seluruh tingkatan ini)",
   },
-  "range.customCount": { en: "Custom…", id: "Ketik sendiri…" },
+  "range.customCount": { en: "Custom", id: "Custom" },
   "range.customCountAria": {
     en: "Type a custom number of questions",
     id: "Ketik jumlah soal sendiri",
@@ -631,10 +631,6 @@ export const I18N: Record<string, I18NEntry> = {
   },
   "common.back": { en: "Back", id: "Kembali" },
   "common.cancel": { en: "Cancel", id: "Batal" },
-  "common.backArmed": {
-    en: "Sure? Click again to cancel",
-    id: "Yakin? Klik lagi untuk batalkan",
-  },
   "practice.eyebrow": { en: "question types", id: "tipe soal" },
   "practice.title": { en: "Question Practice", id: "Latihan Soal" },
   "practice.sub": {

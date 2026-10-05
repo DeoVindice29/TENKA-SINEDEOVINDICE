@@ -62,16 +62,51 @@
     border-radius: 10px;
   }
 
+  /* Jumlah soal acak: 10 & 20 ramping; "seluruh (n)" dan "Custom" lebih lebar
+     supaya tulisannya terbaca penuh (kalau layar sangat sempit, baris
+     membungkus, bukan teksnya terpotong) */
+  .range-random-options {
+    flex-wrap: wrap;
+  }
+
   .range-count-btn {
     padding: 7px 6px;
     border-radius: 10px;
-    font-size: 13px;
+    font-size: 12.5px;
     line-height: 1.2;
   }
 
+  .range-count-num {
+    flex: 0 0 44px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .range-count-all {
+    flex: 1 1 88px;
+    min-width: 88px;
+  }
+
+  .range-count-custom {
+    flex: 1.2 1 100px;
+    min-width: 100px;
+  }
+
+  .range-count-custom > svg {
+    left: 10px;
+    width: 14px;
+    height: 14px;
+  }
+
   .range-count-custom > .range-count-input {
-    padding-top: 7px;
-    padding-bottom: 7px;
+    padding: 7px 6px 7px 28px;
+    font-size: 13px;
+    text-overflow: clip;
+  }
+
+  /* 16px saat mengetik: mencegah iOS zoom otomatis saat input difokus */
+  .range-count-custom > .range-count-input:focus {
+    font-size: 16px;
   }
 
   .conquest-card {

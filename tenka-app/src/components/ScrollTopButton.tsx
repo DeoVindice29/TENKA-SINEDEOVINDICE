@@ -5,14 +5,17 @@ type ScrollTopButtonProps = {
   id?: string;
   /** false = tombol disembunyikan walau halaman sudah di-scroll */
   enabled?: boolean;
+  /** selector elemen yang di-scroll bila halaman dikunci (mis. ".stage") */
+  scrollContainer?: string;
 };
 
 export default function ScrollTopButton({
   id,
   enabled = true,
+  scrollContainer,
 }: ScrollTopButtonProps) {
   const { t } = useLang();
-  const { visible, scrollToTop } = useScrollTop(400);
+  const { visible, scrollToTop } = useScrollTop(400, scrollContainer);
 
   return (
     <button

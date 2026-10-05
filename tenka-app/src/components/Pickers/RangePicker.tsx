@@ -234,17 +234,6 @@ export default function RangePicker() {
       <div className="range-mode-toggle" id="range-mode-toggle">
         <button
           type="button"
-          className={`range-mode-btn ${rangeMode === "random" ? "active" : ""}`}
-          onClick={() => {
-            setOpen(null);
-            setRangeMode("random");
-          }}
-        >
-          <ShuffleIcon />
-          <span>{t("range.random")}</span>
-        </button>
-        <button
-          type="button"
           className={`range-mode-btn ${rangeMode === "manual" ? "active" : ""}`}
           onClick={() => {
             setOpen(null);
@@ -253,6 +242,17 @@ export default function RangePicker() {
         >
           <ListIcon />
           <span>{t("range.chooseRange")}</span>
+        </button>
+        <button
+          type="button"
+          className={`range-mode-btn ${rangeMode === "random" ? "active" : ""}`}
+          onClick={() => {
+            setOpen(null);
+            setRangeMode("random");
+          }}
+        >
+          <ShuffleIcon />
+          <span>{t("range.random")}</span>
         </button>
       </div>
 
@@ -274,8 +274,8 @@ export default function RangePicker() {
                 key={n}
                 type="button"
                 className={`range-count-btn ${
-                  !isCustomActive && n === activeRandomCount ? "active" : ""
-                }`}
+                  n === total ? "range-count-all" : "range-count-num"
+                } ${!isCustomActive && n === activeRandomCount ? "active" : ""}`}
                 onClick={() => {
                   setRandomCount(n);
                   setCustomDraft(null);

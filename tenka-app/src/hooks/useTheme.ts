@@ -1,4 +1,53 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useSyncExternalStore } from "react";
+
+// ---------------------------------------------------------------------------
+// State tema DIBAGI antar semua pemanggil useTheme() (App, Settings, Admin
+// Panel, dst.). Dulu tiap pemanggil punya useState sendiri-sendiri, jadi
+// mengubah dark mode di Settings tidak memberi tahu Admin Panel (dan
+// sebaliknya) → tampilan/tombolnya jadi tidak sinkron dan "nge-bug".
+// Sekarang semuanya membaca & menulis ke satu store yang sama.
+// ---------------------------------------------------------------------------
+const sharedValues = new Map<string, unknown>();
+const sharedListeners = new Map<string, Set<() => void>>();
+
+function useSharedState<T>(
+  name: string,
+  init: () => T,
+): [T, (v: T | ((prev: T) => T)) => void] {
+  if (!sharedValues.has(name)) sharedValues.set(name, init());
+
+  const subscribe = useCallback(
+    (cb: () => void) => {
+      let set = sharedListeners.get(name);
+      if (!set) {
+        set = new Set();
+        sharedListeners.set(name, set);
+      }
+      set.add(cb);
+      return () => {
+        set!.delete(cb);
+      };
+    },
+    [name],
+  );
+  const value = useSyncExternalStore(
+    subscribe,
+    () => sharedValues.get(name) as T,
+  );
+
+  const setValue = useCallback(
+    (v: T | ((prev: T) => T)) => {
+      const prev = sharedValues.get(name) as T;
+      const next = typeof v === "function" ? (v as (p: T) => T)(prev) : v;
+      if (Object.is(prev, next)) return;
+      sharedValues.set(name, next);
+      sharedListeners.get(name)?.forEach((l) => l());
+    },
+    [name],
+  );
+
+  return [value, setValue];
+}
 
 const BORDER_STYLE_KEY = "tebakAksara_choiceBorderStyle_v1";
 const THEME_KEY = "tebakAksara_theme_v1";
@@ -236,7 +285,7 @@ function readStoredHex(key: string, fallback: string): string {
 }
 
 export function useTheme() {
-  const [theme, setThemeState] = useState<Theme>(() => {
+  const [theme, setThemeState] = useSharedState<Theme>("theme", () => {
     const stored = localStorage.getItem(THEME_KEY);
     if (stored === "dark" || stored === "light") return stored;
     if (typeof window !== "undefined" && window.matchMedia) {
@@ -247,7 +296,7 @@ export function useTheme() {
     return "light";
   });
 
-  const [borderStyle, setBorderStyleState] = useState<BorderStyle>(() => {
+  const [borderStyle, setBorderStyleState] = useSharedState<BorderStyle>("borderStyle", () => {
     // kalau mode custom disembunyikan, orang yang dulu pakai custom balik ke default
     if (!CUSTOM_THEME_ENABLED) return "default";
     const stored = localStorage.getItem(BORDER_STYLE_KEY);
@@ -256,41 +305,41 @@ export function useTheme() {
       : "default";
   });
 
-  const [customAccent, setCustomAccentState] = useState<string>(() =>
+  const [customAccent, setCustomAccentState] = useSharedState<string>("customAccent", () =>
     readStoredHex(CUSTOM_ACCENT_KEY, DEFAULT_CUSTOM_ACCENT),
   );
-  const [customText, setCustomTextState] = useState<string>(() =>
+  const [customText, setCustomTextState] = useSharedState<string>("customText", () =>
     readStoredHex(CUSTOM_TEXT_KEY, DEFAULT_CUSTOM_TEXT),
   );
-  const [customOnAccent, setCustomOnAccentState] = useState<string>(() =>
+  const [customOnAccent, setCustomOnAccentState] = useSharedState<string>("customOnAccent", () =>
     readStoredHex(CUSTOM_ON_ACCENT_KEY, DEFAULT_CUSTOM_ON_ACCENT),
   );
-  const [customIcon, setCustomIconState] = useState<string>(() =>
+  const [customIcon, setCustomIconState] = useSharedState<string>("customIcon", () =>
     readStoredHex(CUSTOM_ICON_KEY, DEFAULT_CUSTOM_ICON),
   );
-  const [customBackground, setCustomBackgroundState] = useState<string>(() =>
+  const [customBackground, setCustomBackgroundState] = useSharedState<string>("customBackground", () =>
     readStoredHex(CUSTOM_BG_KEY, DEFAULT_CUSTOM_BACKGROUND),
   );
-  const [customQuizCorrect, setCustomQuizCorrectState] = useState<string>(() =>
+  const [customQuizCorrect, setCustomQuizCorrectState] = useSharedState<string>("customQuizCorrect", () =>
     readStoredHex(CUSTOM_QUIZ_CORRECT_KEY, DEFAULT_CUSTOM_QUIZ_CORRECT),
   );
-  const [customQuizWrong, setCustomQuizWrongState] = useState<string>(() =>
+  const [customQuizWrong, setCustomQuizWrongState] = useSharedState<string>("customQuizWrong", () =>
     readStoredHex(CUSTOM_QUIZ_WRONG_KEY, DEFAULT_CUSTOM_QUIZ_WRONG),
   );
-  const [customVermillion, setCustomVermillionState] = useState<string>(() =>
+  const [customVermillion, setCustomVermillionState] = useSharedState<string>("customVermillion", () =>
     readStoredHex(CUSTOM_VERMILLION_KEY, DEFAULT_CUSTOM_VERMILLION),
   );
-  const [customGold, setCustomGoldState] = useState<string>(() =>
+  const [customGold, setCustomGoldState] = useSharedState<string>("customGold", () =>
     readStoredHex(CUSTOM_GOLD_KEY, DEFAULT_CUSTOM_GOLD),
   );
-  const [customMoss, setCustomMossState] = useState<string>(() =>
+  const [customMoss, setCustomMossState] = useSharedState<string>("customMoss", () =>
     readStoredHex(CUSTOM_MOSS_KEY, DEFAULT_CUSTOM_MOSS),
   );
-  const [customChoiceBg, setCustomChoiceBgState] = useState<string>(() =>
+  const [customChoiceBg, setCustomChoiceBgState] = useSharedState<string>("customChoiceBg", () =>
     readStoredHex(CUSTOM_CHOICE_BG_KEY, DEFAULT_CUSTOM_CHOICE_BG),
   );
   const [customChoiceSelected, setCustomChoiceSelectedState] =
-    useState<string>(() =>
+    useSharedState<string>("customChoiceSelected", () =>
       readStoredHex(CUSTOM_CHOICE_SELECTED_KEY, DEFAULT_CUSTOM_CHOICE_SELECTED),
     );
 

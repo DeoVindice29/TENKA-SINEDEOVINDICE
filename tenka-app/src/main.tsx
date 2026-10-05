@@ -10,6 +10,9 @@ import { AuthProvider } from "@/state/AuthContext";
 import AuthGate from "@/components/AuthGate";
 import AdminPanel from "@/admin/AdminPanel";
 import "@/styles/index.css";
+import { initSlideNav } from "@/lib/slideNav";
+
+initSlideNav();
 
 // /admin-panel sengaja dipisah total dari App biasa (bukan bagian dari
 // sistem "screen" di UIContext) — jadi gak ke-mix sama flow belajar/quiz

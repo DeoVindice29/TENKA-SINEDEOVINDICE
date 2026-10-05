@@ -114,6 +114,8 @@ export default function ConquestSheet() {
       type: "SUBMIT_TIER",
       answers: items.map((_, i) => answers[i] ?? ""),
     });
+    // layar kuis dikunci: yang di-scroll adalah .stage, bukan window
+    document.querySelector(".stage")?.scrollTo({ top: 0 });
     window.scrollTo({ top: 0 });
   };
 
@@ -329,7 +331,7 @@ export default function ConquestSheet() {
         </div>
       )}
 
-      <ScrollTopButton id="btn-conquest-scrolltop" />
+      <ScrollTopButton id="btn-conquest-scrolltop" scrollContainer=".stage" />
     </div>
   );
 }

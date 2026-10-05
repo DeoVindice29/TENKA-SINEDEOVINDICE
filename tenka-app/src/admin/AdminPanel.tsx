@@ -54,6 +54,28 @@ function lines(text: string) {
   ));
 }
 
+/** Tombol tema terang/gelap Admin Panel (state dibagi lewat useTheme). */
+function AdminThemeToggle({ className = "" }: { className?: string }) {
+  const { t } = useLang();
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "dark";
+  return (
+    <button
+      type="button"
+      className={`adm-theme-toggle ${className}`.trim()}
+      onClick={toggleTheme}
+      aria-label={isDark ? t("admin.theme.toLight") : t("admin.theme.toDark")}
+      title={isDark ? t("admin.theme.light") : t("admin.theme.dark")}
+    >
+      {isDark ? (
+        <IconSun className="adm-theme-icon" />
+      ) : (
+        <IconMoon className="adm-theme-icon" />
+      )}
+    </button>
+  );
+}
+
 /** Tombol ganti bahasa EN | ID untuk Admin Panel (pakai LangContext yang sama dgn app). */
 function AdminLangToggle({ floating = false }: { floating?: boolean }) {
   const { lang, setLang, t } = useLang();
@@ -354,11 +376,8 @@ function AdminShell({
     return () => window.removeEventListener("keydown", onKey);
   }, [navOpen]);
   const [activity, setActivity] = useLocalStorage<ActivityEntry[]>(ACTIVITY_STORAGE_KEY, []);
-  const { theme, toggleTheme } = useTheme();
-
   const isPractice = section.startsWith("practice-");
   const isMateri = section === "kotoba" || section === "kanji" || section === "bunpo";
-  const isDark = theme === "dark";
 
   // dipanggil dari tombol Aksi Cepat di Dashboard: pindah ke section materi
   // yang dipilih dan langsung buka form tambahnya di sana.
@@ -393,6 +412,11 @@ function AdminShell({
             <IconSakura />
             <span className="adm-mobilebar-name">Tenka</span>
           </span>
+          {/* HP: bahasa + tema nempel di bar atas, tampil di semua section */}
+          <div className="adm-mobilebar-actions">
+            <AdminLangToggle />
+            <AdminThemeToggle />
+          </div>
         </div>
         <div className={`adm-backdrop${navOpen ? " open" : ""}`} onClick={() => setNavOpen(false)} aria-hidden="true" />
         <aside className={`adm-sidebar${navOpen ? " open" : ""}`}>
@@ -510,16 +534,10 @@ function AdminShell({
         </aside>
 
         <div className="adm-content-col">
-          <AdminLangToggle />
-          <button
-            type="button"
-            className="adm-theme-toggle"
-            onClick={toggleTheme}
-            aria-label={isDark ? t("admin.theme.toLight") : t("admin.theme.toDark")}
-            title={isDark ? t("admin.theme.light") : t("admin.theme.dark")}
-          >
-            {isDark ? <IconSun className="adm-theme-icon" /> : <IconMoon className="adm-theme-icon" />}
-          </button>
+          <div className="adm-floating-actions">
+            <AdminLangToggle />
+            <AdminThemeToggle />
+          </div>
 
           <main className="adm-main">
             <AdminContentManager

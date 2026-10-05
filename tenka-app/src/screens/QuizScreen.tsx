@@ -75,26 +75,9 @@ function QuizScreenInner() {
     if (state.index > 0) setShowStory(false);
   }, [state.index]);
 
-  // Tombol Back "armed": klik pertama minta konfirmasi (3 detik), klik kedua
-  // baru benar-benar keluar dari kuis.
-  const [backArmed, setBackArmed] = useState(false);
-  const backTimerRef = useRef<number | null>(null);
-  useEffect(
-    () => () => {
-      if (backTimerRef.current) window.clearTimeout(backTimerRef.current);
-    },
-    [],
-  );
+  // Tombol Back langsung keluar dari kuis (tanpa konfirmasi).
+  // Latihan Tipe Soal kembali ke lobbynya, bukan ke layar awal.
   const handleBack = () => {
-    if (!backArmed) {
-      setBackArmed(true);
-      if (backTimerRef.current) window.clearTimeout(backTimerRef.current);
-      backTimerRef.current = window.setTimeout(() => setBackArmed(false), 3000);
-      return;
-    }
-    if (backTimerRef.current) window.clearTimeout(backTimerRef.current);
-    setBackArmed(false);
-    // Latihan Tipe Soal kembali ke lobbynya, bukan ke layar awal
     setScreen(state.mode === "practice" ? "practice" : "start");
   };
 
@@ -296,12 +279,12 @@ function QuizScreenInner() {
     >
       <div className="quiz-topbar">
         <button
-          className={`quiz-pill-btn quiz-back ${backArmed ? "armed" : ""}`}
+          className="quiz-pill-btn quiz-back"
           type="button"
           data-i18n="common.back"
           onClick={handleBack}
         >
-          <span>{backArmed ? t("common.backArmed") : t("common.back")}</span>
+          <span>{t("common.back")}</span>
         </button>
 
         <div className="quiz-progress-center">

@@ -3485,11 +3485,6 @@ button.match-tile:disabled {
     color: var(--vermillion);
 }
 
-.quiz-back.armed {
-    color: var(--vermillion);
-    font-weight: 900;
-}
-
 .quiz-top {
     display: flex;
     align-items: center;

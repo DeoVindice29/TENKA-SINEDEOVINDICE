@@ -2467,11 +2467,6 @@ body:has(.app-shell.quiz-scenic) {
     transform: translateY(-1px);
 }
 
-#screen-quiz .quiz-pill-btn.armed,
-#screen-match .quiz-pill-btn.armed {
-    color: var(--quiz-wrong);
-}
-
 #screen-quiz .quiz-pill-icon,
 #screen-match .quiz-pill-icon {
     width: 15px;
@@ -5262,12 +5257,6 @@ body:has(#screen-flashcard) {
 [data-theme="dark"] #screen-match .quiz-pill-btn:hover {
     background: rgba(30, 40, 100, 0.75);
     border-color: rgba(170, 190, 255, 0.6);
-}
-
-[data-theme="dark"] #screen-quiz .quiz-pill-btn.armed,
-[data-theme="dark"] #screen-match .quiz-pill-btn.armed {
-    color: #ff8f9f;
-    border-color: rgba(255, 143, 159, 0.55);
 }
 
 [data-theme="dark"] #screen-quiz .quiz-progress-text,

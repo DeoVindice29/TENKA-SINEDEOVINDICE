@@ -4418,3 +4418,71 @@ body:has(.adm-shell) {
         justify-content: center;
     }
 }
+
+/* ================= HP: bahasa + tema nempel di bar atas ================= */
+/* Di desktop pil EN | ID dan tombol tema melayang di kanan atas konten
+   (.adm-floating-actions). Di HP (<= 680px) keduanya pindah ke bar atas
+   (.adm-mobilebar) supaya selalu kelihatan di semua section, dan ukurannya
+   diperkecil. */
+
+.adm-mobilebar-actions {
+    display: none;
+}
+
+@media (max-width: 680px) {
+    .adm-floating-actions {
+        display: none;
+    }
+
+    .adm-mobilebar-actions {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-left: auto;
+    }
+
+    .adm-mobilebar-actions .adm-lang-toggle,
+    .adm-mobilebar-actions .adm-theme-toggle {
+        position: static;
+        top: auto;
+        right: auto;
+        height: 28px;
+        box-shadow: none;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(157, 184, 245, 0.35);
+        color: #dbe6ff;
+    }
+
+    .adm-mobilebar-actions .adm-lang-toggle {
+        padding: 2px;
+        gap: 1px;
+    }
+
+    .adm-mobilebar-actions .adm-lang-toggle button {
+        height: 22px;
+        padding: 0 8px;
+        font-size: 10.5px;
+        color: #cfdcff;
+    }
+
+    .adm-mobilebar-actions .adm-lang-toggle button.active {
+        background: #9db8f5;
+        color: #121d44;
+    }
+
+    .adm-mobilebar-actions .adm-theme-toggle {
+        width: 28px;
+        padding: 0;
+        transform: none;
+    }
+
+    .adm-mobilebar-actions .adm-theme-toggle:hover {
+        color: #fff;
+        transform: none;
+    }
+
+    .adm-mobilebar-actions .adm-theme-icon {
+        width: 15px;
+        height: 15px;
+    }
+}

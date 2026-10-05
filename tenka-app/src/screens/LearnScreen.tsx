@@ -993,8 +993,8 @@ export default function LearnScreen() {
               window.scrollTo({ top: 0, behavior: "instant" });
             }}
           >
-            {item.glyph}
-            <span>{item.label}</span>
+            <span className="script-tab-icon">{item.glyph}</span>
+            <span className="script-tab-label">{item.label}</span>
           </button>
         ))}
       </div>

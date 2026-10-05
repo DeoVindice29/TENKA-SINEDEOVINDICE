@@ -1,18 +1,33 @@
 import { useCallback, useEffect, useState } from "react";
 
-export function useScrollTop(threshold = 400) {
+/**
+ * Tombol "kembali ke atas".
+ * `containerSelector` dipakai di layar yang halamannya dikunci (mis. layar
+ * kuis: body overflow hidden, yang di-scroll adalah `.stage`). Tanpa itu,
+ * yang dipantau adalah scroll halaman (window) seperti biasa.
+ */
+export function useScrollTop(threshold = 400, containerSelector?: string) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const update = () => setVisible(window.scrollY > threshold);
+    const el = containerSelector
+      ? document.querySelector<HTMLElement>(containerSelector)
+      : null;
+    const pos = () => (el ? el.scrollTop : window.scrollY);
+    const update = () => setVisible(pos() > threshold);
     update();
-    window.addEventListener("scroll", update, { passive: true });
-    return () => window.removeEventListener("scroll", update);
-  }, [threshold]);
+    const target: HTMLElement | Window = el ?? window;
+    target.addEventListener("scroll", update, { passive: true });
+    return () => target.removeEventListener("scroll", update);
+  }, [threshold, containerSelector]);
 
   const scrollToTop = useCallback(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
+    const el = containerSelector
+      ? document.querySelector<HTMLElement>(containerSelector)
+      : null;
+    if (el) el.scrollTo({ top: 0, behavior: "smooth" });
+    else window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [containerSelector]);
 
   return { visible, scrollToTop };
 }

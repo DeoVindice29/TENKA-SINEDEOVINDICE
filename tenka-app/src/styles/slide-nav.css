@@ -1,0 +1,84 @@
+/* ==========================================================================
+   Nav dengan penanda aktif yang meluncur (digerakkan lib/slideNav.ts).
+   Latar tab aktif dipindah ke pseudo-element ::before milik container, yang
+   posisinya diatur lewat --sx/--sy/--sw/--sh. Tab aktif sendiri dibuat
+   transparan; teks/ikon tetap memakai warna aktif yang sudah ada.
+   `!important` di bagian transparan disengaja: latar tab aktif didefinisikan
+   di banyak lapisan (tema gelap, nav HP, dll.) dan semuanya harus kalah.
+   ========================================================================== */
+
+:where([data-slide]) {
+  position: relative;
+}
+
+[data-slide] {
+  isolation: isolate;
+}
+
+[data-slide]::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  width: var(--sw, 0px);
+  height: var(--sh, 0px);
+  transform: translate3d(var(--sx, 0px), var(--sy, 0px), 0);
+  background: var(--slide-bg, var(--indigo));
+  border-radius: var(--slide-radius, 999px);
+  box-shadow: var(--slide-shadow, none);
+  opacity: var(--so, 0);
+  pointer-events: none;
+  will-change: transform, width, height;
+}
+
+/* ---- tab aktif transparan (latarnya dipegang penanda) ---- */
+.script-tabs[data-slide] .script-tab.active,
+[data-theme="dark"] .script-tabs[data-slide] .script-tab.active,
+.sidebar-nav[data-slide] .sidebar-nav-item.active,
+.st-tabs[data-slide] button.on,
+.source-switch-seg[data-slide] .source-pill.active,
+.adm-seg[data-slide] button.active,
+.adm-lang-toggle[data-slide] button.active {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* tab tidak aktif transparan juga, supaya penanda kelihatan saat melewatinya
+   (tetap muncul tint saat ditekan) */
+.script-tabs[data-slide] .script-tab:not(.active):not(:active) {
+  background: transparent !important;
+}
+
+/* ---- warna & bentuk penanda per nav ---- */
+.script-tabs[data-slide] {
+  --slide-bg: var(--indigo);
+  --slide-shadow: 0 4px 12px color-mix(in srgb, var(--indigo) 30%, transparent);
+}
+
+[data-theme="dark"] .script-tabs[data-slide] {
+  --slide-bg: linear-gradient(135deg, #52ccff 0%, #34a9ee 100%);
+  --slide-shadow: 0 4px 14px rgba(52, 169, 238, 0.35);
+}
+
+.sidebar-nav[data-slide] {
+  --slide-bg: var(--indigo);
+  --slide-radius: 12px;
+  --slide-shadow: 0 8px 18px rgba(47, 95, 222, 0.28);
+}
+
+.st-tabs[data-slide],
+.source-switch-seg[data-slide] {
+  --slide-bg: var(--indigo);
+}
+
+.adm-seg[data-slide],
+.adm-lang-toggle[data-slide] {
+  --slide-bg: var(--a-indigo);
+}
+
+/* pil bahasa di bar atas Admin (HP): latarnya biru muda, bukan indigo */
+.adm-mobilebar-actions .adm-lang-toggle[data-slide] {
+  --slide-bg: #9db8f5;
+}
