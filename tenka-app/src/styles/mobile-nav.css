@@ -1,0 +1,301 @@
+/* ==========================================================================
+   Nav bawah HP (#script-tabs): gaya sama seperti di web — glyph dan teks
+   BERDAMPINGAN dalam satu pil. Supaya tidak sempit, teks hanya tampil di tab
+   yang aktif; tab lain cuma glyph. Saat pindah tab, pil aktif melebar dan
+   teksnya muncul/menghilang dengan transisi halus.
+   Dimuat paling akhir (index.css) supaya menimpa bagian 15 di dashboard.css;
+   selector sengaja disamakan spesifisitasnya dengan aturan lama.
+   ========================================================================== */
+@media (max-width: 768px) {
+  #script-tabs {
+    align-items: center;
+    gap: 4px;
+    padding-top: 7px;
+    padding-bottom: calc(7px + env(safe-area-inset-bottom));
+  }
+
+  /* ---- semua tab: satu baris (glyph + teks), tinggi pendek ---- */
+  #script-tabs .script-tab {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 46px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    padding: 0 4px;
+    border-radius: 999px;
+    transition:
+      flex-grow 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+      background-color 0.28s ease,
+      color 0.28s ease,
+      box-shadow 0.28s ease;
+  }
+
+  #script-tabs .script-tab:not(.active):active {
+    background: color-mix(in srgb, var(--indigo) 12%, transparent);
+  }
+
+  #script-tabs .script-tab .script-tab-icon {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    font-size: 19px;
+  }
+
+  /* ---- teks: tersembunyi di tab tidak aktif, mengembang di tab aktif ---- */
+  #script-tabs .script-tab .script-tab-label {
+    display: block;
+    max-width: 0;
+    margin-left: 0;
+    opacity: 0;
+    overflow: hidden;
+    text-overflow: clip;
+    white-space: nowrap;
+    font-size: 12.5px;
+    font-weight: 700;
+    line-height: 1.3;
+    transition:
+      max-width 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+      margin-left 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.18s ease;
+  }
+
+  /* ---- tab aktif: pil penuh berisi glyph + teks ---- */
+  #script-tabs .script-tab.active,
+  [data-theme="dark"] #script-tabs .script-tab.active {
+    flex-grow: 2.7;
+    border: 0;
+    background: var(--indigo);
+    color: var(--on-accent);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--indigo) 35%, transparent);
+  }
+
+  [data-theme="dark"] #script-tabs .script-tab.active {
+    background: linear-gradient(135deg, #52ccff 0%, #34a9ee 100%);
+    color: #071a2e;
+    box-shadow: 0 4px 14px rgba(52, 169, 238, 0.35);
+  }
+
+  #script-tabs .script-tab.active .script-tab-icon,
+  [data-theme="dark"] #script-tabs .script-tab.active .script-tab-icon,
+  [data-theme="dark"] #script-tabs .script-tab.conquered.active .script-tab-icon {
+    background: transparent;
+    box-shadow: none;
+    color: var(--on-accent);
+  }
+
+  [data-theme="dark"] #script-tabs .script-tab.active .script-tab-icon,
+  [data-theme="dark"] #script-tabs .script-tab.conquered.active .script-tab-icon {
+    color: #071a2e;
+  }
+
+  #script-tabs .script-tab.active .script-tab-label {
+    max-width: 84px;
+    margin-left: 3px;
+    opacity: 1;
+    color: var(--on-accent);
+    transition-delay: 0s, 0s, 0.1s;
+  }
+
+  [data-theme="dark"] #script-tabs .script-tab.active .script-tab-label,
+  [data-theme="dark"] #script-tabs .script-tab.conquered.active .script-tab-label {
+    color: #071a2e;
+  }
+}
+
+@media (max-width: 340px) {
+  #script-tabs .script-tab .script-tab-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 17px;
+  }
+
+  #script-tabs .script-tab .script-tab-label {
+    font-size: 11.5px;
+  }
+
+  #script-tabs .script-tab.active {
+    flex-grow: 2.9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #script-tabs .script-tab,
+  #script-tabs .script-tab .script-tab-label {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   Halaman Lessons / Belajar (#learn-script-tabs) — gaya yang sama dengan nav
+   beranda: 5 tab berbagi lebar, tab aktif jadi pil berisi glyph + teks,
+   tab lain cuma glyph, dan pindah tab dianimasikan halus. Bedanya, bar ini
+   inline di atas konten (bukan menempel di bawah).
+   ========================================================================== */
+@media (max-width: 768px) {
+  #learn-script-tabs {
+    gap: 4px;
+    padding-top: 2px;
+    overflow-x: visible;
+    scroll-snap-type: none;
+  }
+
+  #learn-script-tabs .script-tab {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 44px;
+    justify-content: center;
+    gap: 0;
+    padding: 0 4px;
+    border-radius: 999px;
+    scroll-snap-align: none;
+    transform: none;
+    transition:
+      flex-grow 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+      background-color 0.28s ease,
+      color 0.28s ease,
+      border-color 0.28s ease,
+      box-shadow 0.28s ease;
+  }
+
+  #learn-script-tabs .script-tab .script-tab-icon {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    font-size: 19px;
+    background: transparent;
+  }
+
+  #learn-script-tabs .script-tab .script-tab-label {
+    display: block;
+    max-width: 0;
+    margin-left: 0;
+    opacity: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 12.5px;
+    font-weight: 700;
+    line-height: 1.3;
+    transition:
+      max-width 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+      margin-left 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.18s ease;
+  }
+
+  #learn-script-tabs .script-tab.active {
+    flex-grow: 2.7;
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--indigo) 30%, transparent);
+  }
+
+  #learn-script-tabs .script-tab.active .script-tab-icon {
+    background: transparent;
+  }
+
+  #learn-script-tabs .script-tab.active .script-tab-label {
+    max-width: 84px;
+    margin-left: 3px;
+    opacity: 1;
+    transition-delay: 0s, 0s, 0.1s;
+  }
+}
+
+@media (max-width: 340px) {
+  #learn-script-tabs .script-tab .script-tab-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 17px;
+  }
+
+  #learn-script-tabs .script-tab .script-tab-label {
+    font-size: 11.5px;
+  }
+
+  #learn-script-tabs .script-tab.active {
+    flex-grow: 2.9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #learn-script-tabs .script-tab,
+  #learn-script-tabs .script-tab .script-tab-label {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   Nav bawah HP: dock melayang (bukan bar penuh dari tepi ke tepi).
+   --------------------------------------------------------------------------
+   Sebelumnya bar menempel di dasar layar selebar penuh dan polos (latar rata
+   + garis atas). Sekarang: pil kaca yang melayang di atas dasar layar,
+   lebarnya dibatasi dan dipusatkan, ada tepi bergradasi, kilau tipis di
+   atas, dan bayangan berlapis. Tinggi tab dipangkas supaya lebih ringkas.
+   Ditaruh paling akhir supaya menimpa dashboard.css bagian 15/16.
+   ========================================================================== */
+@media (max-width: 768px) {
+  #screen-start {
+    padding-bottom: calc(86px + env(safe-area-inset-bottom));
+  }
+
+  #script-tabs {
+    left: calc(14px + env(safe-area-inset-left));
+    right: calc(14px + env(safe-area-inset-right));
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    width: auto;
+    max-width: 344px;
+    margin: 0 auto;
+    padding: 5px 6px;
+    gap: 3px;
+    border: 1px solid color-mix(in srgb, var(--indigo) 26%, transparent);
+    border-radius: 999px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 55%),
+      color-mix(in srgb, var(--card) 84%, transparent);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    backdrop-filter: blur(20px) saturate(1.4);
+    box-shadow:
+      0 14px 32px rgba(10, 20, 60, 0.26),
+      0 3px 8px rgba(10, 20, 60, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      inset 0 -1px 0 rgba(10, 20, 60, 0.06);
+  }
+
+  [data-theme="dark"] #script-tabs {
+    border-color: rgba(150, 190, 255, 0.28);
+    background:
+      linear-gradient(180deg, rgba(160, 200, 255, 0.14) 0%, rgba(160, 200, 255, 0) 55%),
+      rgba(16, 24, 56, 0.78);
+    box-shadow:
+      0 14px 34px rgba(0, 0, 0, 0.55),
+      0 0 0 1px rgba(60, 120, 255, 0.08),
+      0 0 22px rgba(52, 169, 238, 0.16),
+      inset 0 1px 0 rgba(200, 225, 255, 0.22);
+  }
+
+  #script-tabs .script-tab {
+    min-height: 42px;
+  }
+
+  #script-tabs .script-tab .script-tab-icon {
+    width: 26px;
+    height: 26px;
+    font-size: 18px;
+  }
+
+  /* tab tidak aktif sedikit redup supaya yang aktif menonjol */
+  #script-tabs .script-tab:not(.active):not(.conquered) .script-tab-icon {
+    opacity: 0.72;
+  }
+
+  #script-tabs .script-tab.active .script-tab-label {
+    max-width: 78px;
+    letter-spacing: 0.01em;
+  }
+}
+
+@media (max-width: 340px) {
+  #script-tabs {
+    left: calc(8px + env(safe-area-inset-left));
+    right: calc(8px + env(safe-area-inset-right));
+  }
+}
