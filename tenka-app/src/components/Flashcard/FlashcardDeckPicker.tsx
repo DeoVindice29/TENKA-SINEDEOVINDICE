@@ -30,8 +30,8 @@ type Kind = "kotoba" | "kanji";
 type Tab = Kind | "mine";
 
 /**
- * Daftar deck satu jenis (Kotoba / Kanji): pilih Level + "Organize by" persis
- * seperti di Lessons & Home. Topik (N5) = deck bawaan app; Organize by lain =
+ * Daftar deck satu jenis (Kotoba / Kanji): pilih Level + "Category" persis
+ * seperti di Lessons & Home. Topik (N5) = deck bawaan app; Category lain =
  * konten yang ditambahkan admin.
  */
 function KindDecks({ kind, onPickDeck }: { kind: Kind; onPickDeck: PickDeck }) {

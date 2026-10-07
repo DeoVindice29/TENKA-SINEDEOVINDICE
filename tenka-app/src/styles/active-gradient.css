@@ -1,0 +1,157 @@
+/* ==========================================================================
+   Gradien untuk semua tombol/tab "aktif" berwarna biru.
+   Kiri biru tua -> kanan biru terang. Dipakai lewat token --active-grad:
+   versi light didefinisikan di bawah, versi dark di styles.css (blok dark).
+   Dimuat paling akhir supaya menang atas aturan lama.
+   ========================================================================== */
+
+:root:not([data-theme="dark"]) {
+  --active-grad: linear-gradient(90deg, #1e43b8 0%, #2f5fde 55%, #4f8bf0 100%);
+  --active-shadow: 0 6px 14px rgba(47, 95, 222, 0.3);
+  --on-active: #fff;
+}
+
+/* ---- penanda yang meluncur: semua nav/pilihan memakai gradien yang sama ---- */
+.script-tabs[data-slide],
+.sidebar-nav[data-slide],
+.st-tabs[data-slide],
+.source-switch-seg[data-slide],
+.practice-seg[data-slide],
+.timer-options[data-slide],
+.difficulty-options[data-slide],
+.quiz-variant-options[data-slide],
+.range-mode-toggle[data-slide],
+.range-random-options[data-slide] {
+  --slide-bg: var(--active-grad);
+  --slide-shadow: var(--active-shadow);
+}
+
+.difficulty-options[data-slide],
+.quiz-variant-options:not(.practice-seg)[data-slide],
+.range-mode-toggle[data-slide],
+.range-random-options[data-slide] {
+  --slide-radius: 14px;
+}
+
+.timer-options[data-slide] {
+  --slide-radius: 999px;
+}
+
+@media (max-width: 720px) {
+  .difficulty-options[data-slide],
+  .quiz-variant-options:not(.practice-seg)[data-slide],
+  .range-mode-toggle[data-slide],
+  .range-random-options[data-slide] {
+    --slide-radius: 10px;
+  }
+}
+
+/* ---- teks pada item aktif selalu putih (di dark mode --on-accent itu gelap) ---- */
+.source-switch-seg[data-slide] .source-pill.active,
+.practice-seg[data-slide] .quiz-variant-btn.active {
+  color: var(--on-active);
+}
+
+/* ---- Timer / Difficulty / Question type / mode Rentang ----
+   Tombol tidak aktif tetap berlatar pucat, tapi digambar lewat ::before
+   (di bawah penanda) supaya penanda gradien terlihat meluncur di bawahnya. */
+:is(.difficulty-options, .timer-options, .quiz-variant-options:not(.practice-seg), .range-mode-toggle, .range-random-options)[data-slide] > button {
+  position: relative;
+  background: transparent !important;
+}
+
+:is(.difficulty-options, .timer-options, .quiz-variant-options:not(.practice-seg), .range-mode-toggle, .range-random-options)[data-slide] > button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  border-radius: inherit;
+  background: var(--paper);
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+:is(.difficulty-options, .timer-options, .quiz-variant-options:not(.practice-seg), .range-mode-toggle, .range-random-options)[data-slide] > button.active {
+  border-color: transparent !important;
+  box-shadow: none !important;
+  color: var(--on-active) !important;
+}
+
+:is(.difficulty-options, .timer-options, .quiz-variant-options:not(.practice-seg), .range-mode-toggle, .range-random-options)[data-slide] > button.active::before {
+  opacity: 0;
+}
+
+:is(.difficulty-options, .timer-options, .quiz-variant-options:not(.practice-seg), .range-mode-toggle, .range-random-options)[data-slide] > button.active .difficulty-sub {
+  color: var(--on-active);
+  opacity: 0.85;
+}
+
+/* ---- kotak "Custom" (ada ikon pensil + input) ikut penanda yang sama ----
+   Latar pucatnya digambar di span pembungkus, input-nya sendiri transparan. */
+.range-random-options[data-slide] > .range-count-custom::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  border-radius: 14px;
+  background: var(--paper);
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+@media (max-width: 720px) {
+  .range-random-options[data-slide] > .range-count-custom::before {
+    border-radius: 10px;
+  }
+}
+
+.range-random-options[data-slide] .range-count-input {
+  background: transparent !important;
+}
+
+.range-random-options[data-slide] .range-count-input.active {
+  border-color: transparent !important;
+  box-shadow: none !important;
+  color: var(--on-active) !important;
+}
+
+.range-random-options[data-slide] > .range-count-custom:has(> .active)::before {
+  opacity: 0;
+}
+
+.range-random-options[data-slide] > .range-count-custom:has(> .active) > svg {
+  color: var(--on-active);
+}
+
+/* ---- semua tombol utama / Start (button.primary) ---- */
+button.primary:not(.danger) {
+  background: var(--active-grad);
+  color: var(--on-active);
+  box-shadow: var(--active-shadow);
+  transition:
+    filter 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+button.primary:not(.danger):not(:disabled):hover {
+  background: var(--active-grad);
+  filter: brightness(1.08) saturate(1.05);
+}
+
+button.primary:not(.danger):not(:disabled):active {
+  transform: translateY(1px);
+}
+
+button.primary:not(.danger):disabled {
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button.primary:not(.danger),
+  .range-random-options[data-slide] > .range-count-custom::before,
+  :is(.difficulty-options, .timer-options, .quiz-variant-options:not(.practice-seg), .range-mode-toggle, .range-random-options)[data-slide] > button::before {
+    transition: none;
+  }
+}

@@ -69,7 +69,7 @@ export default function StartScreen() {
   const { startQuiz, startConquest, startSpeedrun } = useQuiz();
   const { isConquered, isLocked, getSpeedrunBestTime } = useConquest();
 
-  // Kotoba, Bunpō & Kanji: pilih Level + Organize by (Minna no Nihongo, dst) seperti di
+  // Kotoba, Bunpō & Kanji: pilih Level + Category (Minna no Nihongo, dst) seperti di
   // Lessons. Default "Topic" = data bawaan, jadi tampilan lama tidak berubah.
   const src = useHomeContentSource(currentScript);
   const srcKey =

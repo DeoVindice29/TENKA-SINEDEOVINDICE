@@ -705,8 +705,8 @@ export default function LearnScreen() {
   // Kotoba, Bunpō, dan Kanji di Lessons punya dua pilihan yang berdiri
   // sendiri PER TAB, semuanya diingat lewat refresh:
   //  - level JLPT (N5..N1)
-  //  - "Organize by": Topic (data bawaan app, tidak ada yang dihapus) atau
-  //    salah satu Organize by dari Supabase (Minna no Nihongo, dst — admin
+  //  - "Category": Topic (data bawaan app, tidak ada yang dihapus) atau
+  //    salah satu Category dari Supabase (Minna no Nihongo, dst — admin
   //    bisa menambah yang baru).
   // Data bawaan cuma ada untuk N5, jadi level lain otomatis pakai Supabase.
   const [kotobaLevel, setKotobaLevel] = useLocalStorage<KotobaLevel>(
@@ -733,7 +733,7 @@ export default function LearnScreen() {
     "tenka:org:learn:kanji",
     "topic",
   );
-  // tab yang punya pilihan level + Organize by (Hiragana/Katakana tidak)
+  // tab yang punya pilihan level + Category (Hiragana/Katakana tidak)
   const contentKind: ContentKind | null =
     tab === "kotoba" || tab === "bunpo" || tab === "kanji" ? tab : null;
   const storedLevel =

@@ -18,9 +18,9 @@ export type KotobaLevelState =
   | { status: "error"; error: string };
 
 /**
- * Ambil kotoba satu level + satu "Organize by" dari Supabase. level atau
+ * Ambil kotoba satu level + satu "Category" dari Supabase. level atau
  * sourceId = null berarti tidak ada yang diambil (sumber bawaan / belum ada
- * Organize by). Hasil di-cache per (level, sourceId), jadi ganti-ganti pilihan
+ * Category). Hasil di-cache per (level, sourceId), jadi ganti-ganti pilihan
  * tidak fetch ulang.
  */
 export function useKotobaLevel(

@@ -3,7 +3,8 @@ import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabaseClient";
 import { fetchAppRole, type AppRole } from "@/lib/appRole";
 import AdminContentManager, { type AdminSection, type QuickAddSignal } from "@/admin/AdminContentManager";
-import adminBg from "@/assets/bg-admin-login-sakura.webp";
+import quizSceneBg from "@/assets/bg-quiz.webp";
+import quizSceneBgNight from "@/assets/bg-quiz-night.webp";
 import adminDoorlock from "@/assets/doorlock-admin-panel-login.webp";
 import AccountSwitcher from "@/admin/AccountSwitcher";
 import {
@@ -17,7 +18,7 @@ import {
 } from "@/lib/accountSwitcher";
 import { useTheme } from "@/hooks/useTheme";
 import { useLang } from "@/i18n/LangContext";
-import { Spinner } from "@/components/ui/Loader";
+import { SakuraLoader, Spinner } from "@/components/ui/Loader";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { ACTIVITY_STORAGE_KEY, appendActivity, type ActivityEntry } from "@/admin/adminActivity";
 import {
@@ -33,7 +34,6 @@ import {
   IconLayers,
   IconMoon,
   IconQuote,
-  IconSakura,
   IconSignOut,
   IconSun,
   IconUsers,
@@ -111,6 +111,7 @@ type AdminPanelProps = {
 };
 
 export default function AdminPanel({ onClose }: AdminPanelProps) {
+  const { theme: sceneTheme } = useTheme();
   const { t } = useLang();
   const [session, setSession] = useState<Session | null>(null);
   const [status, setStatus] = useState<AuthStatus>("checking");
@@ -242,7 +243,9 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
   return (
     <div
       className="admin-scene"
-      style={{ backgroundImage: `url(${adminBg})` }}
+      style={{
+        backgroundImage: `url(${sceneTheme === "dark" ? quizSceneBgNight : quizSceneBg})`,
+      }}
     >
       <AdminLangToggle floating />
       <div className="admin-scene-inner">
@@ -409,7 +412,7 @@ function AdminShell({
             </svg>
           </button>
           <span className="adm-mobilebar-brand">
-            <IconSakura />
+            <SakuraLoader size={40} />
             <span className="adm-mobilebar-name">Tenka</span>
           </span>
           {/* HP: bahasa + tema nempel di bar atas, tampil di semua section */}
@@ -425,7 +428,7 @@ function AdminShell({
           </button>
           <div className="adm-brand">
             <span className="adm-brand-icon">
-              <IconSakura />
+              <SakuraLoader size={44} />
             </span>
             <div className="adm-brand-text">
               <span className="adm-brand-name">Tenka</span>

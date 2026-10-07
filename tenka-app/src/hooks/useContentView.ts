@@ -19,9 +19,9 @@ export type ContentViewState =
   | { status: "error"; error: string };
 
 /**
- * Ambil Bunpō / Kanji satu level + satu "Organize by" dari Supabase, sama
+ * Ambil Bunpō / Kanji satu level + satu "Category" dari Supabase, sama
  * seperti useKotobaLevel. level atau sourceId = null berarti tidak ada yang
- * diambil (sumber bawaan / tab lain / belum ada Organize by). Hasil di-cache
+ * diambil (sumber bawaan / tab lain / belum ada Category). Hasil di-cache
  * per (kind, level, sourceId).
  */
 export function useContentView(

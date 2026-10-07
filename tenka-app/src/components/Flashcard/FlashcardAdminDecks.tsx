@@ -12,7 +12,7 @@ import type { FlashDeckRef } from "@/data/flashDecks";
 
 type Stat = { fresh: number; learning: number; due: number };
 
-/** Satu kartu deck di daftar (dipakai deck bawaan & deck dari Organize by). */
+/** Satu kartu deck di daftar (dipakai deck bawaan & deck dari Category). */
 export function DeckCardButton({
   title,
   stat,
@@ -66,7 +66,7 @@ export function DeckCardButton({
 }
 
 /**
- * Deck dari satu "Organize by" (konten yang ditambahkan admin). Isinya dimuat
+ * Deck dari satu "Category" (konten yang ditambahkan admin). Isinya dimuat
  * dari Supabase (cache bareng layar Lessons) supaya angka Baru/Belajar/Ulang
  * bisa tampil.
  */
@@ -77,7 +77,7 @@ export default function DbDeckCardView({
   onPick,
 }: {
   deckRef: DbDeckRef;
-  /** nama di kartu = nama Organize by */
+  /** nama di kartu = nama Category */
   title: string;
   /** judul di layar belajar */
   label: string;

@@ -13,8 +13,8 @@ import type { KanjiEntry, KotobaEntry } from "@/data/types";
 
 /**
  * Konten yang ditambahkan admin (tabel kotoba/kanji_entries_<level>,
- * dikelompokkan per "Organize by") sebagai deck flashcard. Satu deck = satu
- * Organize by di satu level. Flashcard hanya untuk Kotoba dan Kanji. Datanya
+ * dikelompokkan per "Category") sebagai deck flashcard. Satu deck = satu
+ * Category di satu level. Flashcard hanya untuk Kotoba dan Kanji. Datanya
  * dibaca lewat loader yang sama dengan layar Lessons, jadi cache-nya dipakai
  * bareng (tidak fetch dua kali).
  */

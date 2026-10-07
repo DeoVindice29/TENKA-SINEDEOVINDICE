@@ -3,17 +3,19 @@
 // Soalnya ratusan, jadi Penaklukan tidak lagi "semua soal sekaligus". Sekarang
 // formatnya per tier, tiap tier N soal acak (pilihan ganda 4 opsi):
 //
-//   Basic Kotoba (Moji · Goi) — 4 tier
+//   Basic Kotoba (Moji · Goi) — 5 tier
 //     Tier 1 — Kalimat penuh hiragana, satu kata digarisbawahi → tebak kanjinya
 //     Tier 2 — Kalimat penuh kanji N5, satu kata digarisbawahi → tebak hiragananya
 //     Tier 3 — Pilih kata yang paling cocok untuk bagian kosong kalimat
-//     Tier 4 — 「kata」を つかう ぶんは どれですか → pilih kalimat yang benar
-//   Kanji N5 — 4 tier
+//     Tier 4 — Similar Meaning: kata → pilih kata yang artinya paling mirip
+//     Tier 5 — 「kata」を つかう ぶんは どれですか → pilih kalimat yang benar
+//   Kanji N5 — 5 tier
 //     Tier 1 — Arti kanji
 //     Tier 2 — Baca kanji (hiragana)
 //     Tier 3 — Tebak kanjinya dari arti (pilihan salah = kanji yang bentuknya
 //              mirip, mis. 日/目/白)
 //     Tier 4 — Pilih kata kanji yang paling cocok untuk kalimat
+//     Tier 5 — 「kanji」を つかう ぶんは どれですか → pilih kalimat yang benar
 //   Bunpō N5 — 5 tier
 //     Tier 1 — Arti pola
 //     Tier 2 — Tebak partikel yang tepat
@@ -592,7 +594,7 @@ function kanjiFill(): Candidate[] {
   );
 }
 
-// Kanji Usage (khusus Latihan) — 「六」を つかう ぶんは どれですか。
+// Tier 5 Kanji (Usage) — 「六」を つかう ぶんは どれですか。
 // Soal ditulis tangan di kanjiUsage.ts: KE-4 kalimat sama-sama memuat kanji itu,
 // jadi tidak bisa dijawab cuma dengan mencari kanji yang sama. Yang diuji adalah
 // pemakaiannya — satu kalimat wajar, tiga lainnya salah (kata bantu bilangan /
@@ -747,9 +749,8 @@ function bunpoTransform(): Candidate[] {
   );
 }
 
-// Latihan Kotoba "Similar Meaning" — kata → kata yang artinya mirip. Bank soalnya
-// ditulis tangan di kotobaSimilar.ts. Bukan tier Penaklukan: cuma ada di Latihan
-// (lihat PRACTICE_ONLY), jadi jumlah tier ujian Kotoba tetap 4.
+// Tier 4 Kotoba "Similar Meaning" — kata → kata yang artinya mirip. Bank soalnya
+// ditulis tangan di kotobaSimilar.ts.
 function kotobaSimilar(): Candidate[] {
   return KOTOBA_SIMILAR.map(
     ([word, correct, wrongA, wrongB, wrongC, meaning], i) => ({
@@ -797,6 +798,7 @@ const SPECS: Record<JlptScriptKey, TierSpec[]> = {
       mode: "otherGroup",
       similarLength: true,
     },
+    { type: JLPT_TIER_TYPES.similar, cands: kotobaSimilar, mode: "any" },
     { type: JLPT_TIER_TYPES.usage, cands: kotobaUsage, mode: "any" },
   ],
   bunpo: [
@@ -841,39 +843,15 @@ const SPECS: Record<JlptScriptKey, TierSpec[]> = {
       cands: kanjiFill,
       mode: "otherGroup",
     },
+    { type: JLPT_TIER_TYPES.usage, cands: kanjiUsage, mode: "any" },
   ],
 };
 
-// Tipe soal yang HANYA ada di Latihan (bukan tier ujian Penaklukan). Ditaruh
-// terpisah dari SPECS supaya jumlah tier, cerita, dan pangkat Penaklukan tidak
-// ikut berubah. `after` = tipe yang jadi pendahulunya di urutan Latihan.
-const PRACTICE_ONLY: Partial<
-  Record<JlptScriptKey, { after: string; spec: TierSpec }[]>
-> = {
-  kanji: [
-    {
-      after: JLPT_TIER_TYPES.fill,
-      spec: { type: JLPT_TIER_TYPES.usage, cands: kanjiUsage, mode: "any" },
-    },
-  ],
-  kotoba: [
-    {
-      after: JLPT_TIER_TYPES.fill,
-      spec: { type: JLPT_TIER_TYPES.similar, cands: kotobaSimilar, mode: "any" },
-    },
-  ],
-};
+// Latihan memakai tipe soal yang sama persis dengan tier Penaklukan (5 tier per
+// aksara), jadi tidak ada lagi tipe khusus Latihan.
+const practiceSpecsOf = (scriptKey: JlptScriptKey): TierSpec[] => SPECS[scriptKey];
 
-const practiceSpecsOf = (scriptKey: JlptScriptKey): TierSpec[] => {
-  const out = [...SPECS[scriptKey]];
-  for (const { after, spec } of PRACTICE_ONLY[scriptKey] ?? []) {
-    const at = out.findIndex((s) => s.type === after);
-    out.splice(at === -1 ? out.length : at + 1, 0, spec);
-  }
-  return out;
-};
-
-/** Jumlah tier ujian Penaklukan untuk script ini (Kotoba 4, Bunpō 5, Kanji 4). */
+/** Jumlah tier ujian Penaklukan untuk script ini (Kotoba 5, Bunpō 5, Kanji 5). */
 export function jlptTierCount(scriptKey: string): number {
   return isJlptScript(scriptKey) ? SPECS[scriptKey].length : 0;
 }
@@ -989,7 +967,7 @@ const TYPE_KEY_BY_VALUE: Record<string, PracticeTypeKey> = Object.fromEntries(
   Object.entries(JLPT_TIER_TYPES).map(([key, value]) => [value, key]),
 ) as Record<string, PracticeTypeKey>;
 
-/** Tipe soal yang bisa dilatih untuk script ini: tier Penaklukan (urut Tier 1, 2, ...) + tipe khusus Latihan. */
+/** Tipe soal yang bisa dilatih untuk script ini: tier Penaklukan (urut Tier 1, 2, ...). */
 export function practiceTypesFor(scriptKey: JlptScriptKey): PracticeTypeKey[] {
   return practiceSpecsOf(scriptKey).map((spec) => TYPE_KEY_BY_VALUE[spec.type]);
 }
@@ -1043,6 +1021,73 @@ export function buildPractice(
   return buildTier(practiceSpec(scriptKey, type), count, new Set());
 }
 
+// ---- Mode Mixed: campuran semua tipe soal Latihan untuk satu aksara ----------
+
+export const PRACTICE_MIXED = "mixed" as const;
+export type PracticeModeKey = PracticeTypeKey | typeof PRACTICE_MIXED;
+
+/** Semua mode Latihan untuk aksara ini: tiap tipe soal + "mixed" di paling akhir. */
+export function practiceModesFor(scriptKey: JlptScriptKey): PracticeModeKey[] {
+  return [...practiceTypesFor(scriptKey), PRACTICE_MIXED];
+}
+
+/** Jumlah soal tersedia untuk satu mode (Mixed = jumlah semua tipe). */
+export function practiceModeCount(
+  scriptKey: JlptScriptKey,
+  mode: PracticeModeKey,
+): number {
+  if (mode !== PRACTICE_MIXED) return practiceCount(scriptKey, mode);
+  return practiceTypesFor(scriptKey).reduce(
+    (sum, k) => sum + practiceCount(scriptKey, k),
+    0,
+  );
+}
+
+/**
+ * `count` soal acak dari SEMUA tipe, dibagi rata antar tipe (tipe yang
+ * soalnya lebih sedikit dari jatah tidak dipaksa; sisanya dioper ke tipe
+ * lain). Kata yang sudah dipakai di satu tipe diutamakan tidak muncul lagi
+ * di tipe lain, supaya soal sebelumnya tidak membocorkan jawabannya.
+ */
+export function buildPracticeMixed(
+  scriptKey: JlptScriptKey,
+  count: number,
+): JlptQueueItem[] {
+  const types = practiceTypesFor(scriptKey);
+  const caps = types.map((k) => practiceCount(scriptKey, k));
+  const alloc = types.map(() => 0);
+  let left = Math.min(count, caps.reduce((a, b) => a + b, 0));
+  // urutan pembagian diacak supaya sisa pembagian tidak selalu jatuh ke tipe pertama
+  const order = shuffle(types.map((_, i) => i));
+  while (left > 0) {
+    let gave = false;
+    for (const i of order) {
+      if (left > 0 && alloc[i] < caps[i]) {
+        alloc[i] += 1;
+        left -= 1;
+        gave = true;
+      }
+    }
+    if (!gave) break;
+  }
+  const used = new Set<string>();
+  const items = types.flatMap((k, i) =>
+    alloc[i] > 0 ? buildTier(practiceSpec(scriptKey, k), alloc[i], used) : [],
+  );
+  return shuffle(items);
+}
+
+/** Satu pintu untuk lembar Latihan: tipe tunggal atau Mixed. */
+export function buildPracticeMode(
+  scriptKey: JlptScriptKey,
+  mode: PracticeModeKey,
+  count: number,
+): JlptQueueItem[] {
+  return mode === PRACTICE_MIXED
+    ? buildPracticeMixed(scriptKey, count)
+    : buildPractice(scriptKey, mode, count);
+}
+
 // ---------------------------------------------------------------------------
 // Teks cerita/intro tiap tier (dipakai ConquestStory & ResultsScreen)
 // ---------------------------------------------------------------------------
@@ -1053,7 +1098,7 @@ export const JLPT_STORY: Record<
   JlptScriptKey,
   { epilogue: Bilingual; phases: Phase[] }
 > = {
-  // ── Kotoba · 4 tier · pangkat Baron (男爵) ───────────────────────────────
+  // ── Kotoba · 5 tier · pangkat Baron (男爵) ───────────────────────────────
   // Lanjutan kisah Knight: Kapten mengirimmu ke Kotonoha (言の葉), kota pasar
   // perbatasan yang "mata uangnya adalah kata". Lulus = dianugerahi wilayah.
   kotoba: {
@@ -1094,12 +1139,22 @@ export const JLPT_STORY: Record<
       },
       {
         label: {
-          en: "Tier 4 — The Court of Witnesses",
-          id: "Tier 4 — Pengadilan Para Saksi",
+          en: "Tier 4 — The Twin Scribes",
+          id: "Tier 4 — Dua Juru Tulis Kembar",
         },
         text: {
-          en: "🧩 The final test, held in the town court at dusk: a dispute between two merchants, and the verdict falls to you. A word appears in 「 」 and four witnesses each use it in a sentence — only one tells the truth, using the word correctly. Name that witness, and the barony is yours.",
-          id: "🧩 Ujian pemungkas, digelar di pengadilan kota saat senja: perselisihan dua saudagar, dan putusannya ada di tanganmu. Sebuah kata muncul di dalam 「 」 dan empat saksi masing-masing memakainya dalam kalimat — hanya satu yang jujur, memakai kata itu dengan benar. Tunjuk saksi itu, dan wilayah ini jadi milikmu.",
+          en: "🪶 The mended contract is read aloud — and the two rival scribes who drafted it start to bicker. “I wrote one word, he wrote another, yet they mean the same thing!” The town magistrate raises a hand: only someone who knows which words truly echo each other can settle it. A word appears — pick the word closest in meaning.",
+          id: "🪶 Kontrak yang sudah ditambal dibacakan lantang — dan dua juru tulis saingan yang menyusunnya mulai berdebat. “Aku menulis satu kata, dia menulis kata lain, padahal maknanya sama!” Hakim kota mengangkat tangan: hanya orang yang tahu kata mana yang benar-benar bergema satu sama lain yang bisa menengahi. Sebuah kata muncul — pilih kata yang artinya paling mirip.",
+        },
+      },
+      {
+        label: {
+          en: "Tier 5 — The Court of Witnesses",
+          id: "Tier 5 — Pengadilan Para Saksi",
+        },
+        text: {
+          en: "🧩 The final test, held in the town court at dusk: the scribes' quarrel has grown into a lawsuit between two merchants, and the verdict falls to you. A word appears in 「 」 and four witnesses each use it in a sentence — only one tells the truth, using the word correctly. Name that witness, and the barony is yours.",
+          id: "🧩 Ujian pemungkas, digelar di pengadilan kota saat senja: pertengkaran para juru tulis berkembang menjadi gugatan dua saudagar, dan putusannya ada di tanganmu. Sebuah kata muncul di dalam 「 」 dan empat saksi masing-masing memakainya dalam kalimat — hanya satu yang jujur, memakai kata itu dengan benar. Tunjuk saksi itu, dan wilayah ini jadi milikmu.",
         },
       },
     ],
@@ -1167,7 +1222,7 @@ export const JLPT_STORY: Record<
     ],
   },
 
-  // ── Kanji · 4 tier · pangkat Count (伯爵) ────────────────────────────────
+  // ── Kanji · 5 tier · pangkat Count (伯爵) ────────────────────────────────
   // Ibu kota, Balairung Seribu Goresan (千画の間). Ujian terakhir jalur N5.
   kanji: {
     epilogue: {
@@ -1211,8 +1266,18 @@ export const JLPT_STORY: Record<
           id: "Tier 4 — Titah Kekaisaran",
         },
         text: {
-          en: "✍️ The final tier: the Emperor's own decree lies open on the table, a single kanji word missing from every sentence, waiting for a Count's pen. Read each sentence and pick the kanji word that fits best.",
-          id: "✍️ Tier terakhir: titah Kaisar sendiri terbentang di atas meja, satu kata kanji hilang di setiap kalimatnya, menunggu pena seorang Count. Baca tiap kalimat dan pilih kata kanji yang paling cocok.",
+          en: "✍️ With the forged seals swept away, the Emperor's own decree is brought out and laid open on the table: a single kanji word missing from every sentence, waiting for a Count's pen. Read each sentence and pick the kanji word that fits best.",
+          id: "✍️ Setelah stempel-stempel palsu disingkirkan, titah Kaisar sendiri dibawa keluar dan dibentangkan di atas meja: satu kata kanji hilang di setiap kalimatnya, menunggu pena seorang Count. Baca tiap kalimat dan pilih kata kanji yang paling cocok.",
+        },
+      },
+      {
+        label: {
+          en: "Tier 5 — The Four Petitioners",
+          id: "Tier 5 — Empat Pemohon",
+        },
+        text: {
+          en: "🧩 The final tier, before the throne itself: four petitioners step forward, each presenting a sentence that contains the very same kanji — but only one uses it the way it is truly used. A kanji appears in 「 」 and four sentences follow. Pick the one that rings true, and the Count's seal is yours.",
+          id: "🧩 Tier terakhir, di hadapan singgasana itu sendiri: empat pemohon maju satu per satu, masing-masing membawa kalimat yang memuat kanji yang sama persis — tetapi hanya satu yang memakainya dengan cara yang benar. Sebuah kanji muncul di dalam 「 」 dan empat kalimat menyusul. Pilih yang paling wajar, dan segel Count menjadi milikmu.",
         },
       },
     ],

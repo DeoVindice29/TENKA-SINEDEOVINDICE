@@ -45,7 +45,7 @@ export type KotobaChapterView = {
 export type KotobaLevelView = {
   kind: "kotoba";
   level: KotobaLevel;
-  /** Organize by (organize_sources.id) asal data ini */
+  /** Category (organize_sources.id) asal data ini */
   sourceId: number;
   /** mode kuis "All Mixed" untuk view ini (terdaftar di SCRIPTS lewat lib/quizModes.ts) */
   allKey: string;
@@ -128,7 +128,7 @@ export function buildKotobaView(
       const subGroups: KotobaSubGroupView[] = subEntries.map(
         ([subTier, subRows]) => {
           // sourceId ikut di key: dipakai juga sebagai id mode kuis di SCRIPTS,
-          // jadi dua Organize by di level yang sama tidak boleh bentrok.
+          // jadi dua Category di level yang sama tidak boleh bentrok.
           const key = `sb-kotoba-${level}-${sourceId}-${chapter}-${subTier}`;
           groupOfKey[key] = groupId;
           const n = subRows.length;
@@ -206,7 +206,7 @@ async function fetchAllRows(
   return { rows, error: null };
 }
 
-// Satu view = satu (level, Organize by). Kuncinya "N5:12" (level:source_id).
+// Satu view = satu (level, Category). Kuncinya "N5:12" (level:source_id).
 const viewCache = new Map<string, KotobaLevelView>();
 const inflight = new Map<string, Promise<LoadResult>>();
 const viewKey = (level: KotobaLevel, sourceId: number) => `${level}:${sourceId}`;

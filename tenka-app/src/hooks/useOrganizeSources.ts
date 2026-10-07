@@ -3,7 +3,7 @@ import type { ContentKind, OrganizeSourceRow } from "@/lib/contentTypes";
 import { fetchOrganizeSources } from "@/lib/organizeSources";
 
 /**
- * Daftar "Organize by" (Minna no Nihongo, Genki, dst) untuk satu jenis konten,
+ * Daftar "Category" (Minna no Nihongo, Genki, dst) untuk satu jenis konten,
  * semua level sekaligus — satu request kecil. `ready` false selama masih dimuat.
  * Hasil disimpan bersama `kind`-nya, jadi saat `kind` berganti (mis. pindah tab
  * Kotoba -> Bunpō) daftar milik kind sebelumnya tidak dianggap siap.

@@ -10,7 +10,7 @@ export type SegmentPair = readonly [string, string];
 export type KotobaRow = {
   id: number;
   tier: string;
-  /** Organize by (organize_sources.id) tempat entri ini berada. */
+  /** Category (organize_sources.id) tempat entri ini berada. */
   source_id: number;
   chapter: number;
   sub_tier: number;
@@ -32,7 +32,7 @@ export type KotobaRow = {
 export type KanjiRow = {
   id: number;
   tier: string;
-  /** Organize by (organize_sources.id) tempat entri ini berada. */
+  /** Category (organize_sources.id) tempat entri ini berada. */
   source_id: number;
   chapter: number;
   sub_tier: number;
@@ -47,7 +47,7 @@ export type KanjiRow = {
 export type BunpoRow = {
   id: number;
   tier: string;
-  /** Organize by (organize_sources.id) tempat entri ini berada. */
+  /** Category (organize_sources.id) tempat entri ini berada. */
   source_id: number;
   chapter: number;
   sub_tier: number;
@@ -66,13 +66,13 @@ export type BunpoRow = {
 
 /**
  * Satu baris di tabel soal_entries_<level> — bank soal mode Latihan (pilihan
- * ganda). Disusun persis seperti materi: Level -> Organize by -> Chapter ->
+ * ganda). Disusun persis seperti materi: Level -> Category -> Chapter ->
  * Sub Chapter -> soal.
  */
 export type SoalRow = {
   id: number;
   tier: string;
-  /** Organize by (organize_sources.id) — kosong untuk soal Script Practice (daftar datar). */
+  /** Category (organize_sources.id) — kosong untuk soal Script Practice (daftar datar). */
   source_id: number | null;
   chapter: number;
   sub_tier: number;
@@ -97,7 +97,7 @@ export type SoalRow = {
 export type ContentKind = "kotoba" | "kanji" | "bunpo";
 
 /**
- * Jenis konten yang tersusun dalam pohon Level -> Organize by -> Chapter ->
+ * Jenis konten yang tersusun dalam pohon Level -> Category -> Chapter ->
  * Sub Chapter. Tiga materi + bank soal Latihan. ContentKind sengaja tidak
  * dilebarkan karena dipakai di Dashboard/Statistik/Aktivitas yang hanya
  * mengenal materi.
@@ -148,9 +148,9 @@ export function sectionTitlesTable(kind: TreeKind): string {
 }
 
 /**
- * "Organize by" = cara/sumber menyusun materi di satu level, mis. "Minna no
+ * "Category" = cara/sumber menyusun materi di satu level, mis. "Minna no
  * Nihongo", "Genki", "Tema Harian". Ada di antara Level dan Chapter:
- * Level -> Organize by -> Chapter -> Sub Chapter -> entri. Daftarnya per jenis
+ * Level -> Category -> Chapter -> Sub Chapter -> entri. Daftarnya per jenis
  * konten + level (tabel organize_sources), jadi menghapus satu sumber di
  * Kotoba tidak menyentuh Kanji/Bunpō.
  */

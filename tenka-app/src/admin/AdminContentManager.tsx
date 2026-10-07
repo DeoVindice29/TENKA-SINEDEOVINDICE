@@ -175,7 +175,7 @@ export default function AdminContentManager({
   onNavigateToDashboard: () => void;
   /** Pindah ke section lain (dipakai kartu statistik di Dashboard). */
   onOpenSection: (section: AdminSection) => void;
-  /** Hapus (entri, Chapter, Sub Chapter, Organize by) khusus role dev. */
+  /** Hapus (entri, Chapter, Sub Chapter, Category) khusus role dev. */
   canDelete: boolean;
 }) {
   // hanya "milik" section yang lagi aktif — kalau kind-nya beda (misal
@@ -452,7 +452,7 @@ function Trend({ value }: { value: number | null }) {
   );
 }
 
-/** Jumlah "Lesson" = Chapter unik (Organize by + nomor Chapter) per tier, dari semua jenis konten. */
+/** Jumlah "Lesson" = Chapter unik (Category + nomor Chapter) per tier, dari semua jenis konten. */
 async function countChapters(): Promise<Record<string, number>> {
   const seen: Record<string, Set<string>> = Object.fromEntries(TIERS.map((t) => [t, new Set<string>()]));
   await Promise.all(
@@ -1503,7 +1503,7 @@ async function ensureSectionTitleRow(kind: TreeKind, row: SectionTitleRow): Prom
 type TreeRow = { id: number; tier: string; source_id: number; chapter: number; sub_tier: number; sort_order?: number };
 type SubTierNode<T extends TreeRow> = { subTier: number; title: SectionTitleRow | null; entries: T[] };
 type ChapterNode<T extends TreeRow> = { chapter: number; title: SectionTitleRow | null; subTiers: Map<number, SubTierNode<T>> };
-// Organize by = lapisan di antara Tier dan Chapter (mis. "Minna no Nihongo").
+// Category = lapisan di antara Tier dan Chapter (mis. "Minna no Nihongo").
 type SourceNode<T extends TreeRow> = { source: OrganizeSourceRow; chapters: Map<number, ChapterNode<T>> };
 type TierNode<T extends TreeRow> = { tier: string; sources: SourceNode<T>[] };
 
@@ -1571,7 +1571,7 @@ function locationText(tier: string, sourceName: string, chapter: number, subTier
   return `${tier} · ${sourceName} · Chapter ${chapter} · Sub Chapter ${subTier}`;
 }
 
-// Dialog kecil buat Tambah/Edit Organize by, Chapter & Sub Chapter (Tier N5–N1
+// Dialog kecil buat Tambah/Edit Category, Chapter & Sub Chapter (Tier N5–N1
 // tetap, gak bisa ditambah/diubah/dihapus dari sini) — beda dari form
 // Tambah/Edit entri (kotoba/kanji/bunpo) yang tetap punya formnya sendiri.
 type NodeDialog =
@@ -1590,7 +1590,7 @@ type NodeDialog =
       title: SectionTitleRow | null;
     };
 
-// Hapus Chapter/Sub Chapter (di dalam satu Organize by) untuk SATU jenis konten
+// Hapus Chapter/Sub Chapter (di dalam satu Category) untuk SATU jenis konten
 // (kotoba/kanji/bunpo). Nama Chapter/Sub Chapter disimpan per jenis konten
 // (section_titles_<jenis>), jadi menghapus di Kotoba tidak menyentuh Kanji
 // maupun Bunpō, dan sebaliknya.
@@ -1612,7 +1612,7 @@ async function deleteTreeNode(
   return titleErr ? titleErr.message : null;
 }
 
-// State + handler pohon Tier -> Organize by -> Chapter -> Sub Chapter yang
+// State + handler pohon Tier -> Category -> Chapter -> Sub Chapter yang
 // dipakai bareng oleh Kotoba, Kanji, dan Bunpō. Tiap section cuma nambahin
 // form entri dan kolom tabelnya sendiri.
 function useContentTree<T extends TreeRow>(kind: TreeKind, noun: string, canDelete: boolean) {
@@ -1770,7 +1770,7 @@ function useContentTree<T extends TreeRow>(kind: TreeKind, noun: string, canDele
 
     if (dialog.kind === "source-add") {
       if (!titleId && !titleEn) {
-        setDialogStatus(tr("Isi nama Organize by (Indonesia atau English)."));
+        setDialogStatus(tr("Isi nama Kategori (Indonesia atau English)."));
         return;
       }
       const tierSources = tree.get(dialog.tier)?.sources ?? [];
@@ -1790,7 +1790,7 @@ function useContentTree<T extends TreeRow>(kind: TreeKind, noun: string, canDele
 
     if (dialog.kind === "source-edit") {
       if (!titleId && !titleEn) {
-        setDialogStatus(tr("Nama Organize by tidak boleh kosong."));
+        setDialogStatus(tr("Nama Kategori tidak boleh kosong."));
         return;
       }
       setDialogStatus(tr("Menyimpan…"));
@@ -1912,7 +1912,7 @@ function useContentTree<T extends TreeRow>(kind: TreeKind, noun: string, canDele
     const name = sourceName(source, "id");
     if (
       !confirm(
-        tr("Hapus Organize by \"{name}\" di {tier}? {chapters} Chapter dan {entries} {noun} di dalamnya akan terhapus permanen.", { name, tier: tierName, chapters: chapterCount, entries: entryCount, noun }),
+        tr("Hapus Kategori \"{name}\" di {tier}? {chapters} Chapter dan {entries} {noun} di dalamnya akan terhapus permanen.", { name, tier: tierName, chapters: chapterCount, entries: entryCount, noun }),
       )
     )
       return;
@@ -1923,7 +1923,7 @@ function useContentTree<T extends TreeRow>(kind: TreeKind, noun: string, canDele
       return;
     }
     if (selected?.sourceId === source.id) setSelected(null);
-    setStatus(tr("Organize by \"{name}\" di {tier} dihapus.", { name, tier: tierName }));
+    setStatus(tr("Kategori \"{name}\" di {tier} dihapus.", { name, tier: tierName }));
     load();
   };
 
@@ -2255,7 +2255,7 @@ function ContentTreeView<T extends TreeRow>({
                 <IconLayers />
               </span>
               <button type="button" className="adm-tree-label-btn" onClick={() => handleToggleSource(source.id)}>
-                <span className="adm-tree-tag">Organize by</span> {sourceName(source, "id")}
+                <span className="adm-tree-tag">{tr("Kategori")}</span> {sourceName(source, "id")}
               </button>
               <span className="adm-tree-badge">{sourceNode.chapters.size} chapter</span>
               <span className="adm-tree-row-actions">
@@ -2263,7 +2263,7 @@ function ContentTreeView<T extends TreeRow>({
                   type="button"
                   className="adm-icon-btn"
                   onClick={() => openSourceEdit(tierName, source)}
-                  aria-label={tr("Ubah nama Organize by {name}", { name: sourceName(source, "id") })}
+                  aria-label={tr("Ubah nama Kategori {name}", { name: sourceName(source, "id") })}
                 >
                   <IconEdit />
                 </button>
@@ -2272,7 +2272,7 @@ function ContentTreeView<T extends TreeRow>({
                     type="button"
                     className="adm-icon-btn danger"
                     onClick={() => handleDeleteSource(tierName, source)}
-                    aria-label={tr("Hapus Organize by {name}", { name: sourceName(source, "id") })}
+                    aria-label={tr("Hapus Kategori {name}", { name: sourceName(source, "id") })}
                   >
                     <IconTrash />
                   </button>
@@ -2284,7 +2284,7 @@ function ContentTreeView<T extends TreeRow>({
         );
       })}
       <button type="button" className="adm-tree-add-link" onClick={() => openSourceAdd(tierName)}>
-        <IconPlus /> {tr("Tambah Organize by")}
+        <IconPlus /> {tr("Tambah Kategori")}
       </button>
     </div>
   );
@@ -2317,7 +2317,7 @@ function ContentTreeView<T extends TreeRow>({
                       <button type="button" className="adm-tree-label-btn" onClick={() => handleToggleTier(tierName)}>
                         {tierName}
                       </button>
-                      <span className="adm-tree-badge">{sources.length} organize by</span>
+                      <span className="adm-tree-badge">{sources.length} {tr("kategori")}</span>
                     </div>
                     {tierOpen && renderSources(tierName, sources)}
                   </div>
@@ -2708,7 +2708,7 @@ function KotobaSection({
   );
 }
 
-// Dialog kecil buat Tambah/Edit Organize by, Chapter & Sub Chapter — cuma
+// Dialog kecil buat Tambah/Edit Category, Chapter & Sub Chapter — cuma
 // ngurusin nomor + nama (ID/EN), gak nyentuh form entri yang lebih detail.
 function NodeFormDialog({
   dialog,
@@ -2725,9 +2725,9 @@ function NodeFormDialog({
   const isSource = dialog.kind === "source-add" || dialog.kind === "source-edit";
   const titleText =
     dialog.kind === "source-add"
-      ? tr("Tambah Organize by — {tier}", { tier: dialog.tier })
+      ? tr("Tambah Kategori — {tier}", { tier: dialog.tier })
       : dialog.kind === "source-edit"
-        ? tr("Ubah Nama Organize by — {tier}", { tier: dialog.tier })
+        ? tr("Ubah Nama Kategori — {tier}", { tier: dialog.tier })
         : dialog.kind === "chapter-add"
           ? tr("Tambah Chapter")
           : dialog.kind === "chapter-edit"
@@ -2761,7 +2761,7 @@ function NodeFormDialog({
         <form className="adm-modal-form" onSubmit={onSubmit}>
           {dialog.kind === "source-add" && (
             <p className="adm-muted adm-modal-note">
-              {tr("Organize by menandai materi di {tier} ini disusun berdasarkan apa — mis. Minna no Nihongo, Genki, atau Tema Harian. Setelah dibuat, isi dengan Chapter dan Sub Chapter.", { tier: dialog.tier })}
+              {tr("Kategori menandai materi di {tier} ini disusun berdasarkan apa — mis. Minna no Nihongo, Genki, atau Tema Harian. Setelah dibuat, isi dengan Chapter dan Sub Chapter.", { tier: dialog.tier })}
             </p>
           )}
 
@@ -3313,8 +3313,13 @@ function BunpoSection({
 // Bank soal mode Latihan (pilihan ganda), ditampilkan per aksara (Kotoba /
 // Bunpō / Kanji) lalu per tipe soal — kartu tipe di atas, tabel soal di
 // bawahnya. Soal disimpan di soal_entries_<level> dengan kolom `script` &
-// `question_type` (lihat migrasi 2026_add_soal_script_and_type.sql). Daftarnya
-// datar: semua level N5–N1 digabung, tanpa Organize by / Chapter / Sub Chapter.
+// `question_type` (lihat migrasi 2026_add_soal_script_and_type.sql).
+//
+// Soal dikelompokkan per Level (N5–N1) -> Category -> tipe soal, sama seperti
+// pilihan Level + Category di halaman Practice sisi user. Category-nya
+// diambil dari organize_sources milik aksara ini (kind = kotoba/bunpo/kanji),
+// dikelola lewat menu Kotoba / Bunpō / Kanji (lihat migrasi
+// 2026_practice_organize_by.sql). Chapter / Sub Chapter tidak dipakai di Practice.
 
 const SOAL_MIN_OPTIONS = 2;
 const SOAL_MAX_OPTIONS = 6;
@@ -3434,6 +3439,81 @@ function OptionsEditor({ defaultOptions, defaultAnswer }: { defaultOptions?: str
   );
 }
 
+// Level + Category di form soal. Daftar Category mengikuti Level yang
+// dipilih (diambil dari organize_sources milik aksaranya — sama dengan yang
+// dipakai halaman Lessons & Practice di sisi user). Nilainya dibaca lewat
+// FormData (name="tier" & name="source_id").
+function SoalScopeFields({
+  sources,
+  scriptLabel,
+  defaultTier,
+  defaultSourceId,
+  lockTier,
+}: {
+  sources: OrganizeSourceRow[];
+  scriptLabel: string;
+  defaultTier: string;
+  defaultSourceId: number | null;
+  lockTier: boolean;
+}) {
+  const { tr, lang } = useAdminTr();
+  const [tier, setTier] = useState(defaultTier);
+  const options = sources.filter((s) => s.tier === tier);
+  const [sourceId, setSourceId] = useState<string>(() => {
+    const first = sources.filter((s) => s.tier === defaultTier)[0];
+    if (defaultSourceId !== null && sources.some((s) => s.id === defaultSourceId && s.tier === defaultTier)) {
+      return String(defaultSourceId);
+    }
+    return first ? String(first.id) : "";
+  });
+
+  const changeTier = (next: string) => {
+    setTier(next);
+    const first = sources.filter((s) => s.tier === next)[0];
+    setSourceId(first ? String(first.id) : "");
+  };
+
+  return (
+    <>
+      <div className="adm-grid-2">
+        <Field label="Level" required>
+          <select name="tier" value={tier} disabled={lockTier} onChange={(e) => changeTier(e.currentTarget.value)}>
+            {TIERS.map((x) => (
+              <option key={x} value={x}>
+                {x}
+              </option>
+            ))}
+          </select>
+        </Field>
+        <Field label={tr("Kategori")} required>
+          <select
+            name="source_id"
+            value={sourceId}
+            required
+            disabled={options.length === 0}
+            onChange={(e) => setSourceId(e.currentTarget.value)}
+          >
+            {options.length === 0 && <option value="">—</option>}
+            {options.map((s) => (
+              <option key={s.id} value={s.id}>
+                {sourceName(s, lang)}
+              </option>
+            ))}
+          </select>
+        </Field>
+      </div>
+      {options.length === 0 && (
+        <p className="adm-practice-scope-warn" role="alert">
+          {tr("Belum ada Kategori di {tier}. Klik Tambah Kategori untuk membuatnya.", {
+            tier,
+            label: scriptLabel,
+          })}
+        </p>
+      )}
+    </>
+  );
+}
+
 function PracticeSection({ script, canDelete }: { script: JlptScriptKey; canDelete: boolean }) {
   const { tr, lang } = useAdminTr();
   const { t } = useLang();
@@ -3450,6 +3530,28 @@ function PracticeSection({ script, canDelete }: { script: JlptScriptKey; canDele
   const [editingRow, setEditingRow] = useState<SoalRow | null>(null);
   const [busy, setBusy] = useState(false);
   const dateLocale = lang === "en" ? "en-US" : "id-ID";
+
+  // Level + Category yang sedang ditampilkan (null = otomatis ke yang pertama)
+  const [sources, setSources] = useState<OrganizeSourceRow[] | null>(null);
+  const [level, setLevel] = useState<string>("N5");
+  const [sourceFilter, setSourceFilter] = useState<number | "none" | null>(null);
+
+  // Tambah / ubah nama Category (dialog yang sama dengan halaman materi)
+  const [dialog, setDialog] = useState<NodeDialog | null>(null);
+  const [dialogStatus, setDialogStatus] = useState<string | null>(null);
+  const [catMenu, setCatMenu] = useState(false);
+  useEffect(() => {
+    if (!catMenu) return;
+    const close = (e: MouseEvent) => {
+      if (!(e.target as HTMLElement).closest(".adm-catmenu")) setCatMenu(false);
+    };
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, [catMenu]);
+  const closeDialog = () => {
+    setDialog(null);
+    setDialogStatus(null);
+  };
 
   const load = async () => {
     const results = await Promise.all(
@@ -3477,15 +3579,123 @@ function PracticeSection({ script, canDelete }: { script: JlptScriptKey; canDele
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [script]);
 
+  useEffect(() => {
+    let cancelled = false;
+    setSources(null);
+    setSourceFilter(null);
+    fetchOrganizeSources(script).then((list) => {
+      if (!cancelled) setSources(list);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [script]);
+
+  const levelSources = useMemo(() => (sources ?? []).filter((s) => s.tier === level), [sources, level]);
+  // soal lama yang belum punya Category (sebelum migrasi backfill dijalankan)
+  const hasUnassigned = (rows ?? []).some((r) => r.tier === level && r.source_id === null);
+  const activeSource: number | "none" | null = (() => {
+    if (sourceFilter === "none" && hasUnassigned) return "none";
+    if (typeof sourceFilter === "number" && levelSources.some((s) => s.id === sourceFilter)) return sourceFilter;
+    if (levelSources[0]) return levelSources[0].id;
+    return hasUnassigned ? "none" : null;
+  })();
+
+  const scopedRows = useMemo(
+    () =>
+      (rows ?? []).filter(
+        (r) =>
+          r.tier === level && (activeSource === "none" ? r.source_id === null : r.source_id === activeSource),
+      ),
+    [rows, level, activeSource],
+  );
+
   const counts = useMemo(() => {
     const map: Record<string, number> = {};
-    (rows ?? []).forEach((r) => {
+    scopedRows.forEach((r) => {
       if (r.question_type) map[r.question_type] = (map[r.question_type] ?? 0) + 1;
     });
     return map;
-  }, [rows]);
+  }, [scopedRows]);
 
-  const typeRows = useMemo(() => (rows ?? []).filter((r) => r.question_type === type), [rows, type]);
+  const typeRows = useMemo(() => scopedRows.filter((r) => r.question_type === type), [scopedRows, type]);
+
+  const reloadSources = () => fetchOrganizeSources(script).then(setSources);
+
+  const submitDialog = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!dialog) return;
+    const form = new FormData(e.currentTarget);
+    const titleId = String(form.get("title_id") ?? "").trim();
+    const titleEn = String(form.get("title_en") ?? "").trim();
+    if (!titleId && !titleEn) {
+      setDialogStatus(tr("Isi nama Kategori (Indonesia atau English)."));
+      return;
+    }
+    setDialogStatus(tr("Menyimpan…"));
+    if (dialog.kind === "source-add") {
+      const tierSources = (sources ?? []).filter((x) => x.tier === dialog.tier);
+      const nextOrder = tierSources.length > 0 ? Math.max(...tierSources.map((x) => x.sort_order)) + 1 : 0;
+      const res = await createOrganizeSource(script, dialog.tier, titleId || titleEn, titleEn || titleId, nextOrder);
+      if (res.error || !res.row) {
+        setDialogStatus(tr("Gagal:") + " " + (res.error ?? tr("tidak diketahui")));
+        return;
+      }
+      await reloadSources();
+      setLevel(dialog.tier);
+      setSourceFilter(res.row.id);
+      resetListState();
+      closeDialog();
+    } else if (dialog.kind === "source-edit") {
+      const err = await renameOrganizeSource(dialog.source.id, titleId || titleEn, titleEn || titleId);
+      if (err) {
+        setDialogStatus(tr("Gagal:") + " " + err);
+        return;
+      }
+      await reloadSources();
+      closeDialog();
+    }
+  };
+
+  const handleDeleteSource = async (source: OrganizeSourceRow) => {
+    if (!canDelete) return; // hapus khusus dev
+    const name = sourceName(source, "id");
+    if (
+      !confirm(
+        tr(
+          "Hapus Kategori \"{name}\" di {tier}? Semua soal Practice dan materi (Chapter & entri) di dalamnya ikut terhapus permanen.",
+          { name, tier: source.tier },
+        ),
+      )
+    )
+      return;
+    setStatus(tr("Menghapus…"));
+    const err = await deleteOrganizeSource(source.id);
+    if (err) {
+      setStatus(tr("Gagal hapus:") + " " + err);
+      return;
+    }
+    setSourceFilter(null);
+    resetListState();
+    setStatus(tr("Kategori \"{name}\" di {tier} dihapus.", { name, tier: source.tier }));
+    await reloadSources();
+    load();
+  };
+
+  const resetListState = () => {
+    setPage(1);
+    setPicked(new Set());
+    setStatus(null);
+  };
+  const changeLevel = (next: string) => {
+    setLevel(next);
+    setSourceFilter(null);
+    resetListState();
+  };
+  const changeSource = (value: string) => {
+    setSourceFilter(value === "none" ? "none" : Number(value));
+    resetListState();
+  };
   const totalPages = Math.max(1, Math.ceil(typeRows.length / PRACTICE_PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
   const start = (safePage - 1) * PRACTICE_PAGE_SIZE;
@@ -3575,8 +3785,14 @@ function PracticeSection({ script, canDelete }: { script: JlptScriptKey; canDele
       setStatus(tr("Tandai satu pilihan sebagai jawaban yang benar."));
       return;
     }
+    const sourceId = Number(form.get("source_id"));
+    if (!Number.isInteger(sourceId) || sourceId <= 0) {
+      setStatus(tr("Pilih Kategori untuk soal ini."));
+      return;
+    }
     const opt = (name: string) => String(form.get(name) ?? "").trim() || null;
     const content = {
+      source_id: sourceId,
       question: String(form.get("question") ?? "").trim(),
       question_translation_id: opt("question_translation_id"),
       question_translation_en: opt("question_translation_en"),
@@ -3595,6 +3811,8 @@ function PracticeSection({ script, canDelete }: { script: JlptScriptKey; canDele
       }
       setStatus(tr("Perubahan tersimpan."));
       setEditingRow(null);
+      setLevel(editingRow.tier);
+      setSourceFilter(sourceId);
       setView("browse");
       load();
       return;
@@ -3606,7 +3824,6 @@ function PracticeSection({ script, canDelete }: { script: JlptScriptKey; canDele
       tier,
       script,
       question_type: type,
-      source_id: null,
       chapter: 1,
       sub_tier: 1,
     });
@@ -3615,6 +3832,9 @@ function PracticeSection({ script, canDelete }: { script: JlptScriptKey; canDele
       return;
     }
     setStatus(tr("Tersimpan."));
+    // lihat soal yang baru ditambah: pindah ke Level + Category yang dipakai form
+    setLevel(tier);
+    setSourceFilter(sourceId);
     load();
     if (submitter?.value === "done") {
       setPage(1);
@@ -3647,15 +3867,13 @@ function PracticeSection({ script, canDelete }: { script: JlptScriptKey; canDele
           onSubmit={(e) => handleSubmit(e, (e.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null)}
         >
           <SectionCard icon={<IconDocument />} title="Soal" desc="Pertanyaan yang akan muncul di mode Latihan.">
-            <Field label="Level" required>
-              <select name="tier" defaultValue={r?.tier ?? "N5"} disabled={editing}>
-                {TIERS.map((tier) => (
-                  <option key={tier} value={tier}>
-                    {tier}
-                  </option>
-                ))}
-              </select>
-            </Field>
+            <SoalScopeFields
+              sources={sources ?? []}
+              scriptLabel={meta.label}
+              defaultTier={r?.tier ?? level}
+              defaultSourceId={r ? r.source_id : activeSource === "none" ? null : activeSource}
+              lockTier={editing}
+            />
             <Field label="Teks Soal" required>
               <CountedTextarea
                 name="question"
@@ -3730,27 +3948,149 @@ function PracticeSection({ script, canDelete }: { script: JlptScriptKey; canDele
         </div>
       </div>
 
-      <div className="adm-ptype-grid" role="tablist" aria-label={tr("Tipe Soal")}>
-        {types.map((k, i) => (
-          <button
-            key={k}
-            type="button"
-            role="tab"
-            aria-selected={type === k}
-            className={`adm-ptype tone-${PRACTICE_TONES[i % PRACTICE_TONES.length]}${type === k ? " active" : ""}`}
-            onClick={() => pickType(k)}
-          >
-            <span className="adm-ptype-icon">{PRACTICE_TYPE_ICON[k]}</span>
-            <span className="adm-ptype-text">
-              <span className="adm-ptype-name">{t(`practice.${script}.${k}`)}</span>
-              <span className="adm-ptype-count">
-                {rows === null ? "…" : counts[k] ?? 0} {tr("soal")}
-              </span>
-            </span>
-            <IconChevronRight className="adm-ptype-caret" />
-          </button>
-        ))}
+      <div className="adm-pscope">
+        <div className="adm-prow" role="group" aria-label={tr("Level")}>
+          <span className="adm-prow-label">{tr("Level")}</span>
+          <div className="adm-seg">
+            {TIERS.map((x) => (
+              <button
+                key={x}
+                type="button"
+                className={`adm-seg-pill${level === x ? " active" : ""}`}
+                aria-pressed={level === x}
+                onClick={() => changeLevel(x)}
+              >
+                {x}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="adm-prow" role="group" aria-label={tr("Kategori")}>
+          <span className="adm-prow-label">{tr("Kategori")}</span>
+          {sources === null ? (
+            <InlineLoading label={tr("Memuat…")} />
+          ) : (
+            <>
+              <div className="adm-prow-line">
+              <div className="adm-seg">
+                {levelSources.map((s) => {
+                  const on = activeSource === s.id;
+                  return (
+                    <button
+                      key={s.id}
+                      type="button"
+                      className={`adm-seg-pill${on ? " active" : ""}`}
+                      aria-pressed={on}
+                      onClick={() => changeSource(String(s.id))}
+                    >
+                      {sourceName(s, lang)}
+                    </button>
+                  );
+                })}
+                {hasUnassigned && (
+                  <button
+                    type="button"
+                    className={`adm-seg-pill${activeSource === "none" ? " active" : ""}`}
+                    aria-pressed={activeSource === "none"}
+                    onClick={() => changeSource("none")}
+                  >
+                    {tr("Belum diatur")}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  className="adm-seg-pill adm-seg-pill--add"
+                  onClick={() => {
+                    setDialogStatus(null);
+                    setDialog({ kind: "source-add", tier: level });
+                  }}
+                >
+                  + {tr("Tambah Kategori")}
+                </button>
+              </div>
+              {typeof activeSource === "number" && (
+                <span className="adm-catmenu">
+                  <button
+                    type="button"
+                    className="adm-catmenu-btn"
+                    aria-haspopup="menu"
+                    aria-expanded={catMenu}
+                    aria-label={tr("Kategori")}
+                    onClick={() => setCatMenu((v) => !v)}
+                  >
+                    <span aria-hidden="true">⋮</span>
+                  </button>
+                  {catMenu && (
+                    <div className="adm-catmenu-pop" role="menu">
+                      <button
+                        type="button"
+                        role="menuitem"
+                        onClick={() => {
+                          const src = levelSources.find((x) => x.id === activeSource);
+                          setCatMenu(false);
+                          if (src) {
+                            setDialogStatus(null);
+                            setDialog({ kind: "source-edit", tier: level, source: src });
+                          }
+                        }}
+                      >
+                        <IconEdit /> {tr("Ubah nama Kategori")}
+                      </button>
+                      {canDelete && (
+                        <button
+                          type="button"
+                          role="menuitem"
+                          className="danger"
+                          onClick={() => {
+                            const src = levelSources.find((x) => x.id === activeSource);
+                            setCatMenu(false);
+                            if (src) handleDeleteSource(src);
+                          }}
+                        >
+                          <IconTrash /> {tr("Hapus Kategori")}
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </span>
+              )}
+              </div>
+              {activeSource === null && (
+                <p className="adm-prow-warn">
+                  {tr("Belum ada Kategori di {tier}. Klik Tambah Kategori untuk membuatnya.", {
+                    tier: level,
+                    label: meta.label,
+                  })}
+                </p>
+              )}
+            </>
+          )}
+        </div>
+
+        <div className="adm-prow" role="group" aria-label={tr("Tipe Soal")}>
+          <span className="adm-prow-label">{tr("Tipe Soal")}</span>
+          <div className="adm-seg adm-seg--wrap" role="tablist">
+            {types.map((k) => (
+              <button
+                key={k}
+                type="button"
+                role="tab"
+                aria-selected={type === k}
+                className={`adm-seg-pill${type === k ? " active" : ""}`}
+                onClick={() => pickType(k)}
+              >
+                {t(`practice.${script}.${k}`)}
+                <span className="adm-seg-count">{rows === null ? "…" : counts[k] ?? 0}</span>
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
+
+      {dialog && (
+        <NodeFormDialog dialog={dialog} status={dialogStatus} onSubmit={submitDialog} onClose={closeDialog} />
+      )}
 
       <StatusLine status={status} />
 
@@ -3767,6 +4107,7 @@ function PracticeSection({ script, canDelete }: { script: JlptScriptKey; canDele
           <button
             type="button"
             className="adm-btn adm-btn-primary"
+            disabled={sources === null}
             onClick={() => {
               setEditingRow(null);
               setStatus(null);
@@ -3866,18 +4207,26 @@ function PracticeSection({ script, canDelete }: { script: JlptScriptKey; canDele
                       <span className="adm-practice-actions">
                         <button
                           type="button"
-                          className="adm-practice-btn edit"
+                          className="adm-practice-btn edit icon"
                           onClick={() => {
                             setEditingRow(row);
                             setStatus(null);
                             setView("edit");
                           }}
+                          aria-label={tr("Edit")}
+                          title={tr("Edit")}
                         >
-                          <IconEdit /> {tr("Edit")}
+                          <IconEdit />
                         </button>
                         {canDelete && (
-                          <button type="button" className="adm-practice-btn danger" onClick={() => handleDelete(row)}>
-                            <IconTrash /> {tr("Hapus")}
+                          <button
+                            type="button"
+                            className="adm-practice-btn danger icon"
+                            onClick={() => handleDelete(row)}
+                            aria-label={tr("Hapus")}
+                            title={tr("Hapus")}
+                          >
+                            <IconTrash />
                           </button>
                         )}
                       </span>

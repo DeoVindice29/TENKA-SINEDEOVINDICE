@@ -8,7 +8,7 @@ export function sourceName(row: Pick<OrganizeSourceRow, "name_id" | "name_en">, 
   return primary.trim() || fallback.trim() || "—";
 }
 
-/** Semua sumber "Organize by" untuk satu jenis konten (semua level), urut tampil. */
+/** Semua sumber "Category" untuk satu jenis konten (semua level), urut tampil. */
 export async function fetchOrganizeSources(kind: TreeKind, tier?: string): Promise<OrganizeSourceRow[]> {
   let q = supabase.from("organize_sources").select("*").eq("kind", kind);
   if (tier) q = q.eq("tier", tier);

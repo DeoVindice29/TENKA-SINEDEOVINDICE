@@ -569,7 +569,7 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Belum ada data bunpō N4.",
   },
 
-  "source.label": { en: "Organize by", id: "Susun berdasarkan" },
+  "source.label": { en: "Category", id: "Kategori" },
   "source.local": { en: "Topic", id: "Topik" },
   "source.level": { en: "Level", id: "Level" },
   "source.lockedHint": {
@@ -640,6 +640,11 @@ export const I18N: Record<string, I18NEntry> = {
   "practice.countLabel": { en: "Number of questions", id: "Jumlah soal" },
   "practice.all": { en: "All ({count})", id: "Semua ({count})" },
   "practice.questions": { en: "questions", id: "soal" },
+  "practice.mixed": { en: "Mixed", id: "Campuran" },
+  "practice.mixedDesc": {
+    en: "A random mix of every question type",
+    id: "Campuran acak dari semua tipe soal",
+  },
   "practice.customCount": { en: "Custom…", id: "Ketik sendiri…" },
   "practice.customCountAria": {
     en: "Type a custom number of questions",
@@ -780,6 +785,22 @@ export const I18N: Record<string, I18NEntry> = {
   "practice.sheet.answerWas": {
     en: "Correct answer:",
     id: "Jawaban yang benar:",
+  },
+  "practice.sheet.explanationLabel": {
+    en: "Explanation: {value}",
+    id: "Pembahasan: {value}",
+  },
+  "practice.loadingSoal": {
+    en: "Loading {level} questions…",
+    id: "Memuat soal {level}…",
+  },
+  "practice.noSoal": {
+    en: "No questions for {level} here yet. Try another category or level.",
+    id: "Belum ada soal {level} di sini. Coba kategori atau level lain.",
+  },
+  "practice.noSource": {
+    en: "No category available for {level} yet.",
+    id: "Belum ada kategori untuk {level}.",
   },
   "practice.sheet.verdictGreat": {
     en: "Excellent!",
@@ -1210,6 +1231,10 @@ export const I18N: Record<string, I18NEntry> = {
   "feedback.thanksClose": { en: "Got it", id: "Oke" },
 
   "speedrun.countdownGo": { en: "GO!", id: "MULAI!" },
+  "speedrun.countdownCancel": {
+    en: "Tap anywhere to cancel",
+    id: "Ketuk di mana saja untuk batal",
+  },
   "matchMode.cardTitle": { en: "Match Mode", id: "Mode Match" },
   "matchMode.cardDesc": {
     en: "Match 4 characters with their romaji, round by round.",
@@ -1615,12 +1640,12 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Ujiannya ala JLPT N5 tata bahasa: 5 tier — arti pola, partikel, konjugasi kata kerja, memilih kalimat yang benar untuk sebuah pola, dan mengubah bentuk kalimat — masing-masing {count} soal acak {label} (total {total} soal).",
   },
   "conquestModal.jlptIntroKanji": {
-    en: "This works like the JLPT N5 kanji exam: 4 tiers — kanji meaning, kanji reading (hiragana), picking the kanji for a meaning, and choosing the best kanji word for a sentence — with {count} random {label} questions in each ({total} in total).",
-    id: "Ujiannya ala JLPT N5 kanji: 4 tier — arti kanji, bacaan kanji (hiragana), menebak kanji dari arti, dan memilih kata kanji yang paling cocok untuk kalimat — masing-masing {count} soal acak {label} (total {total} soal).",
+    en: "This works like the JLPT N5 kanji exam: 5 tiers — kanji meaning, kanji reading (hiragana), picking the kanji for a meaning, choosing the best kanji word for a sentence, and choosing the correct sentence for a kanji — with {count} random {label} questions in each ({total} in total).",
+    id: "Ujiannya ala JLPT N5 kanji: 5 tier — arti kanji, bacaan kanji (hiragana), menebak kanji dari arti, memilih kata kanji yang paling cocok untuk kalimat, dan memilih kalimat yang benar untuk sebuah kanji — masing-masing {count} soal acak {label} (total {total} soal).",
   },
   "conquestModal.jlptIntroKotoba": {
-    en: "This works like the JLPT N5 vocabulary (Moji · Goi) exam: 4 tiers — hiragana → kanji, kanji → hiragana, choosing the best word for a sentence, and choosing the correct sentence for a word — with {count} random {label} questions in each ({total} in total).",
-    id: "Ujiannya ala JLPT N5 Moji · Goi: 4 tier — hiragana → kanji, kanji → hiragana, memilih kata yang paling cocok untuk kalimat, dan memilih kalimat yang benar untuk sebuah kata — masing-masing {count} soal acak {label} (total {total} soal).",
+    en: "This works like the JLPT N5 vocabulary (Moji · Goi) exam: 5 tiers — hiragana → kanji, kanji → hiragana, choosing the best word for a sentence, choosing the word closest in meaning, and choosing the correct sentence for a word — with {count} random {label} questions in each ({total} in total).",
+    id: "Ujiannya ala JLPT N5 Moji · Goi: 5 tier — hiragana → kanji, kanji → hiragana, memilih kata yang paling cocok untuk kalimat, memilih kata yang artinya paling mirip, dan memilih kalimat yang benar untuk sebuah kata — masing-masing {count} soal acak {label} (total {total} soal).",
   },
   "conquestModal.rule.jlptChoices": {
     en: "Every tier is a <b>sheet of {count} multiple-choice questions</b> (4 options each) that you answer in one go. The questions are drawn at random from {label} each attempt.",

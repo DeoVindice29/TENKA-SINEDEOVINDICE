@@ -33,7 +33,7 @@
     padding: 40px 20px;
     background-color: var(--app-bg, #eaf1ff);
     background-size: cover;
-    background-position: center;
+    background-position: 20% center;
     background-repeat: no-repeat;
     font-family: system-ui, sans-serif;
     box-sizing: border-box;
@@ -1685,7 +1685,7 @@ body:has(.adm-shell) {
     }
 }
 
-/* Organize by: lapisan di antara Tier dan Chapter */
+/* Category: lapisan di antara Tier dan Chapter */
 .adm-tree-row--source {
     background: var(--a-indigo-tint);
 }
@@ -2236,13 +2236,11 @@ body:has(.adm-shell) {
     padding: 0 14px 16px;
     border-right: none;
     color: #dbe6ff;
-    background-color: #17244f;
-    background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 232 200' fill='none'%3E%3Cg stroke='%23a9c0ff' stroke-opacity='.16' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M-6 172c10-22 40-24 50-4 12-18 44-14 48 8 14-12 40-6 44 12 16-14 46-8 50 12'/%3E%3Cpath d='M-6 196c12-20 38-20 48-2 12-16 40-12 46 6 14-10 38-4 42 12 18-12 46-6 52 10'/%3E%3Cpath d='M22 186c6-10 22-10 28-1M104 190c6-10 22-10 28-1M170 184c6-10 22-10 28-1'/%3E%3C/g%3E%3Cg fill='%23a9c0ff' fill-opacity='.2'%3E%3Cg transform='translate(196 132) scale(.9)'%3E%3Ccircle r='7'/%3E%3Ccircle cx='11' cy='-4' r='7'/%3E%3Ccircle cx='7' cy='9' r='7'/%3E%3Ccircle cx='-7' cy='9' r='7'/%3E%3Ccircle cx='-11' cy='-4' r='7'/%3E%3C/g%3E%3Cg transform='translate(170 96) scale(.55)'%3E%3Ccircle r='7'/%3E%3Ccircle cx='11' cy='-4' r='7'/%3E%3Ccircle cx='7' cy='9' r='7'/%3E%3Ccircle cx='-7' cy='9' r='7'/%3E%3Ccircle cx='-11' cy='-4' r='7'/%3E%3C/g%3E%3Cg transform='translate(214 76) scale(.4)'%3E%3Ccircle r='7'/%3E%3Ccircle cx='11' cy='-4' r='7'/%3E%3Ccircle cx='7' cy='9' r='7'/%3E%3Ccircle cx='-7' cy='9' r='7'/%3E%3Ccircle cx='-11' cy='-4' r='7'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
-        linear-gradient(180deg, #1f3170 0%, #182757 46%, #121d44 100%);
-    background-repeat: no-repeat, no-repeat;
-    background-position: center calc(100% - 158px), 0 0;
-    background-size: 100% auto, 100% 100%;
+    background-color: #031139;
+    background-image: url("../assets/bg-admin-sidebar.png");
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: cover;
 }
 
 .adm-sidebar .adm-brand {
@@ -2256,6 +2254,10 @@ body:has(.adm-shell) {
     width: 44px;
     height: 44px;
     color: #fff;
+}
+
+.adm-sidebar .adm-brand-icon .tk-sakura {
+    --tk-sakura-color: #ff79c6;
 }
 
 .adm-sidebar .adm-brand-icon svg {
@@ -4637,4 +4639,548 @@ body:has(.adm-shell) {
     .adm-sidebar .adm-nav-sub {
         margin-left: 22px;
     }
+}
+
+/* Practice admin: pilihan Level + Category di atas kartu tipe soal */
+.adm-practice-scope {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.adm-practice-scope-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--a-ink-soft);
+}
+
+.adm-practice-scope-label:not(:first-child) {
+    margin-left: 6px;
+}
+
+.adm-practice-scope-warn {
+    margin: 0;
+    font-size: 13.5px;
+    color: #b45309;
+}
+
+@media (max-width: 640px) {
+    .adm-practice-scope-label:not(:first-child) {
+        margin-left: 0;
+    }
+}
+
+.adm-practice-scope-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
+
+@media (max-width: 640px) {
+    .adm-practice-scope-actions {
+        margin-left: 0;
+    }
+}
+
+/* ================= Sidebar admin: kontras lebih jelas + ikon sakura diam =================
+   Latar sidebar diganti ke bg-admin-sidebar.png yang baru (biru polos, tanpa bunga
+   di belakang teks), lalu warna teks / ikon / garis dicerahkan supaya menu tidak
+   lagi samar. Ikon sakura di brand tidak lagi berkedip/berputar. */
+
+.adm-sidebar {
+    background-color: #021033;
+    background-position: center bottom;
+    background-size: cover;
+}
+
+/* ikon sakura di brand: diam, semua kelopak tampil penuh */
+.adm-sidebar .adm-brand-icon .tk-sakura path {
+    animation: none;
+    opacity: 1;
+}
+
+.adm-sidebar .adm-brand-name {
+    color: #fff;
+    text-shadow: 0 1px 10px rgba(0, 10, 40, 0.8);
+}
+
+.adm-sidebar .adm-brand-caption {
+    color: #bcd0ff;
+    font-weight: 500;
+}
+
+/* menu utama */
+.adm-sidebar .adm-nav-item,
+.adm-sidebar .adm-nav-group {
+    color: #f2f6ff;
+    font-weight: 600;
+}
+
+.adm-sidebar .adm-nav-item:hover,
+.adm-sidebar .adm-nav-group:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.adm-sidebar .adm-nav-icon,
+.adm-sidebar .adm-nav-caret {
+    color: #c7d8ff;
+}
+
+.adm-sidebar .adm-nav-item.active {
+    background: linear-gradient(90deg, #4673f0 0%, #3560d6 100%);
+    box-shadow: 0 6px 16px rgba(30, 60, 170, 0.55);
+}
+
+.adm-sidebar .adm-nav-item.active,
+.adm-sidebar .adm-nav-item.active .adm-nav-icon,
+.adm-sidebar .adm-nav-group.active-parent,
+.adm-sidebar .adm-nav-group.active-parent .adm-nav-icon {
+    color: #fff;
+}
+
+/* sub menu */
+.adm-sidebar .adm-nav-sub {
+    border-left-color: rgba(190, 210, 255, 0.4);
+}
+
+.adm-sidebar .adm-nav-sub .adm-nav-item {
+    color: #e4ecff;
+}
+
+.adm-sidebar .adm-nav-sub .adm-nav-item.active {
+    background: linear-gradient(90deg, rgba(110, 150, 255, 0.34), rgba(110, 150, 255, 0));
+    color: #fff;
+}
+
+.adm-sidebar .adm-nav-sub .adm-nav-item.active .adm-nav-icon {
+    color: #c2d4ff;
+}
+
+/* footer: kartu akun, Back to App, Sign out */
+.adm-sidebar .adm-switch-trigger {
+    background: rgba(6, 16, 54, 0.72);
+    border-color: rgba(190, 210, 255, 0.55);
+}
+
+.adm-sidebar .adm-switch-trigger:hover {
+    background: rgba(20, 40, 100, 0.8);
+}
+
+.adm-sidebar .adm-switch-trigger .adm-switch-name {
+    color: #fff;
+    font-weight: 700;
+}
+
+.adm-sidebar .adm-switch-trigger .adm-switch-sub {
+    color: #d3e0ff;
+}
+
+.adm-sidebar .adm-sidebar-footer > .adm-nav-item:not(.adm-switch-trigger):not(.signout) {
+    background: rgba(6, 16, 54, 0.72);
+    border-color: rgba(190, 210, 255, 0.32);
+    color: #f2f6ff;
+}
+
+.adm-sidebar .adm-sidebar-footer > .adm-nav-item:not(.adm-switch-trigger):not(.signout):hover {
+    background: rgba(20, 40, 100, 0.85);
+}
+
+.adm-sidebar .adm-nav-item.signout,
+.adm-sidebar .adm-nav-item.signout .adm-nav-icon {
+    color: #ff93a3;
+    font-weight: 700;
+}
+
+.adm-sidebar .adm-nav-item.signout:hover {
+    background: rgba(255, 120, 140, 0.18);
+}
+
+/* ================= Script Practice: rapihin layout =================
+   - Level & Category: label di atas pill, sejajar, aksi rapi di kanan
+   - Tabel soal: kolom aksi ikon saja supaya tidak terpotong, header tidak patah
+   - Kartu tipe soal: nama panjang boleh 2 baris, tidak dipotong "…" */
+
+.adm-practice-scope {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 14px 18px;
+    margin-bottom: 18px;
+    padding: 14px 18px;
+    background: var(--a-card);
+    border: 1px solid var(--a-card-line);
+    border-radius: 18px;
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--a-indigo) 6%, transparent);
+}
+
+.adm-practice-field {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    min-width: 0;
+}
+
+.adm-practice-field--grow {
+    flex: 1 1 220px;
+}
+
+.adm-practice-scope .adm-practice-scope-label,
+.adm-practice-scope .adm-practice-scope-label:not(:first-child) {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--a-ink-soft);
+}
+
+.adm-practice-scope .adm-pill {
+    max-width: 100%;
+}
+
+.adm-practice-scope .adm-pill-text {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.adm-practice-scope-warn {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+}
+
+.adm-practice-scope .adm-practice-scope-actions {
+    margin-left: auto;
+    gap: 8px;
+}
+
+.adm-practice-scope .adm-practice-scope-actions .adm-icon-btn,
+.adm-practice-scope .adm-practice-scope-actions .adm-btn {
+    height: 44px;
+}
+
+.adm-practice-scope .adm-practice-scope-actions .adm-icon-btn {
+    width: 44px;
+    border: 1px solid var(--a-line);
+    border-radius: 999px;
+    background: var(--a-card);
+}
+
+.adm-practice-scope .adm-practice-scope-actions .adm-btn {
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+/* tipe soal */
+.adm-ptype-name {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.25;
+}
+
+/* tabel soal */
+.adm-table--practice {
+    min-width: 760px;
+}
+
+.adm-table--practice th {
+    white-space: nowrap;
+}
+
+.adm-table--practice th:last-child,
+.adm-table--practice td:last-child {
+    width: 1%;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.adm-practice-actions {
+    justify-content: flex-end;
+}
+
+.adm-practice-btn.icon {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.adm-practice-btn.icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.adm-table--practice td {
+    vertical-align: middle;
+}
+
+@media (max-width: 640px) {
+    .adm-practice-scope {
+        padding: 12px 14px;
+    }
+    .adm-practice-field,
+    .adm-practice-field--grow {
+        flex: 1 1 100%;
+    }
+    .adm-practice-scope .adm-practice-scope-actions {
+        margin-left: 0;
+        width: 100%;
+    }
+    .adm-practice-scope .adm-practice-scope-actions .adm-btn {
+        flex: 1;
+        justify-content: center;
+    }
+}
+
+/* tabel soal: padding lebih rapat supaya kolom aksi tidak terpotong */
+.adm-table--practice {
+    min-width: 680px;
+}
+
+.adm-table--practice th,
+.adm-table--practice td {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.adm-table--practice .adm-col-check {
+    width: 38px;
+    padding-left: 14px;
+}
+
+.adm-table--practice .adm-col-no {
+    width: 40px;
+}
+
+.adm-table--practice td:last-child,
+.adm-table--practice th:last-child {
+    padding-right: 14px;
+}
+
+.adm-table--practice .adm-chips {
+    min-width: 150px;
+}
+
+/* ================= Script Practice: Level / Category / Question Type =================
+   Tiga baris pill bertumpuk, sama gayanya dengan pilihan di Practice sisi user. */
+
+.adm-pscope {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 18px;
+    padding: 16px 18px;
+    background: var(--a-card);
+    border: 1px solid var(--a-card-line);
+    border-radius: 18px;
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--a-indigo) 6%, transparent);
+}
+
+.adm-prow {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    min-width: 0;
+}
+
+.adm-prow-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--a-ink-soft);
+}
+
+.adm-seg {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 4px;
+    max-width: 100%;
+    background: var(--a-card);
+    border: 1px solid var(--a-line);
+    border-radius: 22px;
+}
+
+.adm-seg-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    height: 34px;
+    padding: 0 15px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--a-ink-soft);
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.adm-seg-pill:hover {
+    color: var(--a-ink);
+    background: var(--a-surface-tint);
+}
+
+.adm-seg-pill.active {
+    color: #fff;
+    background: var(--a-indigo);
+}
+
+.adm-seg-pill:focus-visible {
+    outline: 2px solid var(--a-indigo);
+    outline-offset: 2px;
+}
+
+.adm-seg-pill--add {
+    color: var(--a-indigo);
+    border: 1px dashed color-mix(in srgb, var(--a-indigo) 45%, transparent);
+}
+
+.adm-seg-count {
+    min-width: 20px;
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: color-mix(in srgb, currentColor 14%, transparent);
+    font-size: 11.5px;
+    text-align: center;
+}
+
+.adm-prow-actions {
+    display: inline-flex;
+    gap: 8px;
+}
+
+.adm-prow-actions .adm-icon-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--a-line);
+    border-radius: 999px;
+    background: var(--a-card);
+}
+
+.adm-prow-warn {
+    margin: 0;
+    font-size: 13.5px;
+    color: #b45309;
+}
+
+@media (max-width: 640px) {
+    .adm-pscope {
+        padding: 12px 14px;
+    }
+    .adm-seg {
+        width: 100%;
+    }
+}
+
+/* Script Practice: pill aktif pakai gradien biru yang sama dengan sisi user */
+.adm-seg-pill.active {
+    color: #fff;
+    background: var(--active-grad, linear-gradient(90deg, #1e43b8 0%, #2f5fde 55%, #4f8bf0 100%));
+    box-shadow: var(--active-shadow, 0 6px 14px rgba(47, 95, 222, 0.3));
+}
+
+/* Edit / Hapus kategori: menu titik tiga di samping pill kategori */
+.adm-prow-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.adm-catmenu {
+    position: relative;
+    flex: none;
+}
+
+.adm-catmenu-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--a-line);
+    border-radius: 999px;
+    background: var(--a-card);
+    color: var(--a-ink);
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.adm-catmenu-btn:hover {
+    background: var(--a-surface-tint);
+}
+
+.adm-catmenu-pop {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    min-width: 190px;
+    padding: 6px;
+    background: var(--a-card);
+    border: 1px solid var(--a-line);
+    border-radius: 14px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+}
+
+.adm-catmenu-pop button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--a-ink);
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+}
+
+.adm-catmenu-pop button svg {
+    width: 16px;
+    height: 16px;
+}
+
+.adm-catmenu-pop button:hover {
+    background: var(--a-surface-tint);
+}
+
+.adm-catmenu-pop button.danger {
+    color: #dc2626;
+}
+
+@media (max-width: 640px) {
+    .adm-prow-line {
+        width: 100%;
+    }
+    .adm-prow-line .adm-seg {
+        width: auto;
+        flex: 1 1 auto;
+    }
+}
+
+/* Sidebar: blok atas (brand) turun sedikit, blok bawah (akun / Back to App / Sign out) naik sedikit */
+.adm-sidebar {
+    padding-top: 14px;
+    padding-bottom: calc(var(--sb-pad-bottom, 16px) + 18px);
 }

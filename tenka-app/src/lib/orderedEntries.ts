@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabaseClient";
 
 /**
- * Ambil entri (kotoba / kanji / bunpo) satu Organize by, urut sesuai yang
+ * Ambil entri (kotoba / kanji / bunpo) satu Category, urut sesuai yang
  * diatur admin: chapter → sub chapter → sort_order (tombol ▲▼ di Admin Panel)
  * → id. Kalau kolom sort_order belum ada (migrasi belum dijalankan), jatuh
  * balik ke urutan lama (chapter → sub chapter → id).

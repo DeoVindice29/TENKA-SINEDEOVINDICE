@@ -63,7 +63,7 @@ export default function ConquestStory({
       </div>
 
       <button
-        className="primary danger"
+        className="primary"
         type="button"
         data-i18n="conquest.startThisChapter"
         onClick={onContinue}

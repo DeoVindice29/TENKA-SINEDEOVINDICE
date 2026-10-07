@@ -11,7 +11,7 @@ import type { KotobaLevel } from "@/lib/kotobaSupabase";
 import { registerQuizView } from "@/lib/quizModes";
 
 /**
- * Bunpō & Kanji dari Supabase per level JLPT + "Organize by" (Minna no
+ * Bunpō & Kanji dari Supabase per level JLPT + "Category" (Minna no
  * Nihongo, dst) untuk layar Lessons. Bentuknya sengaja sama dengan
  * lib/kotobaSupabase.ts (Chapter -> Sub Chapter), supaya LearnScreen bisa
  * merender ketiganya lewat accordion yang sama. Data bawaan app
@@ -46,7 +46,7 @@ export type ContentChapterView<E> = {
 export type ContentLevelView<E> = {
   kind: LessonKind;
   level: KotobaLevel;
-  /** Organize by (organize_sources.id) asal data ini */
+  /** Category (organize_sources.id) asal data ini */
   sourceId: number;
   /** mode kuis "All Mixed" untuk view ini (terdaftar di SCRIPTS lewat lib/quizModes.ts) */
   allKey: string;
@@ -189,7 +189,7 @@ function buildView<R extends Row, E>(
       const subGroups: ContentSubGroupView<E>[] = subEntries.map(
         ([subTier, subRows]) => {
           // sourceId ikut di key: dipakai juga sebagai id mode kuis di SCRIPTS,
-          // jadi dua Organize by di level yang sama tidak boleh bentrok.
+          // jadi dua Category di level yang sama tidak boleh bentrok.
           const key = `sb-${kind}-${level}-${sourceId}-${chapter}-${subTier}`;
           groupOfKey[key] = groupId;
           return {
@@ -261,7 +261,7 @@ export type LoadContentResult<E> =
   | { view: ContentLevelView<E>; error: null }
   | { view: null; error: string };
 
-// Satu view = satu (kind, level, Organize by). Kuncinya "bunpo:N5:12".
+// Satu view = satu (kind, level, Category). Kuncinya "bunpo:N5:12".
 const viewCache = new Map<string, ContentLevelView<any>>();
 const inflight = new Map<string, Promise<LoadContentResult<any>>>();
 const viewKey = (kind: LessonKind, level: KotobaLevel, sourceId: number) =>

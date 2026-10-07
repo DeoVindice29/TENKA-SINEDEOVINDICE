@@ -15,7 +15,7 @@ import type { KotobaLevel } from "@/lib/kotobaSupabase";
 type Kind = "kotoba" | "bunpo" | "kanji";
 
 export type HomeContentSource = {
-  /** tab aktif punya pilihan Level + Organize by (Kotoba / Bunpō / Kanji)? */
+  /** tab aktif punya pilihan Level + Category (Kotoba / Bunpō / Kanji)? */
   enabled: boolean;
   level: KotobaLevel;
   setLevel: (next: KotobaLevel) => void;
@@ -31,13 +31,13 @@ export type HomeContentSource = {
 };
 
 /**
- * Pilihan Level + "Organize by" di Home untuk tab Kotoba / Bunpō / Kanji, sama konsepnya
+ * Pilihan Level + "Category" di Home untuk tab Kotoba / Bunpō / Kanji, sama konsepnya
  * dengan yang ada di Lessons (LearnScreen) tapi disimpan terpisah
  * (tenka:lvl:quiz:* / tenka:org:quiz:*), jadi memilih sumber untuk belajar
  * tidak mengubah sumber untuk kuis, dan sebaliknya.
  *
  * Default-nya "topic" (data bawaan N5), jadi Home berperilaku persis seperti
- * sebelumnya sampai user memilih Organize by dari Supabase.
+ * sebelumnya sampai user memilih Category dari Supabase.
  */
 export function useHomeContentSource(script: string): HomeContentSource {
   const kind: Kind | null =

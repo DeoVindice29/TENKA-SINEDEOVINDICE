@@ -49,16 +49,22 @@ export default function SpeedrunCountdown({
   return (
     <div
       className="modal-overlay speedrun-countdown-overlay open"
-      aria-hidden="false"
+      role="alertdialog"
+      aria-live="assertive"
+      aria-label={labels[step]}
       onClick={onCancel}
     >
-      {/* key = langkah → di-mount ulang supaya animasi "tick" main tiap angka */}
-      <div
-        key={step}
-        className={`speedrun-countdown-number tick ${isGo ? "go" : ""}`}
-      >
-        {labels[step]}
+      <div className={`sr-cd ${isGo ? "go" : ""}`}>
+        {/* key = langkah → elemen di-mount ulang supaya animasi ring & angka main lagi tiap langkah */}
+        <svg className="sr-cd-ring" viewBox="0 0 100 100" aria-hidden="true">
+          <circle className="sr-cd-track" cx="50" cy="50" r="46" />
+          <circle key={step} className="sr-cd-arc" cx="50" cy="50" r="46" />
+        </svg>
+        <div key={step} className="sr-cd-number">
+          {labels[step]}
+        </div>
       </div>
+      <p className="sr-cd-hint">{t("speedrun.countdownCancel")}</p>
     </div>
   );
 }

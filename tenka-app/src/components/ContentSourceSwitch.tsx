@@ -4,21 +4,21 @@ import { KOTOBA_LEVELS, type KotobaLevel } from "@/lib/kotobaSupabase";
 import type { OrganizeSourceRow } from "@/lib/contentTypes";
 import { sourceName } from "@/lib/organizeSources";
 
-/** "topic" = data bawaan app; "src:<id>" = satu Organize by dari Supabase. */
+/** "topic" = data bawaan app; "src:<id>" = satu Category dari Supabase. */
 export type OrganizeBy = "topic" | `src:${number}`;
 
 export type ResolvedOrganize = {
   /** pilihan yang benar-benar aktif; null = belum ada yang bisa dipakai */
   value: OrganizeBy | null;
-  /** id Organize by Supabase yang aktif (null kalau Topic / belum ada) */
+  /** id Category Supabase yang aktif (null kalau Topic / belum ada) */
   sourceId: number | null;
-  /** true selama daftar Organize by masih dimuat dan pilihan belum bisa ditentukan */
+  /** true selama daftar Category masih dimuat dan pilihan belum bisa ditentukan */
   pending: boolean;
 };
 
 /**
- * Cocokkan pilihan tersimpan dengan Organize by yang benar-benar ada di level
- * ini. Pilihan lama ("minna") atau yang sudah dihapus admin jatuh ke Organize by
+ * Cocokkan pilihan tersimpan denga Category yang benar-benar ada di level
+ * ini. Pilihan lama ("minna") atau yang sudah dihapus admin jatuh ke Category
  * pertama di level itu; kalau tidak ada, Topic (N5) atau kosong.
  */
 export function resolveOrganize(
@@ -41,7 +41,7 @@ export function resolveOrganize(
 type Props = {
   level: KotobaLevel;
   organize: ResolvedOrganize;
-  /** semua Organize by kotoba (semua level); disaring per level di sini */
+  /** semua Category kotoba (semua level); disaring per level di sini */
   sources: OrganizeSourceRow[];
   onLevelChange: (next: KotobaLevel) => void;
   onOrganizeChange: (next: OrganizeBy) => void;
@@ -50,8 +50,8 @@ type Props = {
 /**
  * Dua baris pilihan di atas daftar:
  *  1. Level JLPT N5-N1 — selalu tampil. N4-N1 terkunci sampai N5 ditaklukkan.
- *  2. "Organize by": Topic (data bawaan app — cuma ada untuk N5, jadi
- *     disembunyikan di N4-N1) plus semua Organize by dari Supabase di level itu
+ *  2. "Category": Topic (data bawaan app — cuma ada untuk N5, jadi
+ *     disembunyikan di N4-N1) plus semua Category dari Supabase di level itu
  *     (Minna no Nihongo, dan yang ditambah admin).
  * Dibikin generik supaya section lain (Flashcard, Practice, Home) bisa pakai
  * komponen yang sama nanti.

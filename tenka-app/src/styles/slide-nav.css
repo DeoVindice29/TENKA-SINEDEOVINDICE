@@ -58,8 +58,13 @@
 }
 
 [data-theme="dark"] .script-tabs[data-slide] {
-  --slide-bg: linear-gradient(135deg, #52ccff 0%, #34a9ee 100%);
-  --slide-shadow: 0 4px 14px rgba(52, 169, 238, 0.35);
+  --slide-bg: var(--active-grad);
+  --slide-shadow: var(--active-shadow);
+}
+
+[data-theme="dark"] .sidebar-nav[data-slide] {
+  --slide-bg: var(--active-grad);
+  --slide-shadow: var(--active-shadow);
 }
 
 .sidebar-nav[data-slide] {

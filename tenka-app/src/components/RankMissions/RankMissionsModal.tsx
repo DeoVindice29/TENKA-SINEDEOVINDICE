@@ -30,7 +30,7 @@ const MISSION_GLYPH: Record<MissionScriptKey, { glyph: string; tone: string }> =
 
 // Jumlah tier yang harus dilewati buat menaklukkan tiap materi, sesuai ujian
 // Penaklukan: hiragana & katakana = 3 tier (tahap); kotoba/bunpō/kanji =
-// ujian ala JLPT (jlptTierCount: kotoba 4, bunpō 5, kanji 4).
+// ujian ala JLPT (jlptTierCount: kotoba 5, bunpō 5, kanji 5).
 function tierCount(key: MissionScriptKey): number {
   return isJlptScript(key) ? jlptTierCount(key) : 3;
 }

@@ -36,11 +36,21 @@
     background: color-mix(in srgb, var(--indigo) 12%, transparent);
   }
 
+  /* lingkaran di belakang glyph: gelap saat tidak aktif, putih transparan saat aktif */
   #script-tabs .script-tab .script-tab-icon {
     flex: none;
     width: 28px;
     height: 28px;
     font-size: 19px;
+    border-radius: 50%;
+    background: var(--paper-dark);
+    transition:
+      background-color 0.28s ease,
+      color 0.28s ease;
+  }
+
+  [data-theme="dark"] #script-tabs .script-tab .script-tab-icon {
+    background: #0b0d14;
   }
 
   /* ---- teks: tersembunyi di tab tidak aktif, mengembang di tab aktif ---- */
@@ -72,22 +82,22 @@
   }
 
   [data-theme="dark"] #script-tabs .script-tab.active {
-    background: linear-gradient(135deg, #52ccff 0%, #34a9ee 100%);
-    color: #071a2e;
-    box-shadow: 0 4px 14px rgba(52, 169, 238, 0.35);
+    background: var(--active-grad);
+    color: var(--on-active);
+    box-shadow: var(--active-shadow);
   }
 
   #script-tabs .script-tab.active .script-tab-icon,
   [data-theme="dark"] #script-tabs .script-tab.active .script-tab-icon,
   [data-theme="dark"] #script-tabs .script-tab.conquered.active .script-tab-icon {
-    background: transparent;
+    background: rgba(255, 255, 255, 0.24);
     box-shadow: none;
     color: var(--on-accent);
   }
 
   [data-theme="dark"] #script-tabs .script-tab.active .script-tab-icon,
   [data-theme="dark"] #script-tabs .script-tab.conquered.active .script-tab-icon {
-    color: #071a2e;
+    color: var(--on-active);
   }
 
   #script-tabs .script-tab.active .script-tab-label {
@@ -100,7 +110,7 @@
 
   [data-theme="dark"] #script-tabs .script-tab.active .script-tab-label,
   [data-theme="dark"] #script-tabs .script-tab.conquered.active .script-tab-label {
-    color: #071a2e;
+    color: var(--on-active);
   }
 }
 

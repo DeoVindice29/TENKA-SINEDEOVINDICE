@@ -156,8 +156,8 @@ export default function N4Screen() {
       setLoading(true);
       setError(null);
       // Layar ini menampilkan satu daftar per jenis konten, jadi ambil dari
-      // Organize by pertama di N4 (Minna no Nihongo) supaya Chapter dari
-      // Organize by lain tidak tercampur.
+      // Category pertama di N4 (Minna no Nihongo) supaya Chapter dari
+      // Category lain tidak tercampur.
       const [kSrc, kjSrc, bSrc] = await Promise.all([
         fetchOrganizeSources("kotoba", "N4"),
         fetchOrganizeSources("kanji", "N4"),

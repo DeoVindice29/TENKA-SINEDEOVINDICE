@@ -1,15 +1,19 @@
 import { useMemo, useRef, useState, type CSSProperties } from "react";
 import { useLang } from "@/i18n/LangContext";
 import {
-  buildPractice,
+  buildPracticeMode,
+  practiceTypeKeyOfQueueType,
+  PRACTICE_MIXED,
   stripMarks,
   type JlptQueueItem,
   type JlptScriptKey,
+  type PracticeModeKey,
   type PracticeTypeKey,
 } from "@/data/jlptConquest";
 import QuestionBody from "@/components/Quiz/QuestionBody";
 import { logActivity } from "@/lib/activityLog";
 import { appendStudyLog } from "@/state/flashStats";
+import { pickFromPool } from "@/lib/soalPractice";
 import "@/styles/practice-sheet.css";
 
 // Latihan Tipe Soal versi "lembar soal" — semua soal tampil sekaligus dan
@@ -20,9 +24,14 @@ import "@/styles/practice-sheet.css";
 
 type Props = {
   script: JlptScriptKey;
-  type: PracticeTypeKey;
+  type: PracticeModeKey;
   icon: string;
   count: number;
+  /**
+   * Kumpulan soal dari Supabase (Category pilihan user). Kalau diisi, soal
+   * diambil acak dari sini; kalau kosong, soal dibuat generator bawaan (Topic).
+   */
+  pool?: JlptQueueItem[];
   /** balik ke layar pengaturan latihan */
   onBack: () => void;
 };
@@ -34,13 +43,17 @@ export default function PracticeSheet({
   type,
   icon,
   count,
+  pool,
   onBack,
 }: Props) {
   const { t } = useLang();
   const [round, setRound] = useState(0);
   // soal dibangun sekali per ronde; "Ulangi" = ronde baru = soal acak baru
   const items = useMemo<JlptQueueItem[]>(
-    () => buildPractice(script, type, count),
+    () =>
+      pool
+        ? pickFromPool(pool, type, count)
+        : buildPracticeMode(script, type, count),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [script, type, count, round],
   );
@@ -120,8 +133,13 @@ export default function PracticeSheet({
     );
   };
 
-  const typeName = t(`practice.${script}.${type}`);
-  const typeDesc = t(`practice.${script}.${type}Desc`);
+  const isMixed = type === PRACTICE_MIXED;
+  const typeName = isMixed
+    ? t("practice.mixed")
+    : t(`practice.${script}.${type}`);
+  const typeDesc = isMixed
+    ? t("practice.mixedDesc")
+    : t(`practice.${script}.${type}Desc`);
   const verdict =
     percent >= 90
       ? t("practice.sheet.verdictGreat")
@@ -222,17 +240,26 @@ export default function PracticeSheet({
           const chosen = answers[i];
           const missing = showMissing && chosen === undefined;
           const choices = item[5] ?? [];
+          // di mode Mixed tiap soal punya tipenya sendiri (dibaca dari queue)
+          const itemType: PracticeTypeKey =
+            practiceTypeKeyOfQueueType(item[2]) ??
+            (isMixed ? "meaning" : (type as PracticeTypeKey));
 
           return (
             <li
               key={`${round}-${i}`}
               id={`ps-q-${i}`}
-              className={`ps-card ps-type-${type} ${
+              className={`ps-card ps-type-${itemType} ${
                 ok ? "is-correct" : bad ? "is-wrong" : ""
               } ${missing ? "is-missing" : ""}`}
             >
               <div className="ps-card-head">
                 <span className="ps-num">{i + 1}</span>
+                {isMixed && (
+                  <span className="ps-type-chip">
+                    {t(`practice.${script}.${itemType}`)}
+                  </span>
+                )}
                 {!submitted && (
                   <span
                     className="ps-req"
@@ -253,7 +280,7 @@ export default function PracticeSheet({
 
               <QuestionBody
                 q={item[0]}
-                type={type}
+                type={itemType}
               />
 
               <div
