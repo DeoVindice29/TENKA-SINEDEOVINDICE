@@ -134,8 +134,8 @@ export default function StartScreen() {
   // takluk kartunya tetap Penaklukan ala JLPT (bisa diulang), cuma dikasih ✓.
   const speedrunMode = conquered && supportsSpeedrun(currentScript);
   const isJlpt = isJlptScript(currentScript);
-  // Conquest JLPT yang sudah ditaklukkan: kartunya jadi pintasan ke Practice
-  // (bukan mengulang Conquest).
+  // Conquest JLPT yang sudah ditaklukkan: muncul pintasan ke Practice, dan
+  // kartu Conquest berubah jadi "Penaklukan selanjutnya (N4)" (coming soon).
   const goesToPractice = isJlpt && conquered && !speedrunMode;
   const lockKey = isLocked(currentScript);
 
@@ -260,10 +260,10 @@ export default function StartScreen() {
           </button>
         )}
 
+        <RangePicker />
         <VariantPicker />
         <DifficultyPicker />
         <TimerPicker />
-        <RangePicker />
       </div>
 
       <button
@@ -301,16 +301,36 @@ export default function StartScreen() {
       </button>
       </div>
 
+      {goesToPractice && (
+        // Conquest sudah tuntas: pintasan ke Practice ditaruh di atas kartu
+        // Penaklukan selanjutnya (N4).
+        <button
+          className="conquest-card practice-shortcut"
+          id="btn-practice-shortcut"
+          type="button"
+          onClick={() => setScreen("practice")}
+        >
+          <span className="conquest-icon practice-shortcut-icon" />
+          <span className="conquest-body">
+            <span className="conquest-title">
+              {t("conquest.goToPracticeCardTitle")}
+            </span>
+            <span className="conquest-desc">
+              {t("conquest.goToPracticeDesc", { label: script.label })}
+            </span>
+          </span>
+          <span className="conquest-arrow" />
+        </button>
+      )}
+
       <button
         className={`conquest-card ${speedrunMode ? "speedrun-mode" : ""} ${
           lockKey ? "locked" : ""
-        }`}
+        } ${goesToPractice ? "coming-soon" : ""}`}
         id="btn-conquest"
         type="button"
-        disabled={!!lockKey}
-        onClick={() =>
-          goesToPractice ? setScreen("practice") : setModalOpen(true)
-        }
+        disabled={!!lockKey || goesToPractice}
+        onClick={() => setModalOpen(true)}
       >
         <span className="conquest-icon" id="conquest-icon" />
         <span className="conquest-body">
@@ -318,7 +338,7 @@ export default function StartScreen() {
             {speedrunMode
               ? t("speedrun.cardTitleWithLabel", { label: script.label })
               : goesToPractice
-                ? t("conquest.goToPracticeCardTitle") + " ✓"
+                ? t("conquest.nextCardTitle")
                 : t("conquest.cardTitleWithLabel", { label: script.label }) +
                   (conquered ? " ✓" : "")}
           </span>
@@ -342,7 +362,7 @@ export default function StartScreen() {
                   label: script.label,
                 })
               : goesToPractice
-                ? t("conquest.goToPracticeDesc", { label: script.label })
+                ? t("conquest.nextCardDesc")
                 : isJlpt
                 ? t("conquest.jlptDesc", {
                     tiers: jlptTierCount(currentScript),

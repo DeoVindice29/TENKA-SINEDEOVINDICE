@@ -18,6 +18,7 @@ export type Screen =
   | "match"
   | "results"
   | "n4"
+  | "listening"
   | "statistik";
 
 export type ScriptKey = "hiragana" | "katakana" | "kotoba" | "bunpo" | "kanji";

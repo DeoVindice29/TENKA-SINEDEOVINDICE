@@ -4325,6 +4325,9 @@ body:has(#screen-flashcard) {
 .st-row .h span { color: var(--ink-soft); font-weight: 600; }
 .st-row .track { height: 10px; background: var(--paper); border-radius: 99px; overflow: hidden; }
 .st-row .track i { display: block; height: 100%; border-radius: 99px; background: var(--indigo); }
+.st-scroll { max-height: 340px; overflow-y: auto; padding-right: 4px; }
+.st-scroll > div + div { margin-top: 18px; }
+.st-group { font-size: 11.5px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 10px; }
 .st-weak { display: flex; flex-wrap: wrap; gap: 10px; }
 .st-weak span { background: color-mix(in srgb, var(--quiz-wrong) 10%, var(--card)); color: var(--quiz-wrong); border-radius: 12px; padding: 8px 14px; font-weight: 700; font-size: 15px; }
 .st-weak small { color: var(--ink-soft); font-weight: 600; margin-left: 6px; }
@@ -6987,3 +6990,127 @@ button,
 [data-theme="dark"] #screen-match .match-col button.match-tile.wrong {
     background: #6b2540;
 }
+
+/* ==========================================================================
+   Statistik — layout baru (header, filter, KPI, progres, rank, heatmap)
+   ========================================================================== */
+.sx-head .st-sub { margin-bottom: 14px; }
+.sx-filters { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-bottom: 16px; }
+.sx-filter label { display: block; font-size: 11.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 6px 4px; }
+.sx-filter .st-tabs { margin: 0; }
+.st-tabs-src { margin-left: 0; }
+
+.st-kpi { display: flex; align-items: center; gap: 14px; min-width: 0; padding: 18px 20px; }
+.st-kpi > div { min-width: 0; }
+.st-kpi .n { font-size: 28px; line-height: 1.1; margin: 4px 0 2px; }
+.sx-ico { flex: none; width: 44px; height: 44px; display: grid; place-items: center; font-size: 20px; border-radius: 50%; background: color-mix(in srgb, var(--indigo) 14%, var(--card)); border: 1px solid color-mix(in srgb, var(--indigo) 28%, transparent); }
+.st-kpi .d:not(.up):not(.dn) { color: var(--ink-soft); }
+
+.st-card h2 { gap: 10px; flex-wrap: wrap; }
+.st-bars { height: 170px; gap: 10px; }
+
+.sx-result { display: flex; align-items: center; gap: 20px; }
+.sx-result .st-ring { margin: 0; flex: none; }
+.sx-result-rows { flex: 1; min-width: 0; display: grid; gap: 14px; }
+.sx-line { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+.sx-line span { flex: 1; display: flex; align-items: center; }
+.sx-line i { width: 9px; height: 9px; border-radius: 50%; margin-right: 7px; flex: none; }
+.sx-line em { font-style: normal; color: var(--ink-soft); min-width: 38px; text-align: right; font-weight: 600; }
+.sx-result-rows .track { height: 8px; background: var(--paper); border-radius: 99px; overflow: hidden; }
+.sx-result-rows .track i { display: block; height: 100%; border-radius: 99px; }
+
+.st-row .h { gap: 12px; }
+.sx-name em { font-style: normal; color: var(--ink-soft); font-weight: 600; }
+.sx-name b { font-weight: 800; }
+.sx-pct { flex: none; }
+.sx-meta { margin-top: 5px; font-size: 12px; font-weight: 600; color: var(--ink-soft); }
+.st-scroll { max-height: 320px; }
+.st-weak span { display: inline-flex; align-items: baseline; font-size: 14.5px; padding: 7px 12px; }
+.sx-link { display: block; margin: 16px 0 0; padding: 8px 14px; border-radius: 999px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; color: var(--quiz-wrong); background: transparent; border: 1px solid color-mix(in srgb, var(--quiz-wrong) 45%, transparent); }
+.sx-link:hover { background: color-mix(in srgb, var(--quiz-wrong) 10%, transparent); }
+
+.sx-scripts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 32px; }
+.sx-script { display: flex; align-items: center; gap: 12px; margin: 0; min-width: 0; }
+.sx-script > div { flex: 1; min-width: 0; }
+.sx-glyph { flex: none; width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%; font-size: 17px; font-weight: 800; background: var(--paper); border: 1px solid var(--line); }
+
+.sx-bottom { align-items: stretch; }
+.sx-journey { display: flex; flex-direction: column; }
+.sx-rank { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.sx-rank img { width: 56px; height: 56px; object-fit: contain; }
+.sx-rank b { display: block; font-size: 22px; font-weight: 800; }
+.sx-rank small { color: var(--ink-soft); font-weight: 700; }
+.sx-xp { display: flex; align-items: center; gap: 12px; }
+.sx-xp .track { flex: 1; height: 10px; background: var(--paper); border-radius: 99px; overflow: hidden; }
+.sx-xp .track i { display: block; height: 100%; border-radius: 99px; background: var(--active-grad, var(--indigo)); }
+.sx-xp span { font-weight: 800; font-size: 14px; }
+.sx-journey-foot { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 10px; font-size: 13px; font-weight: 600; color: var(--ink-soft); }
+.sx-journey-foot b { color: var(--ink); }
+
+.sx-best { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sx-best > div { padding: 12px 14px; border-radius: 14px; background: var(--paper); border: 1px solid var(--line); min-width: 0; }
+.sx-best small { display: block; font-size: 12px; font-weight: 700; color: var(--ink-soft); margin-bottom: 2px; }
+.sx-best b { font-size: 18px; font-weight: 800; overflow-wrap: anywhere; }
+
+.sx-title small { margin-left: 8px; font-size: 12.5px; color: var(--ink-soft); font-weight: 600; }
+.sx-heat-scroll { overflow-x: auto; padding-bottom: 4px; }
+.sx-heat { --cols: 15; min-width: calc(var(--cols) * 18px + 34px); }
+.sx-heat-months { display: grid; grid-template-columns: 30px repeat(var(--cols), minmax(14px, 1fr)); gap: 4px; font-size: 11px; font-weight: 700; color: var(--ink-soft); margin-bottom: 4px; height: 14px; }
+.sx-heat-months span { overflow: visible; white-space: nowrap; }
+.sx-heat-body { display: flex; gap: 4px; }
+.sx-heat-days { flex: none; width: 30px; display: grid; grid-template-rows: repeat(7, 1fr); gap: 4px; font-size: 10.5px; font-weight: 700; color: var(--ink-soft); align-items: center; }
+.sx-heat-cols { flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(var(--cols), minmax(14px, 1fr)); gap: 4px; }
+.sx-heat-cols > div { display: grid; grid-template-rows: repeat(7, auto); gap: 4px; }
+.sx-heat-cols i, .sx-legend i { display: block; aspect-ratio: 1; max-height: 20px; border-radius: 5px; background: var(--paper); cursor: default; }
+.sx-heat-cols i.f { background: transparent; }
+.sx-heat-cols .l1, .sx-legend .l1 { background: color-mix(in srgb, var(--indigo) 22%, var(--card)); }
+.sx-heat-cols .l2, .sx-legend .l2 { background: color-mix(in srgb, var(--indigo) 45%, var(--card)); }
+.sx-heat-cols .l3, .sx-legend .l3 { background: color-mix(in srgb, var(--indigo) 72%, var(--card)); }
+.sx-heat-cols .l4, .sx-legend .l4 { background: var(--indigo); }
+.sx-heat-cols i:not(.f):hover { outline: 2px solid var(--ink-soft); outline-offset: 1px; }
+.sx-heat-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 12px; font-size: 12.5px; font-weight: 600; color: var(--ink-soft); min-height: 24px; }
+.sx-tip { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.sx-tip b { color: var(--ink); }
+.sx-legend { display: flex; align-items: center; gap: 4px; }
+.sx-legend i { width: 14px; height: 14px; aspect-ratio: auto; }
+.sx-legend { gap: 5px; }
+
+@media (max-width: 900px) {
+  .sx-scripts { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .sx-filters { gap: 12px; }
+  .sx-filter { width: 100%; min-width: 0; }
+  .sx-filter .st-tabs { display: flex; width: 100%; box-sizing: border-box; overflow-x: auto; scrollbar-width: none; }
+  .sx-filter .st-tabs button { flex: 0 0 auto; padding: 8px 14px; white-space: nowrap; }
+  .st-kpis { grid-template-columns: 1fr; }
+  .sx-result { flex-direction: column; align-items: stretch; }
+  .sx-result .st-ring { align-self: center; }
+  .sx-best b { font-size: 16px; }
+}
+
+/* Yang sering salah: dipisah per jenis soal, tiap jenis punya ranking sendiri */
+.sx-weak { max-height: 320px; }
+.sx-wgroup + .sx-wgroup { margin-top: 16px; }
+.sx-whead { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 13px; }
+.sx-whead b { font-weight: 800; }
+.sx-whead em { margin-left: auto; font-style: normal; font-weight: 700; color: var(--quiz-wrong); font-size: 12px; }
+.sx-wglyph { width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; font-size: 12px; font-weight: 800; background: var(--paper); border: 1px solid var(--line); }
+.sx-wlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.sx-wlist li { display: flex; align-items: center; gap: 10px; padding: 7px 12px; border-radius: 12px; background: color-mix(in srgb, var(--quiz-wrong) 9%, var(--card)); color: var(--quiz-wrong); font-weight: 700; font-size: 14.5px; min-width: 0; }
+.sx-rk { flex: none; width: 20px; height: 20px; display: grid; place-items: center; border-radius: 50%; font-size: 11px; font-weight: 800; color: var(--ink-soft); background: var(--card); }
+.sx-wlist li:first-child .sx-rk { background: var(--quiz-wrong); color: #fff; }
+.sx-wq { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.sx-wlist small { flex: none; color: var(--ink-soft); font-weight: 700; }
+
+/* tab jenis soal di "Yang sering salah" */
+.sx-wtabs { display: flex; width: 100%; box-sizing: border-box; margin: 0 0 14px; overflow-x: auto; scrollbar-width: none; }
+.sx-wtabs button { flex: 1 1 0; padding: 7px 12px; font-size: 13px; white-space: nowrap; }
+
+/* asal kesalahan + tombol tujuan */
+.sx-src { flex: none; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: .02em; color: var(--ink-soft); background: var(--card); border: 1px solid var(--line); }
+.sx-src.practice { color: var(--gold); border-color: color-mix(in srgb, var(--gold) 45%, transparent); }
+.sx-src.flashcard { color: var(--moss); border-color: color-mix(in srgb, var(--moss) 45%, transparent); }
+.sx-src.quiz { color: var(--indigo); border-color: color-mix(in srgb, var(--indigo) 45%, transparent); }
+.sx-gos { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.sx-gos .sx-link { margin: 0; }

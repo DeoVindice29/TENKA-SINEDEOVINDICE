@@ -44,6 +44,22 @@ const TYPE_ICONS: Record<PracticeModeKey, string> = {
   mixed: "🎲",
 };
 
+const PencilIcon = () => (
+  <svg
+    width={16}
+    height={16}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+  </svg>
+);
+
 // Pilihan jumlah soal: 10 / 20 selama masih di bawah total, lalu "Semua".
 function countSteps(total: number): number[] {
   const steps = [10, 20].filter((n) => n < total);
@@ -256,43 +272,50 @@ export default function PracticeScreen() {
         ))}
       </div>
 
-      <div className="quiz-variant-picker practice-count-picker">
+      <div className="range-picker practice-count-picker">
         <span className="settings-label">{t("practice.countLabel")}</span>
-        <div className="quiz-variant-options practice-seg">
-          {steps.map((n) => (
-            <button
-              key={n}
-              type="button"
-              className={`quiz-variant-btn ${
-                !isCustomActive && activeCount === n ? "active" : ""
-              }`}
-              onClick={() => {
-                setCount(n);
-                setCustomDraft(null);
-              }}
-            >
-              {n === total ? t("practice.all", { count: n }) : n}
-            </button>
-          ))}
-          <input
-            type="number"
-            inputMode="numeric"
-            className={`quiz-variant-btn practice-count-input ${
-              isCustomActive ? "active" : ""
-            }`}
-            aria-label={t("practice.customCountAria")}
-            placeholder={t("practice.customCount")}
-            min={1}
-            max={total || 1}
-            disabled={total === 0}
-            value={customDraft ?? (isCustomActive ? String(activeCount) : "")}
-            onChange={(e) => setCustomDraft(e.target.value)}
-            onFocus={(e) => setCustomDraft(e.target.value)}
-            onBlur={(e) => commitCustomDraft(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") (e.target as HTMLInputElement).blur();
-            }}
-          />
+        <div className="range-random">
+          <div className="range-random-options">
+            {steps.map((n) => (
+              <button
+                key={n}
+                type="button"
+                className={`range-count-btn ${
+                  n === total ? "range-count-all" : "range-count-num"
+                } ${!isCustomActive && activeCount === n ? "active" : ""}`}
+                onClick={() => {
+                  setCount(n);
+                  setCustomDraft(null);
+                }}
+              >
+                {n === total ? t("range.all", { n }) : String(n)}
+              </button>
+            ))}
+            <span className="range-count-custom">
+              <PencilIcon />
+              <input
+                type="number"
+                inputMode="numeric"
+                className={`range-count-btn range-count-input ${
+                  isCustomActive ? "active" : ""
+                }`}
+                aria-label={t("range.customCountAria")}
+                placeholder={t("range.customCount")}
+                min={1}
+                max={total || 1}
+                disabled={total === 0}
+                value={
+                  customDraft ?? (isCustomActive ? String(activeCount) : "")
+                }
+                onChange={(e) => setCustomDraft(e.target.value)}
+                onFocus={(e) => setCustomDraft(e.target.value)}
+                onBlur={(e) => commitCustomDraft(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+                }}
+              />
+            </span>
+          </div>
         </div>
       </div>
 

@@ -2501,6 +2501,10 @@ button.secondary:focus-visible {
     margin: 8px 2px 0;
 }
 
+.range-match-note {
+    margin-top: 4px;
+}
+
 .range-mode-toggle {
     display: flex;
     gap: 8px;
@@ -2727,6 +2731,45 @@ button.secondary:focus-visible {
 
 .conquest-card.locked .conquest-desc {
     display: none;
+}
+
+/* ---------- conquest selesai: pintasan Practice + kartu "selanjutnya" (coming soon) ---------- */
+.conquest-card + .conquest-card {
+    margin-top: 12px;
+}
+
+.practice-shortcut-icon::before {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    vertical-align: -0.15em;
+    background-color: currentColor;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%2020h9%27%2F%3E%3Cpath%20d%3D%27M16.5%203.5a2.121%202.121%200%200%201%203%203L7%2019l-4%201%201-4Z%27%2F%3E%3C%2Fsvg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%2020h9%27%2F%3E%3Cpath%20d%3D%27M16.5%203.5a2.121%202.121%200%200%201%203%203L7%2019l-4%201%201-4Z%27%2F%3E%3C%2Fsvg%3E");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    flex-shrink: 0;
+}
+
+.conquest-card.coming-soon {
+    cursor: not-allowed;
+    opacity: 0.6;
+    border-color: var(--line);
+}
+
+.conquest-card.coming-soon:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.conquest-card.coming-soon .conquest-title,
+.conquest-card.coming-soon .conquest-arrow {
+    color: var(--ink-soft);
 }
 
 /* ---------- mode speedrun (unlocked after a script is conquered) ---------- */
@@ -6882,6 +6925,11 @@ button.ghost {
 }
 
 .practice-count-input:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.range-count-input:disabled {
     opacity: .5;
     cursor: not-allowed;
 }

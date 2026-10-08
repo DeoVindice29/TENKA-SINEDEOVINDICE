@@ -47,6 +47,16 @@ function PracticeIcon({ className }: IconProps) {
   );
 }
 
+function ListeningIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 15v-3a8 8 0 0 1 16 0v3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <rect x="3" y="14" width="4" height="7" rx="1.5" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+      <rect x="17" y="14" width="4" height="7" rx="1.5" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 function ChartIcon({ className }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -107,6 +117,12 @@ const NAV_ITEMS: NavItem[] = [
     labelKey: "nav.practice",
     icon: PracticeIcon,
     matches: (s) => s === "practice",
+  },
+  {
+    key: "listening",
+    labelKey: "nav.listening",
+    icon: ListeningIcon,
+    matches: (s) => s === "listening",
   },
   {
     key: "statistik",

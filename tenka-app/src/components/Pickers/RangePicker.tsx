@@ -315,6 +315,7 @@ export default function RangePicker() {
       <p className="range-hint" id="range-hint">
         {hint}
       </p>
+      <p className="range-hint range-match-note">{t("range.matchNote")}</p>
     </div>
   );
 }

@@ -104,6 +104,7 @@ export default function PracticeSheet({
         ok ? "good" : "again",
         Date.now(),
         stripMarks(item[0]),
+        "practice",
       );
       logActivity({
         kind: "answer",

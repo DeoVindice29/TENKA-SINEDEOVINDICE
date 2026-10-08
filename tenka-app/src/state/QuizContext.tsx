@@ -418,6 +418,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
           okAns ? "good" : "again",
           Date.now(),
           stripMarks(current[0]),
+          "quiz",
         );
         logActivity({
           kind: "answer",
@@ -448,6 +449,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
             okAns ? "good" : "again",
             Date.now(),
             stripMarks(item[0]),
+            "quiz",
           );
           logActivity({
             kind: "answer",

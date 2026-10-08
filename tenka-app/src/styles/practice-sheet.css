@@ -648,3 +648,35 @@
   border: 1px solid var(--line);
   white-space: nowrap;
 }
+
+/* ================= Listening ================= */
+.ls-play {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0 14px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1.5px solid var(--accent, #e5677f);
+  background: transparent;
+  color: var(--accent, #e5677f);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, transform 0.1s;
+}
+.ls-play:hover:not(:disabled) {
+  background: var(--accent, #e5677f);
+  color: var(--on-accent, #fff);
+}
+.ls-play:active:not(:disabled) { transform: scale(0.97); }
+.ls-play:disabled { opacity: 0.5; cursor: not-allowed; }
+.ls-play.speaking {
+  background: var(--accent, #e5677f);
+  color: var(--on-accent, #fff);
+}
+.ls-transcript {
+  margin: -4px 0 12px;
+  opacity: 0.8;
+  font-size: 1.05rem;
+}

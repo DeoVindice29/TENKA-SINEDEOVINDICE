@@ -228,7 +228,7 @@ export default function MatchScreen() {
       newRomaji[romajiIdx] = { ...romaji, matched: true };
       setKanaTiles(newKana);
       setRomajiTiles(newRomaji);
-      appendStudyLog("match", "match", "good");
+      appendStudyLog("match", `match:${matchScript}`, "good");
       playSfx("matchOk");
       setMatchedCount((c) => c + 1);
       setSelectedKana(null);
@@ -249,7 +249,7 @@ export default function MatchScreen() {
         }, 500);
       }
     } else {
-      appendStudyLog("match", "match", "again");
+      appendStudyLog("match", `match:${matchScript}`, "again");
       playSfx("matchBad");
       setMistakes((m) => m + 1);
       setWrongKana(kanaIdx);
