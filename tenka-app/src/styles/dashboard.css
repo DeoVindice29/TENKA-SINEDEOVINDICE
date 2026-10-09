@@ -207,7 +207,7 @@ body {
     align-self: flex-start;
     height: 100vh;
     height: 100dvh;
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 .sidebar-identity {
@@ -298,6 +298,14 @@ body {
     display: flex;
     flex-direction: column;
     gap: 2px;
+    /* hanya daftar menu yang bisa di-scroll; Settings + kutipan di
+       .sidebar-bottom selalu menempel di bawah */
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 2px 0 12px;
+    scrollbar-width: thin;
 }
 
 .sidebar-nav-item {
@@ -341,7 +349,42 @@ body {
     box-shadow: var(--active-shadow);
 }
 
+/* ---- accordion grup (Learning / Skills) ---- */
+.sidebar-group { display: flex; flex-direction: column; gap: 2px; }
+.sidebar-group-head { color: var(--ink); }
+.sidebar-group-head > span { flex: 1; }
+.sidebar-group-chevron {
+    width: 16px;
+    height: 16px;
+    margin-left: auto;
+    opacity: 0.7;
+    transition: transform .2s ease;
+    transform: rotate(-90deg);
+}
+.sidebar-group-chevron.open { transform: none; }
+.sidebar-group-head.has-active { color: var(--indigo); }
+[data-theme="dark"] .sidebar-group-head.has-active { color: var(--on-active, #fff); }
+.sidebar-group-items {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    animation: sidebar-group-in .2s ease both;
+}
+.sidebar-nav-sub {
+    padding-left: 22px;
+    font-weight: 600;
+}
+.sidebar-nav-sub .sidebar-nav-icon { width: 17px; height: 17px; }
+@keyframes sidebar-group-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .sidebar-group-items { animation: none; }
+}
+
 .sidebar-bottom {
+    flex: 0 0 auto;
     margin-top: auto;
     padding-top: 14px;
     border-top: 1px solid var(--line);
@@ -406,13 +449,14 @@ body {
     50% { opacity: 0; }
 }
 
-.sidebar-promo-sakura {
+.sidebar-promo .sidebar-promo-sakura {
+    --tk-sakura-color: #f7a8bc;
     position: absolute;
     z-index: 1;
-    top: 12px;
-    right: 14px;
-    width: 18px;
-    height: 18px;
+    top: 10px;
+    right: 12px;
+    width: 22px;
+    height: 22px;
     cursor: pointer;
 }
 
@@ -489,8 +533,15 @@ body {
     height: 66px;
     margin-top: 10px;
     border-radius: 18px;
-    background: var(--indigo);
-    box-shadow: 0 8px 18px rgba(47, 95, 222, 0.28);
+    background: var(--card, #fff);
+    border: 1px solid color-mix(in srgb, #e5677f 28%, var(--line));
+    box-shadow: 0 8px 18px rgba(229, 103, 127, 0.22);
+}
+
+.hero-icon .tk-sakura {
+    --tk-sakura-color: #f08aa0;
+    width: 84%;
+    height: 84%;
 }
 
 .hero-icon svg {
@@ -5942,13 +5993,16 @@ button,
         height: 56px;
         margin: 0;
         border-radius: 16px;
-        background: linear-gradient(145deg, #3fdcff 0%, #17b3f2 100%);
-        color: #0a1a30;
-        font-family: "Shippori Mincho", "Noto Serif JP", serif;
-        font-size: 34px;
-        font-weight: 800;
-        line-height: 1;
-        box-shadow: 0 8px 20px rgba(30, 190, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        background: linear-gradient(145deg, #17294f 0%, #0c1a3a 100%);
+        border: 1px solid rgba(255, 121, 198, 0.4);
+        box-shadow: 0 8px 22px rgba(255, 121, 198, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    [data-theme="dark"] #screen-start .hero-icon .tk-sakura {
+        --tk-sakura-color: #ff79c6;
+        width: 86%;
+        height: 86%;
+        filter: drop-shadow(0 0 6px rgba(255, 121, 198, 0.45));
     }
 
     [data-theme="dark"] #screen-start .hero-text {

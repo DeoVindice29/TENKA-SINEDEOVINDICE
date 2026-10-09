@@ -40,11 +40,14 @@ export function resolveOrganize(
 
 type Props = {
   level: KotobaLevel;
-  organize: ResolvedOrganize;
+  /** tidak dipakai kalau hideCategory */
+  organize?: ResolvedOrganize;
   /** semua Category kotoba (semua level); disaring per level di sini */
-  sources: OrganizeSourceRow[];
+  sources?: OrganizeSourceRow[];
   onLevelChange: (next: KotobaLevel) => void;
-  onOrganizeChange: (next: OrganizeBy) => void;
+  onOrganizeChange?: (next: OrganizeBy) => void;
+  /** true = hanya baris Level (dipakai di Skills: Listening, Speaking, Reading) */
+  hideCategory?: boolean;
 };
 
 /**
@@ -59,9 +62,10 @@ type Props = {
 export default function ContentSourceSwitch({
   level,
   organize,
-  sources,
+  sources = [],
   onLevelChange,
   onOrganizeChange,
+  hideCategory = false,
 }: Props) {
   const { t, lang } = useLang();
   const { isLevelUnlocked, allUnlocked } = useLevelUnlock();
@@ -111,6 +115,7 @@ export default function ContentSourceSwitch({
 
       {!allUnlocked && <p className="source-switch-hint">{t("source.lockedHint")}</p>}
 
+      {!hideCategory && (
       <div className="source-switch" role="group" aria-label={t("source.label")}>
         <span className="source-switch-label">{t("source.label")}</span>
         <div className="source-switch-seg">
@@ -118,9 +123,9 @@ export default function ContentSourceSwitch({
           {topicAvailable && (
             <button
               type="button"
-              className={`source-pill ${organize.value === "topic" ? "active" : ""}`}
-              aria-pressed={organize.value === "topic"}
-              onClick={() => onOrganizeChange("topic")}
+              className={`source-pill ${organize?.value === "topic" ? "active" : ""}`}
+              aria-pressed={organize?.value === "topic"}
+              onClick={() => onOrganizeChange?.("topic")}
             >
               {t("source.local")}
             </button>
@@ -131,9 +136,9 @@ export default function ContentSourceSwitch({
               <button
                 key={src.id}
                 type="button"
-                className={`source-pill ${organize.value === value ? "active" : ""}`}
-                aria-pressed={organize.value === value}
-                onClick={() => onOrganizeChange(value)}
+                className={`source-pill ${organize?.value === value ? "active" : ""}`}
+                aria-pressed={organize?.value === value}
+                onClick={() => onOrganizeChange?.(value)}
               >
                 {sourceName(src, lang)}
               </button>
@@ -141,6 +146,7 @@ export default function ContentSourceSwitch({
           })}
         </div>
       </div>
+      )}
     </div>
   );
 }

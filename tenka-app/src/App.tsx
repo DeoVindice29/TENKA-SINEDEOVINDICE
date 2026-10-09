@@ -10,6 +10,8 @@ import FlashcardScreen from "@/screens/FlashcardScreen";
 import PracticeScreen from "@/screens/PracticeScreen";
 import N4Screen from "@/screens/N4Screen";
 import ListeningScreen from "@/screens/ListeningScreen";
+import ReadingScreen from "@/screens/ReadingScreen";
+import SpeakingScreen from "@/screens/SpeakingScreen";
 import StatistikScreen from "@/screens/StatistikScreen";
 import Sidebar from "@/components/Sidebar";
 import SettingsPanel, { type SettingsView } from "@/components/SettingsPanel";
@@ -162,7 +164,9 @@ export default function App() {
               <FlashcardScreen />
             )}
             {screen === "n4" && <N4Screen />}
+            {screen === "reading" && <ReadingScreen />}
             {screen === "listening" && <ListeningScreen />}
+            {screen === "speaking" && <SpeakingScreen />}
             {screen === "statistik" && <StatistikScreen />}
             {screen !== "quiz" &&
               screen !== "match" &&

@@ -382,10 +382,11 @@ body:has(.adm-shell) {
     color: var(--a-ink-soft);
     transition: transform 0.15s ease;
     flex-shrink: 0;
+    transform: rotate(-90deg);
 }
 
 .adm-nav-caret.open {
-    transform: rotate(180deg);
+    transform: none;
 }
 
 .adm-nav-sub {

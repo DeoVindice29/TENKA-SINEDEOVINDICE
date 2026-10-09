@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import type { CSSProperties, SVGProps } from "react";
 
 /**
  * Komponen loading bersama — dipakai di semua tempat yang menunggu data
@@ -48,6 +48,33 @@ export function SakuraLoader({ size = 44 }: { size?: number }) {
           transform={`rotate(${i * 72} 24 24)`}
           style={{ animationDelay: `${i * 0.16}s` }}
         />
+      ))}
+      <circle cx="24" cy="24" r="2.2" className="tk-sakura-core" />
+    </svg>
+  );
+}
+
+/** Bunga sakura yang sama dengan loader, tapi diam (semua kelopak penuh).
+ *  Dipakai sebagai ikon/logo dekoratif (hero Home, kartu promo sidebar). */
+export function SakuraMark({
+  size = 44,
+  className = "",
+  ...rest
+}: { size?: number; className?: string } & Omit<
+  SVGProps<SVGSVGElement>,
+  "width" | "height" | "viewBox" | "className"
+>) {
+  return (
+    <svg
+      className={`tk-sakura tk-sakura--static ${className}`.trim()}
+      width={size}
+      height={size}
+      viewBox="0 0 48 48"
+      aria-hidden="true"
+      {...rest}
+    >
+      {[0, 1, 2, 3, 4].map((i) => (
+        <path key={i} d={PETAL} transform={`rotate(${i * 72} 24 24)`} />
       ))}
       <circle cx="24" cy="24" r="2.2" className="tk-sakura-core" />
     </svg>

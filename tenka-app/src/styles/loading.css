@@ -60,6 +60,12 @@
     fill: var(--gold, #f2a93c);
 }
 
+/* versi diam: ikon dekoratif (hero Home, kartu promo sidebar) */
+.tk-sakura--static path {
+    opacity: 1;
+    animation: none;
+}
+
 @keyframes tkPetal {
     0%,
     100% {

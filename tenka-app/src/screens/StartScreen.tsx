@@ -1,3 +1,4 @@
+import { SakuraMark } from "@/components/ui/Loader";
 import { useEffect, useState } from "react";
 import heroArt from "@/assets/hero-start.webp";
 import { useLang } from "@/i18n/LangContext";
@@ -152,7 +153,7 @@ export default function StartScreen() {
         <div className="hero-card">
           <img className="hero-art" src={heroArt} alt="" aria-hidden="true" />
           <div className="hero-icon" aria-hidden="true">
-            天
+            <SakuraMark size={42} />
           </div>
           <div className="hero-text">
             <div className="eyebrow">Learning Japanese — From Zero to Hero</div>

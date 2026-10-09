@@ -2,7 +2,9 @@ import type { ComponentType } from "react";
 import { useUI, type Screen } from "@/state/UIContext";
 import { useLang } from "@/i18n/LangContext";
 import { useState, useEffect } from "react";
+import { SakuraMark } from "@/components/ui/Loader";
 import { useAuth } from "@/state/AuthContext";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useRankIndex } from "@/hooks/useRankIndex";
 import { RANK_LEVELS } from "@/data/ranks";
 import { useSidebarQuotes } from "@/lib/sidebarQuotes";
@@ -57,6 +59,32 @@ function ListeningIcon({ className }: IconProps) {
   );
 }
 
+function ReadingIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 6.5C10.3 5.3 8 4.8 4 5v13c4-.2 6.3.3 8 1.5 1.7-1.2 4-1.7 8-1.5V5c-4-.2-6.3.3-8 1.5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+      <path d="M12 6.5v13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function SpeakingIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="9" y="3" width="6" height="11" rx="3" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+      <path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M8.5 21h7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function ChevronIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="m6 9 6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 function ChartIcon({ className }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -87,7 +115,17 @@ type NavItem = {
   matches: (s: Screen) => boolean;
 };
 
-const NAV_ITEMS: NavItem[] = [
+type NavGroup = {
+  groupKey: string;
+  labelKey: string;
+  icon: ComponentType<IconProps>;
+  items: NavItem[];
+};
+type NavEntry = NavItem | NavGroup;
+
+const isGroup = (e: NavEntry): e is NavGroup => "items" in e;
+
+const NAV_ENTRIES: NavEntry[] = [
   {
     key: "start",
     labelKey: "nav.home",
@@ -101,28 +139,54 @@ const NAV_ITEMS: NavItem[] = [
       s === "n4",
   },
   {
-    key: "learn",
-    labelKey: "nav.learn",
+    groupKey: "learning",
+    labelKey: "nav.group.learning",
     icon: BookIcon,
-    matches: (s) => s === "learn",
+    items: [
+      {
+        key: "learn",
+        labelKey: "nav.learn",
+        icon: BookIcon,
+        matches: (s) => s === "learn",
+      },
+      {
+        key: "flashdeck",
+        labelKey: "nav.flashcard",
+        icon: CardsIcon,
+        matches: (s) => s === "flashdeck" || s === "flashcard",
+      },
+      {
+        key: "practice",
+        labelKey: "nav.practice",
+        icon: PracticeIcon,
+        matches: (s) => s === "practice",
+      },
+    ],
   },
   {
-    key: "flashdeck",
-    labelKey: "nav.flashcard",
-    icon: CardsIcon,
-    matches: (s) => s === "flashdeck" || s === "flashcard",
-  },
-  {
-    key: "practice",
-    labelKey: "nav.practice",
-    icon: PracticeIcon,
-    matches: (s) => s === "practice",
-  },
-  {
-    key: "listening",
-    labelKey: "nav.listening",
+    groupKey: "skills",
+    labelKey: "nav.group.skills",
     icon: ListeningIcon,
-    matches: (s) => s === "listening",
+    items: [
+      {
+        key: "reading",
+        labelKey: "nav.reading",
+        icon: ReadingIcon,
+        matches: (s) => s === "reading",
+      },
+      {
+        key: "listening",
+        labelKey: "nav.listening",
+        icon: ListeningIcon,
+        matches: (s) => s === "listening",
+      },
+      {
+        key: "speaking",
+        labelKey: "nav.speaking",
+        icon: SpeakingIcon,
+        matches: (s) => s === "speaking",
+      },
+    ],
   },
   {
     key: "statistik",
@@ -231,6 +295,46 @@ export default function Sidebar({ open, onClose, onOpenSettings, onOpenAdmin }: 
     onClose();
   };
 
+  // accordion: grup (Learning / Skills) bisa dilipat; status disimpan per
+  // browser. Grup yang berisi halaman aktif otomatis dibuka saat berpindah
+  // halaman supaya penanda aktif selalu kelihatan.
+  const [openGroups, setOpenGroups] = useLocalStorage<Record<string, boolean>>(
+    "tenka:sidebarGroups",
+    {},
+  );
+  const toggleGroup = (key: string) =>
+    setOpenGroups((prev) => ({ ...prev, [key]: !(prev[key] ?? true) }));
+
+  useEffect(() => {
+    for (const e of NAV_ENTRIES) {
+      if (isGroup(e) && e.items.some((i) => i.matches(screen))) {
+        setOpenGroups((prev) =>
+          prev[e.groupKey] === false ? { ...prev, [e.groupKey]: true } : prev,
+        );
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [screen]);
+
+  const renderItem = (item: NavItem, nested: boolean) => {
+    const Icon = item.icon;
+    const active = item.matches(screen);
+    return (
+      <button
+        key={item.key}
+        type="button"
+        className={`sidebar-nav-item ${nested ? "sidebar-nav-sub" : ""} ${
+          active ? "active" : ""
+        }`}
+        aria-current={active ? "page" : undefined}
+        onClick={() => go(item.key)}
+      >
+        <Icon className="sidebar-nav-icon" />
+        <span>{t(item.labelKey)}</span>
+      </button>
+    );
+  };
+
   const openProfileSettings = () => {
     onOpenSettings("profile");
     onClose();
@@ -279,21 +383,36 @@ export default function Sidebar({ open, onClose, onOpenSettings, onOpenAdmin }: 
         </div>
 
         <nav className="sidebar-nav" aria-label="Main">
-          {NAV_ITEMS.map((item) => {
-            const Icon = item.icon;
-            const active = item.matches(screen);
-            return (
-              <button
-                key={item.key}
-                type="button"
-                className={`sidebar-nav-item ${active ? "active" : ""}`}
-                aria-current={active ? "page" : undefined}
-                onClick={() => go(item.key)}
-              >
-                <Icon className="sidebar-nav-icon" />
-                <span>{t(item.labelKey)}</span>
-              </button>
-            );
+          {NAV_ENTRIES.map((entry) => {
+            if (isGroup(entry)) {
+              const GroupIcon = entry.icon;
+              const hasActive = entry.items.some((i) => i.matches(screen));
+              const expanded = openGroups[entry.groupKey] ?? true;
+              return (
+                <div className="sidebar-group" key={entry.groupKey}>
+                  <button
+                    type="button"
+                    className={`sidebar-nav-item sidebar-group-head ${
+                      hasActive && !expanded ? "has-active" : ""
+                    }`}
+                    aria-expanded={expanded}
+                    onClick={() => toggleGroup(entry.groupKey)}
+                  >
+                    <GroupIcon className="sidebar-nav-icon" />
+                    <span>{t(entry.labelKey)}</span>
+                    <ChevronIcon
+                      className={`sidebar-group-chevron ${expanded ? "open" : ""}`}
+                    />
+                  </button>
+                  {expanded && (
+                    <div className="sidebar-group-items">
+                      {entry.items.map((item) => renderItem(item, true))}
+                    </div>
+                  )}
+                </div>
+              );
+            }
+            return renderItem(entry, false);
           })}
         </nav>
 
@@ -311,23 +430,13 @@ export default function Sidebar({ open, onClose, onOpenSettings, onOpenAdmin }: 
           </button>
 
           <div className="sidebar-promo">
-            <svg
+            <SakuraMark
+              size={20}
               className="sidebar-promo-sakura"
-              viewBox="0 0 24 24"
               role="button"
               tabIndex={-1}
-              aria-hidden="true"
               onClick={onOpenAdmin}
-            >
-              <g fill="#F7A8BC">
-                <ellipse cx="12" cy="6.2" rx="3.6" ry="4.6" />
-                <ellipse cx="12" cy="6.2" rx="3.6" ry="4.6" transform="rotate(72 12 12)" />
-                <ellipse cx="12" cy="6.2" rx="3.6" ry="4.6" transform="rotate(144 12 12)" />
-                <ellipse cx="12" cy="6.2" rx="3.6" ry="4.6" transform="rotate(216 12 12)" />
-                <ellipse cx="12" cy="6.2" rx="3.6" ry="4.6" transform="rotate(288 12 12)" />
-              </g>
-              <circle cx="12" cy="12" r="2.2" fill="#E5677F" />
-            </svg>
+            />
             <div className="sidebar-promo-quote-wrap">
               <p className="sidebar-promo-quote">
                 {typedLines.map((line, i) => (
