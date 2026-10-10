@@ -281,7 +281,6 @@ export const I18N: Record<string, I18NEntry> = {
   },
   "profile.addNickname": { en: "+ Add nickname", id: "+ Tambah nickname" },
   "profile.joinedOn": { en: "Joined {date}", id: "Bergabung {date}" },
-  "profile.changePhoto": { en: "Change photo", id: "Ganti foto" },
   "profile.viewProgress": { en: "View progress", id: "Lihat progres" },
   "profile.changePhoto": { en: "Change image", id: "Ganti gambar" },
   "auth.signOutConfirmTitle": {
