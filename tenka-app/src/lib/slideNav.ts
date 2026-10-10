@@ -13,7 +13,7 @@
  */
 
 const SELECTOR =
-  ".script-tabs, .sidebar-nav, .st-tabs, .source-switch-seg, .practice-seg, .adm-seg, .adm-lang-toggle, .timer-options, .difficulty-options, .quiz-variant-options, .range-mode-toggle, .range-random-options";
+  ".script-tabs, .sidebar-nav, .st-tabs, .source-switch-seg, .practice-seg, .adm-seg, .adm-lang-toggle, .timer-options, .difficulty-options, .quiz-variant-options, .range-mode-toggle, .range-random-options, .sk-grid";
 const ACTIVE = ".active, .on, [aria-selected='true'], [aria-current='page']";
 const SETTLE_MS = 520; // lebih lama dari transisi flex-grow nav HP (380ms)
 const TAU_MS = 75; // makin kecil = makin cepat menyusul target

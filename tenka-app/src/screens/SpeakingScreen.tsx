@@ -6,6 +6,7 @@ import { useSpeech } from "@/hooks/useSpeech";
 import type { Bilingual, KotobaEntry } from "@/data/types";
 import { useSkillSource } from "@/hooks/useSkillSource";
 import ContentSourceSwitch from "@/components/ContentSourceSwitch";
+import SkillScopePicker from "@/components/SkillScopePicker";
 import { LoadingState } from "@/components/ui/Loader";
 import PageHero from "@/components/PageHero";
 import ScrollTopButton from "@/components/ScrollTopButton";
@@ -261,6 +262,10 @@ export default function SpeakingScreen() {
     [src.entries, type, lang],
   );
   const activeCount = Math.min(count, totalAvailable);
+  const countOptions = [
+    ...COUNTS.filter((n) => n < totalAvailable),
+    ...(totalAvailable > 0 ? [totalAvailable] : []),
+  ];
 
   const start = useCallback(() => {
     stopAll();
@@ -586,6 +591,15 @@ export default function SpeakingScreen() {
                   setError("");
                 }}
               >
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M4 12a8 8 0 1 0 2.6-5.9M4 4v4.5h4.5"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
                 {t("speaking.retry")}
               </button>
             )}
@@ -621,9 +635,15 @@ export default function SpeakingScreen() {
 
       <ContentSourceSwitch
         level={src.level}
+        organize={src.organize}
+        sources={src.sources}
         onLevelChange={src.setLevel}
-        hideCategory
+        onOrganizeChange={src.setOrganize}
       />
+
+      {src.status === "ready" && (
+        <SkillScopePicker src={src} available={totalAvailable} />
+      )}
 
       {src.status === "loading" && (
         <LoadingState
@@ -679,7 +699,7 @@ export default function SpeakingScreen() {
         <span className="settings-label">{t("speaking.countLabel")}</span>
         <div className="range-random">
           <div className="range-random-options">
-            {COUNTS.filter((n) => n <= totalAvailable).map((n) => (
+            {countOptions.map((n) => (
               <button
                 key={n}
                 type="button"
@@ -688,7 +708,9 @@ export default function SpeakingScreen() {
                 }`}
                 onClick={() => setCount(n)}
               >
-                {n}
+                {n === totalAvailable && !COUNTS.includes(n)
+                  ? t("skill.countAll", { count: n })
+                  : n}
               </button>
             ))}
           </div>

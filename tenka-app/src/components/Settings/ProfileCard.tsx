@@ -133,6 +133,7 @@ export default function ProfileCard({ variant = "default" }: ProfileCardProps) {
           ? t("aria.viewPhoto")
           : t("aria.changePhoto")
       }
+      data-hint={variant === "hero" ? t("profile.changePhoto") : undefined}
       onClick={handleAvatarClick}
       disabled={uploading}
     >
@@ -147,10 +148,8 @@ export default function ProfileCard({ variant = "default" }: ProfileCardProps) {
       ) : (
         <span className="profile-avatar-placeholder" />
       )}
-      {variant === "hero" ? (
-        <span className="profile-avatar-edit-hint" aria-hidden="true" />
-      ) : (
-        hasAvatar && <span className="profile-avatar-zoom-hint" aria-hidden="true" />
+      {variant !== "hero" && hasAvatar && (
+        <span className="profile-avatar-zoom-hint" aria-hidden="true" />
       )}
     </button>
   );
@@ -188,7 +187,6 @@ export default function ProfileCard({ variant = "default" }: ProfileCardProps) {
       }}
     >
       <span>{profile?.username || t("profile.addNickname")}</span>
-      <span className="profile-nickname-edit-icon" />
     </button>
   );
 

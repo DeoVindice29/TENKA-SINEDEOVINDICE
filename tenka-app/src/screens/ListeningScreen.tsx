@@ -7,6 +7,7 @@ import { useSpeech } from "@/hooks/useSpeech";
 import type { Bilingual, KotobaEntry } from "@/data/types";
 import { useSkillSource } from "@/hooks/useSkillSource";
 import ContentSourceSwitch from "@/components/ContentSourceSwitch";
+import SkillScopePicker from "@/components/SkillScopePicker";
 import { LoadingState } from "@/components/ui/Loader";
 import PageHero from "@/components/PageHero";
 import ScrollTopButton from "@/components/ScrollTopButton";
@@ -143,6 +144,10 @@ export default function ListeningScreen() {
     [src.entries, type, lang],
   );
   const activeCount = Math.min(count, totalAvailable);
+  const countOptions = [
+    ...COUNTS.filter((n) => n < totalAvailable),
+    ...(totalAvailable > 0 ? [totalAvailable] : []),
+  ];
 
   const start = useCallback(() => {
     stopAudio();
@@ -436,9 +441,15 @@ export default function ListeningScreen() {
 
       <ContentSourceSwitch
         level={src.level}
+        organize={src.organize}
+        sources={src.sources}
         onLevelChange={src.setLevel}
-        hideCategory
+        onOrganizeChange={src.setOrganize}
       />
+
+      {src.status === "ready" && (
+        <SkillScopePicker src={src} available={totalAvailable} />
+      )}
 
       {src.status === "loading" && (
         <LoadingState
@@ -494,7 +505,7 @@ export default function ListeningScreen() {
         <span className="settings-label">{t("listening.countLabel")}</span>
         <div className="range-random">
           <div className="range-random-options">
-            {COUNTS.filter((n) => n <= totalAvailable).map((n) => (
+            {countOptions.map((n) => (
               <button
                 key={n}
                 type="button"
@@ -503,7 +514,9 @@ export default function ListeningScreen() {
                 }`}
                 onClick={() => setCount(n)}
               >
-                {n}
+                {n === totalAvailable && !COUNTS.includes(n)
+                  ? t("skill.countAll", { count: n })
+                  : n}
               </button>
             ))}
           </div>

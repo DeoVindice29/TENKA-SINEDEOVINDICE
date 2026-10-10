@@ -281,6 +281,7 @@ export const I18N: Record<string, I18NEntry> = {
   },
   "profile.addNickname": { en: "+ Add nickname", id: "+ Tambah nickname" },
   "profile.joinedOn": { en: "Joined {date}", id: "Bergabung {date}" },
+  "profile.changePhoto": { en: "Change photo", id: "Ganti foto" },
   "profile.viewProgress": { en: "View progress", id: "Lihat progres" },
   "profile.changePhoto": { en: "Change image", id: "Ganti gambar" },
   "auth.signOutConfirmTitle": {
@@ -752,6 +753,11 @@ export const I18N: Record<string, I18NEntry> = {
     id: "Belum ada data bunpō N4.",
   },
 
+  "skill.chapter": { en: "Chapter", id: "Chapter" },
+  "skill.subChapter": { en: "Sub Chapter", id: "Sub Chapter" },
+  "skill.all": { en: "All", id: "Semua" },
+  "skill.available": { en: "{count} questions available in this selection", id: "{count} soal tersedia di pilihan ini" },
+  "skill.countAll": { en: "All ({count})", id: "Semua ({count})" },
   "source.label": { en: "Category", id: "Kategori" },
   "source.local": { en: "Topic", id: "Topik" },
   "source.level": { en: "Level", id: "Level" },

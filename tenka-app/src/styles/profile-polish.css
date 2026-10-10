@@ -1,0 +1,186 @@
+/* ==========================================================================
+   Kartu profil (Settings > Profile): tanpa ikon pensil, tampilan "kaca"
+   yang seragam di mode terang & gelap lewat variabel --pf-*.
+   Dimuat paling akhir supaya menimpa aturan lama di styles/dashboard.css.
+   ========================================================================== */
+
+.profile-hero {
+  --pf-glass: rgba(255, 255, 255, 0.74);
+  --pf-glass-hover: rgba(255, 255, 255, 0.92);
+  --pf-ink: #263553;
+  --pf-line: rgba(255, 255, 255, 0.95);
+  --pf-ring: rgba(255, 255, 255, 0.9);
+  --pf-glow: rgba(120, 160, 255, 0.5);
+  --pf-shadow: 0 6px 18px rgba(20, 30, 60, 0.16);
+}
+
+[data-theme="dark"] .profile-hero {
+  --pf-glass: rgba(16, 22, 54, 0.62);
+  --pf-glass-hover: rgba(34, 46, 98, 0.78);
+  --pf-ink: #eef2ff;
+  --pf-line: rgba(160, 180, 255, 0.32);
+  --pf-ring: rgba(190, 205, 255, 0.6);
+  --pf-glow: rgba(110, 140, 255, 0.55);
+  --pf-shadow: 0 8px 22px rgba(0, 0, 0, 0.5);
+}
+
+.profile-hero .profile-card--hero {
+  gap: 0;
+}
+
+/* ---- "Bergabung ..." ---- */
+.profile-hero .profile-joined-hero {
+  margin: 0 0 20px;
+  padding: 6px 16px;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--pf-ink);
+  background: var(--pf-glass);
+  border: 1px solid var(--pf-line);
+  box-shadow: var(--pf-shadow);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+/* ---- avatar: cincin + cahaya lembut, label "Ganti foto" saat disorot ---- */
+.profile-hero .profile-avatar--hero {
+  position: relative;
+  overflow: hidden;
+  border: 4px solid var(--pf-ring);
+  box-shadow:
+    0 0 0 7px color-mix(in srgb, var(--pf-ring) 22%, transparent),
+    0 0 46px var(--pf-glow),
+    0 20px 40px rgba(0, 0, 0, 0.38);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.profile-hero .profile-avatar--hero:hover:not(:disabled) {
+  transform: scale(1.02);
+}
+.profile-hero .profile-avatar--hero::after {
+  content: attr(data-hint);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 20%;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(to top, rgba(8, 12, 34, 0.7) 0%, rgba(8, 12, 34, 0) 55%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+.profile-hero .profile-avatar--hero:hover:not(:disabled)::after,
+.profile-hero .profile-avatar--hero:focus-visible::after {
+  opacity: 1;
+}
+
+/* ---- nama ---- */
+.profile-hero .profile-nickname-wrap--hero {
+  margin-top: 24px;
+}
+.profile-hero .profile-nickname-btn--hero,
+.profile-hero .profile-nickname-input--hero {
+  padding: 10px 32px;
+  font-size: 22px;
+  letter-spacing: 0.02em;
+  color: var(--pf-ink);
+  background: var(--pf-glass);
+  border: 1px solid var(--pf-line);
+  box-shadow: var(--pf-shadow);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+.profile-hero .profile-nickname-btn--hero.has-name,
+.profile-hero .profile-nickname-btn--hero:hover {
+  color: var(--pf-ink);
+}
+.profile-hero .profile-nickname-btn--hero:hover {
+  background: var(--pf-glass-hover);
+  transform: translateY(-1px);
+}
+.profile-hero .profile-nickname-input--hero:focus {
+  outline: 2px solid var(--indigo);
+  outline-offset: 2px;
+}
+
+/* ---- lencana title ---- */
+.profile-hero .profile-hero-titles {
+  gap: 10px;
+  margin-top: 18px;
+  max-width: 320px;
+}
+.profile-hero .profile-hero-title-badge {
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+  color: var(--pf-ink);
+  background: var(--pf-glass);
+  border: 1px solid var(--pf-line);
+  box-shadow: var(--pf-shadow);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transition: transform 0.18s ease;
+}
+.profile-hero .profile-hero-title-badge:hover {
+  transform: translateY(-2px) scale(1.06);
+}
+
+/* ---- tombol "Lihat progres": CTA gradien biru seperti tombol utama ---- */
+.profile-hero .profile-hero-progress-link {
+  margin: 24px 0 6px;
+  padding: 11px 26px;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--active-grad);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: var(--active-shadow);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  transition: filter 0.2s ease, transform 0.15s ease;
+}
+.profile-hero .profile-hero-progress-link:hover {
+  background: var(--active-grad);
+  filter: brightness(1.1) saturate(1.05);
+  transform: translateY(-1px);
+}
+
+/* ---- muncul bertahap saat dibuka ---- */
+@keyframes pf-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+.profile-hero .profile-card--hero > *,
+.profile-hero .profile-hero-progress-link {
+  animation: pf-rise 0.4s ease both;
+}
+.profile-hero .profile-card--hero > :nth-child(2) { animation-delay: 0.05s; }
+.profile-hero .profile-card--hero > :nth-child(3) { animation-delay: 0.1s; }
+.profile-hero .profile-card--hero > :nth-child(4) { animation-delay: 0.15s; }
+.profile-hero .profile-card--hero > :nth-child(5) { animation-delay: 0.2s; }
+.profile-hero .profile-hero-progress-link { animation-delay: 0.25s; }
+
+@media (max-width: 720px) {
+  .profile-hero .profile-nickname-btn--hero,
+  .profile-hero .profile-nickname-input--hero {
+    padding: 9px 26px;
+    font-size: 20px;
+  }
+  .profile-hero .profile-hero-title-badge {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profile-hero .profile-card--hero > *,
+  .profile-hero .profile-hero-progress-link {
+    animation: none;
+  }
+}
